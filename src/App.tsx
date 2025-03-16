@@ -9,7 +9,6 @@ import {PickingInfo} from '@deck.gl/core';
 import {HoverInfo, TileProperties} from "./components/HoverInfoComponent.tsx";
 
 function App() {
-    const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
     const [hoveredFeatureId, setHoveredFeatureId] = useState<any | null>(null);
 
     const layer = useMemo(() => new MVTLayer({
@@ -21,6 +20,7 @@ function App() {
         getLineColor: [192, 192, 192],
         lineWidthMinPixels: 1,
         pickable: true,
+        // @ts-expect-error comment
         getFillColor: (feature: { id: string, properties: TileProperties }) => {
             const population = feature.properties.econ_loss_25k;
 
@@ -49,15 +49,6 @@ function App() {
         },
 
         onHover: info => {
-            if (info?.object?.properties) {
-                setHoverInfo({
-                    properties: info.object.properties as TileProperties,
-                    x: info.x,
-                    y: info.y,
-                })
-            } else {
-                setHoverInfo(null);
-            }
             setHoveredFeatureId(info.object ? info.object.properties.FIPS : null);
         }
 
