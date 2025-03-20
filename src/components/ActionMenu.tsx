@@ -1,8 +1,20 @@
 import {Tabs} from '@mantine/core';
 
-function ActionMenu() {
+
+export type TabOption = 'map' | 'quiz' | 'learn';
+
+
+function ActionMenu({currentTab, setCurrentTab}: { currentTab: TabOption, setCurrentTab: (tab: TabOption) => void }) {
     return (
-        <Tabs color="teal" variant="pills" radius="xs" defaultValue="map">
+        <Tabs value={currentTab} color="teal" variant="pills" radius="xs" onChange={(tab) => {
+            if (tab && ["map", "quiz", "learn"].includes(tab)) {
+                // @ts-expect-error: bad TS
+                setCurrentTab(tab);
+            } else {
+                setCurrentTab("map");
+            }
+
+        }}>
             <Tabs.List>
                 <Tabs.Tab value="map">
                     Map
