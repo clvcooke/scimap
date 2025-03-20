@@ -38,8 +38,6 @@ export const HoverInfoComponent: React.FC<Props> = ({ hoverInfo }) => {
     return (
         <div
             style={{
-                paddingLeft: '16px',
-                paddingRight: '16px',
                 position: 'absolute',
                 left: hoverInfo.x,
                 top: hoverInfo.y,
