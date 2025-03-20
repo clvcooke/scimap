@@ -33,7 +33,7 @@ export const HoverInfoComponent: React.FC<Props> = ({ hoverInfo }) => {
     if (!hoverInfo) {
         return null;
     }
-    const { county, econ_loss, jobs_loss } = hoverInfo.properties;
+    const { county, state, econ_loss, jobs_loss } = hoverInfo.properties;
     const econ_loss_string = econ_loss >= 1000000 ? Math.round(econ_loss / 1000000) + 'M' : econ_loss >= 1000 ? Math.round(econ_loss / 1000) + 'K' : Math.round(econ_loss);
     return (
         <div
@@ -49,8 +49,9 @@ export const HoverInfoComponent: React.FC<Props> = ({ hoverInfo }) => {
             <Card shadow="sm" padding="md" radius="md" withBorder style={{color: 'black', textAlign: 'left' }}>
                 <Flex direction="column" gap="xs">
                     <Text size="md" style={{ color: 'black' }}><b>County:</b> {county}</Text>
+                    <Text size="md" style={{ color: 'black' }}><b>State:</b> {state}</Text>
                     <Text size="md" style={{ color: 'black' }}><b>Economic Loss:</b> ${econ_loss_string}</Text>
-                    <Text size="md" style={{ color: 'black' }}><b>Job Loss:</b> {Math.round(jobs_loss)}</Text>
+                    <Text size="md" style={{ color: 'black' }}><b>Jobs Lost:</b> {Math.round(jobs_loss)}</Text>
                 </Flex>
             </Card>
         </div>

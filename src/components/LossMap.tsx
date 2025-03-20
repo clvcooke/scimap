@@ -12,7 +12,7 @@ import {ActionIcon, useMantineTheme} from "@mantine/core";
 import {MapViewState, FlyToInterpolator} from '@deck.gl/core';
 
 
-const ALPHA_COLOR = 155;
+const ALPHA_COLOR = 200;
 
 function LossMap() {
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | null>(null);
