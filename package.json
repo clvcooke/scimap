@@ -12,16 +12,20 @@
   "dependencies": {
     "@deck.gl/geo-layers": "^9.1.5",
     "@deck.gl/react": "^9.1.5",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@mantine/core": "^7.17.2",
     "@mantine/hooks": "^7.17.2",
     "@radix-ui/themes": "^3.2.1",
     "@tabler/icons-react": "^3.31.0",
+    "@tailwindcss/vite": "^4.0.14",
     "d3-scale": "^4.0.2",
     "d3-scale-chromatic": "^3.1.0",
     "maplibre-gl": "^5.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-map-gl": "^8.0.1"
+    "react-map-gl": "^8.0.1",
+    "tailwindcss": "^4.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

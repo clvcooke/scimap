@@ -8,9 +8,8 @@ import {MVTLayer} from '@deck.gl/geo-layers';
 import {scaleLinear} from 'd3-scale';
 import {interpolateOrRd,} from 'd3-scale-chromatic';
 import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
-import {ActionIcon, Button, useMantineTheme} from "@mantine/core";
+import {ActionIcon, useMantineTheme} from "@mantine/core";
 import {MapViewState, FlyToInterpolator} from '@deck.gl/core';
-
 
 
 const ALPHA_COLOR = 155;
@@ -18,7 +17,6 @@ const ALPHA_COLOR = 155;
 function LossMap() {
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | null>(null);
     const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
-    const [showLocationPrompt, setShowLocationPrompt] = useState(false);
     const [viewState, setViewState] = useState<MapViewState>({
         longitude: -98.5795, // Approximate center longitude of the USA
         latitude: 39.8283,  // Approximate center latitude of the USA
@@ -34,18 +32,6 @@ function LossMap() {
         .range([0, 1])
         .clamp(true); // Makes sure values outside the domain get mapped to the range boundaries
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-
-    useEffect(() => {
-        const userLocation = localStorage.getItem("USER_LOCATION");
-        if (userLocation) {
-            console.log(userLocation);
-            setUserLocation(JSON.parse(userLocation));
-            setShowLocationPrompt(false);
-        } else {
-            setShowLocationPrompt(true);
-        }
-    }, [setUserLocation])
-
 
     useEffect(() => {
         if (userLocation) {
@@ -120,7 +106,7 @@ function LossMap() {
         }
     };
 
-    const flyTo  = useCallback((location: [number, number] | null) => {
+    const flyTo = useCallback((location: [number, number] | null) => {
         if (!location) {
             return;
         }
@@ -139,31 +125,31 @@ function LossMap() {
 
 
     return (
-        <DeckGL
-            onDragStart={() => setHoverInfo(null)}
-            onDragEnd={() => setHoverInfo(null)}
-            initialViewState={viewState}
-            controller={true}
-            layers={[layer]}
-            style={{overflow: 'hidden'}}
-        >
-            <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
-            {hoverInfo && <HoverInfoComponent hoverInfo={hoverInfo}/>}
-            <ActionIcon variant="filled" aria-label="Location"
-                        size={'sm'}
-                        style={{
-                            position: 'absolute',
-                            bottom: 20,
-                            left: 20,
-                            zIndex: 1,
-                            backgroundColor: theme.colors.gray[0],
-                            color: theme.colors.gray[9],
-                        }}
-                        onClick={getLocation}
+            <DeckGL
+                onDragStart={() => setHoverInfo(null)}
+                onDragEnd={() => setHoverInfo(null)}
+                initialViewState={viewState}
+                controller={true}
+                layers={[layer]}
+                style={{overflow: 'hidden'}}
             >
-                <IconGps style={{width: '70%', height: '70%'}}/>
-            </ActionIcon>
-        </DeckGL>
+                <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
+                {hoverInfo && <HoverInfoComponent hoverInfo={hoverInfo}/>}
+                <ActionIcon variant="filled" aria-label="Location"
+                            size={'md'}
+                            style={{
+                                position: 'absolute',
+                                bottom: 10,
+                                left: 10,
+                                zIndex: 1,
+                                backgroundColor: theme.colors.gray[0],
+                                color: theme.colors.gray[9],
+                            }}
+                            onClick={getLocation}
+                >
+                    <IconGps style={{width: '70%', height: '70%'}}/>
+                </ActionIcon>
+            </DeckGL>
     );
 }
 
