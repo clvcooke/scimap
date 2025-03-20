@@ -1,4 +1,4 @@
-import * as Popover from '@radix-ui/react-popover';
+import { Card, Text, Flex } from '@mantine/core';
 
 export type TileProperties = {
     FIPS: number;
@@ -33,30 +33,28 @@ export const HoverInfoComponent: React.FC<Props> = ({ hoverInfo }) => {
     if (!hoverInfo) {
         return null;
     }
-
-    const { properties, x, y } = hoverInfo;
-
-    const {
-        county,
-        state,
-        pop_2024,
-        grant_funds,
-        econ_loss,
-    } = properties;
-
+    const { county, econ_loss, jobs_loss } = hoverInfo.properties;
+    const econ_loss_string = econ_loss >= 1000000 ? Math.round(econ_loss / 1000000) + 'M' : econ_loss >= 1000 ? Math.round(econ_loss / 1000) + 'K' : Math.round(econ_loss);
     return (
-        <Popover.Root open={!!hoverInfo}>
-            <Popover.Anchor style={{ position: 'absolute', left: x, top: y }} />
-            <Popover.Content
-                className="radix-popover-content" // Add your styles for the popover content
-                sideOffset={5} // Adjust the distance from the anchor
-            >
-                <h3>{county}, {state}</h3>
-                <p>Population (2024): {pop_2024}</p>
-                <p>Grant Funds: {grant_funds}</p>
-                <p>Economic Loss: {econ_loss}</p>
-                <Popover.Close>Close</Popover.Close>
-            </Popover.Content>
-        </Popover.Root>
+        <div
+            style={{
+                paddingLeft: '16px',
+                paddingRight: '16px',
+                position: 'absolute',
+                left: hoverInfo.x,
+                top: hoverInfo.y,
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                zIndex: 1,
+                pointerEvents: 'none',
+            }}
+        >
+            <Card shadow="sm" padding="md" radius="md" withBorder style={{color: 'black', textAlign: 'left' }}>
+                <Flex direction="column" gap="xs">
+                    <Text size="md" style={{ color: 'black' }}><b>County:</b> {county}</Text>
+                    <Text size="md" style={{ color: 'black' }}><b>Economic Loss:</b> ${econ_loss_string}</Text>
+                    <Text size="md" style={{ color: 'black' }}><b>Job Loss:</b> {Math.round(jobs_loss)}</Text>
+                </Flex>
+            </Card>
+        </div>
     );
 };

@@ -12,7 +12,10 @@
   "dependencies": {
     "@deck.gl/geo-layers": "^9.1.5",
     "@deck.gl/react": "^9.1.5",
+    "@mantine/core": "^7.17.2",
+    "@mantine/hooks": "^7.17.2",
     "@radix-ui/themes": "^3.2.1",
+    "@tabler/icons-react": "^3.31.0",
     "d3-scale": "^4.0.2",
     "d3-scale-chromatic": "^3.1.0",
     "maplibre-gl": "^5.2.0",
@@ -31,6 +34,9 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "postcss": "^8.5.3",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"
