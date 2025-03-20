@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react'
+import {useCallback, useState} from 'react'
 import './App.css'
 
 import { Map } from 'react-map-gl/maplibre';
@@ -7,11 +7,25 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import {MVTLayer} from '@deck.gl/geo-layers';
 import {PickingInfo} from '@deck.gl/core';
 import {HoverInfo, TileProperties} from "./components/HoverInfoComponent.tsx";
+import { scaleLinear } from 'd3-scale';
+import { interpolateOrRd } from 'd3-scale-chromatic';
+
+const ALPHA_COLOR = 155;
 
 function App() {
     const [hoveredFeatureId, setHoveredFeatureId] = useState<any | null>(null);
 
-    const layer = useMemo(() => new MVTLayer({
+    // Define your data range based on your economic loss values
+    const dataMin = 0;
+    const dataMax = Math.asinh(10000000); // Adjust this based on your actual max value
+
+    const colorScale = scaleLinear()
+        .domain([dataMin, dataMax])
+        .range([0, 1])
+        .clamp(true); // Makes sure values outside the domain get mapped to the range boundaries
+
+
+    const layer =  new MVTLayer({
         id: 'xyz-mvt',
         data: [
             `https://pub-68b2412877cd4500a55733977f95cc9f.r2.dev/tiles_simple_v1/{z}/{x}/{y}.pbf`,
@@ -20,40 +34,32 @@ function App() {
         getLineColor: [192, 192, 192],
         lineWidthMinPixels: 1,
         pickable: true,
+        highlightedFeatureId: hoveredFeatureId,
+        highlightColor: [127, 255, 212, ALPHA_COLOR],
+        uniqueIdProperty: "FIPS",
         // @ts-expect-error comment
         getFillColor: (feature: { id: string, properties: TileProperties }) => {
-            const population = feature.properties.econ_loss_25k;
-
-            // Normalize the population to a 0-1 range
-            const normalizedPopulation = population / 1000000; // Assuming a max population of 1 million for scaling
-
-            // Convert the normalized value to a color (e.g., red for high, green for low)
-            // Use a heatmap color scheme (red for high, blue for low)
-            let red = normalizedPopulation * 255;
-            let green = 0;
-            let blue = (1 - normalizedPopulation) * 255;
-            let color = [red, green, blue];
-            // Ensure values are within the valid range (0-255)
-            red = Math.max(0, Math.min(255, red));
-            green = Math.max(0, Math.min(255, green));
-            blue = Math.max(0, Math.min(255, blue));
-            if (hoveredFeatureId === feature.properties.FIPS) {
-                console.log("FIPS");
-                color = [255, 255, 255]; // Highlight color (white in this case)
+            const value = Math.asinh(feature.properties.econ_loss_25k);
+            const colorString = interpolateOrRd(colorScale(value));
+            let rgbValues;
+            if (colorString.startsWith('rgb')) {
+                // Handle rgb format "rgb(255, 0, 0)"
+                rgbValues = colorString.slice(4, -1).split(",").map(str => parseInt(str.trim(), 10));
             } else {
-                console.log("not FIPS", feature.properties.FIPS, hoveredFeatureId);
+                // Handle hex format from discrete scales "#ff0000"
+                const hex = colorString.slice(1); // Remove #
+                rgbValues = [
+                    parseInt(hex.slice(0, 2), 16),
+                    parseInt(hex.slice(2, 4), 16),
+                    parseInt(hex.slice(4, 6), 16)
+                ];
             }
-
-            return [...color, 100]; // Adding some transparency
-
+            return [...rgbValues, ALPHA_COLOR]; // Add alpha channel
         },
-
         onHover: info => {
             setHoveredFeatureId(info.object ? info.object.properties.FIPS : null);
         }
-
-    }), [hoveredFeatureId]);
-    console.log(hoveredFeatureId);
+    });
     const getTooltip = useCallback(({object}: PickingInfo<HoverInfo>) => {
         if (object && object.properties) {
             const { county, econ_loss} = object.properties;
@@ -73,7 +79,7 @@ function App() {
             layers={[layer]}
             getTooltip={getTooltip}
         >
-            <Map mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" />
+            <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json" />
         </DeckGL>
     );
 }
