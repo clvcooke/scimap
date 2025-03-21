@@ -22,7 +22,8 @@ function App() {
 
     return <>
 
-        <Flex direction="column" justify="center" align="center" style={{minHeight: '100vh'}}>
+        <Flex direction="column" justify="center" align="center" style={{minHeight: '100svh', width: '100%', position: 'relative'}}>
+
             <div className="Loss Map" style={{width: '100%', flex: 1, position: 'relative'}}>
                 {showMap && <LossMap/>}
                 {showQuiz && <Button>Quiz</Button>}

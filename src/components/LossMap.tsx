@@ -10,7 +10,10 @@ import {interpolateOrRd,} from 'd3-scale-chromatic';
 import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
 import {ActionIcon, useMantineTheme, Radio, Text, Stack} from "@mantine/core";
 import {MapViewState, FlyToInterpolator} from '@deck.gl/core';
+import TitleHeader from "./TitleHeader.tsx";
 
+const JOBS_LOST = 153712.58056788
+const ECONOMIC_LOSS = 13834132249.184;
 
 const ALPHA_COLOR = 200;
 
@@ -60,6 +63,7 @@ function LossMap() {
         highlightedFeatureId: hoveredFeatureId,
         highlightColor: [127, 255, 212, ALPHA_COLOR],
         uniqueIdProperty: "FIPS",
+        maxZoom: 10,
         // @ts-expect-error comment
         getFillColor: (feature: { id: string, properties: TileProperties }) => {
             let colorString: string;
@@ -140,43 +144,56 @@ function LossMap() {
 
 
     return (
-            <DeckGL
-                onDragStart={() => setHoverInfo(null)}
-                onDragEnd={() => setHoverInfo(null)}
-                initialViewState={viewState}
-                controller={true}
-                layers={[layer]}
-                style={{overflow: 'hidden'}}
+        <DeckGL
+            onDragStart={() => setHoverInfo(null)}
+            onDragEnd={() => setHoverInfo(null)}
+            initialViewState={viewState}
+            controller={true}
+            layers={[layer]}
+            style={{overflow: 'hidden'}}
+        >
+            <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                zIndex: 2,
+                background: 'rgba(255, 255, 255, 0.7)', // Slightly less transparent
+                backdropFilter: 'blur(5px)', // Add a subtle blur
+                padding: '4px', // Add some padding inside the container
+            }}>
+                <TitleHeader
+                    jobsLost={JOBS_LOST} costImpact={ECONOMIC_LOSS}></TitleHeader>
+            </div>
+            <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
+            <Stack style={{
+                position: 'absolute',
+                top: 100,
+                right: 10,
+                zIndex: 1,
+                backgroundColor: theme.colors.gray[0],
+                padding: 10,
+            }} gap="xs">
+                <Text fw={700}>Level</Text>
+                <Radio checked={mode === 'county'} onChange={() => setMode('county')} label="County"/>
+                <Radio checked={mode === 'state'} onChange={() => setMode('state')} label="State"/>
+            </Stack>
+            {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo}/>}
+            <ActionIcon variant="filled" aria-label="Location"
+                        size={'xl'}
+                        style={{
+                            position: 'absolute',
+                            bottom: 10,
+                            left: 10,
+                            zIndex: 1,
+                            backgroundColor: theme.colors.gray[0],
+                            color: theme.colors.gray[9],
+                        }}
+                        onClick={getLocation}
             >
-                <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
-                <Stack  style={{
-                    position: 'absolute',
-                    top: 10,
-                    right: 10,
-                    zIndex: 1,
-                    backgroundColor: theme.colors.gray[0],
-                    padding: 10,
-                }} gap="xs">
-                    <Text fw={700}>Level</Text>
-                    <Radio checked={mode === 'county'} onChange={() => setMode('county')} label="County"/>
-                    <Radio checked={mode === 'state'} onChange={() => setMode('state')} label="State"/>
-                </Stack>
-                {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo}/>}
-                <ActionIcon variant="filled" aria-label="Location"
-                            size={'md'}
-                            style={{
-                                position: 'absolute',
-                                bottom: 10,
-                                left: 10,
-                                zIndex: 1,
-                                backgroundColor: theme.colors.gray[0],
-                                color: theme.colors.gray[9],
-                            }}
-                            onClick={getLocation}
-                >
-                    <IconGps style={{width: '70%', height: '70%'}}/>
-                </ActionIcon>
-            </DeckGL>
+                <IconGps style={{width: '70%', height: '70%'}}/>
+            </ActionIcon>
+        </DeckGL>
     );
 }
 
