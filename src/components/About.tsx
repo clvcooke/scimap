@@ -56,7 +56,7 @@ function About() {
                         Science transforms our world, advances the economy, improves
                         well-being, and saves lives.
                     </Text>{' '}
-                    Yet the doing of science seems remote – involving a relatively number
+                    Yet the doing of science seems remote – involving a small relatively number
                     of people working in universities, hospitals, and research institutes
                     nationwide. There can be a substantial{' '}
                     <Text span fw={700}>
