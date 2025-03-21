@@ -18,7 +18,7 @@ const ECONOMIC_LOSS = 13834132249.184;
 const ALPHA_COLOR = 200;
 
 function LossMap() {
-    const [hoveredFeatureId, setHoveredFeatureId] = useState<number | null>(null);
+    const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
     const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
     const [viewState, setViewState] = useState<MapViewState>({
         longitude: -98.5795, // Approximate center longitude of the USA
@@ -62,7 +62,7 @@ function LossMap() {
         pickable: true,
         highlightedFeatureId: hoveredFeatureId,
         highlightColor: [127, 255, 212, ALPHA_COLOR],
-        uniqueIdProperty: "FIPS",
+        uniqueIdProperty: mode === "county" ? "FIPS" : "state",
         maxZoom: 10,
         // @ts-expect-error comment
         getFillColor: (feature: { id: string, properties: TileProperties }) => {
@@ -91,7 +91,11 @@ function LossMap() {
         },
         onHover: info => {
             if (info.object) {
-                setHoveredFeatureId(info.object.properties.FIPS);
+                if (mode === 'county') {
+                    setHoveredFeatureId(info.object.properties.FIPS);
+                } else {
+                    setHoveredFeatureId(info.object.properties.state);
+                }
                 setHoverInfo(
                     {
                         properties: info.object.properties,
