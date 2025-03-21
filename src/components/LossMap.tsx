@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
 import {IconGps} from '@tabler/icons-react';
 
 import {Map} from 'react-map-gl/maplibre';
@@ -8,7 +8,7 @@ import {MVTLayer} from '@deck.gl/geo-layers';
 import {scaleLinear} from 'd3-scale';
 import {interpolateOrRd,} from 'd3-scale-chromatic';
 import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
-import {ActionIcon, useMantineTheme} from "@mantine/core";
+import {ActionIcon, useMantineTheme, Radio, Text, Stack} from "@mantine/core";
 import {MapViewState, FlyToInterpolator} from '@deck.gl/core';
 
 
@@ -23,14 +23,25 @@ function LossMap() {
         zoom: 3.5             // Adjust the zoom level to fit the continental USA
     })
 
-    // Define your data range based on your economic loss values
-    const dataMin = 0;
-    const dataMax = Math.log(1000000); // Adjust this based on your actual max value
+    const [mode, setMode] = useState<"county" | "state">('county');
+    const tileLink = useMemo(() => {
+        if (mode === 'county') {
+            return 'https://pub-68b2412877cd4500a55733977f95cc9f.r2.dev/tiles_counties_v1/{z}/{x}/{y}.pbf';
+        } else {
+            return 'https://pub-68b2412877cd4500a55733977f95cc9f.r2.dev/tiles_states_v1/{z}/{x}/{y}.pbf';
+        }
+    }, [mode]);
 
-    const colorScale = scaleLinear()
-        .domain([dataMin, dataMax])
+    // Define your data range based on your economic loss values
+    const countyColorScale = scaleLinear()
+        .domain([0, Math.log(1000000)])
         .range([0, 1])
-        .clamp(true); // Makes sure values outside the domain get mapped to the range boundaries
+        .clamp(true);
+    const stateColorScale = scaleLinear()
+        .domain([0, Math.log(187.3718153)])
+        .range([0, 1])
+        .clamp(true);
+
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
 
     useEffect(() => {
@@ -41,9 +52,7 @@ function LossMap() {
 
     const layer = new MVTLayer({
         id: 'xyz-mvt',
-        data: [
-            `https://pub-68b2412877cd4500a55733977f95cc9f.r2.dev/tiles_simple_v1/{z}/{x}/{y}.pbf`,
-        ],
+        data: [tileLink],
         binary: true, // Try setting this to true
         getLineColor: [192, 192, 192, ALPHA_COLOR / 2],
         lineWidthMinPixels: 1,
@@ -53,8 +62,14 @@ function LossMap() {
         uniqueIdProperty: "FIPS",
         // @ts-expect-error comment
         getFillColor: (feature: { id: string, properties: TileProperties }) => {
-            const value = Math.log(feature.properties.econ_loss_25k);
-            const colorString = interpolateOrRd(colorScale(value));
+            let colorString: string;
+            if (mode === 'county') {
+                const value = Math.log(feature.properties.econ_loss_25k);
+                colorString = interpolateOrRd(countyColorScale(value));
+            } else {
+                const value = Math.log(feature.properties.econ_loss_pc);
+                colorString = interpolateOrRd(stateColorScale(value));
+            }
             let rgbValues;
             if (colorString.startsWith('rgb')) {
                 // Handle rgb format "rgb(255, 0, 0)"
@@ -134,7 +149,19 @@ function LossMap() {
                 style={{overflow: 'hidden'}}
             >
                 <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
-                {hoverInfo && <HoverInfoComponent hoverInfo={hoverInfo}/>}
+                <Stack  style={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 10,
+                    zIndex: 1,
+                    backgroundColor: theme.colors.gray[0],
+                    padding: 10,
+                }} gap="xs">
+                    <Text fw={700}>Level</Text>
+                    <Radio checked={mode === 'county'} onChange={() => setMode('county')} label="County"/>
+                    <Radio checked={mode === 'state'} onChange={() => setMode('state')} label="State"/>
+                </Stack>
+                {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo}/>}
                 <ActionIcon variant="filled" aria-label="Location"
                             size={'md'}
                             style={{
