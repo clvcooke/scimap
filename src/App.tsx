@@ -6,6 +6,7 @@ import {Button, Card, Flex} from '@mantine/core';
 import {useEffect, useState} from "react";
 import ImpactStatement from "./components/ImpactStatement.tsx";
 import LearnMore from "./components/LearnMore.tsx";
+import About from "./components/About.tsx";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
     const showMap = currentTab === "map";
     const showQuiz = currentTab === "quiz";
     const showLearn = currentTab === "learn";
+    const showAbout = currentTab === "about";
 
     return <>
 
@@ -28,6 +30,7 @@ function App() {
                 {showMap && <LossMap/>}
                 {showQuiz && <Button>Quiz</Button>}
                 {showLearn && <LearnMore/>}
+                {showAbout && <About/>}
             </div>
             <ActionMenu currentTab={currentTab ?? "map"} setCurrentTab={setCurrentTab}/>
         </Flex>
