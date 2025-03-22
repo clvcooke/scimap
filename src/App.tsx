@@ -2,7 +2,7 @@ import './App.css'
 import 'maplibre-gl/dist/maplibre-gl.css';
 import LossMap from "./components/LossMap.tsx";
 import ActionMenu, {TabOption} from "./components/ActionMenu.tsx";
-import {Button, Card, Flex} from '@mantine/core';
+import {Button, Flex} from '@mantine/core';
 import {useEffect, useState} from "react";
 import ImpactStatement from "./components/ImpactStatement.tsx";
 import LearnMore from "./components/LearnMore.tsx";
@@ -23,8 +23,8 @@ function App() {
     const showAbout = currentTab === "about";
 
     return <>
-
-        <Flex direction="column" justify="center" align="center" style={{minHeight: '100svh', width: '100%', position: 'relative'}}>
+        <Flex direction="column" justify="center" align="center"
+              style={{minHeight: '100svh', width: '100%', position: 'relative'}}>
 
             <div className="Loss Map" style={{width: '100%', flex: 1, position: 'relative', overflowY: 'scroll'}}>
                 {showMap && <LossMap/>}
@@ -37,12 +37,10 @@ function App() {
         {opened && <Flex justify="center" align="center"
                          onClick={() => setOpened(false)}
                          style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 2}}>
-            <Card shadow="sm" padding="md" radius="md" withBorder
-                  style={{color: 'black', textAlign: 'left', width: '50%'}}>
-                <Flex direction="column" gap="xs">
-                    <ImpactStatement/>
-                </Flex>
-            </Card>
+
+            <Flex direction="column" gap="xs">
+                <ImpactStatement/>
+            </Flex>
         </Flex>}
 
 
