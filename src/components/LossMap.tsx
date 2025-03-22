@@ -17,6 +17,10 @@ const ECONOMIC_LOSS = 13834132249.184;
 
 const ALPHA_COLOR = 200;
 
+const domain = "https://data.scienceimpacts.org"
+const tilesCounties = `${domain}/county_tiles/{z}/{x}/{y}.pbf`
+const tilesStates = `${domain}/state_tiles/{z}/{x}/{y}.pbf`
+
 function LossMap() {
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
     const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
@@ -24,14 +28,14 @@ function LossMap() {
         longitude: -98.5795, // Approximate center longitude of the USA
         latitude: 39.8283,  // Approximate center latitude of the USA
         zoom: 3.5             // Adjust the zoom level to fit the continental USA
-    })
+    });
 
     const [mode, setMode] = useState<"county" | "state">('county');
     const tileLink = useMemo(() => {
         if (mode === 'county') {
-            return 'https://pub-68b2412877cd4500a55733977f95cc9f.r2.dev/tiles_counties_v1/{z}/{x}/{y}.pbf';
+            return tilesCounties;
         } else {
-            return 'https://pub-68b2412877cd4500a55733977f95cc9f.r2.dev/tiles_states_v1/{z}/{x}/{y}.pbf';
+            return tilesStates;
         }
     }, [mode]);
 
@@ -63,7 +67,7 @@ function LossMap() {
         highlightedFeatureId: hoveredFeatureId,
         highlightColor: [127, 255, 212, ALPHA_COLOR],
         uniqueIdProperty: mode === "county" ? "FIPS" : "state",
-        maxZoom: 10,
+        maxZoom: 7,
         // @ts-expect-error comment
         getFillColor: (feature: { id: string, properties: TileProperties }) => {
             let colorString: string;

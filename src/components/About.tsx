@@ -1,47 +1,5 @@
 import {Container, Paper, Title, Text, Anchor} from '@mantine/core';
 
-// function About() {
-//     return (
-//         <Container>
-//             <Title mt="md">
-//                 About the Project
-//             </Title>
-//
-//             <Paper withBorder shadow="md" p="md" mt="md">
-//                 <Title order={2}>Our Team</Title>
-//                 <Text>
-//                     This project is led by a team of scientists who care about
-//                     communicating the impact of federal funding cuts on science, health,
-//                     and the economy. We are affiliated with institutions across the
-//                     nation (University of Maryland - College Park, University of
-//                     Pennsylvania, Georgia Institute of Technology, University of Utah, and
-//                     University of Oregon). We study diverse topics, including
-//                     neuroscience, biology, communication, psychology, and geographic
-//                     information science.
-//                 </Text>
-//             </Paper>
-//
-//             <Paper withBorder shadow="md" p="md" mt="md">
-//                 <Title order={2}>Data and Methodology</Title>
-//                 <Text>
-//                     We source our data from a <a href={"https://report.nih.gov/award/index.cfm"}>public database of NIH grants</a>. We estimate
-//                     the economic impact of NIH grants (or reductions in NIH funding) <a href={"https://www.forbes.com/sites/michaeltnietzel/2025/03/12/nih-grants-fueled-95-billion-in-economic-activity-finds-new-report/"}>based
-//                     on a recent report</a>, which found that every dollar invested in NIH
-//                     generated{' '}
-//                     <Text span fw={700}>
-//                         $2.56 in new economic activity in 2024.
-//                     </Text>{' '}
-//                     To estimate the number of jobs that would be lost if NIH funding is
-//                     cut, we used the ratio of the number of jobs supported / research
-//                     funds awarded in the 2024 fiscal year.
-//                 </Text>
-//             </Paper>
-//         </Container>
-//     );
-// }
-//
-// export default About;
-
 function About() {
     return (
         <Container>
