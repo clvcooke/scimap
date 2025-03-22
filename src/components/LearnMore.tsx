@@ -14,7 +14,7 @@ function LearnMore() {
     const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
 
     return (
-        <Container size="md">
+            <Container size="md">
             <Title mt="md" mb="sm">
                 Understanding NIH Funding
             </Title>

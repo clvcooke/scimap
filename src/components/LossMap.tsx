@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
-import {IconGps} from '@tabler/icons-react';
+import {IconGps, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
 
 import {Map} from 'react-map-gl/maplibre';
 import DeckGL from '@deck.gl/react';
@@ -125,11 +125,11 @@ function LossMap() {
                 },
                 error => {
                     console.error("Error getting location:", error);
-                    alert("Error getting location. Please allow location access or center of USA.");
+                    alert("Error getting location. Please allow location access to zoom to your location.");
                 }
             );
         } else {
-            alert("Geolocation is not supported by this browser. Please select a state.");
+            alert("Geolocation is not supported by this browser");
         }
     };
 
@@ -149,6 +149,15 @@ function LossMap() {
     useEffect(() => {
         flyTo(userLocation);
     }, [userLocation, flyTo])
+
+    const zoomIn = () => {
+        setViewState(prev => ({...prev, zoom: prev.zoom + 1}));
+    };
+
+    const zoomOut = () => {
+        setViewState(prev => ({...prev, zoom: prev.zoom - 1}));
+    };
+
 
 
     return (
@@ -187,20 +196,46 @@ function LossMap() {
                 <Radio checked={mode === 'state'} onChange={() => setMode('state')} label="State"/>
             </Stack>
             {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo}/>}
-            <ActionIcon variant="filled" aria-label="Location"
-                        size={'xl'}
-                        style={{
-                            position: 'absolute',
-                            bottom: 10,
-                            left: 10,
-                            zIndex: 1,
-                            backgroundColor: theme.colors.gray[0],
-                            color: theme.colors.gray[9],
-                        }}
-                        onClick={getLocation}
-            >
-                <IconGps style={{width: '70%', height: '70%'}}/>
-            </ActionIcon>
+
+
+            <Stack style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                zIndex: 1,
+                color: theme.colors.gray[9],
+                padding: 10,
+            }} gap="xs">
+
+                <ActionIcon variant="transparent" aria-label="Zoom In"
+                            size={'xl'}
+                            style={{
+                                color: theme.colors.gray[9],
+                            }}
+                            onClick={zoomIn}
+                >
+                    <IconZoomIn style={{width: '70%', height: '70%'}}/>
+                </ActionIcon>
+                <ActionIcon variant="transparent" aria-label="Zoom Out"
+                            size={'xl'}
+                            style={{
+                                color: theme.colors.gray[9],
+                            }}
+                            onClick={zoomOut}
+                >
+                    <IconZoomOut style={{width: '70%', height: '70%'}}/>
+                </ActionIcon>
+                <ActionIcon variant="transparent" aria-label="Location"
+                            size={'xl'}
+                            style={{
+                                color: theme.colors.gray[9],
+                            }}
+                            onClick={getLocation}
+                >
+                    <IconGps style={{width: '70%', height: '70%'}}/>
+                </ActionIcon>
+            </Stack>
+
         </DeckGL>
     );
 }

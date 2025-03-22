@@ -2,7 +2,7 @@ import {Container, Paper, Title, Text, Anchor} from '@mantine/core';
 
 function About() {
     return (
-        <Container>
+        <Container >
             <Title mt="md">
                 The Science & Community Impacts Mapping Project (SCIMaP)
             </Title>
