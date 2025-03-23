@@ -1,5 +1,6 @@
 import {Container, Flex, Text, Title, useMantineTheme} from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import {useMediaQuery} from "@mantine/hooks";
+
 
 function TitleHeader({jobsLost, costImpact}: { jobsLost: number, costImpact: number }) {
 
@@ -16,21 +17,23 @@ function TitleHeader({jobsLost, costImpact}: { jobsLost: number, costImpact: num
 
     const theme = useMantineTheme();
     const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
+    return <Container>
+        <div style={{position: 'relative', width: '100%'}}>
+            <div style={{textAlign: 'center'}}>
+                <Title
+                    size={isMobile ? 'h3' : 'h2'}
+                    style={{
+                        fontFamily: 'Roboto, sans-serif',
+                        fontWeight: 700,
+                        color: 'rgba(0, 0, 0, 0.9)',
+                        marginBottom: '5px',
+                    }}
+                >
+                    Federal Health Research Cuts
+                </Title>
+            </div>
+        </div>
 
-
-    return <Container
-
-    >
-        <Title size={isMobile ? 'h3' : 'h2'}
-               style={{
-                   fontFamily: 'Roboto, sans-serif',
-                   fontWeight: 700,
-                   color: 'rgba(0, 0, 0, 0.9)',
-                   marginBottom: '5px',
-                   textAlign: 'center'
-               }}>
-            Federal Health Research Cuts
-        </Title>
         <Flex justify="center" gap="sm" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
             <Text>
                 <Text
