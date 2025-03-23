@@ -1,5 +1,5 @@
 import {useCallback, useMemo, useState} from 'react'
-import {IconGps, IconShare, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
+import {IconGps, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
 
 import {Map} from 'react-map-gl/maplibre';
 import DeckGL from '@deck.gl/react';
@@ -8,33 +8,21 @@ import {MVTLayer} from '@deck.gl/geo-layers';
 import {scaleLinear} from 'd3-scale';
 import {interpolateOrRd,} from 'd3-scale-chromatic';
 import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
-import {ActionIcon, useMantineTheme, Radio, Text, Stack, Button} from "@mantine/core";
+import {ActionIcon, useMantineTheme, Radio, Text, Stack} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {MapViewState, FlyToInterpolator} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
 import {MouseEvent} from "react";
 
-const JOBS_LOST = 153712.58056788
-const ECONOMIC_LOSS = 13834132249.184;
 
 const ALPHA_COLOR = 200;
 
 const domain = "https://data.scienceimpacts.org"
 const tilesCounties = `${domain}/county_tiles/{z}/{x}/{y}.pbf`
 const tilesStates = `${domain}/state_tiles/{z}/{x}/{y}.pbf`
-import {isMobile} from 'react-device-detect';
-import ReactGA from "react-ga4";
-import {ANALYTICS_ACTIONS} from "../constants.ts";
+import { ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
+import ShareButton from "./ShareButton.tsx";
 
-const formattedJobs = new Intl.NumberFormat('en-US', {
-    notation: 'compact',
-    compactDisplay: 'short'
-}).format(JOBS_LOST);
-
-const formattedCost = new Intl.NumberFormat('en-US', {
-    notation: 'compact',
-    compactDisplay: 'short'
-}).format(ECONOMIC_LOSS);
 
 function LossMap() {
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
@@ -64,27 +52,6 @@ function LossMap() {
         .domain([0, Math.log(187.3718153)])
         .range([0, 1])
         .clamp(true);
-
-
-    const pageUrl = window.location.href;
-    const handleShare = async () => {
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: 'Federal Health Research Cuts',
-                    text: `Impact: $${formattedCost} and ${formattedJobs} Jobs Lost`,
-                    url: pageUrl,
-                });
-                ReactGA.event({
-                    category: ANALYTICS_ACTIONS.action, // Required
-                    action: 'Share',     // Required
-                });
-            } catch (error) {
-                console.error('Error sharing:', error);
-                alert("Error sharing. Please copy the link to your clipboard.");
-            }
-        }
-    };
 
     const layer = new MVTLayer({
         id: 'xyz-mvt',
@@ -256,8 +223,7 @@ function LossMap() {
                     <Radio checked={mode === 'county'} onChange={() => setMode('county')} label="County"/>
                     <Radio checked={mode === 'state'} onChange={() => setMode('state')} label="State"/>
                 </Stack>
-                {isMobile &&
-                    <Button onClick={handleShare} size={"sm"} rightSection={<IconShare size={16}/>}>Share</Button>}
+                {<ShareButton/>}
             </Stack>
             {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo}/>}
 

@@ -88,7 +88,7 @@ function About() {
                             dollar invested in NIH generated $2.56 in new economic activity in 2024. To estimate the
                             number of jobs that would be lost if NIH funding is cut, we used the ratio of the number of
                             jobs supported / research funds awarded in the 2024 fiscal year. We also use <a
-                            href={"https://www.census.gov/topics/employment/commuting/guidance/flows.html"}
+                            href={"https://lehd.ces.census.gov/data/"}
                             target={"_blank"}>Census data on
                             where U.S. commuters live and work</a> to estimate how economic activity generated in each
                             county can spread to adjacent counties.

@@ -6,6 +6,7 @@ import {
     Card,
 } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons-react';
+import ShareButton from "./ShareButton.tsx";
 
 function Advocacy() {
     return (
@@ -34,7 +35,6 @@ function Advocacy() {
                         target="_blank"
                         rel="noopener noreferrer"
                         rightSection={<IconExternalLink size={16} />}
-                        variant="outline"
                     >
                         Find Contact Information
                     </Button>
@@ -51,6 +51,7 @@ function Advocacy() {
                     <Text size="sm" mb="sm" ta={'left'}>
                         We also encourage you to share our website with friends, family, and followers
                     </Text>
+                    <ShareButton />
                 </Card.Section>
             </Card>
 
