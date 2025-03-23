@@ -2,15 +2,19 @@ import './App.css'
 import 'maplibre-gl/dist/maplibre-gl.css';
 import LossMap from "./components/LossMap.tsx";
 import ActionMenu, {TabOption} from "./components/ActionMenu.tsx";
-import {Button, Flex, ScrollArea} from '@mantine/core';
+import {Flex, ScrollArea} from '@mantine/core';
 import {useEffect, useState} from "react";
 import ImpactStatement from "./components/ImpactStatement.tsx";
 import LearnMore from "./components/LearnMore.tsx";
 import About from "./components/About.tsx";
 import Advocacy from "./components/Advocacy.tsx";
 
+import ReactGA from 'react-ga4';
+import Quiz from "./components/Quiz.tsx";
+
 
 function App() {
+    ReactGA.initialize("G-CCM3BQY1WQ");
     const [opened, setOpened] = useState(true);
     const [currentTab, setCurrentTab] = useState<TabOption | null>("map");
 
@@ -36,10 +40,10 @@ function App() {
                 // style={{flex: 1}}
                 style={{height: "calc(100svh - 3rem)"}}
             >
-                {showQuiz && <Button>Quiz</Button>}
                 {showLearn && <LearnMore/>}
                 {showAbout && <About/>}
                 {takeAction && <Advocacy/>}
+                {showQuiz && <Quiz/>}
             </ScrollArea>}
 
             <div style={{height: "2.5rem"}}>

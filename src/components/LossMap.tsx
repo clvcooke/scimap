@@ -23,6 +23,8 @@ const domain = "https://data.scienceimpacts.org"
 const tilesCounties = `${domain}/county_tiles/{z}/{x}/{y}.pbf`
 const tilesStates = `${domain}/state_tiles/{z}/{x}/{y}.pbf`
 import {isMobile} from 'react-device-detect';
+import ReactGA from "react-ga4";
+import {ANALYTICS_ACTIONS} from "../constants.ts";
 
 const formattedJobs = new Intl.NumberFormat('en-US', {
     notation: 'compact',
@@ -73,7 +75,10 @@ function LossMap() {
                     text: `Impact: $${formattedCost} and ${formattedJobs} Jobs Lost`,
                     url: pageUrl,
                 });
-                console.log('Successfully shared');
+                ReactGA.event({
+                    category: ANALYTICS_ACTIONS.action, // Required
+                    action: 'Share',     // Required
+                });
             } catch (error) {
                 console.error('Error sharing:', error);
                 alert("Error sharing. Please copy the link to your clipboard.");
@@ -242,12 +247,15 @@ function LossMap() {
                 top: 100,
                 right: 10,
                 zIndex: 10,
-                backgroundColor: theme.colors.gray[0],
-                padding: 10,
+                m: 10,
             }} gap="xs">
-                <Text fw={700}>Level</Text>
-                <Radio checked={mode === 'county'} onChange={() => setMode('county')} label="County"/>
-                <Radio checked={mode === 'state'} onChange={() => setMode('state')} label="State"/>
+                <Stack style={{backgroundColor: theme.colors.gray[0],
+                    padding: 10
+                }} gap={"xs"}>
+                    <Text fw={700}>Level</Text>
+                    <Radio checked={mode === 'county'} onChange={() => setMode('county')} label="County"/>
+                    <Radio checked={mode === 'state'} onChange={() => setMode('state')} label="State"/>
+                </Stack>
                 {isMobile &&
                     <Button onClick={handleShare} size={"sm"} rightSection={<IconShare size={16}/>}>Share</Button>}
             </Stack>

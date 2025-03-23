@@ -10,10 +10,8 @@ function ImpactStatement() {
                 <Flex direction="column" gap="sm">
                     <Text size="xl" c="dark" ta="center">Medical Research is at Risk</Text>
                     <Text size="md" c="dark" ta="left">
-                        The National Institutes of Health (NIH) funds crucial health research to address cancer, diabetes, dementia, and more. NIH funding also boosts the economy, returning &gt;250% of the value invested.
+                        The <b>National Institutes of Health</b> (NIH) funds crucial health <b>research</b> to address cancer, diabetes, dementia, and more. NIH funding also boosts the economy, returning &gt;250% of the value invested. On Feb. 7th, 2025, the White House ordered across-the-board cuts to NIH funding, which would cause economic losses and reduce jobs across the nation.
                     </Text>
-                    <Text size="md" c="dark" ta="left">
-                        The Trump Administration has ordered across-the-board cuts to NIH funding, which would cause economic losses and reduce jobs across the nation. </Text>
                     <Button size="md">
                         See Impact
                     </Button>
