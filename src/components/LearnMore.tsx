@@ -6,7 +6,7 @@ import {
     Text,
     useMantineTheme,
 } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
+import {useMediaQuery} from '@mantine/hooks';
 
 
 function LearnMore() {
@@ -14,7 +14,7 @@ function LearnMore() {
     const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
 
     return (
-            <Container size="md">
+        <Container size="md">
             <Title mt="md" mb="sm">
                 Understanding NIH Funding
             </Title>
@@ -26,9 +26,10 @@ function LearnMore() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            The National Institutes of Health (NIH) provide funding for
-                            crucial scientific research that addresses leading health
-                            problems, including cancer, diabetes, dementia, heart disease,
+                            The <b>National Institutes of Health</b> (NIH) provides funding for crucial scientific
+                            research that
+                            addresses <b>leading health problems</b>, including cancer, diabetes, dementia, heart
+                            disease,
                             stroke, mental illness, and more.
                         </Text>
                     </Accordion.Panel>
@@ -42,17 +43,16 @@ function LearnMore() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            NIH funding is an excellent financial investment. Less than 1% of
-                            the total federal budget goes to the NIH, but this small-but-mighty
-                            investment has a big impact. Every dollar invested in scientific
-                            research through NIH produces, on average, $2.56 of economic
-                            activity in return– over 250% gain.
+                            NIH funding is an <b>excellent financial investment</b>. Less than 1% of the total federal
+                            budget
+                            goes to the NIH, but this small-but-mighty investment has a big impact. Every dollar
+                            invested in scientific research through NIH produces, on average, $2.56 of economic activity
+                            in return – <b>over 250% gain</b>.
                         </Text>
                         <Text ta={"left"} mt="sm">
-                            NIH funding supports universities, hospitals, research
-                            institutions, and businesses across the U.S. In 2024, the NIH
-                            directly supported over 408,000 jobs and generated over $94.5
-                            billion in new economic activity in the U.S.
+                            NIH funding supports universities, hospitals, research institutions, and businesses across
+                            the U.S. In 2024, the NIH directly supported over <b>408,000 jobs</b> and generated over <b>$94.5
+                            billion</b> in new economic activity in the U.S.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
@@ -65,14 +65,13 @@ function LearnMore() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            Currently, the Trump Administration has ordered major changes to
-                            NIH funding, which would take back funds that were already
-                            promised to the states. States have sued to challenge the order,
-                            arguing that the changes are unlawful.
+                            Currently, the Trump Administration has ordered <b>major changes to NIH funding</b>, which would
+                            <b>take back funds</b> that were already promised to the states. States have sued to challenge the
+                            order, arguing that the changes are <b>unlawful</b>.
                         </Text>
                         <Text ta={"left"} mt="sm">
                             One of the changes would greatly reduce NIH funding that covers
-                            "indirect costs" of research. Indirect costs include the
+                            <b>"indirect costs"</b> of research. Indirect costs include the
                             essential facilities, special equipment, skilled staff, and safety
                             checks required for medical research.
                         </Text>
@@ -118,9 +117,12 @@ function LearnMore() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            We source our data from a <a href={"https://report.nih.gov/award/index.cfm"}>public database of NIH grants</a>. We
+                            We source our data from a <a href={"https://report.nih.gov/award/index.cfm"}>public database
+                            of NIH grants</a>. We
                             estimate the economic impact of NIH grants (or reductions in NIH
-                            funding) <a href={"https://www.forbes.com/sites/michaeltnietzel/2025/03/12/nih-grants-fueled-95-billion-in-economic-activity-finds-new-report/"}>based on a recent report</a>, which found that every dollar
+                            funding) <a
+                            href={"https://www.forbes.com/sites/michaeltnietzel/2025/03/12/nih-grants-fueled-95-billion-in-economic-activity-finds-new-report/"}>based
+                            on a recent report</a>, which found that every dollar
                             invested in NIH generated $2.56 in new economic activity in 2024.
                             To estimate the number of jobs that would be lost if NIH funding
                             is cut, we used the ratio of the number of jobs supported /

@@ -1,13 +1,13 @@
 import {Tabs} from '@mantine/core';
 
 
-export type TabOption = 'map' | 'quiz' | 'learn' | 'about';
+export type TabOption = 'map' | 'quiz' | 'learn' | 'about' | 'action';
 
 
 function ActionMenu({currentTab, setCurrentTab}: { currentTab: TabOption, setCurrentTab: (tab: TabOption) => void }) {
     return (
         <Tabs value={currentTab} color="teal" variant="pills" radius="xs" onChange={(tab) => {
-            if (tab && ["map", "quiz", "learn", "about"].includes(tab)) {
+            if (tab && ["map", "quiz", "learn", "about", 'action'].includes(tab)) {
                 // @ts-expect-error: bad TS
                 setCurrentTab(tab);
             } else {
@@ -34,6 +34,9 @@ function ActionMenu({currentTab, setCurrentTab}: { currentTab: TabOption, setCur
                 </Tabs.Tab>
                 <Tabs.Tab value="about">
                     About
+                </Tabs.Tab>
+                <Tabs.Tab value="action">
+                    Take Action
                 </Tabs.Tab>
             </Tabs.List>
         </Tabs>

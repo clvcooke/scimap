@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import ImpactStatement from "./components/ImpactStatement.tsx";
 import LearnMore from "./components/LearnMore.tsx";
 import About from "./components/About.tsx";
+import Advocacy from "./components/Advocacy.tsx";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
     const showQuiz = currentTab === "quiz";
     const showLearn = currentTab === "learn";
     const showAbout = currentTab === "about";
+    const takeAction = currentTab === "action";
 
     return <>
         <Flex direction="column" justify="space-between" align="center"
@@ -37,6 +39,7 @@ function App() {
                 {showQuiz && <Button>Quiz</Button>}
                 {showLearn && <LearnMore/>}
                 {showAbout && <About/>}
+                {takeAction && <Advocacy/>}
             </ScrollArea>}
 
             <div style={{height: "2.5rem"}}>
