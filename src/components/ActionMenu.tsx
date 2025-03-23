@@ -17,8 +17,8 @@ function ActionMenu({currentTab, setCurrentTab}: { currentTab: TabOption, setCur
             }
         }} styles={{
             tab: {
-                'padding': isMobile ? '8px 8px' : '12px 12px',
-                'fontSize': isMobile ? '12px' : '16px',
+                'padding': isMobile ? '4px 4px' : '12px 12px',
+                'fontSize': isMobile ? '10px' : '16px',
             },
         }}
         >
