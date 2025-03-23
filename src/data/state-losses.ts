@@ -1,366 +1,69 @@
-export const STATE_LOSSES = {
-    "Alaska":
-        {
-            "loss":
-                4894526.976,
-            "state_code":
-                "AK"
-        }
-    ,
-    "Alabama":
-        {
-            "loss":
-                121567739.6, "state_code":
-                "AL"
-        }
-    ,
-    "Arkansas":
-        {
-            "loss":
-                42985114.5, "state_code":
-                "AR"
-        }
-    ,
-    "Arizona":
-        {
-            "loss":
-                121508236.2, "state_code":
-                "AZ"
-        }
-    ,
-    "California":
-        {
-            "loss":
-                1978637698.0, "state_code":
-                "CA"
-        }
-    ,
-    "Colorado":
-        {
-            "loss":
-                180721111.4, "state_code":
-                "CO"
-        }
-    ,
-    "Connecticut":
-        {
-            "loss":
-                370563251.7, "state_code":
-                "CT"
-        }
-    ,
-    "District of Columbia":
-        {
-            "loss":
-                65067174.78, "state_code":
-                "DC"
-        }
-    ,
-    "Delaware":
-        {
-            "loss":
-                34208674.3, "state_code":
-                "DE"
-        }
-    ,
-    "Florida":
-        {
-            "loss":
-                322677138.7, "state_code":
-                "FL"
-        }
-    ,
-    "Georgia":
-        {
-            "loss":
-                277174965.9, "state_code":
-                "GA"
-        }
-    ,
-    "Hawaii":
-        {
-            "loss":
-                38275930.75, "state_code":
-                "HI"
-        }
-    ,
-    "Iowa":
-        {
-            "loss":
-                86467958.02, "state_code":
-                "IA"
-        }
-    ,
-    "Idaho":
-        {
-            "loss":
-                8531054.464, "state_code":
-                "ID"
-        }
-    ,
-    "Illinois":
-        {
-            "loss":
-                503064893.2, "state_code":
-                "IL"
-        }
-    ,
-    "Indiana":
-        {
-            "loss":
-                163337893.2, "state_code":
-                "IN"
-        }
-    ,
-    "Kansas":
-        {
-            "loss":
-                56683360.26, "state_code":
-                "KS"
-        }
-    ,
-    "Kentucky":
-        {
-            "loss":
-                108165875.8, "state_code":
-                "KY"
-        }
-    ,
-    "Louisiana":
-        {
-            "loss":
-                81142832.9, "state_code":
-                "LA"
-        }
-    ,
-    "Massachusetts":
-        {
-            "loss":
-                1337117314.0, "state_code":
-                "MA"
-        }
-    ,
-    "Maryland":
-        {
-            "loss":
-                479204598.8, "state_code":
-                "MD"
-        }
-    ,
-    "Maine":
-        {
-            "loss":
-                73259129.09, "state_code":
-                "ME"
-        }
-    ,
-    "Michigan":
-        {
-            "loss":
-                398170427.3, "state_code":
-                "MI"
-        }
-    ,
-    "Minnesota":
-        {
-            "loss":
-                301893807.4, "state_code":
-                "MN"
-        }
-    ,
-    "Missouri":
-        {
-            "loss":
-                324976496.4, "state_code":
-                "MO"
-        }
-    ,
-    "Mississippi":
-        {
-            "loss":
-                25316129.79, "state_code":
-                "MS"
-        }
-    ,
-    "Montana":
-        {
-            "loss":
-                14647560.32, "state_code":
-                "MT"
-        }
-    ,
-    "North Carolina":
-        {
-            "loss":
-                580687424.1, "state_code":
-                "NC"
-        }
-    ,
-    "North Dakota":
-        {
-            "loss":
-                12151181.31, "state_code":
-                "ND"
-        }
-    ,
-    "Nebraska":
-        {
-            "loss":
-                66053493.76, "state_code":
-                "NE"
-        }
-    ,
-    "New Hampshire":
-        {
-            "loss":
-                66017861.63, "state_code":
-                "NH"
-        }
-    ,
-    "New Jersey":
-        {
-            "loss":
-                151037748.2, "state_code":
-                "NJ"
-        }
-    ,
-    "New Mexico":
-        {
-            "loss":
-                54495559.55, "state_code":
-                "NM"
-        }
-    ,
-    "Nevada":
-        {
-            "loss":
-                10541746.43, "state_code":
-                "NV"
-        }
-    ,
-    "New York":
-        {
-            "loss":
-                1560324710.0, "state_code":
-                "NY"
-        }
-    ,
-    "Ohio":
-        {
-            "loss":
-                412696769.0, "state_code":
-                "OH"
-        }
-    ,
-    "Oklahoma":
-        {
-            "loss":
-                63693408.13, "state_code":
-                "OK"
-        }
-    ,
-    "Oregon":
-        {
-            "loss":
-                130557804.2, "state_code":
-                "OR"
-        }
-    ,
-    "Pennsylvania":
-        {
-            "loss":
-                891337920.3, "state_code":
-                "PA"
-        }
-    ,
-    "Puerto Rico":
-        {
-            "loss":
-                24825210.37, "state_code":
-                "PR"
-        }
-    ,
-    "Rhode Island":
-        {
-            "loss":
-                90364263.42, "state_code":
-                "RI"
-        }
-    ,
-    "South Carolina":
-        {
-            "loss":
-                91662262.66, "state_code":
-                "SC"
-        }
-    ,
-    "South Dakota":
-        {
-            "loss":
-                13130083.46, "state_code":
-                "SD"
-        }
-    ,
-    "Tennessee":
-        {
-            "loss":
-                332021681.3, "state_code":
-                "TN"
-        }
-    ,
-    "Texas":
-        {
-            "loss":
-                754938778.4, "state_code":
-                "TX"
-        }
-    ,
-    "Utah":
-        {
-            "loss":
-                104554029.6, "state_code":
-                "UT"
-        }
-    ,
-    "Virginia":
-        {
-            "loss":
-                170372990.2, "state_code":
-                "VA"
-        }
-    ,
-    "Vermont":
-        {
-            "loss":
-                22737718.66, "state_code":
-                "VT"
-        }
-    ,
-    "Washington":
-        {
-            "loss":
-                474390810.5, "state_code":
-                "WA"
-        }
-    ,
-    "Wisconsin":
-        {
-            "loss":
-                210486903.9, "state_code":
-                "WI"
-        }
-    ,
-    "West Virginia":
-        {
-            "loss":
-                18942027.01, "state_code":
-                "WV"
-        }
-    ,
-    "Wyoming":
-        {
-            "loss":
-                5848969.344, "state_code":
-                "WY"
-        }
-}
+export const STATE_LOSSES: {
+    [key: string]: {
+        loss: number,
+        state_code: string,
+        jobs_loss: number,
+    }
+} = {
+    "Alaska": {"loss": 4894526.976, "state_code": "AK", "jobs_loss": 54.38363307},
+    "Alabama": {"loss": 121567739.6, "state_code": "AL", "jobs_loss": 1350.752663},
+    "Arkansas": {"loss": 42985114.5, "state_code": "AR", "jobs_loss": 477.6123833},
+    "Arizona": {"loss": 121508236.2, "state_code": "AZ", "jobs_loss": 1350.091513},
+    "California": {"loss": 1978637698.0, "state_code": "CA", "jobs_loss": 21984.86332},
+    "Colorado": {"loss": 180721111.4, "state_code": "CO", "jobs_loss": 2008.012349},
+    "Connecticut": {"loss": 370563251.7, "state_code": "CT", "jobs_loss": 4117.369463},
+    "District of Columbia": {"loss": 65067174.78, "state_code": "DC", "jobs_loss": 722.9686087},
+    "Delaware": {"loss": 34208674.3, "state_code": "DE", "jobs_loss": 380.0963812},
+    "Florida": {"loss": 322677138.7, "state_code": "FL", "jobs_loss": 3585.301541},
+    "Georgia": {"loss": 277174965.9, "state_code": "GA", "jobs_loss": 3079.721843},
+    "Hawaii": {"loss": 38275930.75, "state_code": "HI", "jobs_loss": 425.2881195},
+    "Iowa": {"loss": 86467958.02, "state_code": "IA", "jobs_loss": 960.7550891},
+    "Idaho": {"loss": 8531054.464, "state_code": "ID", "jobs_loss": 94.78949404},
+    "Illinois": {"loss": 503064893.2, "state_code": "IL", "jobs_loss": 5589.609924},
+    "Indiana": {"loss": 163337893.2, "state_code": "IN", "jobs_loss": 1814.865481},
+    "Kansas": {"loss": 56683360.26, "state_code": "KS", "jobs_loss": 629.815114},
+    "Kentucky": {"loss": 108165875.8, "state_code": "KY", "jobs_loss": 1201.843065},
+    "Louisiana": {"loss": 81142832.9, "state_code": "LA", "jobs_loss": 901.5870322},
+    "Massachusetts": {"loss": 1337117314.0, "state_code": "MA", "jobs_loss": 14856.85905},
+    "Maryland": {"loss": 479204598.8, "state_code": "MD", "jobs_loss": 5324.495542},
+    "Maine": {"loss": 73259129.09, "state_code": "ME", "jobs_loss": 813.9903232},
+    "Michigan": {"loss": 398170427.3, "state_code": "MI", "jobs_loss": 4424.115858},
+    "Minnesota": {"loss": 301893807.4, "state_code": "MN", "jobs_loss": 3354.375637},
+    "Missouri": {"loss": 324976496.4, "state_code": "MO", "jobs_loss": 3610.84996},
+    "Mississippi": {"loss": 25316129.79, "state_code": "MS", "jobs_loss": 281.290331},
+    "Montana": {"loss": 14647560.32, "state_code": "MT", "jobs_loss": 162.7506702},
+    "North Carolina": {"loss": 580687424.1, "state_code": "NC", "jobs_loss": 6452.08249},
+    "North Dakota": {"loss": 12151181.31, "state_code": "ND", "jobs_loss": 135.0131257},
+    "Nebraska": {"loss": 66053493.76, "state_code": "NE", "jobs_loss": 733.9277084},
+    "New Hampshire": {"loss": 66017861.63, "state_code": "NH", "jobs_loss": 733.5317959},
+    "New Jersey": {"loss": 151037748.2, "state_code": "NJ", "jobs_loss": 1678.197202},
+    "New Mexico": {"loss": 54495559.55, "state_code": "NM", "jobs_loss": 605.5062172},
+    "Nevada": {"loss": 10541746.43, "state_code": "NV", "jobs_loss": 117.1305159},
+    "New York": {"loss": 1560324710.0, "state_code": "NY", "jobs_loss": 17336.94123},
+    "Ohio": {"loss": 412696769.0, "state_code": "OH", "jobs_loss": 4585.519656},
+    "Oklahoma": {"loss": 63693408.13, "state_code": "OK", "jobs_loss": 707.7045348},
+    "Oregon": {"loss": 130557804.2, "state_code": "OR", "jobs_loss": 1450.642268},
+    "Pennsylvania": {"loss": 891337920.3, "state_code": "PA", "jobs_loss": 9903.75467},
+    "Puerto Rico": {"loss": 24825210.37, "state_code": "PR", "jobs_loss": 275.8356708},
+    "Rhode Island": {"loss": 90364263.42, "state_code": "RI", "jobs_loss": 1004.047371},
+    "South Carolina": {"loss": 91662262.66, "state_code": "SC", "jobs_loss": 1018.469585},
+    "South Dakota": {"loss": 13130083.46, "state_code": "SD", "jobs_loss": 145.8898162},
+    "Tennessee": {"loss": 332021681.3, "state_code": "TN", "jobs_loss": 3689.129792},
+    "Texas": {"loss": 754938778.4, "state_code": "TX", "jobs_loss": 8388.208649},
+    "Utah": {"loss": 104554029.6, "state_code": "UT", "jobs_loss": 1161.71144},
+    "Virginia": {"loss": 170372990.2, "state_code": "VA", "jobs_loss": 1893.033225},
+    "Vermont": {"loss": 22737718.66, "state_code": "VT", "jobs_loss": 252.6413184},
+    "Washington": {"loss": 474390810.5, "state_code": "WA", "jobs_loss": 5271.009006},
+    "Wisconsin": {"loss": 210486903.9, "state_code": "WI", "jobs_loss": 2338.743377},
+    "West Virginia": {"loss": 18942027.01, "state_code": "WV", "jobs_loss": 210.4669668},
+    "Wyoming": {"loss": 5848969.344, "state_code": "WY", "jobs_loss": 64.98854827}
+};
+
+
+export const STATE_LOSS_ARRAY = Object.keys(STATE_LOSSES).map(stateName => ({
+    "Name": stateName,
+    "Loss": STATE_LOSSES[stateName].loss as number,
+    "State Code": STATE_LOSSES[stateName].state_code as string,
+}));
+
+export const STATE_ARRAY = Object.keys(STATE_LOSSES);

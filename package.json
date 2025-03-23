@@ -28,6 +28,7 @@
     "react-ga4": "^2.1.0",
     "react-helmet": "^6.1.0",
     "react-map-gl": "^8.0.1",
+    "react-share": "^5.2.2",
     "tailwindcss": "^4.0.14"
   },
   "devDependencies": {

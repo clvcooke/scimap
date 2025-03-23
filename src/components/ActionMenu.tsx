@@ -35,9 +35,9 @@ function ActionMenu({currentTab, setCurrentTab}: { currentTab: TabOption, setCur
                 <Tabs.Tab value="action">
                     Take Action
                 </Tabs.Tab>
-                {/*<Tabs.Tab value="quiz">*/}
-                {/*    Quiz*/}
-                {/*</Tabs.Tab>*/}
+                <Tabs.Tab value="quiz">
+                    Quiz
+                </Tabs.Tab>
             </Tabs.List>
         </Tabs>
     );

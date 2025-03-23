@@ -1,5 +1,5 @@
 import {useCallback, useMemo, useState} from 'react'
-import {IconGps, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
+import {IconGps, IconShare, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
 
 import {Map} from 'react-map-gl/maplibre';
 import DeckGL from '@deck.gl/react';
@@ -8,7 +8,7 @@ import {MVTLayer} from '@deck.gl/geo-layers';
 import {scaleLinear} from 'd3-scale';
 import {interpolateOrRd,} from 'd3-scale-chromatic';
 import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
-import {ActionIcon, useMantineTheme, Radio, Text, Stack} from "@mantine/core";
+import {ActionIcon, useMantineTheme, Radio, Text, Stack, Button, Modal} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {MapViewState, FlyToInterpolator} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
@@ -21,8 +21,7 @@ const domain = "https://data.scienceimpacts.org"
 const tilesCounties = `${domain}/county_tiles/{z}/{x}/{y}.pbf`
 const tilesStates = `${domain}/state_tiles/{z}/{x}/{y}.pbf`
 import { ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
-import ShareButton from "./ShareButton.tsx";
-
+import SharePage from "./SharePage.tsx";
 
 function LossMap() {
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
@@ -33,6 +32,7 @@ function LossMap() {
         zoom: 3.5             // Adjust the zoom level to fit the continental USA
     });
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+    const [showShare, setShowShare] = useState(false);
 
     const [mode, setMode] = useState<"county" | "state">('county');
     const tileLink = useMemo(() => {
@@ -223,7 +223,7 @@ function LossMap() {
                     <Radio checked={mode === 'county'} onChange={() => setMode('county')} label="County"/>
                     <Radio checked={mode === 'state'} onChange={() => setMode('state')} label="State"/>
                 </Stack>
-                {<ShareButton/>}
+                <Button rightSection={<IconShare size={16}/>} onClick={() => setShowShare(true)}>Share</Button>
             </Stack>
             {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo}/>}
 
@@ -265,7 +265,11 @@ function LossMap() {
                     <IconGps style={{width: '70%', height: '70%'}}/>
                 </ActionIcon>
             </Stack>
-
+            <Modal withinPortal={false} opened={showShare} onClose={() => setShowShare(false)} withCloseButton={false}>
+                <SharePage
+                    title={"See national impact of federal health research cuts"}
+                />
+            </Modal>
         </DeckGL>
     );
 }

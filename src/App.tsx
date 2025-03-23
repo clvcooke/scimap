@@ -16,7 +16,7 @@ import Quiz from "./components/Quiz.tsx";
 function App() {
     ReactGA.initialize("G-CCM3BQY1WQ");
     const [opened, setOpened] = useState(true);
-    const [currentTab, setCurrentTab] = useState<TabOption | null>("map");
+    const [currentTab, setCurrentTab] = useState<TabOption>("map");
 
     useEffect(() => {
         setOpened(true);
@@ -43,7 +43,7 @@ function App() {
                 {showLearn && <LearnMore/>}
                 {showAbout && <About/>}
                 {takeAction && <Advocacy/>}
-                {showQuiz && <Quiz/>}
+                {showQuiz && <Quiz setActiveTab={setCurrentTab}/>}
             </ScrollArea>}
 
             <div style={{height: "2.5rem"}}>
