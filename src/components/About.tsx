@@ -34,11 +34,10 @@ function About() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            The Trump administration and the Department of Government Efficiency (DOGE) have ordered
-                            drastic cuts to federal funding for scientific research. These changes include a proposal to
-                            reduce support for all health-related research nationwide, and cancellations of many grants
-                            for specific research projects. Our mission is to demonstrate how these proposed changes
-                            would be harmful for science, the economy, and healthcare.
+                            The White House has ordered large cuts to federal funding for scientific research. These
+                            changes include a proposal to reduce support for all health-related research nationwide, and
+                            cancellations of many grants for specific research projects. Our mission is to demonstrate
+                            how these proposed changes impact science, the economy, and healthcare.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
@@ -53,8 +52,7 @@ function About() {
                         <Text ta={"left"}>
                             We are an interdisciplinary team of researchers from the University of Maryland - College
                             Park (Dr. Joshua Weitz), the University of Pennsylvania (Dr. Alyssa Sinclair & Dr. Emily
-                            Falk), the University of Oregon (Dr. Ellen Peters), the University of Utah (Dr. Angela
-                            Fagerlin), and the Georgia Institute of Technology (Dr. Clio Andris). We have expertise in
+                            Falk), and the Georgia Institute of Technology (Dr. Clio Andris). We have expertise in
                             different areas—biology, psychology, neuroscience, communication, and geographic information
                             science—but we are united by our vision and goals.
                         </Text>
@@ -75,18 +73,23 @@ function About() {
                             These cuts would reduce funding for “indirect costs” of research, like essential staff,
                             equipment, and facilities. At many institutions, &gt;50% of research funding is used for
                             indirect costs. The proposed changes would cap funding for indirect costs at 15%, taking
-                            back hundreds of millions of dollars that were promised to the states.
+                            back hundreds of millions of dollars that were promised to the states. States have sued to
+                            challenge the order, arguing that the changes are unlawful. Currently, a federal judge has
+                            issued an injunction to temporarily block the changes.
                         </Text>
                         <Text ta={"left"} mt="sm">
                             We source our data from a <a href={"https://report.nih.gov/award/index.cfm"}
                                                          target={"_blank"}>public database of NIH grants</a>. We
                             estimate the economic impact of
                             NIH grants (or reductions in NIH funding) <a
-                            href={"https://www.forbes.com/sites/michaeltnietzel/2025/03/12/nih-grants-fueled-95-billion-in-economic-activity-finds-new-report/"} target={"_blank"}>based
+                            href={"https://www.forbes.com/sites/michaeltnietzel/2025/03/12/nih-grants-fueled-95-billion-in-economic-activity-finds-new-report/"}
+                            target={"_blank"}>based
                             on a recent report</a>, which found that every
                             dollar invested in NIH generated $2.56 in new economic activity in 2024. To estimate the
                             number of jobs that would be lost if NIH funding is cut, we used the ratio of the number of
-                            jobs supported / research funds awarded in the 2024 fiscal year. We also use <a href={"https://www.census.gov/topics/employment/commuting/guidance/flows.html"} target={"_blank"}>Census data on
+                            jobs supported / research funds awarded in the 2024 fiscal year. We also use <a
+                            href={"https://www.census.gov/topics/employment/commuting/guidance/flows.html"}
+                            target={"_blank"}>Census data on
                             where U.S. commuters live and work</a> to estimate how economic activity generated in each
                             county can spread to adjacent counties.
                         </Text>
@@ -101,7 +104,8 @@ function About() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            For questions, comments, and press inquiries, please email <a href="mailto:contact@scienceimpacts.org">contact@scienceimpacts.org</a>
+                            For questions, comments, and press inquiries, please email <a
+                            href="mailto:contact@scienceimpacts.org">contact@scienceimpacts.org</a>
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
