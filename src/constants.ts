@@ -4,8 +4,8 @@ export const ANALYTICS_ACTIONS = {
 }
 
 
-export const JOBS_LOST = 153712.58056788
-export const ECONOMIC_LOSS = 13834132249.184;
+export const JOBS_LOST = 196795.37706808883
+export const ECONOMIC_LOSS = 17711583936.12799;
 
 export const formattedJobs = new Intl.NumberFormat('en-US', {
     notation: 'compact',
