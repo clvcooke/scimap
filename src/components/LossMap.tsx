@@ -18,8 +18,8 @@ import {MouseEvent} from "react";
 const ALPHA_COLOR = 200;
 
 const domain = "https://data.scienceimpacts.org"
-const tilesCounties = `${domain}/county_tiles/{z}/{x}/{y}.pbf`
-const tilesStates = `${domain}/state_tiles/{z}/{x}/{y}.pbf`
+const tilesCounties = `${domain}/county_tiles_v3/{z}/{x}/{y}.pbf`
+const tilesStates = `${domain}/state_tiles_v3/{z}/{x}/{y}.pbf`
 import { ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 
@@ -45,11 +45,11 @@ function LossMap() {
 
     // Define your data range based on your economic loss values
     const countyColorScale = scaleLinear()
-        .domain([0, Math.log(1000000)])
+        .domain([0, 16])
         .range([0, 1])
         .clamp(true);
     const stateColorScale = scaleLinear()
-        .domain([0, Math.log(187.3718153)])
+        .domain([0, Math.log(2_400_000_000)])
         .range([0, 1])
         .clamp(true);
 
@@ -68,10 +68,10 @@ function LossMap() {
         getFillColor: (feature: { id: string, properties: TileProperties }) => {
             let colorString: string;
             if (mode === 'county') {
-                const value = Math.log(feature.properties.econ_loss_25k);
+                const value = feature.properties.econ_loss_log;
                 colorString = interpolateOrRd(countyColorScale(value));
             } else {
-                const value = Math.log(feature.properties.econ_loss_pc);
+                const value = Math.log(feature.properties.econ_loss);
                 colorString = interpolateOrRd(stateColorScale(value));
             }
             let rgbValues;
