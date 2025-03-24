@@ -50,9 +50,8 @@ function About() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            We are an interdisciplinary team of researchers from the University of Maryland - College
-                            Park (Dr. Joshua Weitz), the University of Pennsylvania (Dr. Alyssa Sinclair & Dr. Emily
-                            Falk), and the Georgia Institute of Technology (Dr. Clio Andris). We have expertise in
+                            We are an interdisciplinary team of researchers lead by Dr. Joshua Weitz from the University of Maryland - College
+                            Park, the University of Pennsylvania , and the Georgia Institute of Technology. We have expertise in
                             different areas—biology, psychology, neuroscience, communication, and geographic information
                             science—but we are united by our vision and goals.
                         </Text>
