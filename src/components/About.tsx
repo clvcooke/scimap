@@ -20,8 +20,8 @@ function About() {
                         <Text ta={"left"}>
                             Science transforms our world, advances the economy, and saves lives. However, the process
                             and impacts of science can be hidden from the public. Through interactive visualizations, we
-                            aim to showcase how scientific research fuels the economy, supports jobs, and improves
-                            health for all Americans.
+                            aim to explore how scientific research fuels the economy, supports jobs, and improves health
+                            for all Americans.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
@@ -36,8 +36,8 @@ function About() {
                         <Text ta={"left"}>
                             The White House has ordered large cuts to federal funding for scientific research. These
                             changes include a proposal to reduce support for all health-related research nationwide, and
-                            cancellations of many grants for specific research projects. Our mission is to demonstrate
-                            how these proposed changes impact science, the economy, and healthcare.
+                            cancellations of many grants for specific research projects. We aim to share how these
+                            proposed changes impact science, the economy, and healthcare.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
@@ -50,8 +50,10 @@ function About() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            We are an interdisciplinary team of researchers lead by Dr. Joshua Weitz from the University of Maryland - College
-                            Park, the University of Pennsylvania , and the Georgia Institute of Technology. We have expertise in
+                            We are an interdisciplinary team of researchers lead by Dr. Joshua Weitz from the University
+                            of Maryland - College
+                            Park, the University of Pennsylvania , and the Georgia Institute of Technology. We have
+                            expertise in
                             different areas—biology, psychology, neuroscience, communication, and geographic information
                             science—but we are united by our vision and goals.
                         </Text>
@@ -68,13 +70,16 @@ function About() {
                         <Text ta={"left"}>
                             Currently, we are focusing on the impact of proposed <a
                             href={"https://grants.nih.gov/grants/guide/notice-files/NOT-OD-25-068.html"}
-                            target={"_blank"}> cuts to the NIH indirect cost rate</a>.
-                            These cuts would reduce funding for “indirect costs” of research, like essential staff,
-                            equipment, and facilities. At many institutions, &gt;50% of research funding is used for
-                            indirect costs. The proposed changes would cap funding for indirect costs at 15%, taking
-                            back hundreds of millions of dollars that were promised to the states. States have sued to
-                            challenge the order, arguing that the changes are unlawful. Currently, a federal judge has
-                            issued an injunction to temporarily block the changes.
+                            target={"_blank"}> cuts to the NIH indirect cost rate</a>.These cuts would reduce funding
+                            for “indirect costs” of research, like essential staff, equipment, and facilities. At many
+                            institutions, indirect costs are 50%-60% of the budget allocated to direct costs of
+                            research. The proposed changes would cap funding for indirect costs at 15%, taking back
+                            hundreds of millions of dollars that were promised to the states.
+                            States have sued to challenge the order, arguing that the changes are unlawful.
+                            Currently, a federal judge has issued <a
+                            href={"https://storage.courtlistener.com/recap/gov.uscourts.mad.280590/gov.uscourts.mad.280590.25.0.pdf"}
+                            target={"_blank"}>an injunction</a> to temporarily block the changes.
+
                         </Text>
                         <Text ta={"left"} mt="sm">
                             We source our data from a <a href={"https://report.nih.gov/award/index.cfm"}

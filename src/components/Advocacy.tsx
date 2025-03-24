@@ -18,7 +18,7 @@ function Advocacy() {
             </Title>
 
             <Text size="md" mb="md">
-                You can take action to help stop the cuts to federal funding for scientific research.
+                You can <b>take action</b> to help stop the cuts to federal funding for scientific research.
             </Text>
 
             <Card withBorder shadow="sm" mb="lg">
