@@ -29,7 +29,7 @@ function TitleHeader({jobsLost, costImpact}: { jobsLost: number, costImpact: num
                         marginBottom: '5px',
                     }}
                 >
-                    Federal Health Research Cuts
+                    SCIMaP: View Impact of Federal Health Research Cuts
                 </Title>
             </div>
         </div>

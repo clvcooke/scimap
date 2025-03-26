@@ -12,7 +12,9 @@ function ImpactStatement({close}: { close: () => void }) {
             <Text size="md" c="dark" ta="left">
                 The <b>National Institutes of Health</b> (NIH) funds crucial health <b>research</b> to address
                 cancer, diabetes, dementia, and more. NIH funding also boosts the economy, returning &gt;250% of
-                the value invested. On Feb. 7th, 2025, the White House ordered across-the-board cuts to NIH funded
+                the value invested.
+            </Text>
+            <Text ta={"left"}>On Feb. 7th, 2025, the White House ordered across-the-board cuts to NIH funded
                 research. This website shows how funding cuts reduce economic activity and employment nationwide.
             </Text>
 
