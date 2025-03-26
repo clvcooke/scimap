@@ -6,7 +6,7 @@ import {
     Card, Modal,
     List,
 } from '@mantine/core';
-import {IconExternalLink, IconShare} from '@tabler/icons-react';
+import {IconShare} from '@tabler/icons-react';
 import SharePage from "./SharePage.tsx";
 import {useState} from 'react';
 
