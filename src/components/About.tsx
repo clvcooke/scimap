@@ -123,7 +123,7 @@ function About() {
                         <Zoom>
                             <img
                                 alt="Calculation Methods"
-                                src="/public/methodsFig.png"
+                                src="https://data.scienceimpacts.org/methodsFig.png"
                                 width="50%"
                             />
                         </Zoom>
