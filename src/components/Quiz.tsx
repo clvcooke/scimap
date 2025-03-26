@@ -281,7 +281,7 @@ function Quiz({setActiveTab}) {
                 setShowShare(false)
                 setActiveTab('map');
             }}
-                   title={<Title size="xl" ta="center">Share your State Impact</Title>}>
+                   title={<Title size="xl" ta="center">Response submitted. Next, share your state impact:</Title>}>
                 {active === 2 && <SharePage title={
                     `${stateValue} could lose ${Math.round(STATE_LOSSES[stateValue].loss / 1_000_000)} million due to federal health research cuts. Visit scienceimpacts.org to learn more.`
                 }/>}

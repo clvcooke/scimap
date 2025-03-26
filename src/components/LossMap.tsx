@@ -18,8 +18,8 @@ import {MouseEvent} from "react";
 const ALPHA_COLOR = 200;
 
 const domain = "https://data.scienceimpacts.org"
-const tilesCounties = `${domain}/county_tiles_v4/{z}/{x}/{y}.pbf`
-const tilesStates = `${domain}/state_tiles_v3/{z}/{x}/{y}.pbf`
+const tilesCounties = `${domain}/county_tiles_v5/{z}/{x}/{y}.pbf`
+const tilesStates = `${domain}/state_tiles_v5/{z}/{x}/{y}.pbf`
 import { ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
