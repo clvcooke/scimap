@@ -196,7 +196,7 @@ function Quiz({setActiveTab}) {
                 <Stepper.Step label="Overview">
                     {active === 0 && (
                         <Card shadow="sm" padding="xl" radius="md" withBorder>
-                            <Text size="md" ta="left">
+                            <Text size="md" mb={"sm"} ta="left">
                                 How would <b>your state be impacted</b> by changes to NIH funding? <b>Take the
                                 quiz</b> to find out!
                             </Text>
