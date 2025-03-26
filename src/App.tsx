@@ -46,7 +46,7 @@ function App() {
                 <ActionMenu currentTab={currentTab ?? "map"} setCurrentTab={setCurrentTab}/>
             </div>
         </Flex>
-        <Modal size={"lg"} withinPortal={false} opened={impactOpen} onClose={() => setImpactOpen(false)} withCloseButton={false} centered>
+        <Modal closeOnClickOutside={false} size={"lg"} withinPortal={false} opened={impactOpen} onClose={() => setImpactOpen(false)} withCloseButton={false} centered>
             <ImpactStatement close={() => setImpactOpen(false)}/>
         </Modal>
     </>

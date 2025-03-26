@@ -63,7 +63,7 @@ function Advocacy() {
                     <Button rightSection={<IconShare size={16}/>} onClick={() => setShowShare(true)}>Share</Button>
                 </Card.Section>
             </Card>
-            <Modal withinPortal={false} opened={showShare} onClose={() => setShowShare(false)} withCloseButton={false}
+            <Modal closeOnClickOutside={true} withinPortal={false} opened={showShare} onClose={() => setShowShare(false)} withCloseButton={false}
                    centered>
                 <SharePage
                     title={"See national impact of federal health research cuts"}

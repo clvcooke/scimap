@@ -26,15 +26,11 @@ function ApprovalSlider({value, onChange}: { value?: number; onChange: (newValue
         {value: 10, label: 'Strongly Approve'},
     ];
     return (
-        <Stack p={"xl"} gap={'xs'}>
-            <Text size="sm">
-                Rate your support for the proposed changes to scientific research (0 for strongly disapprove, 10 for
-                strongly approve).
-            </Text>
+        <Stack py={"lg"} px={"xl"} gap={'xs'}>
             <Slider
                 value={value ?? 5}
                 onChange={onChange}
-                step={0.1}
+                step={1}
                 min={0}
                 max={10}
                 marks={marks}
@@ -55,30 +51,32 @@ function LossGuess({stateValue, lossGuess, setLossGuess}: LossGuessProps) {
         <Card shadow="sm" padding="xl" radius="md" withBorder>
             <Stack gap="md">
                 <Text ta='left' size="md">
-                    The White House has ordered major changes to NIH funding, which would take back funds that were
+                    The White House has <b>ordered major changes to NIH funding</b>, which would <b>take back
+                    funds</b> that were
                     already promised to the states. States have sued to challenge the order, arguing that the changes
-                    are unlawful.
+                    are <b>unlawful</b>.
                 </Text>
 
                 <Text ta='left' size="md">
-                    One of the changes would greatly reduce NIH funding that covers "indirect costs" of research. These
-                    funds indirectly support research by helping pay for essential facilities, special equipment,
+                    One of the changes would greatly reduce NIH funding that covers <b>"indirect costs"</b> of research.
+                    These funds indirectly support research by helping pay for essential facilities, special equipment,
                     skilled staff, and safety checks that are shared across many research projects.
                 </Text>
 
                 <Text ta='left' size="md">
-                    Medical and health research would not be possible without funding to cover indirect costs.
-                    Universities, hospitals, and other institutions that receive NIH grants would lose money that is
-                    crucial for operating and conducting research.
+                    Medical and health research <b>would not be possible</b> without funding to cover indirect costs.
+                    Universities, hospitals, and other institutions that receive NIH grants would <b>lose money that is
+                    crucial</b> for operating and conducting research.
                 </Text>
 
                 <Text ta='left' size="md">
-                    In {stateValue}, changes to federal research funding would result in economic losses.
+                    In <b>{stateValue}</b>, changes to federal research funding would result in <b>economic losses</b>.
                 </Text>
 
                 <NumberInput
                     label="Can you guess how many millions of dollars would be lost in your state?"
                     placeholder="Millions of dollars"
+                    ta={"left"}
                     size="lg"
                     value={lossGuess}
                     onChange={(value) => setLossGuess(value as number)}
@@ -119,10 +117,10 @@ function ResultsDisplay({
                     Results for {stateValue}
                 </Text>
                 <Text ta="left">
-                    <b>Your guess:</b> <b>${lossGuess} million</b>.
+                    <b>Your guess:</b> ${lossGuess} million.
                 </Text>
                 <Text ta="left">
-                    <b>Answer:</b> <b>${actualLoss} million</b>.
+                    <b>Answer:</b> ${actualLoss} million.
                 </Text>
             </Stack>
             <Stack gap="sm">
@@ -159,7 +157,7 @@ function Quiz({setActiveTab}) {
 
     const handleSubmit = () => {
         ReactGA.event(
-            'QuizSubmissionV0', {
+            'QuizSubmissionV1', {
                 initialApprovalRating: initialApprovalRating,
                 lossGuess: lossGuess,
                 finalApprovalRating: finalApprovalRating,
@@ -198,6 +196,10 @@ function Quiz({setActiveTab}) {
                 <Stepper.Step label="Overview">
                     {active === 0 && (
                         <Card shadow="sm" padding="xl" radius="md" withBorder>
+                            <Text size="md" ta="left">
+                                How would <b>your state be impacted</b> by changes to NIH funding? <b>Take the
+                                quiz</b> to find out!
+                            </Text>
                             <Combobox
                                 onOptionSubmit={(optionValue) => {
                                     setStateValue(optionValue)
@@ -226,6 +228,10 @@ function Quiz({setActiveTab}) {
                                     </Combobox.Options>
                                 </Combobox.Dropdown>
                             </Combobox>
+                            <Text mt={"lg"}>
+                                Currently, how much do you approve or disapprove of proposed decreases to federal
+                                funding for scientific research?
+                            </Text>
                             <ApprovalSlider value={initialApprovalRating}
                                             onChange={(value) => setInitialApprovalRating(value)}/>
                         </Card>
@@ -271,7 +277,7 @@ function Quiz({setActiveTab}) {
                     <Button disabled={!canSubmit} onClick={handleSubmit}>Submit</Button>
                 )}
             </Group>
-            <Modal centered withinPortal={false} opened={showShare} onClose={() => {
+            <Modal closeOnClickOutside={false} centered withinPortal={false} opened={showShare} onClose={() => {
                 setShowShare(false)
                 setActiveTab('map');
             }}
