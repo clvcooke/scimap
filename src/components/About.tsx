@@ -60,7 +60,7 @@ function About() {
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
-                <AccordionItem value="is-funding-nih-good">
+                <AccordionItem value="is-funding-nih-good2">
                     <Accordion.Control>
                         <Title order={isMobile ? 4 : 3}>
                             Data Sources

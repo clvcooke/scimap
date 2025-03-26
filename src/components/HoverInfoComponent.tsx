@@ -84,7 +84,7 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo }) => {
                 left: hoverInfo.x,
                 top: hoverInfo.y,
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                zIndex: 1,
+                zIndex: 100,
                 pointerEvents: 'none',
             }}
         >
@@ -93,7 +93,6 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo }) => {
                     {county && <Text size="md" style={{ color: 'black' }}><b>County:</b> {county}</Text>}
                     <Text size="md" style={{ color: 'black' }}><b>{regionIndicator}:</b> {state}</Text>
                     <Text size="md" style={{ color: 'black' }}><b>Economic Loss:</b> ${econ_loss_string}</Text>
-                    <Text size="md" style={{ color: 'black' }}><b>Jobs Lost:</b> {roundedJobsLoss}</Text>
                 </Flex>
             </Card>
         </div>
