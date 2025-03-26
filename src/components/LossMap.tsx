@@ -18,10 +18,14 @@ import {MouseEvent} from "react";
 const ALPHA_COLOR = 200;
 
 const domain = "https://data.scienceimpacts.org"
-const tilesCounties = `${domain}/county_tiles_v3/{z}/{x}/{y}.pbf`
+const tilesCounties = `${domain}/county_tiles_v4/{z}/{x}/{y}.pbf`
 const tilesStates = `${domain}/state_tiles_v3/{z}/{x}/{y}.pbf`
 import { ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
+import ColorScale from "./ColorScale.tsx";
+
+const COUNTY_DOMAIN: [number, number] = [0,    8886110.52051];
+const STATE_DOMAIN: [number, number] = [0, 2_400_000_000];
 
 function LossMap() {
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
@@ -45,11 +49,11 @@ function LossMap() {
 
     // Define your data range based on your economic loss values
     const countyColorScale = scaleLinear()
-        .domain([0, 16])
+        .domain([0, Math.log(COUNTY_DOMAIN[1]) ])
         .range([0, 1])
         .clamp(true);
     const stateColorScale = scaleLinear()
-        .domain([0, Math.log(2_400_000_000)])
+        .domain([0, Math.log(STATE_DOMAIN[1])])
         .range([0, 1])
         .clamp(true);
 
@@ -226,6 +230,17 @@ function LossMap() {
                 <Button rightSection={<IconShare size={16}/>} onClick={() => setShowShare(true)}>Share</Button>
             </Stack>
             {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo}/>}
+            <div style={{
+                position: 'absolute',
+                right: 10,
+                bottom: 50,
+                zIndex: 1,
+                pointerEvents: 'none',
+            }}>
+                <ColorScale width={20} height={200} domain={
+                    mode === 'county' ? COUNTY_DOMAIN : STATE_DOMAIN
+                }/>
+            </div>
 
 
             <Stack style={{
@@ -236,7 +251,15 @@ function LossMap() {
                 color: theme.colors.gray[9],
                 padding: 10,
             }} gap="xs">
-
+                <ActionIcon variant="transparent" aria-label="Location"
+                            size={'xl'}
+                            style={{
+                                color: theme.colors.gray[9],
+                            }}
+                            onClick={getLocation}
+                >
+                    <IconGps style={{width: '70%', height: '70%'}}/>
+                </ActionIcon>
                 <ActionIcon variant="transparent" aria-label="Zoom In"
                             size={'xl'}
                             style={{
@@ -254,15 +277,6 @@ function LossMap() {
                             onClick={zoomOut}
                 >
                     <IconZoomOut style={{width: '70%', height: '70%'}}/>
-                </ActionIcon>
-                <ActionIcon variant="transparent" aria-label="Location"
-                            size={'xl'}
-                            style={{
-                                color: theme.colors.gray[9],
-                            }}
-                            onClick={getLocation}
-                >
-                    <IconGps style={{width: '70%', height: '70%'}}/>
                 </ActionIcon>
             </Stack>
             <Modal withinPortal={false} opened={showShare} onClose={() => setShowShare(false)} withCloseButton={false}>

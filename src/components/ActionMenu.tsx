@@ -17,8 +17,8 @@ function ActionMenu({currentTab, setCurrentTab}: { currentTab: TabOption, setCur
             }
         }} styles={{
             tab: {
-                'padding': isMobile ? '4px 4px' : '12px 12px',
-                'fontSize': isMobile ? '10px' : '16px',
+                'padding': isMobile ? '8px 8px' : '12px 12px',
+                'fontSize': isMobile ? '14px' : '16px',
             },
         }}
         >
@@ -26,17 +26,17 @@ function ActionMenu({currentTab, setCurrentTab}: { currentTab: TabOption, setCur
                 <Tabs.Tab value="map">
                     Map
                 </Tabs.Tab>
+                <Tabs.Tab value="quiz">
+                    Quiz
+                </Tabs.Tab>
+                <Tabs.Tab value="action">
+                    Take Action
+                </Tabs.Tab>
                 <Tabs.Tab value="learn">
                     Learn More
                 </Tabs.Tab>
                 <Tabs.Tab value="about">
                     About
-                </Tabs.Tab>
-                <Tabs.Tab value="action">
-                    Take Action
-                </Tabs.Tab>
-                <Tabs.Tab value="quiz">
-                    Quiz
                 </Tabs.Tab>
             </Tabs.List>
         </Tabs>

@@ -30,25 +30,14 @@ function LearnMore() {
                             research that addresses <b>leading health problems</b>, including cancer, diabetes,
                             dementia, heart disease, stroke, mental illness, and more.
                         </Text>
-                    </Accordion.Panel>
-                </AccordionItem>
-
-                <AccordionItem value="how-much">
-                    <Accordion.Control>
-                        <Title order={isMobile ? 4 : 3}>
-                            How much federal funding goes to the NIH?
-                        </Title>
-                    </Accordion.Control>
-                    <Accordion.Panel>
-                        <Text ta={"left"}>
-                            The federal government invests approximately $47 billion in the NIH, of which approximately
-                            $37 billion is distributed nationally through research grant awards. This budget
-                            represents less than 1% of the total federal budget, but this small investment has a big
-                            impact.
+                        <Text ta={"left"} mt={"sm"}>
+                            Research funded by the NIH has led to <a
+                            href={"https://www.nih.gov/about-nih/what-we-do/impact-nih-research"} target={"_blank"}>major
+                            breakthroughs</a> like new treatments for cancer and Type-1 diabetes.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
-                <AccordionItem value="how-much">
+                <AccordionItem value="how-much-nih-contrib">
                     <Accordion.Control>
                         <Title order={isMobile ? 4 : 3}>
                             How does the NIH contribute to the U.S. economy?
@@ -57,49 +46,44 @@ function LearnMore() {
                     <Accordion.Panel>
                         <Text ta={"left"}>
                             NIH funding is an <b>excellent financial investment</b>. Less than 1% of the total federal
-                            budget goes to the NIH, but this small-but-mighty investment has a big impact. Every dollar
-                            invested in scientific research through NIH produces, on average, $2.56 of economic activity
-                            in return – <b>over 250% gain</b>.
+                            budget goes to the NIH, but this small investment has a big impact. Every dollar invested in
+                            scientific research through NIH produces, on average, $2.56 of economic activity in return
+                            – a gain of <b>over 250%</b>.
                         </Text>
-                        <Text ta={"left"}>
+                        <Text ta={"left"} mt={"sm"}>
                             NIH funding supports universities, hospitals, research institutions, and businesses across
-                            the U.S. In 2024, the NIH directly supported over <b>408,000</b> jobs and generated
-                            over <b>$94.5</b> billion in new economic activity in the U.S.
+                            the U.S. In 2024, the NIH directly supported nearly <b>half a million jobs</b> and generated
+                            <b> billions of dollars</b> in new economic activity in the U.S.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
-
                 <AccordionItem value="proposed-changes">
                     <Accordion.Control>
                         <Title order={isMobile ? 4 : 3}>
-                            What are the proposed changes to NIH funding?
+                            What are the changes to NIH funding?
                         </Title>
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            Currently, the White House has ordered <b>major changes to NIH funding</b>, which
-                            would <b>take back funds</b> that were already promised to the universities, hospitals,
-                            institutes, and businesses across the nation. States have sued to
-                            challenge the order, arguing that the changes are <b>unlawful</b>.
+                            Currently, the White House has ordered <b>major changes to NIH funding</b>, which would <b>take
+                            back
+                            funds</b> that were already promised to the states. States have sued to challenge the order,
+                            arguing that the changes are <b>unlawful</b>.
                         </Text>
                         <Text ta={"left"} mt="sm">
-                            One of the changes would greatly reduce NIH funding that covers
-                            <b>"indirect costs"</b> of research. Indirect costs include the
-                            essential facilities, special equipment, skilled staff, and safety
-                            checks required for medical research.
+                            One of the changes would greatly reduce NIH funding that covers <a
+                            href={"https://research.unc.edu/2025/02/13/true-costs-of-conducting-research/"}
+                            target={"_blank"}>"indirect costs"</a> of
+                            research. These funds indirectly support research by helping pay for essential facilities,
+                            special equipment, skilled staff, and safety checks that are shared across many research
+                            projects. Medical research would not be possible without funding to cover indirect costs.
                         </Text>
                         <Text ta={"left"} mt="sm">
-                            Medical research would not be possible without funding to cover
-                            indirect costs.
-                        </Text>
-                        <Text ta={"left"} mt="sm">
-                            Other threats to research include a proposal to reduce the
-                            National Science Foundation’s budget by 66%, and ongoing
-                            cancellations of specific research grants.
+                            Other threats to research include a proposal to reduce the National Science Foundation’s
+                            budget by 66%, and ongoing cancellations of specific research grants.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
-
                 <AccordionItem value="what-if-cuts">
                     <Accordion.Control>
                         <Title order={isMobile ? 4 : 3}>
@@ -108,47 +92,20 @@ function LearnMore() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            Universities, hospitals, and businesses that receive NIH grants
-                            would lose money that is crucial for research. Many people would lose their jobs.
+                            Universities, hospitals, research institutes, and businesses that receive NIH grants would
+                            lose money that is crucial for research.
                         </Text>
                         <Text ta={"left"} mt="sm">
-                            Medical research would be slowed, making it harder to cure
-                            diseases and keep people healthy. The U.S. would lose its standing
-                            as a world leader in medical research, science, and technology.
+                            Across the nation, the proposed changes to federal funding for research are projected to
+                            cause a loss of <b>billions of dollars</b> for the U.S. economy.
                         </Text>
-                    </Accordion.Panel>
-                </AccordionItem>
-
-                <AccordionItem value="data-sources">
-                    <Accordion.Control>
-                        <Title order={isMobile ? 4 : 3}>
-                            What are your data sources and how do you estimate impact?
-                        </Title>
-                    </Accordion.Control>
-                    <Accordion.Panel>
-                        <Text ta={"left"}>
-                            We source our data from a <a href={"https://report.nih.gov/award/index.cfm"}>public database
-                            of NIH grants</a>. We estimate the economic impact of NIH grants (or reductions in NIH
-                            funding)
-                            <a href={"https://www.forbes.com/sites/michaeltnietzel/2025/03/12/nih-grants-fueled-95-billion-in-economic-activity-finds-new-report/"}
-                               target={"_blank"}>based on a recent report</a>, which found that every dollar
-                            invested in NIH generated $2.56 in new economic activity in 2024.
-                            To estimate the number of jobs that would be lost if NIH funding is cut, we used the ratio
-                            of the number of jobs supported / research funds awarded in the 2024 fiscal year. We also
-                            use <a href={"https://lehd.ces.census.gov/data/"}
-                                   target={"_blank"}>Census data on where U.S. commuters live and work</a> to estimate
-                            how economic activity generated in each county can spread to adjacent counties.
-                        </Text>
-
                         <Text ta={"left"} mt="sm">
-                            Currently, we are focusing on the impact of <a
-                            href={"https://grants.nih.gov/grants/guide/notice-files/NOT-OD-25-068.html"}
-                            target={"_blank"}>proposed cuts to the NIH indirect cost (IDC)
-                            rate</a>. These cuts would reduce funding for “indirect costs” of research, like essential
-                            staff, equipment, and facilities. The proposed changes would cap funding for indirect costs at 15% (reduced from 50% or more at many institutions),
-                            taking back hundreds of millions of dollars that were promised to the states.
-                            To estimate decreases in funding, we calculate the difference between current funding for
-                            indirect costs and proposed funding with a 15% maximum for current NIH grants.
+                            The changes would also result in the loss of <b>tens of thousands</b> of jobs in the U.S.
+                        </Text>
+                        <Text ta={"left"} mt="sm">
+                            Medical research would be slowed, making it harder to cure diseases and keep people healthy.
+                            The U.S. could lose its standing as a world leader in medical research, science, and
+                            technology.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>

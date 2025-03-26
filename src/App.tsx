@@ -2,8 +2,8 @@ import './App.css'
 import 'maplibre-gl/dist/maplibre-gl.css';
 import LossMap from "./components/LossMap.tsx";
 import ActionMenu, {TabOption} from "./components/ActionMenu.tsx";
-import {Flex, ScrollArea} from '@mantine/core';
-import {useEffect, useState} from "react";
+import {Flex, Modal, ScrollArea} from '@mantine/core';
+import {useState} from "react";
 import ImpactStatement from "./components/ImpactStatement.tsx";
 import LearnMore from "./components/LearnMore.tsx";
 import About from "./components/About.tsx";
@@ -15,12 +15,8 @@ import Quiz from "./components/Quiz.tsx";
 
 function App() {
     ReactGA.initialize("G-CCM3BQY1WQ");
-    const [opened, setOpened] = useState(true);
     const [currentTab, setCurrentTab] = useState<TabOption>("map");
-
-    useEffect(() => {
-        setOpened(true);
-    }, []);
+    const [impactOpen, setImpactOpen] = useState(true);
 
     const showMap = currentTab === "map";
     const showQuiz = currentTab === "quiz";
@@ -50,16 +46,9 @@ function App() {
                 <ActionMenu currentTab={currentTab ?? "map"} setCurrentTab={setCurrentTab}/>
             </div>
         </Flex>
-        {opened && <Flex justify="center" align="center"
-                         onClick={() => setOpened(false)}
-                         style={{position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 2}}>
-
-            <Flex direction="column" gap="xs">
-                <ImpactStatement/>
-            </Flex>
-        </Flex>}
-
-
+        <Modal size={"lg"} withinPortal={false} opened={impactOpen} onClose={() => setImpactOpen(false)} withCloseButton={false} centered>
+            <ImpactStatement close={() => setImpactOpen(false)}/>
+        </Modal>
     </>
 }
 

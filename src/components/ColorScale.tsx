@@ -14,10 +14,13 @@ function ColorScale({width = 20, height = 200, domain}: ColorScaleProps) {
     const [gradient, setGradient] = useState<string>('');
 
     useEffect(() => {
-        const numStops = 10; // Adjust for smoother gradient
+        const numStops = 2; // Adjust for smoother gradient
         const stops = Array.from({length: numStops}, (_, i) => {
-            const value = domain[0] + (domain[1] - domain[0]) * (i / (numStops - 1));
-            const color = interpolateOrRd(scaleLinear().domain(domain).range([0, 1])(value));
+            let value = 0;
+            if (i > 0) {
+                value = Math.log(domain[0] + (domain[1] - domain[0]) * (i / (numStops - 1)));
+            }
+            const color = interpolateOrRd(scaleLinear().domain([domain[0], Math.log(domain[1])]).range([0, 1])(value));
             return `${color} ${i * (100 / (numStops - 1))}%`;
         });
         setGradient(`linear-gradient(to top, ${stops.join(', ')})`);
@@ -50,8 +53,8 @@ function ColorScale({width = 20, height = 200, domain}: ColorScaleProps) {
                    justify="space-between" style={{
                 height: '100%'
             }}>
-                <Text size="xs">{formattedHigh}</Text>
-                <Text size="xs">{formattedLow}</Text>
+                <Text size="xs">${formattedHigh}</Text>
+                <Text size="xs">${formattedLow}</Text>
             </Stack>
 
         </Flex>
