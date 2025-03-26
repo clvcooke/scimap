@@ -53,7 +53,7 @@ function ColorScale({width = 20, height = 200, domain}: ColorScaleProps) {
                    justify="space-between" style={{
                 height: '100%'
             }}>
-                <Text size="xs">${formattedHigh}</Text>
+                <Text size="xs">${formattedHigh}+</Text>
                 <Text size="xs">${formattedLow}</Text>
             </Stack>
 
