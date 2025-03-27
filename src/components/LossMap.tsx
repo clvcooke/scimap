@@ -279,6 +279,7 @@ function LossMap() {
                     <IconZoomOut style={{width: '70%', height: '70%'}}/>
                 </ActionIcon>
             </Stack>
+
             <Modal closeOnClickOutside={true} withinPortal={false} opened={showShare} onClose={() => setShowShare(false)}>
                 <SharePage
                     title={"See national impact of federal health research cuts"}
