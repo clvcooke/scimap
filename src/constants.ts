@@ -1,3 +1,5 @@
+import {TOTAL_JOB_LOSS, TOTAL_LOSS} from "./data/state-losses.ts";
+
 export const ANALYTICS_ACTIONS = {
     action: 'Action',
     pageView: 'Page View',
@@ -5,8 +7,8 @@ export const ANALYTICS_ACTIONS = {
 }
 
 
-export const JOBS_LOST = 76498.96891561677
-export const ECONOMIC_LOSS = 17711583936.12799;
+export const JOBS_LOST = TOTAL_JOB_LOSS
+export const ECONOMIC_LOSS = TOTAL_LOSS;
 
 export const formattedJobs = new Intl.NumberFormat('en-US', {
     notation: 'compact',

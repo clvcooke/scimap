@@ -43,9 +43,10 @@ export type HoverInfo = {
 type Props = {
     hoverInfo: HoverInfo | null;
     mode: "county" | "state";
+    showJobs: boolean;
 };
 
-export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo }) => {
+export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo, showJobs }) => {
     if (!hoverInfo) {
         return null;
     }
@@ -93,6 +94,7 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo }) => {
                     {county && <Text size="md" style={{ color: 'black' }}><b>County:</b> {county}</Text>}
                     <Text size="md" style={{ color: 'black' }}><b>{regionIndicator}:</b> {state}</Text>
                     <Text size="md" style={{ color: 'black' }}><b>Economic Loss:</b> ${econ_loss_string}</Text>
+                    {showJobs && <Text size="md" style={{ color: 'black' }}><b>Jobs Lost:</b> {roundedJobsLoss}</Text>}
                 </Flex>
             </Card>
         </div>

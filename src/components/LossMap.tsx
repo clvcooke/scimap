@@ -16,10 +16,10 @@ import {MouseEvent} from "react";
 
 
 const ALPHA_COLOR = 200;
-
+const TILE_VERSION = '6'
 const domain = "https://data.scienceimpacts.org"
-const tilesCounties = `${domain}/county_tiles_v5/{z}/{x}/{y}.pbf`
-const tilesStates = `${domain}/state_tiles_v5/{z}/{x}/{y}.pbf`
+const tilesCounties = `${domain}/county_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
+const tilesStates = `${domain}/state_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
 import { ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
@@ -229,7 +229,7 @@ function LossMap() {
                 </Stack>
                 <Button rightSection={<IconShare size={16}/>} onClick={() => setShowShare(true)}>Share</Button>
             </Stack>
-            {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo}/>}
+            {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo} showJobs={mode === 'state'}/>}
             <div style={{
                 position: 'absolute',
                 right: 10,

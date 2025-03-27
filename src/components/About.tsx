@@ -68,11 +68,11 @@ function About() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            We source our data from a <a href={"https://report.nih.gov/award/index.cfm"}
+                            We source our data from a <a href={"https://reporter.nih.gov/advanced-search"}
                                                          target={"_blank"}>public database of NIH grants</a> that were
                             active in 2024. We estimate the economic impact of NIH grants (or reductions in NIH
                             funding) <a
-                            href={"https://www.forbes.com/sites/michaeltnietzel/2025/03/12/nih-grants-fueled-95-billion-in-economic-activity-finds-new-report/"}>based
+                            href={"https://www.unitedformedicalresearch.org/annual-economic-report/"}>based
                             on a recent
                             report</a>, which found that every dollar invested in NIH generated $2.56 in new economic
                             activity in 2024. To estimate the number of jobs that would be lost if NIH funding is cut,
