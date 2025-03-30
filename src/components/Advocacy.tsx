@@ -38,6 +38,7 @@ function Advocacy() {
                     <List ta={"left"} withPadding>
                         <List.Item>Less than 1% of the federal budget goes to NIH, but this investment has a big
                             impact. </List.Item>
+                        <List.Item>Federally funded scientific and medical research improves health, drives innovation, creates jobs, and grows the economy.</List.Item>
                         <List.Item>Every dollar invested in scientific research through NIH produces, on average, $2.56
                             of economic activity in return – <b>over 250% gain.</b></List.Item>
                         <List.Item>NIH research supports over 400,000 jobs across the U.S.</List.Item>

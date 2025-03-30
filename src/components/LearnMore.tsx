@@ -33,7 +33,8 @@ function LearnMore() {
                         <Text ta={"left"} mt={"sm"}>
                             Research funded by the NIH has led to <a
                             href={"https://www.nih.gov/about-nih/what-we-do/impact-nih-research"} target={"_blank"}>major
-                            breakthroughs</a> like new treatments for cancer and Type-1 diabetes.
+                            breakthroughs</a> like prevention, treatment, and cures for heart disease, cancer, and type
+                            1 diabetes.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
@@ -76,11 +77,15 @@ function LearnMore() {
                             target={"_blank"}>"indirect costs"</a> of
                             research. These funds indirectly support research by helping pay for essential facilities,
                             special equipment, skilled staff, and safety checks that are shared across many research
-                            projects. Medical research would not be possible without funding to cover indirect costs.
+                            projects. Medical research is not possible without funding to cover indirect costs.
                         </Text>
                         <Text ta={"left"} mt="sm">
-                            Other threats to research include a proposal to reduce the National Science Foundation’s
-                            budget by 66%, and ongoing cancellations of specific research grants.
+                            Other threats to research include ongoing cancellations of research grants, elimination of
+                            student training, termination of scientists working at NIH, CDC, and other health agencies,
+                            and a proposal to reduce the National Science Foundation (NSF) budget by 66% from $9B a year
+                            to $3B a year. NSF funds basic research across all 50 states; its mission is to “To promote
+                            the progress of science; to advance the national health, prosperity and welfare; and to
+                            secure the national defense.”
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>

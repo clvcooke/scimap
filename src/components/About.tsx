@@ -38,7 +38,8 @@ function About() {
                         <Text ta={"left"}>
                             We are an interdisciplinary team of researchers from the University of Maryland, College
                             Park (Dr. Joshua Weitz), the University of Pennsylvania (Dr. Alyssa Sinclair, Dr. Emily
-                            Falk, and Dr. Danielle Cosme), and the Georgia Institute of Technology (Dr. Clio Andris). We
+                            Falk, and Dr. Danielle Cosme), the University of Utah (Dr. Angela Fagerlin), and the Georgia
+                            Institute of Technology (Dr. Clio Andris). We
                             have expertise in different areas—biology, psychology, neuroscience, communication, and
                             geographic information science— united by our common goal.
                         </Text>
@@ -115,7 +116,8 @@ function About() {
                             and state-level impacts using similar approaches to estimate impacts of cuts to
                             NIH-negotiated indirect cost rates on medical research. Our approach combines these methods
                             with US census data and interactive visualizations to engage with impacts at county levels
-                            nationwide. Our data and code are <a href={"http://doi.org/10.17605/OSF.IO/H398E"} target={"_blank"}>publicly available here</a>.
+                            nationwide. Our data and code are <a href={"http://doi.org/10.17605/OSF.IO/H398E"}
+                                                                 target={"_blank"}>publicly available here</a>.
                         </Text>
                         <Text ta={"left"} mt="sm">
                             View an illustrated summary of our method here.
