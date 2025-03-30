@@ -11,7 +11,7 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <MantineProvider>
             <Helmet>
-                <title>SCiMaP</title>
+                <title>SCIMaP</title>
                 <meta name="description" content="The Science & Community Impacts Mapping Project" />
             </Helmet>
             <App/>

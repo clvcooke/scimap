@@ -47,7 +47,7 @@ function SharePage({title}: { title: string }) {
             Share on your preferred platform
         </Text>
         <Group mt="md" gap="xs" align="center" style={{width: '100%'}}>
-            <FacebookShareButton url={pageUrl} title={title} hashtag="#SCiMaP" onClick={() => trackShare('Facebook')}
+            <FacebookShareButton url={pageUrl} title={title} hashtag="#SCIMaP" onClick={() => trackShare('Facebook')}
             >
                 <FacebookIcon size={32} round/>
             </FacebookShareButton>
