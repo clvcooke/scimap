@@ -19,3 +19,6 @@ export const formattedCost = new Intl.NumberFormat('en-US', {
     notation: 'compact',
     compactDisplay: 'short'
 }).format(ECONOMIC_LOSS);
+
+export const REACT_APP_PUBLIC_POSTHOG_KEY= "phc_7xCOByPPLiPt1qyRf23Ga7ra7qPrAv6NkIkCn4lkZUH"
+export const REACT_APP_PUBLIC_POSTHOG_HOST= "https://us.i.posthog.com"
