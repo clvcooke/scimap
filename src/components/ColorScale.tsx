@@ -1,6 +1,5 @@
 import {scaleLinear} from 'd3-scale';
 import {interpolateOrRd} from 'd3-scale-chromatic';
-import {useEffect,} from 'react';
 import {Text, Flex} from '@mantine/core';
 
 interface ColorScaleProps {
