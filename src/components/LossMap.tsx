@@ -237,7 +237,7 @@ function LossMap() {
                 zIndex: 1,
                 pointerEvents: 'none',
             }}>
-                <ColorScale width={20} height={200} domain={
+                <ColorScale width={10} height={180} domain={
                     mode === 'county' ? COUNTY_DOMAIN : STATE_DOMAIN
                 }/>
             </div>

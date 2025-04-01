@@ -9,7 +9,9 @@ interface ColorScaleProps {
     buckets?: number;
 }
 
-function ColorScale({width = 20, height = 200, domain, buckets = 5}: ColorScaleProps) {
+let previousValue = "";
+
+function ColorScale({width = 10, height = 200, domain, buckets = 5}: ColorScaleProps) {
     const steps = Array.from({length: buckets});
 
     const colorScale = scaleLinear()
@@ -44,7 +46,25 @@ function ColorScale({width = 20, height = 200, domain, buckets = 5}: ColorScaleP
     // I have values from 0 -> 9MM
     // I want to know what the 1/5 point is on the log of this
     //
+    const formattedValues = steps.map((_, i) => {
+        let formattedValue = "ABC";
+        if (i < steps.length - 1) {
+            let value = logMax - i * logMax / (steps.length);
+            value = Math.exp(value);
+            formattedValue = `$${formatter.format(Math.round(value / 100) * 100)}`;
+        }
 
+        let suffix = "";
+        if (i === 0) {
+            suffix = "+"
+        }
+        if (i === steps.length - 1) {
+            previousValue = `<${previousValue}`;
+        } else {
+            previousValue = `${formattedValue}${suffix}`;
+        }
+        return previousValue;
+    });
 
     return (
         <Flex align="flex-start" style={{height: height}}>
@@ -68,21 +88,11 @@ function ColorScale({width = 20, height = 200, domain, buckets = 5}: ColorScaleP
             </svg>
 
             <div style={{width: '50px'}}>
-                {steps.map((_, i) => {
-                    let formattedValue = "<$600";
-                    if (i < steps.length - 1) {
-                        let value = logMax - i * logMax / (steps.length);
-                        value = Math.exp(value);
-                        formattedValue = `$${formatter.format(value)}`;
-                    }
+                {formattedValues.map((formattedValue) => {
 
-                    let suffix = "";
-                    if (i === 0) {
-                        suffix = "+"
-                    }
                     return (
                         <div
-                            key={i}
+                            key={formattedValue}
                             style={{
                                 height: `${height / buckets}px`,
                                 display: 'flex',
@@ -91,7 +101,7 @@ function ColorScale({width = 20, height = 200, domain, buckets = 5}: ColorScaleP
                             }}
                         >
                             <Text size="xs" style={{textAlign: 'left', marginLeft: '5px'}}>
-                                {`${formattedValue}${suffix}`}
+                                {`${formattedValue}`}
                             </Text>
                         </div>
                     );
