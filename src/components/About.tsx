@@ -38,8 +38,8 @@ function About() {
                         <Text ta={"left"}>
                             We are an interdisciplinary team of researchers from the University of Maryland, College
                             Park (Dr. Joshua Weitz), the University of Pennsylvania (Dr. Alyssa Sinclair, Dr. Emily
-                            Falk, and Dr. Danielle Cosme), the University of Utah (Dr. Angela Fagerlin), and the Georgia
-                            Institute of Technology (Dr. Clio Andris). We
+                            Falk, and Dr. Danielle Cosme), the University of Utah (Dr. Angela Fagerlin), the Georgia
+                            Institute of Technology (Dr. Clio Andris), and University of Oregon (Dr. Ellen Peters). We
                             have expertise in different areas—biology, psychology, neuroscience, communication, and
                             geographic information science— united by our common goal.
                         </Text>
