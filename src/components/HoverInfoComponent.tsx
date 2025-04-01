@@ -72,8 +72,14 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo, showJobs 
         regionIndicator = "Territory"
     }
 
-
-    const econ_loss_string = econ_loss >= 1000000 ? Math.round(econ_loss / 1000000) + 'M' : econ_loss >= 1000 ? Math.round(econ_loss / 1000) + 'K' : Math.round(econ_loss);
+    let econ_loss_string;
+    let showLessThan = false;
+    if (econ_loss < 100) {
+        econ_loss_string = "100"
+        showLessThan = true;
+    } else {
+        econ_loss_string = econ_loss >= 1000000 ? Math.round(econ_loss / 1000000) + 'M' : econ_loss >= 1000 ? Math.round(econ_loss / 1000) + 'K' : Math.round(econ_loss);
+    }
     let roundedJobsLoss: number | string = Math.round(jobs_loss);
     if (roundedJobsLoss < 10) {
         roundedJobsLoss = "<10"
@@ -93,7 +99,7 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo, showJobs 
                 <Flex direction="column" gap="xs">
                     {county && <Text size="md" style={{ color: 'black' }}><b>County:</b> {county}</Text>}
                     <Text size="md" style={{ color: 'black' }}><b>{regionIndicator}:</b> {state}</Text>
-                    <Text size="md" style={{ color: 'black' }}><b>Economic Loss:</b> ${econ_loss_string}</Text>
+                    <Text size="md" style={{ color: 'black' }}><b>Economic Loss:</b> {(showLessThan ? `<$` : '$') + econ_loss_string}</Text>
                     {showJobs && <Text size="md" style={{ color: 'black' }}><b>Jobs Lost:</b> {roundedJobsLoss}</Text>}
                 </Flex>
             </Card>

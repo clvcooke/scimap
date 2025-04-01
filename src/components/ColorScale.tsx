@@ -11,7 +11,7 @@ interface ColorScaleProps {
 
 let previousValue = "";
 
-function ColorScale({width = 10, height = 200, domain, buckets = 5}: ColorScaleProps) {
+function ColorScale({width = 10, height = 200, domain, buckets = 6}: ColorScaleProps) {
     const steps = Array.from({length: buckets});
 
     const colorScale = scaleLinear()

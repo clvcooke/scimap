@@ -24,8 +24,9 @@ import { ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 
-const COUNTY_DOMAIN: [number, number] = [0,    8886110.52051];
-const STATE_DOMAIN: [number, number] = [0, 2_400_000_000];
+// const COUNTY_DOMAIN: [number, number] = [0,    8_886110.52051];
+const COUNTY_DOMAIN: [number, number] = [0,    25_000_000];
+const STATE_DOMAIN: [number, number] = [0, 2_500_000_000];
 
 function LossMap() {
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
@@ -232,7 +233,7 @@ function LossMap() {
             {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo} showJobs={mode === 'state'}/>}
             <div style={{
                 position: 'absolute',
-                right: 10,
+                right: 5,
                 bottom: 50,
                 zIndex: 1,
                 pointerEvents: 'none',
