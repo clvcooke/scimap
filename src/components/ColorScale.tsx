@@ -69,13 +69,13 @@ function ColorScale({width = 20, height = 200, domain, buckets = 5}: ColorScaleP
 
             <div style={{width: '50px'}}>
                 {steps.map((_, i) => {
-                    let value = 0;
+                    let formattedValue = "<$600";
                     if (i < steps.length - 1) {
-                        value = logMax - i * logMax / (steps.length);
+                        let value = logMax - i * logMax / (steps.length);
                         value = Math.exp(value);
+                        formattedValue = `$${formatter.format(value)}`;
                     }
-                    // const value = valueScale(buckets - 1 - i);
-                    const formattedValue = formatter.format(value);
+
                     let suffix = "";
                     if (i === 0) {
                         suffix = "+"
@@ -91,7 +91,7 @@ function ColorScale({width = 20, height = 200, domain, buckets = 5}: ColorScaleP
                             }}
                         >
                             <Text size="xs" style={{textAlign: 'left', marginLeft: '5px'}}>
-                                {`$${formattedValue}${suffix}`}
+                                {`${formattedValue}${suffix}`}
                             </Text>
                         </div>
                     );
