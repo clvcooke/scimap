@@ -13,6 +13,7 @@ import {GeoJsonLayer} from '@deck.gl/layers';
 import {MapViewState, FlyToInterpolator} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
 import {MouseEvent} from "react";
+import ReactGA from 'react-ga4';
 
 
 const ALPHA_COLOR = 200;
@@ -21,7 +22,7 @@ const domain = "https://data.scienceimpacts.org"
 const tilesCounties = `${domain}/county_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
 const tilesStates = `${domain}/state_tiles_v7/{z}/{x}/{y}.pbf`
 const tilesDistricts = `${domain}/congressional_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
-import {ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
+import {ANALYTICS_ACTIONS, ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 
@@ -43,6 +44,7 @@ function LossMap() {
     const [showShare, setShowShare] = useState(false);
 
     const [mode, setMode] = useState<"county" | "districts" | "state">('county');
+
     const tileLink = useMemo(() => {
         if (mode === 'county') {
             return tilesCounties;
@@ -261,9 +263,27 @@ function LossMap() {
                     padding: 10
                 }} gap={"xs"}>
                     <Text fw={700}>Level</Text>
-                    <Radio checked={mode === 'county'} onChange={() => setMode('county')} label="County"/>
-                    <Radio checked={mode === 'state'} onChange={() => setMode('state')} label="State"/>
-                    <Radio checked={mode === 'districts'} onChange={() => setMode('districts')} label="House Districts"/>
+                    <Radio checked={mode === 'county'} onChange={() => {
+                        setMode('county')
+                        ReactGA.event({
+                            category: ANALYTICS_ACTIONS.layer,
+                            action: `county`,
+                        });
+                    }} label="County"/>
+                    <Radio checked={mode === 'state'} onChange={() => {
+                        setMode('state')
+                        ReactGA.event({
+                            category: ANALYTICS_ACTIONS.layer,
+                            action: `state`,
+                        });
+                    }} label="State"/>
+                    <Radio checked={mode === 'districts'} onChange={() => {
+                        setMode('districts')
+                        ReactGA.event({
+                            category: ANALYTICS_ACTIONS.layer,
+                            action: `districts`,
+                        });
+                    }} label="House District"/>
                 </Stack>
                 <Button rightSection={<IconShare size={16}/>} onClick={() => setShowShare(true)}>Share</Button>
             </Stack>
