@@ -86,8 +86,14 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo, showJobs 
         jobs_loss = properties.jobs_loss;
         rep_name = properties.rep_name;
         const geoid = properties.GEOID;
-        // @ts-expect-error: stuff
-        state = HOUSE_GEOID_TO_STATE[geoid.toFixed()] as string ?? "";
+        try{
+            // @ts-expect-error: stuff
+            state = HOUSE_GEOID_TO_STATE[geoid?.toString()] ?? "";
+        } catch(error) {
+            console.error(error);
+            state = "";
+        }
+
 
         if (properties.pol_party.startsWith("Republican")) {
             rep_name = `${rep_name} (R)`;
