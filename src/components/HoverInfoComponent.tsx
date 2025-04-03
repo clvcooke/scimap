@@ -95,9 +95,9 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo, showJobs 
         }
 
 
-        if (properties.pol_party.startsWith("Republican")) {
+        if (properties?.pol_party?.startsWith("Republican")) {
             rep_name = `${rep_name} (R)`;
-        } else if (properties.pol_party.startsWith("Democrat")) {
+        } else if (properties?.pol_party?.startsWith("Democrat")) {
             rep_name = `${rep_name} (D)`;
         } else {
             console.log({rep_name});
