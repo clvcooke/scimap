@@ -19,14 +19,17 @@ const ALPHA_COLOR = 200;
 const TILE_VERSION = '6'
 const domain = "https://data.scienceimpacts.org"
 const tilesCounties = `${domain}/county_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
-const tilesStates = `${domain}/state_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
-import { ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
+const tilesStates = `${domain}/state_tiles_v7/{z}/{x}/{y}.pbf`
+const tilesDistricts = `${domain}/congressional_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
+import {ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 
 // const COUNTY_DOMAIN: [number, number] = [0,    8_886110.52051];
-const COUNTY_DOMAIN: [number, number] = [0,    25_000_000];
-const STATE_DOMAIN: [number, number] = [0, 2_500_000_000];
+const COUNTY_DOMAIN: [number, number] = [0, 25_000_000];
+const DISTRICTS_DOMAIN: [number, number] = [5_000, 50_000_000];
+const STATE_DOMAIN: [number, number] = [10_000, 2_500_000_000];
+
 
 function LossMap() {
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
@@ -39,24 +42,40 @@ function LossMap() {
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
     const [showShare, setShowShare] = useState(false);
 
-    const [mode, setMode] = useState<"county" | "state">('county');
+    const [mode, setMode] = useState<"county" | "districts" | "state">('county');
     const tileLink = useMemo(() => {
         if (mode === 'county') {
             return tilesCounties;
-        } else {
+        } else if (mode === 'state') {
             return tilesStates;
+        } else {
+            return tilesDistricts;
         }
     }, [mode]);
 
     // Define your data range based on your economic loss values
     const countyColorScale = scaleLinear()
-        .domain([0, Math.log(COUNTY_DOMAIN[1]) ])
+        .domain([COUNTY_DOMAIN[0] > 1 ? Math.log(COUNTY_DOMAIN[0]) : 0, Math.log(COUNTY_DOMAIN[1])])
+        .range([0, 1])
+        .clamp(true);
+    const districtColorScale = scaleLinear()
+        .domain([DISTRICTS_DOMAIN[0] > 1 ? Math.log(DISTRICTS_DOMAIN[0]) : 0, Math.log(DISTRICTS_DOMAIN[1])])
         .range([0, 1])
         .clamp(true);
     const stateColorScale = scaleLinear()
-        .domain([0, Math.log(STATE_DOMAIN[1])])
+        .domain([STATE_DOMAIN[0] > 1 ? Math.log(STATE_DOMAIN[0]) : 0, Math.log(STATE_DOMAIN[1])])
         .range([0, 1])
         .clamp(true);
+
+    const uniqueProperty = useMemo(() => {
+        if (mode === "county") {
+            return "FIPS"
+        } else if (mode === "districts") {
+            return 'GEOID'
+        } else {
+            return "state"
+        }
+    }, [mode])
 
     const layer = new MVTLayer({
         id: 'xyz-mvt',
@@ -67,7 +86,7 @@ function LossMap() {
         pickable: true,
         highlightedFeatureId: hoveredFeatureId,
         highlightColor: [127, 255, 212, ALPHA_COLOR],
-        uniqueIdProperty: mode === "county" ? "FIPS" : "state",
+        uniqueIdProperty: uniqueProperty,
         maxZoom: 7,
         // @ts-expect-error comment
         getFillColor: (feature: { id: string, properties: TileProperties }) => {
@@ -75,9 +94,13 @@ function LossMap() {
             if (mode === 'county') {
                 const value = feature.properties.econ_loss_log;
                 colorString = interpolateOrRd(countyColorScale(value));
-            } else {
+            } else if (mode === 'state') {
                 const value = Math.log(feature.properties.econ_loss);
                 colorString = interpolateOrRd(stateColorScale(value));
+            } else {
+                const value = Math.log(feature.properties.econ_loss);
+                // const value = feature.properties.econ_loss;
+                colorString = interpolateOrRd(districtColorScale(value));
             }
             let rgbValues;
             if (colorString.startsWith('rgb')) {
@@ -98,8 +121,10 @@ function LossMap() {
             if (info.object) {
                 if (mode === 'county') {
                     setHoveredFeatureId(info.object.properties.FIPS);
-                } else {
+                } else if(mode === "state") {
                     setHoveredFeatureId(info.object.properties.state);
+                } else {
+                    setHoveredFeatureId(info.object.properties.GEOID);
                 }
                 setHoverInfo(
                     {
@@ -184,6 +209,16 @@ function LossMap() {
         });
     }, [userLocation]);
 
+    const colorbarDomain = useMemo(() => {
+        if (mode === 'county') {
+            return COUNTY_DOMAIN;
+        } else if (mode === 'state') {
+            return STATE_DOMAIN;
+        } else {
+            return DISTRICTS_DOMAIN;
+        }
+    }, [mode])
+
 
     return (
         <DeckGL
@@ -221,16 +256,18 @@ function LossMap() {
                 zIndex: 10,
                 m: 10,
             }} gap="xs">
-                <Stack style={{backgroundColor: theme.colors.gray[0],
+                <Stack style={{
+                    backgroundColor: theme.colors.gray[0],
                     padding: 10
                 }} gap={"xs"}>
                     <Text fw={700}>Level</Text>
                     <Radio checked={mode === 'county'} onChange={() => setMode('county')} label="County"/>
                     <Radio checked={mode === 'state'} onChange={() => setMode('state')} label="State"/>
+                    <Radio checked={mode === 'districts'} onChange={() => setMode('districts')} label="House Districts"/>
                 </Stack>
                 <Button rightSection={<IconShare size={16}/>} onClick={() => setShowShare(true)}>Share</Button>
             </Stack>
-            {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo} showJobs={mode === 'state'}/>}
+            {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo} showJobs={mode !== 'county'}/>}
             <div style={{
                 position: 'absolute',
                 right: 5,
@@ -238,9 +275,7 @@ function LossMap() {
                 zIndex: 1,
                 pointerEvents: 'none',
             }}>
-                <ColorScale width={10} height={180} domain={
-                    mode === 'county' ? COUNTY_DOMAIN : STATE_DOMAIN
-                }/>
+                <ColorScale width={10} height={180} domain={colorbarDomain} logScale={true}/>
             </div>
 
 
@@ -281,7 +316,8 @@ function LossMap() {
                 </ActionIcon>
             </Stack>
 
-            <Modal closeOnClickOutside={true} withinPortal={false} opened={showShare} onClose={() => setShowShare(false)}>
+            <Modal closeOnClickOutside={true} withinPortal={false} opened={showShare}
+                   onClose={() => setShowShare(false)}>
                 <SharePage
                     title={"See national impact of federal health research cuts"}
                 />

@@ -7,31 +7,18 @@ interface ColorScaleProps {
     height?: number;
     domain: [number, number];
     buckets?: number;
+    logScale?: boolean;
 }
 
 let previousValue = "";
 
-function ColorScale({width = 10, height = 200, domain, buckets = 6}: ColorScaleProps) {
+function ColorScale({width = 10, height = 200, domain, buckets = 6, logScale = true}: ColorScaleProps) {
     const steps = Array.from({length: buckets});
 
     const colorScale = scaleLinear()
         .domain([0, buckets - 1])
         .range([0, 1])
         .clamp(true);
-
-
-    // useEffect(() => {
-    //     const numStops = 10; // Adjust for smoother gradient
-    //     const stops = Array.from({length: numStops}, (_, i) => {
-    //         let value = 0;
-    //         if (i > 0) {
-    //             value = Math.log(domain[0] + (domain[1] - domain[0]) * (i / (numStops - 1)));
-    //         }
-    //         const color = interpolateOrRd(scaleLinear().domain([domain[0], Math.log(domain[1])]).range([0, 1])(value));
-    //         return `${color} ${i * (100 / (numStops - 1))}%`;
-    //     });
-    //     setGradient(`linear-gradient(to top, ${stops.join(', ')})`);
-    // }, [domain]);
 
 
     const formatter = new Intl.NumberFormat('en-US', {
@@ -41,6 +28,7 @@ function ColorScale({width = 10, height = 200, domain, buckets = 6}: ColorScaleP
 
 
     const logMax = Math.log(domain[1]);
+    const logMin = domain[0] > 1 ? Math.log(domain[0]) : 0;
 
 
     // I have values from 0 -> 9MM
@@ -49,8 +37,14 @@ function ColorScale({width = 10, height = 200, domain, buckets = 6}: ColorScaleP
     const formattedValues = steps.map((_, i) => {
         let formattedValue = "ABC";
         if (i < steps.length - 1) {
-            let value = logMax - i * logMax / (steps.length);
-            value = Math.exp(value);
+            let value;
+            if (logScale) {
+                value = logMax - i * (logMax - logMin) / (steps.length);
+                value = Math.exp(value);
+            } else {
+                value = domain[1] - i * (domain[1]) / (steps.length);
+            }
+
             formattedValue = `$${formatter.format(Math.round(value / 100) * 100)}`;
         }
 
