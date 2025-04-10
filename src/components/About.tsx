@@ -145,9 +145,40 @@ function About() {
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
+                <AccordionItem value="data-updates">
+                    <Accordion.Control>
+                        <Title order={isMobile ? 4 : 3}>
+                            Updates
+                        </Title>
+                    </Accordion.Control>
+                    <Accordion.Panel>
+                        <Text ta={"left"}>
+                            SCIMaP updates its data and visualization to reflect the current state of funding cuts. For
+                            the full data history you can reference the <a
+                            href={"http://doi.org/10.17605/OSF.IO/H398E"}>
+                            publicly available data at the Open Science
+                            Framework link.</a>.
+                        </Text>
+                        <Text ta={"left"} mt="sm">
+                            <b>March 27, 2025</b>
+                        </Text>
+                        <Text ta={"left"}>
+                            Initial release.
+                        </Text>
+                        <Text ta={"left"} mt="sm">
+                            <b>April 9th, 2025</b>
+                        </Text>
+                        <Text ta={"left"}>
+                            Congressional districts are now included in the map, and updates to state/county values have
+                            been made based on improved commuter flow data from the US census.
+                        </Text>
+
+                    </Accordion.Panel>
+                </AccordionItem>
             </Accordion>
         </Container>
-    );
+    )
+        ;
 }
 
 export default About;

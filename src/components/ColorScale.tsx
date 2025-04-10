@@ -1,6 +1,7 @@
 import {scaleLinear} from 'd3-scale';
 import {interpolateOrRd} from 'd3-scale-chromatic';
 import {Text, Flex} from '@mantine/core';
+import {isMobile} from "react-device-detect";
 
 interface ColorScaleProps {
     width?: number;
@@ -61,8 +62,10 @@ function ColorScale({width = 10, height = 200, domain, buckets = 6, logScale = t
     });
 
     return (
-        <Flex align="flex-start" style={{height: height}}>
-            <svg width={width} height={height}>
+        <Flex align="flex-start" style={{height: height, background: "rgba(255, 255, 255, 0.5)", borderRadius: "8px"
+        }}>
+            <svg width={width} height={height}
+            >
                 {steps.map((_, i) => {
                     const y1 = i * (height / buckets);
                     const y2 = (i + 1) * (height / buckets);
@@ -81,9 +84,8 @@ function ColorScale({width = 10, height = 200, domain, buckets = 6, logScale = t
                 })}
             </svg>
 
-            <div style={{width: '50px'}}>
+            <div>
                 {formattedValues.map((formattedValue) => {
-
                     return (
                         <div
                             key={formattedValue}
@@ -91,10 +93,19 @@ function ColorScale({width = 10, height = 200, domain, buckets = 6, logScale = t
                                 height: `${height / buckets}px`,
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'flex-start',
+                                justifyContent: 'flex-between',
                             }}
                         >
-                            <Text size="xs" style={{textAlign: 'left', marginLeft: '5px'}}>
+                            <Text size={isMobile ? "12px" : 'xs'}
+                                  style={{
+                                      textAlign: 'left',
+                                      marginLeft: '5px',
+                                      fontWeight: 'semibold',
+                                      color: 'black',
+                                      marginRight: '5px',
+                                  }}
+
+                            >
                                 {`${formattedValue}`}
                             </Text>
                         </div>

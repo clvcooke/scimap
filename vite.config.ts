@@ -1,13 +1,22 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), sentryVitePlugin({
+    org: "scimap",
+    project: "javascript-react"
+  })],
+
   server: {
     host: true,
     port: 5173,
     allowedHosts: ["robco.mammoth-atlas.ts.net"]
   },
+
+  build: {
+    sourcemap: true
+  }
 })

@@ -14,19 +14,24 @@ export type DistrictTileProperties = {
     fiscal_year: number;
     rep_name: string;
     pol_party: string;
+    state: string;
 }
 
 export type StateTileProperties = {
+    state_FIPS: number;
+    IDC_loss: number;
+    econ_loss: number;
+    job_loss: number
+    IDC_loss_log: number;
+    econ_loss_log: number;
+    job_loss_log: number;
     state_code: string;
     state: string;
     grant_funds: number;
-    IDC_loss: number;
-    econ_loss: number;
     pop_2024: number;
     grant_pc: number;
     loss_pc: number;
     econ_loss_pc: number;
-    jobs_loss: number
 }
 
 export type CountyTileProperties = {
@@ -35,6 +40,8 @@ export type CountyTileProperties = {
     county: string;
     pop_2024: number;
     grant_funds: number;
+    grant_funds_econ: number;
+    grant_funds_econ_log: number;
     econ_loss: number;
     IDC_loss: number;
     jobs_loss: number;
@@ -79,11 +86,12 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo, showJobs 
         const properties = hoverInfo.properties as StateTileProperties;
         state = properties.state;
         econ_loss = properties.econ_loss;
-        jobs_loss = properties.jobs_loss;
+        jobs_loss = properties.job_loss;
     } else {
         const properties = hoverInfo.properties as DistrictTileProperties;
         econ_loss = properties.econ_loss;
         jobs_loss = properties.jobs_loss;
+        state = properties.state;
         rep_name = properties.rep_name;
         const geoid = properties.GEOID;
         try{

@@ -11,6 +11,7 @@ import Advocacy from "./components/Advocacy.tsx";
 
 import ReactGA from 'react-ga4';
 import Quiz from "./components/Quiz.tsx";
+import {ANALYTICS_ACTIONS} from "./constants.ts";
 
 
 function App() {
@@ -47,7 +48,13 @@ function App() {
             </div>
         </Flex>
         <Modal closeOnClickOutside={false} size={"lg"} withinPortal={false} opened={impactOpen} onClose={() => setImpactOpen(false)} withCloseButton={false} centered>
-            <ImpactStatement close={() => setImpactOpen(false)}/>
+            <ImpactStatement close={() => {
+                ReactGA.event({
+                    category: ANALYTICS_ACTIONS.action,
+                    action: `CLOSE_IMPACT_STATEMENT`,
+                });
+                setImpactOpen(false)
+            }}/>
         </Modal>
     </>
 }

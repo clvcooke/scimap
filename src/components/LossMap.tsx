@@ -14,25 +14,28 @@ import {MapViewState, FlyToInterpolator} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
 import {MouseEvent} from "react";
 import ReactGA from 'react-ga4';
-
-
-const ALPHA_COLOR = 200;
-const TILE_VERSION = '6'
-const domain = "https://data.scienceimpacts.org"
-const tilesCounties = `${domain}/county_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
-const tilesStates = `${domain}/state_tiles_v7/{z}/{x}/{y}.pbf`
-const tilesDistricts = `${domain}/congressional_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
 import {ANALYTICS_ACTIONS, ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
+import {isMobile} from "react-device-detect";
+
+
+const ALPHA_COLOR = 200;
+const TILE_VERSION = '9'
+const domain = "https://data.scienceimpacts.org"
+const tilesCounties = `${domain}/state_counties_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
+const tilesStates = `${domain}/state_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
+const tilesDistricts = `${domain}/state_districts_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
+
 
 // const COUNTY_DOMAIN: [number, number] = [0,    8_886110.52051];
 const COUNTY_DOMAIN: [number, number] = [0, 25_000_000];
-const DISTRICTS_DOMAIN: [number, number] = [5_000, 50_000_000];
+const DISTRICTS_DOMAIN: [number, number] = [250_000, 50_000_000];
 const STATE_DOMAIN: [number, number] = [10_000, 2_500_000_000];
 
 
 function LossMap() {
+    ReactGA.send({ hitType: "pageview", page: "map", title: "map" });
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
     const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
     const [viewState, setViewState] = useState<MapViewState>({
@@ -290,12 +293,12 @@ function LossMap() {
             {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo} showJobs={mode !== 'county'}/>}
             <div style={{
                 position: 'absolute',
-                right: 5,
-                bottom: 50,
+                right: 10,
+                bottom: 45,
                 zIndex: 1,
                 pointerEvents: 'none',
             }}>
-                <ColorScale width={10} height={180} domain={colorbarDomain} logScale={true}/>
+                <ColorScale width={isMobile ? 5 : 10} height={isMobile ? 110: 180 } domain={colorbarDomain} logScale={true}/>
             </div>
 
 

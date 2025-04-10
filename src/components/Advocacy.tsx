@@ -9,9 +9,19 @@ import {
 import {IconShare} from '@tabler/icons-react';
 import SharePage from "./SharePage.tsx";
 import {useState} from 'react';
+import ReactGA from "react-ga4";
 
 function Advocacy() {
     const [showShare, setShowShare] = useState(false);
+
+    const trackElectedOfficialsClick = () => {
+        ReactGA.event({
+            category: 'Outbound Link',
+            action: 'Clicked Elected Officials Link',
+            label: 'usa.gov/elected-officials'
+        });
+    };
+
     return (
         <Container size="md">
             <Title ta="center" mt="xl" mb="md">
@@ -32,7 +42,8 @@ function Advocacy() {
                     <Text size="md" ta={'left'}>
                         We encourage you to <b> contact your local elected officials and representatives</b> in Congress
                         to share your opinion and call attention to these funding cuts. <a
-                        href={"https://www.usa.gov/elected-officials"} target={"_blank"}>Click here to find contact
+                        href={"https://www.usa.gov/elected-officials"} target={"_blank"} onClick={trackElectedOfficialsClick}
+                    >Click here to find contact
                         information for your representatives</a>. Here are some facts to keep in mind:
                     </Text>
                     <List ta={"left"} withPadding>
