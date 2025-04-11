@@ -1,5 +1,5 @@
-import { Card, Text, Flex } from '@mantine/core';
-import {HOUSE_GEOID_TO_STATE} from "../data/house-states.ts";
+import {Card, Text, Flex} from '@mantine/core';
+import {HOUSE_GEOID_TO_REP} from "../data/house-states.ts";
 
 export type DistrictTileProperties = {
     GEOID: number;
@@ -67,13 +67,14 @@ type Props = {
     showJobs: boolean;
 };
 
-export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo, showJobs }) => {
+export const HoverInfoComponent: React.FC<Props> = ({mode, hoverInfo, showJobs}) => {
     if (!hoverInfo) {
         return null;
     }
     let county: string = "";
     let state: string = "";
     let rep_name: string = "";
+    let pol_party: string = "";
     let econ_loss: number;
     let jobs_loss: number;
     if (mode === "county") {
@@ -82,7 +83,7 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo, showJobs 
         state = properties.state;
         econ_loss = properties.econ_loss;
         jobs_loss = properties.jobs_loss;
-    } else  if (mode === "state") {
+    } else if (mode === "state") {
         const properties = hoverInfo.properties as StateTileProperties;
         state = properties.state;
         econ_loss = properties.econ_loss;
@@ -92,20 +93,27 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo, showJobs 
         econ_loss = properties.econ_loss;
         jobs_loss = properties.jobs_loss;
         state = properties.state;
-        rep_name = properties.rep_name;
         const geoid = properties.GEOID;
-        try{
-            // @ts-expect-error: stuff
-            state = HOUSE_GEOID_TO_STATE[geoid?.toString()] ?? "";
-        } catch(error) {
-            console.error(error);
-            state = "";
+        console.log({geoid});
+
+        try {
+            rep_name = HOUSE_GEOID_TO_REP[geoid].rep_name;
+            pol_party = HOUSE_GEOID_TO_REP[geoid].rep_party;
+        } catch (e) {
+            console.log({e});
+        }
+
+        if (!rep_name) {
+            rep_name = properties.rep_name;
+        }
+        if (!pol_party) {
+            pol_party = properties.pol_party;
         }
 
 
-        if (properties?.pol_party?.startsWith("Republican")) {
+        if (pol_party?.startsWith("Republican")) {
             rep_name = `${rep_name} (R)`;
-        } else if (properties?.pol_party?.startsWith("Democrat")) {
+        } else if (pol_party?.startsWith("Democrat")) {
             rep_name = `${rep_name} (D)`;
         } else {
             console.log({rep_name});
@@ -146,13 +154,14 @@ export const HoverInfoComponent: React.FC<Props> = ({ mode, hoverInfo, showJobs 
                 pointerEvents: 'none',
             }}
         >
-            <Card shadow="sm" padding="md" radius="md" withBorder style={{color: 'black', textAlign: 'left' }}>
+            <Card shadow="sm" padding="md" radius="md" withBorder style={{color: 'black', textAlign: 'left'}}>
                 <Flex direction="column" gap="xs">
-                    {county && <Text size="md" style={{ color: 'black' }}><b>County:</b> {county}</Text>}
-                    {state && <Text size="md" style={{ color: 'black' }}><b>{regionIndicator}:</b> {state}</Text>}
-                    {rep_name && <Text size="md" style={{ color: 'black' }}><b>Representative:</b> {rep_name}</Text>}
-                    <Text size="md" style={{ color: 'black' }}><b>Economic Loss:</b> {(showLessThan ? `<$` : '$') + econ_loss_string}</Text>
-                    {showJobs && <Text size="md" style={{ color: 'black' }}><b>Jobs Lost:</b> {roundedJobsLoss}</Text>}
+                    {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
+                    {state && <Text size="md" style={{color: 'black'}}><b>{regionIndicator}:</b> {state}</Text>}
+                    {rep_name && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {rep_name}</Text>}
+                    <Text size="md" style={{color: 'black'}}><b>Economic
+                        Loss:</b> {(showLessThan ? `<$` : '$') + econ_loss_string}</Text>
+                    {showJobs && <Text size="md" style={{color: 'black'}}><b>Jobs Lost:</b> {roundedJobsLoss}</Text>}
                 </Flex>
             </Card>
         </div>
