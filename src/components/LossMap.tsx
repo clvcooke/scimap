@@ -19,6 +19,8 @@ import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
 
+import {IconLayer} from '@deck.gl/layers';
+
 
 const ALPHA_COLOR = 200;
 const TILE_VERSION = '9'
@@ -26,6 +28,22 @@ const domain = "https://data.scienceimpacts.org"
 const tilesCounties = `${domain}/state_counties_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
 const tilesStates = `${domain}/state_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
 const tilesDistricts = `${domain}/state_districts_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
+
+import {grantLossValues} from "../data/grant-losses-county.ts";
+import IconClusterLayer from "../layers/icon-cluster-layer.ts";
+import GrantsOverlay from "./GrantsOverlay.tsx";
+
+console.log(grantLossValues);
+
+type GrantLossCounty = {
+    reporter_url: string;
+    award_remaining: number;
+    termination_date: string;
+    org_name: string;
+    project_title: string;
+    cancellation_source: string;
+    centroid: [longitude: number, latitude: number];
+};
 
 
 // const COUNTY_DOMAIN: [number, number] = [0,    8_886110.52051];
@@ -35,7 +53,7 @@ const STATE_DOMAIN: [number, number] = [10_000, 2_500_000_000];
 
 
 function LossMap() {
-    ReactGA.send({ hitType: "pageview", page: "map", title: "map" });
+    ReactGA.send({hitType: "pageview", page: "map", title: "map"});
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
     const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
     const [viewState, setViewState] = useState<MapViewState>({
@@ -80,7 +98,19 @@ function LossMap() {
         } else {
             return "state"
         }
-    }, [mode])
+    }, [mode]);
+
+    const superGrantLayer = new IconClusterLayer({
+        data: grantLossValues,
+        getPosition: (d: GrantLossCounty) => [d.centroid[0], d.centroid[1]],
+        getSize: 50,
+        iconAtlas: '/location-icon-atlas.png',
+        iconMapping: '/location-icon-mapping.json',
+        getColor: () => [0, 255, 0],
+        id: 'icon-cluster',
+        sizeScale: 40,
+        pickable: true
+    })
 
     const layer = new MVTLayer({
         id: 'xyz-mvt',
@@ -126,7 +156,7 @@ function LossMap() {
             if (info.object) {
                 if (mode === 'county') {
                     setHoveredFeatureId(info.object.properties.FIPS);
-                } else if(mode === "state") {
+                } else if (mode === "state") {
                     setHoveredFeatureId(info.object.properties.state);
                 } else {
                     setHoveredFeatureId(info.object.properties.GEOID);
@@ -224,6 +254,10 @@ function LossMap() {
         }
     }, [mode])
 
+    const grantLayerActive = useMemo(() => true, []);
+
+    const [overlayGrants, setOverlayGrants] = useState<GrantLossCounty[]>([]);
+    const [showOverlay, setShowOverlay] = useState(false);
 
     return (
         <DeckGL
@@ -233,9 +267,21 @@ function LossMap() {
             onViewStateChange={({viewState: newViewState}) => {
                 setViewState(newViewState as MapViewState);
             }}
-            controller={true}
-            layers={[layer, userLocationLayer]}
+
+            controller={showOverlay ? false : true}
+            layers={[layer, superGrantLayer, userLocationLayer]}
             style={{overflow: 'hidden'}}
+            onClick={(event) => {
+                if (grantLayerActive) {
+                    // @ts-expect-error: objects are defined
+                    const grants: GrantLossCounty[] = event.objects;
+                    if (grants?.length) {
+                        setOverlayGrants(grants);
+                        setShowOverlay(true);
+                    }
+                }
+            }}
+            _pickable={!showOverlay}
         >
             <div style={{
                 position: 'absolute',
@@ -260,6 +306,8 @@ function LossMap() {
                 right: 10,
                 zIndex: 10,
                 m: 10,
+                pointerEvents: 'auto',
+
             }} gap="xs">
                 <Stack style={{
                     backgroundColor: theme.colors.gray[0],
@@ -298,7 +346,8 @@ function LossMap() {
                 zIndex: 1,
                 pointerEvents: 'none',
             }}>
-                <ColorScale width={isMobile ? 5 : 10} height={isMobile ? 110: 180 } domain={colorbarDomain} logScale={true}/>
+                <ColorScale width={isMobile ? 5 : 10} height={isMobile ? 110 : 180} domain={colorbarDomain}
+                            logScale={true}/>
             </div>
 
 
@@ -345,6 +394,15 @@ function LossMap() {
                     title={"See national impact of federal health research cuts"}
                 />
             </Modal>
+            <GrantsOverlay grants={overlayGrants} opened={showOverlay} onClose={() => setShowOverlay(false)}/>
+
+            {/*<Modal closeOnClickOutside={true} withinPortal={false} opened={showOverlay}*/}
+            {/*       onClose={() => setShowOverlay(false)}>*/}
+            {/*    <div>Grants!</div>*/}
+            {/*    {overlayGrants?.map((g) => {*/}
+            {/*        return <div>{g.org_name}</div>*/}
+            {/*    })}*/}
+            {/*</Modal>*/}
         </DeckGL>
     );
 }
