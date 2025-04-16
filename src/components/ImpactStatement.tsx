@@ -19,7 +19,7 @@ function ImpactStatement({close}: { close: () => void }) {
             </Text>
 
             <Button size="md" onClick={() => close()}>
-                See Impact
+                See Annual Impact
             </Button>
             <Checkbox
                 checked={consent}

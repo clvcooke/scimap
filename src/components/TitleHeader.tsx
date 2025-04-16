@@ -1,5 +1,5 @@
-import {Container, Flex, Text, Title, useMantineTheme} from "@mantine/core";
-import {useMediaQuery} from "@mantine/hooks";
+import {Container, Flex, Text, Title} from "@mantine/core";
+import {isMobile} from "react-device-detect";
 
 
 function TitleHeader({jobsLost, costImpact}: { jobsLost: number, costImpact: number }) {
@@ -15,8 +15,6 @@ function TitleHeader({jobsLost, costImpact}: { jobsLost: number, costImpact: num
         compactDisplay: 'short'
     }).format(costImpact);
 
-    const theme = useMantineTheme();
-    const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
     return <Container>
         <div style={{position: 'relative', width: '100%'}}>
             <div style={{textAlign: 'center'}}>
@@ -37,6 +35,7 @@ function TitleHeader({jobsLost, costImpact}: { jobsLost: number, costImpact: num
         <Flex justify="center" gap="sm" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
             <Text>
                 <Text
+                    size={isMobile ? 'sm' : 'md'}
                     span
                     fw={700}
                     style={{
@@ -44,8 +43,8 @@ function TitleHeader({jobsLost, costImpact}: { jobsLost: number, costImpact: num
                         color: 'rgba(0, 0, 0, 0.8)',
                         textShadow: '1px 1px 2px rgba(255, 255, 255, 0.5)' // Subtle text shadow
                     }}
-                >National Impact: </Text>
-                <Text span size="md" style={{
+                >National Impact per year: </Text>
+                <Text span size={isMobile ? "sm" : "md"} style={{
                     fontFamily: 'Open Sans, sans-serif',
                     color: 'rgba(0, 0, 0, 0.8)',
                     textShadow: '1px 1px 2px rgba(255, 255, 255, 0.5)' // Subtle text shadow
