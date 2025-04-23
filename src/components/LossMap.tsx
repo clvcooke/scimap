@@ -8,7 +8,7 @@ import {MVTLayer} from '@deck.gl/geo-layers';
 import {scaleLinear} from 'd3-scale';
 import {interpolateOrRd,} from 'd3-scale-chromatic';
 import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
-import {ActionIcon, useMantineTheme, Radio, Text, Stack, Button, Modal} from "@mantine/core";
+import {ActionIcon, useMantineTheme, Radio, Text, Stack, Button, Modal, Group} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {MapViewState, FlyToInterpolator} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
@@ -18,9 +18,6 @@ import {ANALYTICS_ACTIONS, ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
-
-import {IconLayer} from '@deck.gl/layers';
-
 
 const ALPHA_COLOR = 200;
 const TILE_VERSION = '9'
@@ -32,8 +29,7 @@ const tilesDistricts = `${domain}/state_districts_v${TILE_VERSION}/{z}/{x}/{y}.p
 import {grantLossValues} from "../data/grant-losses-county.ts";
 import IconClusterLayer from "../layers/icon-cluster-layer.ts";
 import GrantsOverlay from "./GrantsOverlay.tsx";
-
-console.log(grantLossValues);
+import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 type GrantLossCounty = {
     reporter_url: string;
@@ -55,6 +51,9 @@ const STATE_DOMAIN: [number, number] = [10_000, 2_500_000_000];
 function LossMap() {
     ReactGA.send({hitType: "pageview", page: "map", title: "map"});
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
+    const [showControls, setShowControls] = useState(false);
+    const [isNormalized, setIsNormalized] = useState(false);
+    const [showAnnotations, setShowAnnotations] = useState(false);
     const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
     const [viewState, setViewState] = useState<MapViewState>({
         longitude: -98.5795, // Approximate center longitude of the USA
@@ -64,7 +63,7 @@ function LossMap() {
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
     const [showShare, setShowShare] = useState(false);
 
-    const [mode, setMode] = useState<"county" | "districts" | "state">('county');
+    const [mode, setMode] = useState<"county" | "districts" | "state" | ''>('county');
 
     const tileLink = useMemo(() => {
         if (mode === 'county') {
@@ -112,7 +111,7 @@ function LossMap() {
         pickable: true
     })
 
-    const layer = new MVTLayer({
+    const baseLayer = new MVTLayer({
         id: 'xyz-mvt',
         data: [tileLink],
         binary: true, // Try setting this to true
@@ -259,152 +258,203 @@ function LossMap() {
     const [overlayGrants, setOverlayGrants] = useState<GrantLossCounty[]>([]);
     const [showOverlay, setShowOverlay] = useState(false);
 
+    let layers = [
+        userLocationLayer
+    ]
+    if (showAnnotations) {
+        layers = [
+            superGrantLayer,
+            ...layers
+        ];
+    }
+
+    if (mode) {
+        layers = [
+            baseLayer,
+            ...layers
+        ]
+    }
+
+    const mapWidth = isMobile ? '100vw' : '80vw';
+
     return (
-        <DeckGL
-            onDragStart={() => setHoverInfo(null)}
-            onDragEnd={() => setHoverInfo(null)}
-            viewState={viewState}
-            onViewStateChange={({viewState: newViewState}) => {
-                setViewState(newViewState as MapViewState);
-            }}
-
-            controller={showOverlay ? false : true}
-            layers={[layer, superGrantLayer, userLocationLayer]}
-            style={{overflow: 'hidden'}}
-            onClick={(event) => {
-                if (grantLayerActive) {
-                    // @ts-expect-error: objects are defined
-                    const grants: GrantLossCounty[] = event.objects;
-                    if (grants?.length) {
-                        setOverlayGrants(grants);
-                        setShowOverlay(true);
-                    }
-                }
-            }}
-            _pickable={!showOverlay}
-        >
-            <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                zIndex: 2,
-                background: 'rgba(255, 255, 255, 0.7)', // Slightly less transparent
-                backdropFilter: 'blur(5px)', // Add a subtle blur
-                padding: '4px', // Add some padding inside the container
-            }}
-                 onMouseOver={(event) => event.stopPropagation()}
-                 onMouseOut={(event) => event.stopPropagation()}
-            >
-                <TitleHeader
-                    jobsLost={JOBS_LOST} costImpact={ECONOMIC_LOSS}></TitleHeader>
-            </div>
-            <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
-            <Stack style={{
-                position: 'absolute',
-                top: 100,
-                right: 10,
-                zIndex: 10,
-                m: 10,
-                pointerEvents: 'auto',
-
-            }} gap="xs">
-                <Stack style={{
-                    backgroundColor: theme.colors.gray[0],
-                    padding: 10
-                }} gap={"xs"}>
-                    <Text fw={700}>Level</Text>
-                    <Radio checked={mode === 'county'} onChange={() => {
-                        setMode('county')
-                        ReactGA.event({
-                            category: ANALYTICS_ACTIONS.layer,
-                            action: `county`,
-                        });
-                    }} label="County"/>
-                    <Radio checked={mode === 'state'} onChange={() => {
-                        setMode('state')
-                        ReactGA.event({
-                            category: ANALYTICS_ACTIONS.layer,
-                            action: `state`,
-                        });
-                    }} label="State"/>
-                    <Radio checked={mode === 'districts'} onChange={() => {
-                        setMode('districts')
-                        ReactGA.event({
-                            category: ANALYTICS_ACTIONS.layer,
-                            action: `districts`,
-                        });
-                    }} label="House District"/>
-                </Stack>
-                <Button rightSection={<IconShare size={16}/>} onClick={() => setShowShare(true)}>Share</Button>
-            </Stack>
-            {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo} showJobs={mode !== 'county'}/>}
-            <div style={{
-                position: 'absolute',
-                right: 10,
-                bottom: 45,
-                zIndex: 1,
-                pointerEvents: 'none',
+        <Group h={"100%"} w={"100%"} preventGrowOverflow={true} gap={0}>
+            {!isMobile && <div style={{
+                width: '20vw',
+                height: "calc(100svh - 3rem)"
             }}>
-                <ColorScale width={isMobile ? 5 : 10} height={isMobile ? 110 : 180} domain={colorbarDomain}
-                            logScale={true}/>
-            </div>
-
-
-            <Stack style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                zIndex: 1,
-                color: theme.colors.gray[9],
-                padding: 10,
-            }} gap="xs">
-                <ActionIcon variant="transparent" aria-label="Location"
-                            size={'xl'}
-                            style={{
-                                color: theme.colors.gray[9],
-                            }}
-                            onClick={getLocation}
-                >
-                    <IconGps style={{width: '70%', height: '70%'}}/>
-                </ActionIcon>
-                <ActionIcon variant="transparent" aria-label="Zoom In"
-                            size={'xl'}
-                            style={{
-                                color: theme.colors.gray[9],
-                            }}
-                            onClick={zoomIn}
-                >
-                    <IconZoomIn style={{width: '70%', height: '70%'}}/>
-                </ActionIcon>
-                <ActionIcon variant="transparent" aria-label="Zoom Out"
-                            size={'xl'}
-                            style={{
-                                color: theme.colors.gray[9],
-                            }}
-                            onClick={zoomOut}
-                >
-                    <IconZoomOut style={{width: '70%', height: '70%'}}/>
-                </ActionIcon>
-            </Stack>
-
-            <Modal closeOnClickOutside={true} withinPortal={false} opened={showShare}
-                   onClose={() => setShowShare(false)}>
-                <SharePage
-                    title={"See national impact of federal health research cuts"}
+                <MapSettings
+                    baseLayer={mode}
+                    setBaseLayer={setMode}
+                    isNormalized={isNormalized} setIsNormalized={setIsNormalized} showAnnotations={showAnnotations}
+                    setShowAnnotations={setShowAnnotations}
                 />
-            </Modal>
-            <GrantsOverlay grants={overlayGrants} opened={showOverlay} onClose={() => setShowOverlay(false)}/>
+            </div>}
 
-            {/*<Modal closeOnClickOutside={true} withinPortal={false} opened={showOverlay}*/}
-            {/*       onClose={() => setShowOverlay(false)}>*/}
-            {/*    <div>Grants!</div>*/}
-            {/*    {overlayGrants?.map((g) => {*/}
-            {/*        return <div>{g.org_name}</div>*/}
-            {/*    })}*/}
-            {/*</Modal>*/}
-        </DeckGL>
-    );
+            {isMobile && <MapControlsDrawer opened={showControls} onClose={() => {
+                console.log("close");
+                setShowControls(false)
+            }} baseLayer={mode}
+                               setBaseLayer={setMode}
+                               isNormalized={isNormalized} setIsNormalized={setIsNormalized}
+                               showAnnotations={showAnnotations}
+                               setShowAnnotations={setShowAnnotations}/>}
+
+            <Group grow style={{
+                width: mapWidth,
+                height: "calc(100svh - 3rem)",
+                position: "relative",
+            }}>
+                <DeckGL
+                    onDragStart={() => setHoverInfo(null)}
+                    onDragEnd={() => setHoverInfo(null)}
+                    viewState={viewState}
+                    onViewStateChange={({viewState: newViewState}) => {
+                        setViewState(newViewState as MapViewState);
+                    }}
+
+                    controller={!showOverlay}
+                    layers={layers}
+                    style={{overflow: 'hidden'}}
+                    onClick={(event) => {
+                        if (grantLayerActive) {
+                            // @ts-expect-error: objects are defined
+                            let grants: GrantLossCounty[] = event.objects;
+                            if (!grants?.length && event.object?.reporter_url) {
+                                grants = [event.object];
+                            }
+                            if (grants?.length) {
+                                setOverlayGrants(grants);
+                                setShowOverlay(true);
+                            } else {
+                                console.log({grants, event});
+                                console.log("No grants found");
+                            }
+                        }
+                    }}
+                    _pickable={!showOverlay}
+                >
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        zIndex: 2,
+                        background: 'rgba(255, 255, 255, 0.7)', // Slightly less transparent
+                        backdropFilter: 'blur(5px)', // Add a subtle blur
+                        padding: '4px', // Add some padding inside the container
+                    }}
+                         onMouseOver={(event) => event.stopPropagation()}
+                         onMouseOut={(event) => event.stopPropagation()}
+                    >
+                        <TitleHeader
+                            jobsLost={JOBS_LOST} costImpact={ECONOMIC_LOSS}></TitleHeader>
+                    </div>
+                    <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
+                    <Stack style={{
+                        position: 'absolute',
+                        top: 100,
+                        right: 10,
+                        zIndex: 10,
+                        m: 10,
+                        pointerEvents: 'auto',
+
+                    }} gap="xs">
+                        <Stack style={{
+                            backgroundColor: theme.colors.gray[0],
+                            padding: 10
+                        }} gap={"xs"}>
+                            <Radio checked={mode === 'county'} onChange={() => {
+                                setMode('county')
+                                ReactGA.event({
+                                    category: ANALYTICS_ACTIONS.layer,
+                                    action: `county`,
+                                });
+                            }} label="County"/>
+                            <Radio checked={mode === 'state'} onChange={() => {
+                                setMode('state')
+                                ReactGA.event({
+                                    category: ANALYTICS_ACTIONS.layer,
+                                    action: `state`,
+                                });
+                            }} label="State"/>
+                            <Radio checked={mode === 'districts'} onChange={() => {
+                                setMode('districts')
+                                ReactGA.event({
+                                    category: ANALYTICS_ACTIONS.layer,
+                                    action: `districts`,
+                                });
+                            }} label="House District"/>
+                            <Button size={'xs'} onClick={() => setShowControls(true)}>More Options</Button>
+                            <Button size={"xs"} rightSection={<IconShare size={16}/>}
+                                    onClick={() => setShowShare(true)}>Share</Button>
+                        </Stack>
+
+                    </Stack>
+                    {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo} showJobs={mode !== 'county'}/>}
+
+                    <div style={{
+                        position: 'absolute',
+                        right: 10,
+                        bottom: 45,
+                        zIndex: 1,
+                        pointerEvents: 'none',
+                    }}>
+                        <ColorScale width={isMobile ? 5 : 10} height={isMobile ? 110 : 180} domain={colorbarDomain}
+                                    logScale={true}/>
+                    </div>
+
+
+                    <Stack style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        zIndex: 1,
+                        color: theme.colors.gray[9],
+                        padding: 10,
+                    }} gap="xs">
+                        <ActionIcon variant="transparent" aria-label="Location"
+                                    size={'xl'}
+                                    style={{
+                                        color: theme.colors.gray[9],
+                                    }}
+                                    onClick={getLocation}
+                        >
+                            <IconGps style={{width: '70%', height: '70%'}}/>
+                        </ActionIcon>
+                        <ActionIcon variant="transparent" aria-label="Zoom In"
+                                    size={'xl'}
+                                    style={{
+                                        color: theme.colors.gray[9],
+                                    }}
+                                    onClick={zoomIn}
+                        >
+                            <IconZoomIn style={{width: '70%', height: '70%'}}/>
+                        </ActionIcon>
+                        <ActionIcon variant="transparent" aria-label="Zoom Out"
+                                    size={'xl'}
+                                    style={{
+                                        color: theme.colors.gray[9],
+                                    }}
+                                    onClick={zoomOut}
+                        >
+                            <IconZoomOut style={{width: '70%', height: '70%'}}/>
+                        </ActionIcon>
+                    </Stack>
+
+                    <Modal closeOnClickOutside={true} withinPortal={false} opened={showShare}
+                           onClose={() => setShowShare(false)}>
+                        <SharePage
+                            title={"See national impact of federal health research cuts"}
+                        />
+                    </Modal>
+                    <GrantsOverlay grants={overlayGrants} opened={showOverlay} onClose={() => setShowOverlay(false)}/>
+                </DeckGL>
+            </Group>
+
+        </Group>
+    )
+        ;
 }
 
 export default LossMap

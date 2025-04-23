@@ -99,7 +99,6 @@ export default class IconClusterLayer<
                 iconMapping,
                 sizeScale,
                 getPosition: d => {
-                    console.log({d})
                     return d.geometry.coordinates as [number, number]
                 },
                 getIcon: d => getIconName(d.properties.cluster ? d.properties.point_count : 1),

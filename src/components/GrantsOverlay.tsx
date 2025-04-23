@@ -4,9 +4,8 @@ import {
     Text,
     ScrollArea,
     Title,
-    Anchor,
     Stack,
-    Group,
+    Flex,
 } from '@mantine/core';
 import { useMemo } from 'react';
 
@@ -63,43 +62,38 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
         <Modal
             opened={opened}
             onClose={onClose}
-            title="Grants"
-            size="lg"
+            title="Grants Impact"
+            size="md"
             closeOnClickOutside={true}
             withinPortal={false}
         >
-            <ScrollArea style={{ height: 500 }}>
+            <ScrollArea style={{ height: "80%" }}>
                 <Stack>
-                    {groupedGrants.map(({ orgName, grants }) => (
-                        <Card key={orgName} shadow="sm" padding="lg" radius="md" withBorder>
-                            <Title order={4}>{titleCase(orgName)}</Title>
-                            <Stack>
-                                {grants.map((grant) => (
-                                    <Card
-                                        key={grant.project_title}
-                                        shadow="xs"
-                                        padding="sm"
-                                        radius="md"
-                                        withBorder
-                                    >
-                                        <Anchor href={grant.reporter_url} target="_blank">
-                                            {grant.project_title}
-                                        </Anchor>
-                                        <Group gap={'sm'} justify="center"
-                                        >
-                                            <Text size="sm" color="dimmed">
-                                                Lost amount: ${grant.award_remaining}
-                                            </Text>
-                                            <Text size="sm" color="dimmed">
-                                                Termination Date: {grant.termination_date}
-                                            </Text>
-                                        </Group>
+                    {groupedGrants.map(({ orgName, grants }) => {
+                        const totalDollarsLost = grants.reduce((sum, grant) => sum + grant.award_remaining, 0);
+                        const formattedDollarsLost = new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                            maximumFractionDigits: 0
+                        }).format(totalDollarsLost);
 
-                                    </Card>
-                                ))}
-                            </Stack>
-                        </Card>
-                    ))}
+
+                        return (
+                            <Card key={orgName} shadow="sm" padding="lg" radius="md" withBorder>
+                                <Title order={4}>{titleCase(orgName)}</Title>
+                                <Flex
+                                    mt="md"
+                                    direction="column" // Stack on smaller screens
+                                    align="start"
+                                    justify="space-between"
+                                >
+                                    <Text fw={500}>Grants Cancelled: {grants.length}</Text>
+                                    <Text fw={500}>Funding Lost: {formattedDollarsLost}</Text>
+                                </Flex>
+                            </Card>
+                        );
+
+                    })}
                 </Stack>
             </ScrollArea>
         </Modal>
