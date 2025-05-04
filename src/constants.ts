@@ -5,6 +5,7 @@ export const ANALYTICS_ACTIONS = {
     pageView: 'Page View',
     consent: 'Consent',
     layer: 'Layer',
+    condition: 'Condition',
 }
 
 
@@ -23,3 +24,5 @@ export const formattedCost = new Intl.NumberFormat('en-US', {
 
 export const REACT_APP_PUBLIC_POSTHOG_KEY= "phc_7xCOByPPLiPt1qyRf23Ga7ra7qPrAv6NkIkCn4lkZUH"
 export const REACT_APP_PUBLIC_POSTHOG_HOST= "https://us.i.posthog.com"
+
+export type Condition = 'IDC' | 'GRANTS' | 'IDC_GRANTS' | null;

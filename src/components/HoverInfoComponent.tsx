@@ -63,7 +63,7 @@ export type HoverInfo = {
 
 type Props = {
     hoverInfo: HoverInfo | null;
-    mode: "county" | "state" | 'districts';
+    mode: "county" | "state" | 'districts' | "";
     showJobs: boolean;
 };
 
