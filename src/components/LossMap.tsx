@@ -358,11 +358,9 @@ function LossMap({condition}: LossMapProps) {
                                 grants = [event.object];
                             }
                             if (grants?.length) {
-                                console.log("GRANTS", {grants, event});
                                 setOverlayGrants(grants);
                                 setShowOverlay(true);
                             } else {
-                                console.log({grants, event});
                                 console.log("No grants found");
                             }
                         }
