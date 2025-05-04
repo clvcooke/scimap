@@ -81,7 +81,7 @@ export default class IconClusterLayer<
         if (pickedObject) {
             let objects: DataT[] | undefined;
             if (pickedObject.cluster && mode !== 'hover') {
-                objects = this.state.index.getLeaves(pickedObject.cluster_id, 25).map(f => f.properties);
+                objects = this.state.index.getLeaves(pickedObject.cluster_id, 1_000_000).map(f => f.properties);
             }
             return {...info, object: pickedObject, objects};
         }
