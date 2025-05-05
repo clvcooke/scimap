@@ -6049,5 +6049,5 @@ export const grantLossesCounty = {
 }
 
 export const grantLossValues = Object.values(grantLossesCounty).flatMap((grant) => {
-    return grant.filter(g => !Number.isNaN(g.award_remaining))
+    return grant.filter(g => !Number.isNaN(g.award_remaining) && g.award_remaining > 0)
 })
