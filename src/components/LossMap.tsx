@@ -13,27 +13,27 @@ import {GeoJsonLayer} from '@deck.gl/layers';
 import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
 import ReactGA from 'react-ga4';
-import {ANALYTICS_ACTIONS, Condition, ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
+import {ANALYTICS_ACTIONS, BaseLayer, Condition, ECONOMIC_LOSS, JOBS_LOST, Overlay} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
-import {grantLossValues} from "../data/grant-losses-county.ts";
 import IconClusterLayer from "../layers/icon-cluster-layer.ts";
 import GrantsOverlay from "./GrantsOverlay.tsx";
-import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
+import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
+// import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 const ALPHA_COLOR = 200;
-const TILE_VERSION = '9'
+const TILE_VERSION = '12'
 const domain = "https://data.scienceimpacts.org"
 
 
-const idcTilesCounties = `${domain}/state_counties_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const idcTilesStates = `${domain}/state_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const idcTilesDistricts = `${domain}/state_districts_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const idcTilesStates = `${domain}/tiles_states_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const idcTilesDistricts = `${domain}/tiles_districts_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
 
-const grantTilesCounties = `${domain}/state_counties_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const grantTilesStates = `${domain}/state_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const grantTilesDistricts = `${domain}/state_districts_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const grantTilesCounties = `${domain}/tiles_counties_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const grantTilesStates = `${domain}/tiles_states_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const grantTilesDistricts = `${domain}/tiles_districts_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
 
 const TILE_LINKS = {
     county: {
@@ -49,16 +49,6 @@ const TILE_LINKS = {
         grant: grantTilesDistricts
     }
 }
-
-type GrantLossCounty = {
-    reporter_url: string;
-    award_remaining: number;
-    termination_date: string;
-    org_name: string;
-    project_title: string;
-    cancellation_source: string;
-    centroid: [longitude: number, latitude: number];
-};
 
 
 // const COUNTY_DOMAIN: [number, number] = [0,    8_886110.52051];
@@ -83,10 +73,11 @@ const DOMAINS = {
 
 
 interface LossMapProps {
-    condition?: Condition;
+    baseLayer?: BaseLayer;
+    overlay?: Overlay
 }
 
-function LossMap({condition}: LossMapProps) {
+function LossMap({baseLayer, overlay}: LossMapProps) {
 
     useEffect(() => {
         ReactGA.send({hitType: "pageview", page: "map", title: "map"});
@@ -110,23 +101,31 @@ function LossMap({condition}: LossMapProps) {
     const theme = useMantineTheme();
     const uniqueProperty = useMemo(() => mode === "county" ? "FIPS" : mode === "districts" ? "GEOID" : "state", [mode]);
     const [backgroundLayer, setBackgroundLayer] = useState<"idc" | "grant">('idc');
+    const [showBackgroundLayer, setShowBackgroundLayer] = useState(true);
     const [showGrants, setShowGrants] = useState(true);
 
     useEffect(() => {
-        if (condition === 'IDC') {
+        if (baseLayer === 'IDC') {
             setBackgroundLayer('idc');
             setShowGrants(false);
-        } else if (condition === 'GRANTS') {
+        } else if (baseLayer === 'TERM') {
             setBackgroundLayer('grant');
-            setShowGrants(true);
-        } else if (condition === 'IDC_GRANTS') {
+        } else if (baseLayer === "BLANK") {
+            setShowBackgroundLayer(false);
+        } else if (baseLayer === "TOTAL") {
             setBackgroundLayer('idc');
+        } else {
+            setBackgroundLayer('idc');
+        }
+    }, [baseLayer]);
+
+    useEffect(() => {
+        if (overlay === 'GRANTS') {
             setShowGrants(true);
         } else {
             setShowGrants(false);
-            setBackgroundLayer('idc');
         }
-    }, [condition])
+    }, [overlay]);
 
 
     const lossDomain: [number, number] = useMemo(() => {
@@ -221,13 +220,13 @@ function LossMap({condition}: LossMapProps) {
 
     const grantLayerActive = useMemo(() => true, []);
 
-    const [overlayGrants, setOverlayGrants] = useState<GrantLossCounty[]>([]);
+    const [overlayGrants, setOverlayGrants] = useState<GrantTermination[]>([]);
     const [showOverlay, setShowOverlay] = useState(false);
 
 
     const lossLayers: (IconClusterLayer | MVTLayer)[] = [];
 
-    if (tileLink) {
+    if (tileLink && showBackgroundLayer) {
         const baseLayer = new MVTLayer({
             id: 'xyz-mvt',
             data: [tileLink],
@@ -241,18 +240,29 @@ function LossMap({condition}: LossMapProps) {
             maxZoom: 7,
             // @ts-expect-error comment
             getFillColor: (feature: { id: string, properties: TileProperties }) => {
-                let colorString: string;
-                if (mode === 'county') {
-                    const value = feature.properties.econ_loss_log;
-                    colorString = interpolateOrRd(colorScale(value));
-                } else if (mode === 'state') {
-                    const value = Math.log(feature.properties.econ_loss);
-                    colorString = interpolateOrRd(colorScale(value));
+                let value: number;
+                if (backgroundLayer === "idc") {
+                    if (mode === 'county') {
+                        value = Math.log(feature.properties.econ_loss);
+                    } else if (mode === 'state') {
+                        value = Math.log(feature.properties.econ_loss);
+                    } else {
+                        value = Math.log(feature.properties.econ_loss);
+                        // const value = feature.properties.econ_loss;
+                    }
                 } else {
-                    const value = Math.log(feature.properties.econ_loss);
-                    // const value = feature.properties.econ_loss;
-                    colorString = interpolateOrRd(colorScale(value));
+                    if (mode === 'county') {
+                        value = Math.log(feature.properties.terminated_econ_loss);
+                    } else if (mode === 'state') {
+                        value = Math.log(feature.properties.terminated_econ_loss);
+                    } else {
+                        value = Math.log(feature.properties.terminated_econ_loss);
+                        // const value = feature.properties.terminated_econ_loss;
+                    }
                 }
+                const colorString = interpolateOrRd(colorScale(value));
+
+
                 let rgbValues;
                 if (colorString.startsWith('rgb')) {
                     // Handle rgb format "rgb(255, 0, 0)"
@@ -295,8 +305,8 @@ function LossMap({condition}: LossMapProps) {
 
     if (showGrants) {
         const superGrantLayer = new IconClusterLayer({
-            data: grantLossValues,
-            getPosition: (d: GrantLossCounty) => [d.centroid[0], d.centroid[1]],
+            data: GRANT_LOSSES,
+            getPosition: (d: GrantTermination) => [d.lon, d.lat],
             getSize: 50,
             iconAtlas: '/location-icon-atlas-v2.png',
             iconMapping: '/location-icon-mapping.json',
@@ -353,7 +363,7 @@ function LossMap({condition}: LossMapProps) {
                     onClick={(event) => {
                         if (grantLayerActive) {
                             // @ts-expect-error: objects are defined
-                            let grants: GrantLossCounty[] = event.objects;
+                            let grants: GrantTermination[] = event.objects;
                             if (!grants?.length && event.object?.reporter_url) {
                                 grants = [event.object];
                             }
@@ -424,7 +434,7 @@ function LossMap({condition}: LossMapProps) {
                         </Stack>
 
                     </Stack>
-                    {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo} showJobs={mode !== 'county'}/>}
+                    {hoverInfo && <HoverInfoComponent layer={backgroundLayer} mode={mode} hoverInfo={hoverInfo} showJobs={mode !== 'county'}/>}
 
                     <div style={{
                         position: 'absolute',

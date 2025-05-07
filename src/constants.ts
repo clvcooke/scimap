@@ -26,3 +26,6 @@ export const REACT_APP_PUBLIC_POSTHOG_KEY= "phc_7xCOByPPLiPt1qyRf23Ga7ra7qPrAv6N
 export const REACT_APP_PUBLIC_POSTHOG_HOST= "https://us.i.posthog.com"
 
 export type Condition = 'IDC' | 'GRANTS' | 'IDC_GRANTS' | null;
+
+export type BaseLayer = "IDC" | "TERM" | "TOTAL" | "BLANK" | null;
+export type Overlay = "GRANTS" | "BLANK" | null;

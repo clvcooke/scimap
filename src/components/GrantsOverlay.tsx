@@ -8,19 +8,11 @@ import {
     Flex,
 } from '@mantine/core';
 import { useMemo } from 'react';
+import {GrantTermination} from "../data/grant-losses.ts";
 
-type GrantLossCounty = {
-    reporter_url: string;
-    award_remaining: number;
-    termination_date: string;
-    org_name: string;
-    project_title: string;
-    cancellation_source: string;
-    centroid: [longitude: number, latitude: number];
-};
 
 interface GrantsOverlayProps {
-    grants: GrantLossCounty[];
+    grants: GrantTermination[];
     opened: boolean;
     onClose: () => void;
 }
@@ -36,7 +28,7 @@ const titleCase = (str: string) => {
 function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
 
     const groupedGrants = useMemo(() => {
-        const grouped: { [orgName: string]: GrantLossCounty[] } = {};
+        const grouped: { [orgName: string]: GrantTermination[] } = {};
         grants?.forEach((grant) => {
             if (!grouped[grant.org_name]) {
                 grouped[grant.org_name] = [];
@@ -46,8 +38,8 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
 
         // Sort organizations by total award remaining
         const sortedOrgNames = Object.keys(grouped).sort((a, b) => {
-            const totalA = grouped[a].reduce((sum, grant) => sum + grant.award_remaining, 0);
-            const totalB = grouped[b].reduce((sum, grant) => sum + grant.award_remaining, 0);
+            const totalA = grouped[a].reduce((sum, grant) => sum + (grant.award_remaining ?? 0), 0);
+            const totalB = grouped[b].reduce((sum, grant) => sum + (grant.award_remaining ?? 0), 0);
             return totalB - totalA;
         });
 
@@ -70,7 +62,7 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
             <ScrollArea style={{ height: "80%" }}>
                 <Stack>
                     {groupedGrants.map(({ orgName, grants }) => {
-                        const totalDollarsLost = grants.reduce((sum, grant) => sum + grant.award_remaining, 0);
+                        const totalDollarsLost = grants.reduce((sum, grant) => sum + (grant.award_remaining ?? 0), 0);
                         const formattedDollarsLost = new Intl.NumberFormat('en-US', {
                             style: 'currency',
                             currency: 'USD',
