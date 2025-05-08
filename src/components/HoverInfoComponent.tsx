@@ -34,6 +34,7 @@ export type CountyIDCTileProperties = BaseIDCTile & {
 
 export type CountyGrantTileProperties = BaseGrantTile & {
     FIPS: number;
+    county: string;
 }
 
 export type DistrictIDCTileProperties = BaseIDCTile & {
@@ -71,7 +72,7 @@ export type HoverInfo = {
 type Props = {
     hoverInfo: HoverInfo | null;
     mode: "county" | "state" | 'districts' | "";
-    layer: "idc" | "grant";
+    layer: "idc" | "grant" | "total";
     showJobs: boolean;
 };
 
@@ -85,7 +86,8 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
     let pol_party: string = "";
     let econ_loss: number;
     let jobs_loss: number;
-    if (layer === "idc") {
+    console.log("HOVER INFO", {hoverInfo})
+    if (layer === "idc" || layer === "total") {
         if (mode === "county") {
             const properties = hoverInfo.properties as CountyIDCTileProperties;
             county = properties.county;
@@ -122,7 +124,7 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
     } else {
         if (mode === "county") {
             const properties = hoverInfo.properties as CountyGrantTileProperties;
-            county = "NO COUNTY VALUE";
+            county = properties.county;
             state = properties.state;
             econ_loss = properties.terminated_econ_loss;
             jobs_loss = properties.terminated_job_loss;

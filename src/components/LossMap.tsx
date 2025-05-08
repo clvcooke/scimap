@@ -13,7 +13,7 @@ import {GeoJsonLayer} from '@deck.gl/layers';
 import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
 import ReactGA from 'react-ga4';
-import {ANALYTICS_ACTIONS, BaseLayer, Condition, ECONOMIC_LOSS, JOBS_LOST, Overlay} from "../constants.ts";
+import {ANALYTICS_ACTIONS, BaseLayer, ECONOMIC_LOSS, JOBS_LOST, Overlay} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
@@ -23,7 +23,7 @@ import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
 // import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 const ALPHA_COLOR = 200;
-const TILE_VERSION = '12'
+const TILE_VERSION = '13'
 const domain = "https://data.scienceimpacts.org"
 
 
@@ -35,18 +35,23 @@ const grantTilesCounties = `${domain}/tiles_counties_term_v${TILE_VERSION}/{z}/{
 const grantTilesStates = `${domain}/tiles_states_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
 const grantTilesDistricts = `${domain}/tiles_districts_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
 
+const totalTilesCounties = `${domain}/tiles_counties_total_exp/{z}/{x}/{y}.pbf`;
+
 const TILE_LINKS = {
     county: {
         idc: idcTilesCounties,
-        grant: grantTilesCounties
+        grant: grantTilesCounties,
+        total: totalTilesCounties,
     },
     state: {
         idc: idcTilesStates,
-        grant: grantTilesStates
+        grant: grantTilesStates,
+        total: grantTilesStates
     },
     districts: {
         idc: idcTilesDistricts,
-        grant: grantTilesDistricts
+        grant: grantTilesDistricts,
+        total: grantTilesDistricts
     }
 }
 
@@ -59,15 +64,18 @@ const STATE_DOMAIN: [number, number] = [10_000, 2_500_000_000];
 const DOMAINS = {
     county: {
         idc: COUNTY_DOMAIN,
-        grant: COUNTY_DOMAIN
+        grant: COUNTY_DOMAIN,
+        total: COUNTY_DOMAIN
     },
     state: {
         idc: STATE_DOMAIN,
-        grant: STATE_DOMAIN
+        grant: STATE_DOMAIN,
+        total: STATE_DOMAIN
     },
     districts: {
         idc: DISTRICTS_DOMAIN,
-        grant: DISTRICTS_DOMAIN
+        grant: DISTRICTS_DOMAIN,
+        total: DISTRICTS_DOMAIN
     }
 }
 
@@ -100,7 +108,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
     const [mode, setMode] = useState<"county" | "districts" | "state" | ''>('county');
     const theme = useMantineTheme();
     const uniqueProperty = useMemo(() => mode === "county" ? "FIPS" : mode === "districts" ? "GEOID" : "state", [mode]);
-    const [backgroundLayer, setBackgroundLayer] = useState<"idc" | "grant">('idc');
+    const [backgroundLayer, setBackgroundLayer] = useState<"idc" | "grant" | "total">('idc');
     const [showBackgroundLayer, setShowBackgroundLayer] = useState(true);
     const [showGrants, setShowGrants] = useState(true);
 
@@ -113,7 +121,8 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
         } else if (baseLayer === "BLANK") {
             setShowBackgroundLayer(false);
         } else if (baseLayer === "TOTAL") {
-            setBackgroundLayer('idc');
+            setBackgroundLayer('total');
+            setMode('county');
         } else {
             setBackgroundLayer('idc');
         }
@@ -241,7 +250,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
             // @ts-expect-error comment
             getFillColor: (feature: { id: string, properties: TileProperties }) => {
                 let value: number;
-                if (backgroundLayer === "idc") {
+                if (backgroundLayer === "idc" || backgroundLayer === "total") {
                     if (mode === 'county') {
                         value = Math.log(feature.properties.econ_loss);
                     } else if (mode === 'state') {
@@ -414,7 +423,9 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                                     action: `county`,
                                 });
                             }} label="County"/>
-                            <Radio checked={mode === 'state'} onChange={() => {
+                            <Radio
+                                disabled={backgroundLayer === "total"}
+                                checked={mode === 'state'} onChange={() => {
                                 setMode('state')
                                 ReactGA.event({
                                     category: ANALYTICS_ACTIONS.layer,
@@ -427,7 +438,9 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                                     category: ANALYTICS_ACTIONS.layer,
                                     action: `districts`,
                                 });
-                            }} label="House District"/>
+                            }} label="House District"
+                                   disabled={backgroundLayer === "total"}
+                            />
                             {/*<Button size={'xs'} onClick={() => setShowControls(true)}>More Options</Button>*/}
                             <Button size={"xs"} rightSection={<IconShare size={16}/>}
                                     onClick={() => setShowShare(true)}>Share</Button>
