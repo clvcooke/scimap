@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react'
+import {MouseEvent, useCallback, useEffect, useMemo, useState} from 'react'
 import {IconGps, IconShare, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
 
 import {Map} from 'react-map-gl/maplibre';
@@ -8,24 +8,52 @@ import {MVTLayer} from '@deck.gl/geo-layers';
 import {scaleLinear} from 'd3-scale';
 import {interpolateOrRd,} from 'd3-scale-chromatic';
 import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
-import {ActionIcon, useMantineTheme, Radio, Text, Stack, Button, Modal} from "@mantine/core";
+import {ActionIcon, Button, Group, Modal, Radio, Stack, useMantineTheme} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
-import {MapViewState, FlyToInterpolator} from '@deck.gl/core';
+import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
-import {MouseEvent} from "react";
 import ReactGA from 'react-ga4';
-import {ANALYTICS_ACTIONS, ECONOMIC_LOSS, JOBS_LOST} from "../constants.ts";
+import {ANALYTICS_ACTIONS, BaseLayer, ECONOMIC_LOSS, JOBS_LOST, Overlay} from "../constants.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
-
+import IconClusterLayer from "../layers/icon-cluster-layer.ts";
+import GrantsOverlay from "./GrantsOverlay.tsx";
+import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
+// import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 const ALPHA_COLOR = 200;
-const TILE_VERSION = '9'
+const TILE_VERSION = '13'
 const domain = "https://data.scienceimpacts.org"
-const tilesCounties = `${domain}/state_counties_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
-const tilesStates = `${domain}/state_tiles_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
-const tilesDistricts = `${domain}/state_districts_v${TILE_VERSION}/{z}/{x}/{y}.pbf`
+
+
+const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const idcTilesStates = `${domain}/tiles_states_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const idcTilesDistricts = `${domain}/tiles_districts_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+
+const grantTilesCounties = `${domain}/tiles_counties_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const grantTilesStates = `${domain}/tiles_states_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const grantTilesDistricts = `${domain}/tiles_districts_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+
+const totalTilesCounties = `${domain}/tiles_counties_total_exp/{z}/{x}/{y}.pbf`;
+
+const TILE_LINKS = {
+    county: {
+        idc: idcTilesCounties,
+        grant: grantTilesCounties,
+        total: totalTilesCounties,
+    },
+    state: {
+        idc: idcTilesStates,
+        grant: grantTilesStates,
+        total: grantTilesStates
+    },
+    districts: {
+        idc: idcTilesDistricts,
+        grant: grantTilesDistricts,
+        total: grantTilesDistricts
+    }
+}
 
 
 // const COUNTY_DOMAIN: [number, number] = [0,    8_886110.52051];
@@ -33,10 +61,41 @@ const COUNTY_DOMAIN: [number, number] = [0, 25_000_000];
 const DISTRICTS_DOMAIN: [number, number] = [250_000, 50_000_000];
 const STATE_DOMAIN: [number, number] = [10_000, 2_500_000_000];
 
+const DOMAINS = {
+    county: {
+        idc: COUNTY_DOMAIN,
+        grant: COUNTY_DOMAIN,
+        total: COUNTY_DOMAIN
+    },
+    state: {
+        idc: STATE_DOMAIN,
+        grant: STATE_DOMAIN,
+        total: STATE_DOMAIN
+    },
+    districts: {
+        idc: DISTRICTS_DOMAIN,
+        grant: DISTRICTS_DOMAIN,
+        total: DISTRICTS_DOMAIN
+    }
+}
 
-function LossMap() {
-    ReactGA.send({ hitType: "pageview", page: "map", title: "map" });
+
+interface LossMapProps {
+    baseLayer?: BaseLayer;
+    overlay?: Overlay
+}
+
+function LossMap({baseLayer, overlay}: LossMapProps) {
+
+    useEffect(() => {
+        ReactGA.send({hitType: "pageview", page: "map", title: "map"});
+    }, [])
+
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
+
+    // const [showControls, setShowControls] = useState(false);
+    // const [isNormalized, setIsNormalized] = useState(false);
+    // const [showAnnotations, setShowAnnotations] = useState(false);
     const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
     const [viewState, setViewState] = useState<MapViewState>({
         longitude: -98.5795, // Approximate center longitude of the USA
@@ -46,106 +105,60 @@ function LossMap() {
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
     const [showShare, setShowShare] = useState(false);
 
-    const [mode, setMode] = useState<"county" | "districts" | "state">('county');
+    const [mode, setMode] = useState<"county" | "districts" | "state" | ''>('county');
+    const theme = useMantineTheme();
+    const uniqueProperty = useMemo(() => mode === "county" ? "FIPS" : mode === "districts" ? "GEOID" : "state", [mode]);
+    const [backgroundLayer, setBackgroundLayer] = useState<"idc" | "grant" | "total">('idc');
+    const [showBackgroundLayer, setShowBackgroundLayer] = useState(true);
+    const [showGrants, setShowGrants] = useState(true);
+
+    useEffect(() => {
+        if (baseLayer === 'IDC') {
+            setBackgroundLayer('idc');
+            setShowGrants(false);
+        } else if (baseLayer === 'TERM') {
+            setBackgroundLayer('grant');
+        } else if (baseLayer === "BLANK") {
+            setShowBackgroundLayer(false);
+        } else if (baseLayer === "TOTAL") {
+            setBackgroundLayer('total');
+            setMode('county');
+        } else {
+            setBackgroundLayer('idc');
+        }
+    }, [baseLayer]);
+
+    useEffect(() => {
+        if (overlay === 'GRANTS') {
+            setShowGrants(true);
+        } else {
+            setShowGrants(false);
+        }
+    }, [overlay]);
+
+
+    const lossDomain: [number, number] = useMemo(() => {
+        if (!mode || !backgroundLayer) {
+            return [0, 10000000];
+        }
+        return DOMAINS[mode][backgroundLayer];
+    }, [mode, backgroundLayer]);
+    const colorScale = useMemo(() => {
+
+        const lower = lossDomain[0] > 1 ? Math.log(lossDomain[0]) : 0;
+        const upper = Math.log(lossDomain[1]);
+        return scaleLinear()
+            .domain([lower, upper])
+            .range([0, 1])
+            .clamp(true);
+    }, [lossDomain]);
 
     const tileLink = useMemo(() => {
-        if (mode === 'county') {
-            return tilesCounties;
-        } else if (mode === 'state') {
-            return tilesStates;
-        } else {
-            return tilesDistricts;
+        if (!mode || !backgroundLayer) {
+            return null;
         }
-    }, [mode]);
-
-    // Define your data range based on your economic loss values
-    const countyColorScale = scaleLinear()
-        .domain([COUNTY_DOMAIN[0] > 1 ? Math.log(COUNTY_DOMAIN[0]) : 0, Math.log(COUNTY_DOMAIN[1])])
-        .range([0, 1])
-        .clamp(true);
-    const districtColorScale = scaleLinear()
-        .domain([DISTRICTS_DOMAIN[0] > 1 ? Math.log(DISTRICTS_DOMAIN[0]) : 0, Math.log(DISTRICTS_DOMAIN[1])])
-        .range([0, 1])
-        .clamp(true);
-    const stateColorScale = scaleLinear()
-        .domain([STATE_DOMAIN[0] > 1 ? Math.log(STATE_DOMAIN[0]) : 0, Math.log(STATE_DOMAIN[1])])
-        .range([0, 1])
-        .clamp(true);
-
-    const uniqueProperty = useMemo(() => {
-        if (mode === "county") {
-            return "FIPS"
-        } else if (mode === "districts") {
-            return 'GEOID'
-        } else {
-            return "state"
-        }
-    }, [mode])
-
-    const layer = new MVTLayer({
-        id: 'xyz-mvt',
-        data: [tileLink],
-        binary: true, // Try setting this to true
-        getLineColor: [192, 192, 192, ALPHA_COLOR / 2],
-        lineWidthMinPixels: 1,
-        pickable: true,
-        highlightedFeatureId: hoveredFeatureId,
-        highlightColor: [127, 255, 212, ALPHA_COLOR],
-        uniqueIdProperty: uniqueProperty,
-        maxZoom: 7,
-        // @ts-expect-error comment
-        getFillColor: (feature: { id: string, properties: TileProperties }) => {
-            let colorString: string;
-            if (mode === 'county') {
-                const value = feature.properties.econ_loss_log;
-                colorString = interpolateOrRd(countyColorScale(value));
-            } else if (mode === 'state') {
-                const value = Math.log(feature.properties.econ_loss);
-                colorString = interpolateOrRd(stateColorScale(value));
-            } else {
-                const value = Math.log(feature.properties.econ_loss);
-                // const value = feature.properties.econ_loss;
-                colorString = interpolateOrRd(districtColorScale(value));
-            }
-            let rgbValues;
-            if (colorString.startsWith('rgb')) {
-                // Handle rgb format "rgb(255, 0, 0)"
-                rgbValues = colorString.slice(4, -1).split(",").map(str => parseInt(str.trim(), 10));
-            } else {
-                // Handle hex format from discrete scales "#ff0000"
-                const hex = colorString.slice(1); // Remove #
-                rgbValues = [
-                    parseInt(hex.slice(0, 2), 16),
-                    parseInt(hex.slice(2, 4), 16),
-                    parseInt(hex.slice(4, 6), 16)
-                ];
-            }
-            return [...rgbValues, ALPHA_COLOR]; // Add alpha channel
-        },
-        onHover: info => {
-            if (info.object) {
-                if (mode === 'county') {
-                    setHoveredFeatureId(info.object.properties.FIPS);
-                } else if(mode === "state") {
-                    setHoveredFeatureId(info.object.properties.state);
-                } else {
-                    setHoveredFeatureId(info.object.properties.GEOID);
-                }
-                setHoverInfo(
-                    {
-                        properties: info.object.properties,
-                        x: info.x,
-                        y: info.y,
-                    }
-                )
-            } else {
-                setHoverInfo(null);
-                setHoveredFeatureId(null);
-            }
-        }
-    });
-
-    const theme = useMantineTheme();
+        return TILE_LINKS[mode][backgroundLayer];
+    }, [mode, backgroundLayer]);
 
     const flyTo = useCallback((location: [number, number] | null) => {
         if (!location) {
@@ -214,139 +227,290 @@ function LossMap() {
         });
     }, [userLocation]);
 
-    const colorbarDomain = useMemo(() => {
-        if (mode === 'county') {
-            return COUNTY_DOMAIN;
-        } else if (mode === 'state') {
-            return STATE_DOMAIN;
-        } else {
-            return DISTRICTS_DOMAIN;
-        }
-    }, [mode])
+    const grantLayerActive = useMemo(() => true, []);
 
+    const [overlayGrants, setOverlayGrants] = useState<GrantTermination[]>([]);
+    const [showOverlay, setShowOverlay] = useState(false);
+
+
+    const lossLayers: (IconClusterLayer | MVTLayer)[] = [];
+
+    if (tileLink && showBackgroundLayer) {
+        const baseLayer = new MVTLayer({
+            id: 'xyz-mvt',
+            data: [tileLink],
+            binary: true, // Try setting this to true
+            getLineColor: [192, 192, 192, ALPHA_COLOR / 2],
+            lineWidthMinPixels: 1,
+            pickable: true,
+            highlightedFeatureId: hoveredFeatureId,
+            highlightColor: [127, 255, 212, ALPHA_COLOR],
+            uniqueIdProperty: uniqueProperty,
+            maxZoom: 7,
+            // @ts-expect-error comment
+            getFillColor: (feature: { id: string, properties: TileProperties }) => {
+                let value: number;
+                if (backgroundLayer === "idc" || backgroundLayer === "total") {
+                    if (mode === 'county') {
+                        value = Math.log(feature.properties.econ_loss);
+                    } else if (mode === 'state') {
+                        value = Math.log(feature.properties.econ_loss);
+                    } else {
+                        value = Math.log(feature.properties.econ_loss);
+                        // const value = feature.properties.econ_loss;
+                    }
+                } else {
+                    if (mode === 'county') {
+                        value = Math.log(feature.properties.terminated_econ_loss);
+                    } else if (mode === 'state') {
+                        value = Math.log(feature.properties.terminated_econ_loss);
+                    } else {
+                        value = Math.log(feature.properties.terminated_econ_loss);
+                        // const value = feature.properties.terminated_econ_loss;
+                    }
+                }
+                const colorString = interpolateOrRd(colorScale(value));
+
+
+                let rgbValues;
+                if (colorString.startsWith('rgb')) {
+                    // Handle rgb format "rgb(255, 0, 0)"
+                    rgbValues = colorString.slice(4, -1).split(",").map(str => parseInt(str.trim(), 10));
+                } else {
+                    // Handle hex format from discrete scales "#ff0000"
+                    const hex = colorString.slice(1); // Remove #
+                    rgbValues = [
+                        parseInt(hex.slice(0, 2), 16),
+                        parseInt(hex.slice(2, 4), 16),
+                        parseInt(hex.slice(4, 6), 16)
+                    ];
+                }
+                return [...rgbValues, ALPHA_COLOR]; // Add alpha channel
+            },
+            onHover: info => {
+                if (info.object) {
+                    if (mode === 'county') {
+                        setHoveredFeatureId(info.object.properties.FIPS);
+                    } else if (mode === "state") {
+                        setHoveredFeatureId(info.object.properties.state);
+                    } else {
+                        setHoveredFeatureId(info.object.properties.GEOID);
+                    }
+                    setHoverInfo(
+                        {
+                            properties: info.object.properties,
+                            x: info.x,
+                            y: info.y,
+                        }
+                    )
+                } else {
+                    setHoverInfo(null);
+                    setHoveredFeatureId(null);
+                }
+            }
+        });
+        lossLayers.push(baseLayer);
+    }
+
+    if (showGrants) {
+        const superGrantLayer = new IconClusterLayer({
+            data: GRANT_LOSSES,
+            getPosition: (d: GrantTermination) => [d.lon, d.lat],
+            getSize: 50,
+            iconAtlas: '/location-icon-atlas-v2.png',
+            iconMapping: '/location-icon-mapping.json',
+            getColor: () => [0, 255, 0],
+            id: 'icon-cluster',
+            sizeScale: 40,
+            pickable: true
+        });
+        lossLayers.push(superGrantLayer);
+    }
+
+    // const mapWidth = isMobile ? '100vw' : '80vw';
+    const mapWidth = '100vw';
 
     return (
-        <DeckGL
-            onDragStart={() => setHoverInfo(null)}
-            onDragEnd={() => setHoverInfo(null)}
-            viewState={viewState}
-            onViewStateChange={({viewState: newViewState}) => {
-                setViewState(newViewState as MapViewState);
-            }}
-            controller={true}
-            layers={[layer, userLocationLayer]}
-            style={{overflow: 'hidden'}}
-        >
-            <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                zIndex: 2,
-                background: 'rgba(255, 255, 255, 0.7)', // Slightly less transparent
-                backdropFilter: 'blur(5px)', // Add a subtle blur
-                padding: '4px', // Add some padding inside the container
-            }}
-                 onMouseOver={(event) => event.stopPropagation()}
-                 onMouseOut={(event) => event.stopPropagation()}
-            >
-                <TitleHeader
-                    jobsLost={JOBS_LOST} costImpact={ECONOMIC_LOSS}></TitleHeader>
-            </div>
-            <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
-            <Stack style={{
-                position: 'absolute',
-                top: 100,
-                right: 10,
-                zIndex: 10,
-                m: 10,
-            }} gap="xs">
-                <Stack style={{
-                    backgroundColor: theme.colors.gray[0],
-                    padding: 10
-                }} gap={"xs"}>
-                    <Text fw={700}>Level</Text>
-                    <Radio checked={mode === 'county'} onChange={() => {
-                        setMode('county')
-                        ReactGA.event({
-                            category: ANALYTICS_ACTIONS.layer,
-                            action: `county`,
-                        });
-                    }} label="County"/>
-                    <Radio checked={mode === 'state'} onChange={() => {
-                        setMode('state')
-                        ReactGA.event({
-                            category: ANALYTICS_ACTIONS.layer,
-                            action: `state`,
-                        });
-                    }} label="State"/>
-                    <Radio checked={mode === 'districts'} onChange={() => {
-                        setMode('districts')
-                        ReactGA.event({
-                            category: ANALYTICS_ACTIONS.layer,
-                            action: `districts`,
-                        });
-                    }} label="House District"/>
-                </Stack>
-                <Button rightSection={<IconShare size={16}/>} onClick={() => setShowShare(true)}>Share</Button>
-            </Stack>
-            {hoverInfo && <HoverInfoComponent mode={mode} hoverInfo={hoverInfo} showJobs={mode !== 'county'}/>}
-            <div style={{
-                position: 'absolute',
-                right: 10,
-                bottom: 45,
-                zIndex: 1,
-                pointerEvents: 'none',
+        <Group h={"100%"} w={"100%"} preventGrowOverflow={true} gap={0}>
+            {/*{!isMobile && <div style={{*/}
+            {/*    width: '20vw',*/}
+            {/*    height: "calc(100svh - 3rem)"*/}
+            {/*}}>*/}
+            {/*    <MapSettings*/}
+            {/*        baseLayer={mode}*/}
+            {/*        setBaseLayer={setMode}*/}
+            {/*        isNormalized={isNormalized} setIsNormalized={setIsNormalized} showAnnotations={showAnnotations}*/}
+            {/*        setShowAnnotations={setShowAnnotations}*/}
+            {/*    />*/}
+            {/*</div>}*/}
+
+            {/*{isMobile && <MapControlsDrawer opened={showControls} onClose={() => {*/}
+            {/*    console.log("close");*/}
+            {/*    setShowControls(false)*/}
+            {/*}} baseLayer={mode}*/}
+            {/*                                setBaseLayer={setMode}*/}
+            {/*                                isNormalized={isNormalized} setIsNormalized={setIsNormalized}*/}
+            {/*                                showAnnotations={showAnnotations}*/}
+            {/*                                setShowAnnotations={setShowAnnotations}/>}*/}
+
+            <Group grow style={{
+                width: mapWidth,
+                height: "calc(100svh - 3rem)",
+                position: "relative",
             }}>
-                <ColorScale width={isMobile ? 5 : 10} height={isMobile ? 110: 180 } domain={colorbarDomain} logScale={true}/>
-            </div>
+                <DeckGL
+                    onDragStart={() => setHoverInfo(null)}
+                    onDragEnd={() => setHoverInfo(null)}
+                    viewState={viewState}
+                    onViewStateChange={({viewState: newViewState}) => {
+                        setViewState(newViewState as MapViewState);
+                    }}
+
+                    controller={!showOverlay}
+                    layers={[...lossLayers, userLocationLayer]}
+                    style={{overflow: 'hidden'}}
+                    onClick={(event) => {
+                        if (grantLayerActive) {
+                            // @ts-expect-error: objects are defined
+                            let grants: GrantTermination[] = event.objects;
+                            if (!grants?.length && event.object?.reporter_url) {
+                                grants = [event.object];
+                            }
+                            if (grants?.length) {
+                                setOverlayGrants(grants);
+                                setShowOverlay(true);
+                            } else {
+                                console.log("No grants found");
+                            }
+                        }
+                    }}
+                    _pickable={!showOverlay}
+                >
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        zIndex: 2,
+                        background: 'rgba(255, 255, 255, 0.7)', // Slightly less transparent
+                        backdropFilter: 'blur(5px)', // Add a subtle blur
+                        padding: '4px', // Add some padding inside the container
+                    }}
+                         onMouseOver={(event) => event.stopPropagation()}
+                         onMouseOut={(event) => event.stopPropagation()}
+                    >
+                        <TitleHeader
+                            jobsLost={JOBS_LOST} costImpact={ECONOMIC_LOSS}></TitleHeader>
+                    </div>
+                    <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
+                    <Stack style={{
+                        position: 'absolute',
+                        top: 100,
+                        right: 10,
+                        zIndex: 10,
+                        m: 10,
+                        pointerEvents: 'auto',
+
+                    }} gap="xs">
+                        <Stack style={{
+                            backgroundColor: theme.colors.gray[0],
+                            padding: 10
+                        }} gap={"xs"}>
+                            <Radio checked={mode === 'county'} onChange={() => {
+                                setMode('county')
+                                ReactGA.event({
+                                    category: ANALYTICS_ACTIONS.layer,
+                                    action: `county`,
+                                });
+                            }} label="County"/>
+                            <Radio
+                                disabled={backgroundLayer === "total"}
+                                checked={mode === 'state'} onChange={() => {
+                                setMode('state')
+                                ReactGA.event({
+                                    category: ANALYTICS_ACTIONS.layer,
+                                    action: `state`,
+                                });
+                            }} label="State"/>
+                            <Radio checked={mode === 'districts'} onChange={() => {
+                                setMode('districts')
+                                ReactGA.event({
+                                    category: ANALYTICS_ACTIONS.layer,
+                                    action: `districts`,
+                                });
+                            }} label="House District"
+                                   disabled={backgroundLayer === "total"}
+                            />
+                            {/*<Button size={'xs'} onClick={() => setShowControls(true)}>More Options</Button>*/}
+                            <Button size={"xs"} rightSection={<IconShare size={16}/>}
+                                    onClick={() => setShowShare(true)}>Share</Button>
+                        </Stack>
+
+                    </Stack>
+                    {hoverInfo && <HoverInfoComponent layer={backgroundLayer} mode={mode} hoverInfo={hoverInfo} showJobs={mode !== 'county'}/>}
+
+                    <div style={{
+                        position: 'absolute',
+                        right: 10,
+                        bottom: 45,
+                        zIndex: 1,
+                        pointerEvents: 'none',
+                    }}>
+                        <ColorScale width={isMobile ? 5 : 10} height={isMobile ? 110 : 180} domain={lossDomain}
+                                    logScale={true}/>
+                    </div>
 
 
-            <Stack style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                zIndex: 1,
-                color: theme.colors.gray[9],
-                padding: 10,
-            }} gap="xs">
-                <ActionIcon variant="transparent" aria-label="Location"
-                            size={'xl'}
-                            style={{
-                                color: theme.colors.gray[9],
-                            }}
-                            onClick={getLocation}
-                >
-                    <IconGps style={{width: '70%', height: '70%'}}/>
-                </ActionIcon>
-                <ActionIcon variant="transparent" aria-label="Zoom In"
-                            size={'xl'}
-                            style={{
-                                color: theme.colors.gray[9],
-                            }}
-                            onClick={zoomIn}
-                >
-                    <IconZoomIn style={{width: '70%', height: '70%'}}/>
-                </ActionIcon>
-                <ActionIcon variant="transparent" aria-label="Zoom Out"
-                            size={'xl'}
-                            style={{
-                                color: theme.colors.gray[9],
-                            }}
-                            onClick={zoomOut}
-                >
-                    <IconZoomOut style={{width: '70%', height: '70%'}}/>
-                </ActionIcon>
-            </Stack>
+                    <Stack style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        zIndex: 1,
+                        color: theme.colors.gray[9],
+                        padding: 10,
+                    }} gap="xs">
+                        <ActionIcon variant="transparent" aria-label="Location"
+                                    size={'xl'}
+                                    style={{
+                                        color: theme.colors.gray[9],
+                                    }}
+                                    onClick={getLocation}
+                        >
+                            <IconGps style={{width: '70%', height: '70%'}}/>
+                        </ActionIcon>
+                        <ActionIcon variant="transparent" aria-label="Zoom In"
+                                    size={'xl'}
+                                    style={{
+                                        color: theme.colors.gray[9],
+                                    }}
+                                    onClick={zoomIn}
+                        >
+                            <IconZoomIn style={{width: '70%', height: '70%'}}/>
+                        </ActionIcon>
+                        <ActionIcon variant="transparent" aria-label="Zoom Out"
+                                    size={'xl'}
+                                    style={{
+                                        color: theme.colors.gray[9],
+                                    }}
+                                    onClick={zoomOut}
+                        >
+                            <IconZoomOut style={{width: '70%', height: '70%'}}/>
+                        </ActionIcon>
+                    </Stack>
 
-            <Modal closeOnClickOutside={true} withinPortal={false} opened={showShare}
-                   onClose={() => setShowShare(false)}>
-                <SharePage
-                    title={"See national impact of federal health research cuts"}
-                />
-            </Modal>
-        </DeckGL>
-    );
+                    <Modal closeOnClickOutside={true} withinPortal={false} opened={showShare}
+                           onClose={() => setShowShare(false)}>
+                        <SharePage
+                            title={"See national impact of federal health research cuts"}
+                        />
+                    </Modal>
+                    <GrantsOverlay grants={overlayGrants} opened={showOverlay} onClose={() => setShowOverlay(false)}/>
+                </DeckGL>
+            </Group>
+
+        </Group>
+    )
+        ;
 }
 
 export default LossMap
