@@ -7773,4 +7773,4 @@ const grant_losses: GrantTermination[] = [{
 }];
 
 
-export const GRANT_LOSSES = grant_losses.filter(g => g)
+export const GRANT_LOSSES = grant_losses.filter(g => !Number.isNaN(g.award_remaining) && !!g.award_remaining)

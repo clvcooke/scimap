@@ -390,7 +390,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                          onMouseOut={(event) => event.stopPropagation()}
                     >
                         <TitleHeader
-                            jobsLost={JOBS_LOST} costImpact={ECONOMIC_LOSS}></TitleHeader>
+                            baseLayer={baseLayer} overlay={overlay}></TitleHeader>
                     </div>
                     <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
                     <Stack style={{

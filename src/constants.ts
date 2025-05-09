@@ -13,6 +13,7 @@ export const ANALYTICS_ACTIONS = {
 export const JOBS_LOST = TOTAL_JOB_LOSS
 export const ECONOMIC_LOSS = TOTAL_LOSS;
 
+
 export const formattedJobs = new Intl.NumberFormat('en-US', {
     notation: 'compact',
     compactDisplay: 'short'
