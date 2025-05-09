@@ -2,7 +2,7 @@ import {isMobile} from "react-device-detect";
 import {ActionIcon, Card, Group, Text} from "@mantine/core";
 import {IconShare} from "@tabler/icons-react";
 import {ANALYTICS_ACTIONS, formattedCost, formattedJobs} from "../constants.ts";
-import ReactGA from "react-ga4";
+import { trackEvent } from "../utils/analytics.ts";
 
 import {
     FacebookShareButton,
@@ -19,10 +19,10 @@ function SharePage({title}: { title: string }) {
     const pageUrl = window.location.href;
 
     const trackShare = (platform: string) => {
-        ReactGA.event({
-            category: ANALYTICS_ACTIONS.action,
-            action: `Share - ${platform} - ${title}`,
-        });
+        trackEvent(
+            ANALYTICS_ACTIONS.action,
+            `Share - ${platform} - ${title}`
+        );
     };
 
     const handleShare = async () => {

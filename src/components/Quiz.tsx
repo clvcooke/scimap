@@ -15,7 +15,7 @@ import {
 } from '@mantine/core';
 import {isMobile} from "react-device-detect";
 import {STATE_ARRAY, STATE_LOSSES} from "../data/state-losses.ts";
-import ReactGA from "react-ga4";
+import { trackEvent } from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
 
 
@@ -156,13 +156,17 @@ function Quiz({setActiveTab}) {
     const [showShare, setShowShare] = useState(false);
 
     const handleSubmit = () => {
-        ReactGA.event(
-            'QuizSubmissionV1', {
-                initialApprovalRating: initialApprovalRating,
-                lossGuess: lossGuess,
-                finalApprovalRating: finalApprovalRating,
-                stateValue: stateValue,
-            });
+        // Track quiz submission with all the details as a JSON string in the label
+        trackEvent(
+            'Quiz',
+            'QuizSubmissionV1',
+            JSON.stringify({
+                initialApprovalRating,
+                lossGuess,
+                finalApprovalRating,
+                stateValue,
+            })
+        );
         setShowShare(true);
     };
 

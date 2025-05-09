@@ -1,7 +1,7 @@
 import {Flex, Text, Button, Checkbox} from '@mantine/core';
 import {useState} from "react";
-import ReactGA from "react-ga4";
 import {ANALYTICS_ACTIONS} from "../constants.ts";
+import { trackEvent } from "../utils/analytics.ts";
 
 function ImpactStatement({close}: { close: () => void }) {
     const [consent, setConsent] = useState(true);
@@ -26,15 +26,15 @@ function ImpactStatement({close}: { close: () => void }) {
                 onChange={(event) => {
                     const consented = event.currentTarget.checked;
                     if (!consented) {
-                        ReactGA.event({
-                            category: ANALYTICS_ACTIONS.consent,
-                            action: `OPT_OUT`,
-                        });
+                        trackEvent(
+                            ANALYTICS_ACTIONS.consent,
+                            'OPT_OUT'
+                        );
                     } else {
-                        ReactGA.event({
-                            category: ANALYTICS_ACTIONS.consent,
-                            action: `OPT_IN`,
-                        });
+                        trackEvent(
+                            ANALYTICS_ACTIONS.consent,
+                            'OPT_IN'
+                        );
                     }
                     setConsent(consented);
                 }}

@@ -9,13 +9,16 @@ import LearnMore from "./components/LearnMore.tsx";
 import About from "./components/About.tsx";
 import Advocacy from "./components/Advocacy.tsx";
 
-import ReactGA from 'react-ga4';
 import Quiz from "./components/Quiz.tsx";
 import {ANALYTICS_ACTIONS, BaseLayer, Overlay} from "./constants.ts";
+import { initializeGA, initializePostHog, trackEvent } from "./utils/analytics.ts";
 
 
 function App() {
-    ReactGA.initialize("G-CCM3BQY1WQ");
+    // Initialize both Google Analytics and PostHog
+    initializeGA("G-CCM3BQY1WQ");
+    initializePostHog();
+
     const [currentTab, setCurrentTab] = useState<TabOption>("map");
     const [impactOpen, setImpactOpen] = useState(false);
     const [baseLayer, setBaseLayer] = useState<BaseLayer>(null);
@@ -38,20 +41,20 @@ function App() {
             setImpactOpen(true);
         }
 
-        // Record PROLIFIC_PID in Google Analytics if it exists
+        // Record PROLIFIC_PID in both Google Analytics and PostHog if it exists
         if (prolificPidParam) {
-            ReactGA.event({
-                category: ANALYTICS_ACTIONS.experiment,
-                action: 'PROLIFIC_PID',
-                label: prolificPidParam
-            });
+            trackEvent(
+                ANALYTICS_ACTIONS.experiment,
+                'PROLIFIC_PID',
+                prolificPidParam
+            );
         }
         if (conditionParam) {
-            ReactGA.event({
-                category: ANALYTICS_ACTIONS.experiment,
-                action: 'CONDITION',
-                label: conditionParam
-            });
+            trackEvent(
+                ANALYTICS_ACTIONS.experiment,
+                'CONDITION',
+                conditionParam
+            );
         }
     }, []);
 
@@ -85,10 +88,10 @@ function App() {
         </Flex>
         <Modal closeOnClickOutside={false} size={"lg"} withinPortal={false} opened={impactOpen} onClose={() => setImpactOpen(false)} withCloseButton={false} centered>
             <ImpactStatement close={() => {
-                ReactGA.event({
-                    category: ANALYTICS_ACTIONS.action,
-                    action: `CLOSE_IMPACT_STATEMENT`,
-                });
+                trackEvent(
+                    ANALYTICS_ACTIONS.action,
+                    'CLOSE_IMPACT_STATEMENT'
+                );
                 setImpactOpen(false)
             }}/>
         </Modal>

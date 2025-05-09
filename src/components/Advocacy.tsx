@@ -9,17 +9,17 @@ import {
 import {IconShare} from '@tabler/icons-react';
 import SharePage from "./SharePage.tsx";
 import {useState} from 'react';
-import ReactGA from "react-ga4";
+import { trackEvent } from "../utils/analytics.ts";
 
 function Advocacy() {
     const [showShare, setShowShare] = useState(false);
 
     const trackElectedOfficialsClick = () => {
-        ReactGA.event({
-            category: 'Outbound Link',
-            action: 'Clicked Elected Officials Link',
-            label: 'usa.gov/elected-officials'
-        });
+        trackEvent(
+            'Outbound Link',
+            'Clicked Elected Officials Link',
+            'usa.gov/elected-officials'
+        );
     };
 
     return (

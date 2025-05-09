@@ -1,6 +1,6 @@
 import {Tabs} from '@mantine/core';
-import ReactGA from "react-ga4";
 import {isMobile} from 'react-device-detect';
+import { trackPageView } from "../utils/analytics.ts";
 
 export type TabOption = 'map' | 'quiz' | 'learn' | 'about' | 'action';
 
@@ -8,7 +8,7 @@ export type TabOption = 'map' | 'quiz' | 'learn' | 'about' | 'action';
 function ActionMenu({currentTab, setCurrentTab}: { currentTab: TabOption, setCurrentTab: (tab: TabOption) => void }) {
     return (
         <Tabs value={currentTab} color="teal" variant="pills" radius="xs" onChange={(tab) => {
-            ReactGA.send({ hitType: "pageview", page: tab, title: tab });
+            trackPageView(tab, tab);
             if (tab && ["map", "quiz", "learn", "about", 'action'].includes(tab)) {
                 // @ts-expect-error: bad TS
                 setCurrentTab(tab);

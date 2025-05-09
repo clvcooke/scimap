@@ -12,8 +12,8 @@ import {ActionIcon, Button, Group, Modal, Radio, Stack, useMantineTheme} from "@
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
-import ReactGA from 'react-ga4';
-import {ANALYTICS_ACTIONS, BaseLayer, ECONOMIC_LOSS, JOBS_LOST, Overlay} from "../constants.ts";
+import {ANALYTICS_ACTIONS, BaseLayer, Overlay} from "../constants.ts";
+import { trackEvent, trackPageView } from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
@@ -90,7 +90,7 @@ interface LossMapProps {
 function LossMap({baseLayer, overlay}: LossMapProps) {
 
     useEffect(() => {
-        ReactGA.send({hitType: "pageview", page: "map", title: "map"});
+        trackPageView("map", "map");
     }, [])
 
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
@@ -408,25 +408,25 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         }} gap={"xs"}>
                             <Radio checked={mode === 'county'} onChange={() => {
                                 setMode('county')
-                                ReactGA.event({
-                                    category: ANALYTICS_ACTIONS.layer,
-                                    action: `county`,
-                                });
+                                trackEvent(
+                                    ANALYTICS_ACTIONS.layer,
+                                    'county'
+                                );
                             }} label="County"/>
                             <Radio
                                 checked={mode === 'state'} onChange={() => {
                                 setMode('state')
-                                ReactGA.event({
-                                    category: ANALYTICS_ACTIONS.layer,
-                                    action: `state`,
-                                });
+                                trackEvent(
+                                    ANALYTICS_ACTIONS.layer,
+                                    'state'
+                                );
                             }} label="State"/>
                             <Radio checked={mode === 'districts'} onChange={() => {
                                 setMode('districts')
-                                ReactGA.event({
-                                    category: ANALYTICS_ACTIONS.layer,
-                                    action: `districts`,
-                                });
+                                trackEvent(
+                                    ANALYTICS_ACTIONS.layer,
+                                    'districts'
+                                );
                             }} label="House District"
                             />
                             {/*<Button size={'xs'} onClick={() => setShowControls(true)}>More Options</Button>*/}
