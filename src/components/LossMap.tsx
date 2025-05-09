@@ -23,7 +23,7 @@ import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
 // import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 const ALPHA_COLOR = 200;
-const TILE_VERSION = '13'
+const TILE_VERSION = '16'
 const domain = "https://data.scienceimpacts.org"
 
 
@@ -35,7 +35,9 @@ const grantTilesCounties = `${domain}/tiles_counties_term_v${TILE_VERSION}/{z}/{
 const grantTilesStates = `${domain}/tiles_states_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
 const grantTilesDistricts = `${domain}/tiles_districts_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
 
-const totalTilesCounties = `${domain}/tiles_counties_total_exp/{z}/{x}/{y}.pbf`;
+const totalTilesCounties = `${domain}/tiles_counties_total_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const totalTilesStates = `${domain}/tiles_states_total_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const totalTilesDistricts = `${domain}/tiles_districts_total_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
 
 const TILE_LINKS = {
     county: {
@@ -46,12 +48,12 @@ const TILE_LINKS = {
     state: {
         idc: idcTilesStates,
         grant: grantTilesStates,
-        total: grantTilesStates
+        total: totalTilesStates
     },
     districts: {
         idc: idcTilesDistricts,
         grant: grantTilesDistricts,
-        total: grantTilesDistricts
+        total: totalTilesDistricts
     }
 }
 
@@ -249,26 +251,14 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
             maxZoom: 7,
             // @ts-expect-error comment
             getFillColor: (feature: { id: string, properties: TileProperties }) => {
-                let value: number;
-                if (backgroundLayer === "idc" || backgroundLayer === "total") {
-                    if (mode === 'county') {
-                        value = Math.log(feature.properties.econ_loss);
-                    } else if (mode === 'state') {
-                        value = Math.log(feature.properties.econ_loss);
-                    } else {
-                        value = Math.log(feature.properties.econ_loss);
-                        // const value = feature.properties.econ_loss;
-                    }
-                } else {
-                    if (mode === 'county') {
-                        value = Math.log(feature.properties.terminated_econ_loss);
-                    } else if (mode === 'state') {
-                        value = Math.log(feature.properties.terminated_econ_loss);
-                    } else {
-                        value = Math.log(feature.properties.terminated_econ_loss);
-                        // const value = feature.properties.terminated_econ_loss;
-                    }
+                let property_name: string = "econ_loss";
+                if (backgroundLayer === "total") {
+                    property_name = "combined_econ_loss";
+                } else if(backgroundLayer === 'grant') {
+                    property_name = "terminated_econ_loss";
                 }
+                const value = Math.log(feature.properties[property_name]);
+
                 const colorString = interpolateOrRd(colorScale(value));
 
 
@@ -424,7 +414,6 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                                 });
                             }} label="County"/>
                             <Radio
-                                disabled={backgroundLayer === "total"}
                                 checked={mode === 'state'} onChange={() => {
                                 setMode('state')
                                 ReactGA.event({
@@ -439,7 +428,6 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                                     action: `districts`,
                                 });
                             }} label="House District"
-                                   disabled={backgroundLayer === "total"}
                             />
                             {/*<Button size={'xs'} onClick={() => setShowControls(true)}>More Options</Button>*/}
                             <Button size={"xs"} rightSection={<IconShare size={16}/>}

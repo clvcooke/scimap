@@ -157,7 +157,7 @@ function About() {
                             the full data history you can reference the <a
                             href={"http://doi.org/10.17605/OSF.IO/H398E"}>
                             publicly available data at the Open Science
-                            Framework link.</a>.
+                            Framework link</a>.
                         </Text>
                         <Text ta={"left"} mt="sm">
                             <b>March 27, 2025</b>

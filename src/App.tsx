@@ -23,14 +23,14 @@ function App() {
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const conditionParam = urlParams.get('CONDITION');
-        const skipWelcome = urlParams.get('SKIP_WELCOME');
-        const prolificPidParam = urlParams.get('PROLIFIC_PID');
+        const conditionParam = urlParams.get('CONDITION') || urlParams.get('condition') || urlParams.get('Condition');
+        const skipWelcome = urlParams.get('SKIP_WELCOME') || urlParams.get('skip_welcome') || urlParams.get('Skip_Welcome');
+        const prolificPidParam = urlParams.get('PROLIFIC_PID') || urlParams.get('prolific_pid') || urlParams.get('Prolific_PID');
 
         const [baseLayer, overlayLayer] = conditionParam?.split("_") ?? [];
 
-        setBaseLayer(baseLayer as BaseLayer);
-        setOverlayLayer(overlayLayer as Overlay);
+        setBaseLayer(baseLayer?.toUpperCase() as BaseLayer);
+        setOverlayLayer(overlayLayer?.toUpperCase() as Overlay);
         console.log({baseLayer, overlayLayer, skipWelcome});
         if (skipWelcome?.toLocaleLowerCase() === "true") {
             setImpactOpen(false);
