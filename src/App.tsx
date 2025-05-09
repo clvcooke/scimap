@@ -41,14 +41,14 @@ function App() {
         // Record PROLIFIC_PID in Google Analytics if it exists
         if (prolificPidParam) {
             ReactGA.event({
-                category: ANALYTICS_ACTIONS.consent,
+                category: ANALYTICS_ACTIONS.experiment,
                 action: 'PROLIFIC_PID',
                 label: prolificPidParam
             });
         }
         if (conditionParam) {
             ReactGA.event({
-                category: ANALYTICS_ACTIONS.condition,
+                category: ANALYTICS_ACTIONS.experiment,
                 action: 'CONDITION',
                 label: conditionParam
             });

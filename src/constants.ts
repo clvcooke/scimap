@@ -2,6 +2,7 @@ import {TOTAL_JOB_LOSS, TOTAL_LOSS} from "./data/state-losses.ts";
 
 export const ANALYTICS_ACTIONS = {
     action: 'Action',
+    experiment: "Experiment",
     pageView: 'Page View',
     consent: 'Consent',
     layer: 'Layer',
