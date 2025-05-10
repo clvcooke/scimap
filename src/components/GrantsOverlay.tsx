@@ -38,8 +38,8 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
 
         // Sort organizations by total award remaining
         const sortedOrgNames = Object.keys(grouped).sort((a, b) => {
-            const totalA = grouped[a].reduce((sum, grant) => sum + (grant.award_remaining ?? 0), 0);
-            const totalB = grouped[b].reduce((sum, grant) => sum + (grant.award_remaining ?? 0), 0);
+            const totalA = grouped[a].reduce((sum, grant) => sum + (grant.terminated_loss ?? 0), 0);
+            const totalB = grouped[b].reduce((sum, grant) => sum + (grant.terminated_loss ?? 0), 0);
             return totalB - totalA;
         });
 
@@ -62,7 +62,7 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
             <ScrollArea style={{ height: "80%" }}>
                 <Stack>
                     {groupedGrants.map(({ orgName, grants }) => {
-                        const totalDollarsLost = grants.reduce((sum, grant) => sum + (grant.award_remaining ?? 0), 0);
+                        const totalDollarsLost = grants.reduce((sum, grant) => sum + (grant.terminated_loss ?? 0), 0);
                         const formattedDollarsLost = new Intl.NumberFormat('en-US', {
                             style: 'currency',
                             currency: 'USD',
