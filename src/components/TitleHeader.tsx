@@ -11,16 +11,20 @@ const basicTextStyle = {
 }
 
 function idcGrants() {
-    return <Flex justify="center" gap="sm" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
+    return <Flex justify="center" gap="md" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
         <Text>
+            <div>
             <Text
                 size={textSize}
                 span
                 style={basicTextStyle}
-            >Current losses: $4.9B and 21K jobs lost</Text>
+            > <b>Current losses:</b> $4.9B and 21K jobs lost</Text>
+            </div>
+            <div>
             <Text span size={textSize} style={basicTextStyle}>
-                Future losses: $16B and 68K jobs lost per year
+                <b>Future losses:</b> $16B and 68K jobs lost per year
             </Text>
+            </div>
         </Text>
     </Flex>
 }
@@ -32,7 +36,7 @@ function termGrants() {
                 size={textSize}
                 span
                 style={basicTextStyle}
-            >Economic impact of cancelled grants: $4.9B and 21K jobs lost</Text>
+            ><b>Economic impact of cancelled grants:</b> $4.9B and 21K jobs lost</Text>
         </Text>
     </Flex>
 }
@@ -44,7 +48,7 @@ function totalOnly() {
                 size={textSize}
                 span
                 style={basicTextStyle}
-            >Current + Future Economic Losses: $20.9B and 89K jobs lost</Text>
+            ><b>Current + Future Economic Losses:</b> $20.9B and 89K jobs lost</Text>
         </Text>
     </Flex>
 }
