@@ -82,7 +82,7 @@ function App() {
                 {showQuiz && <Quiz setActiveTab={setCurrentTab}/>}
             </ScrollArea>}
 
-            <div style={{height: "2.5rem"}}>
+            <div style={{height: "2.7rem"}}>
                 <ActionMenu currentTab={currentTab ?? "map"} setCurrentTab={setCurrentTab}/>
             </div>
         </Flex>

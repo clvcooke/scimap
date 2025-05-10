@@ -14,16 +14,16 @@ function idcGrants() {
     return <Flex justify="center" gap="md" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
         <Text>
             <div>
-            <Text
-                size={textSize}
-                span
-                style={basicTextStyle}
-            > <b>Current losses:</b> $4.9B and 21K jobs lost</Text>
+                <Text
+                    size={textSize}
+                    span
+                    style={basicTextStyle}
+                > <b>Current losses:</b> $4.9B and 21K jobs lost</Text>
             </div>
             <div>
-            <Text span size={textSize} style={basicTextStyle}>
-                <b>Future losses:</b> $16B and 68K jobs lost per year
-            </Text>
+                <Text span size={textSize} style={basicTextStyle}>
+                    <b>Future losses:</b> $16B and 68K jobs lost per year
+                </Text>
             </div>
         </Text>
     </Flex>
@@ -77,7 +77,7 @@ function defaultText() {
     </Flex>
 }
 
-export function TitleHeader({baseLayer, overlay}: {baseLayer?: BaseLayer, overlay?: Overlay}) {
+export function TitleHeader({baseLayer, overlay}: { baseLayer?: BaseLayer, overlay?: Overlay }) {
 
     return <Container>
         <div style={{position: 'relative', width: '100%'}}>

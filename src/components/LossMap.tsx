@@ -5,15 +5,15 @@ import {Map} from 'react-map-gl/maplibre';
 import DeckGL from '@deck.gl/react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {MVTLayer} from '@deck.gl/geo-layers';
-import {scaleLinear} from 'd3-scale';
+import {ScaleLinear, scaleLinear} from 'd3-scale';
 import {interpolateOrRd,} from 'd3-scale-chromatic';
-import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
+import {HoverDisplayMode, HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
 import {ActionIcon, Button, Group, Modal, Radio, Stack, useMantineTheme} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
 import {ANALYTICS_ACTIONS, BaseLayer, Overlay} from "../constants.ts";
-import { trackEvent, trackPageView } from "../utils/analytics.ts";
+import {trackEvent, trackPageView} from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
@@ -87,6 +87,99 @@ interface LossMapProps {
     overlay?: Overlay
 }
 
+
+function generateMapLayer({
+                              tileLink,
+                              hoveredFeatureId,
+                              uniqueProperty,
+                              mode,
+                              setHoveredFeatureId,
+                              setHoverInfo,
+                              colorScale,
+                              colorProperties,
+
+
+                          }: {
+    tileLink: string;
+    hoveredFeatureId: number | string | null;
+    uniqueProperty: string;
+    mode: string | null;
+    backgroundLayer: string | null;
+    setHoveredFeatureId: (featureId: number | null | string) => void;
+    setHoverInfo: (info: HoverInfo | null) => void;
+    colorScale: ScaleLinear<number, number>;
+    colorProperties: string[];
+
+}) {
+    return new MVTLayer({
+        id: 'xyz-mvt',
+        data: [tileLink],
+        binary: true, // Try setting this to true
+        getLineColor: [192, 192, 192, ALPHA_COLOR / 2],
+        lineWidthMinPixels: 1,
+        pickable: true,
+        highlightedFeatureId: hoveredFeatureId,
+        highlightColor: [127, 255, 212, ALPHA_COLOR],
+        uniqueIdProperty: uniqueProperty,
+        maxZoom: 7,
+        // @ts-expect-error comment
+        getFillColor: (feature: { id: string, properties: TileProperties }) => {
+            // let property_name: string = "econ_loss";
+            const value = Math.log(
+                colorProperties.map((p) =>
+                    feature.properties[p] ?? 0).reduce((previous, current) => previous + current, 0)
+            );
+            //
+            //
+            // if (backgroundLayer === "total") {
+            //     property_name = "combined_econ_loss";
+            // } else if (backgroundLayer === 'grant') {
+            //     property_name = "terminated_econ_loss";
+            // }
+            // const value = Math.log(feature.properties[property_name]);
+
+            const colorString = interpolateOrRd(colorScale(value));
+
+
+            let rgbValues;
+            if (colorString.startsWith('rgb')) {
+                // Handle rgb format "rgb(255, 0, 0)"
+                rgbValues = colorString.slice(4, -1).split(",").map(str => parseInt(str.trim(), 10));
+            } else {
+                // Handle hex format from discrete scales "#ff0000"
+                const hex = colorString.slice(1); // Remove #
+                rgbValues = [
+                    parseInt(hex.slice(0, 2), 16),
+                    parseInt(hex.slice(2, 4), 16),
+                    parseInt(hex.slice(4, 6), 16)
+                ];
+            }
+            return [...rgbValues, ALPHA_COLOR]; // Add alpha channel
+        },
+        onHover: info => {
+            if (info.object) {
+                if (mode === 'county') {
+                    setHoveredFeatureId(info.object.properties.FIPS);
+                } else if (mode === "state") {
+                    setHoveredFeatureId(info.object.properties.state);
+                } else {
+                    setHoveredFeatureId(info.object.properties.GEOID);
+                }
+                setHoverInfo(
+                    {
+                        properties: info.object.properties,
+                        x: info.x,
+                        y: info.y,
+                    }
+                )
+            } else {
+                setHoverInfo(null);
+                setHoveredFeatureId(null);
+            }
+        }
+    });
+}
+
 function LossMap({baseLayer, overlay}: LossMapProps) {
 
     useEffect(() => {
@@ -111,24 +204,36 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
     const theme = useMantineTheme();
     const uniqueProperty = useMemo(() => mode === "county" ? "FIPS" : mode === "districts" ? "GEOID" : "state", [mode]);
     const [backgroundLayer, setBackgroundLayer] = useState<"idc" | "grant" | "total">('idc');
+    // TODO type this stricter
+    const [colorProperties, setColorProperties] = useState<string[]>(["econ_loss"])
     const [showBackgroundLayer, setShowBackgroundLayer] = useState(true);
     const [showGrants, setShowGrants] = useState(true);
+    const [hoverInfoMode, setHoverInfoMode] = useState<HoverDisplayMode | null>(null);
 
     useEffect(() => {
+        setHoverInfoMode(null);
         if (baseLayer === 'IDC') {
-            setBackgroundLayer('idc');
-            setShowGrants(false);
+            setBackgroundLayer('total');
+            if (overlay === "GRANTS") {
+                setColorProperties(["IDC_econ_loss"]);
+                setHoverInfoMode(HoverDisplayMode.IDC_GRANTS)
+            } else {
+                setColorProperties(["IDC_econ_loss"]);
+            }
+
         } else if (baseLayer === 'TERM') {
-            setBackgroundLayer('grant');
+            setBackgroundLayer('total');
         } else if (baseLayer === "BLANK") {
             setShowBackgroundLayer(false);
         } else if (baseLayer === "TOTAL") {
             setBackgroundLayer('total');
             setMode('county');
+            setColorProperties(["combined_econ_loss"])
+            setHoverInfoMode(HoverDisplayMode.TOTAL)
         } else {
             setBackgroundLayer('idc');
         }
-    }, [baseLayer]);
+    }, [baseLayer, overlay]);
 
     useEffect(() => {
         if (overlay === 'GRANTS') {
@@ -138,6 +243,10 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
         }
     }, [overlay]);
 
+    console.log("SETTINGS", {
+        colorProperties,
+        backgroundLayer
+    })
 
     const lossDomain: [number, number] = useMemo(() => {
         if (!mode || !backgroundLayer) {
@@ -238,66 +347,16 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
     const lossLayers: (IconClusterLayer | MVTLayer)[] = [];
 
     if (tileLink && showBackgroundLayer) {
-        const baseLayer = new MVTLayer({
-            id: 'xyz-mvt',
-            data: [tileLink],
-            binary: true, // Try setting this to true
-            getLineColor: [192, 192, 192, ALPHA_COLOR / 2],
-            lineWidthMinPixels: 1,
-            pickable: true,
-            highlightedFeatureId: hoveredFeatureId,
-            highlightColor: [127, 255, 212, ALPHA_COLOR],
-            uniqueIdProperty: uniqueProperty,
-            maxZoom: 7,
-            // @ts-expect-error comment
-            getFillColor: (feature: { id: string, properties: TileProperties }) => {
-                let property_name: string = "econ_loss";
-                if (backgroundLayer === "total") {
-                    property_name = "combined_econ_loss";
-                } else if(backgroundLayer === 'grant') {
-                    property_name = "terminated_econ_loss";
-                }
-                const value = Math.log(feature.properties[property_name]);
-
-                const colorString = interpolateOrRd(colorScale(value));
-
-
-                let rgbValues;
-                if (colorString.startsWith('rgb')) {
-                    // Handle rgb format "rgb(255, 0, 0)"
-                    rgbValues = colorString.slice(4, -1).split(",").map(str => parseInt(str.trim(), 10));
-                } else {
-                    // Handle hex format from discrete scales "#ff0000"
-                    const hex = colorString.slice(1); // Remove #
-                    rgbValues = [
-                        parseInt(hex.slice(0, 2), 16),
-                        parseInt(hex.slice(2, 4), 16),
-                        parseInt(hex.slice(4, 6), 16)
-                    ];
-                }
-                return [...rgbValues, ALPHA_COLOR]; // Add alpha channel
-            },
-            onHover: info => {
-                if (info.object) {
-                    if (mode === 'county') {
-                        setHoveredFeatureId(info.object.properties.FIPS);
-                    } else if (mode === "state") {
-                        setHoveredFeatureId(info.object.properties.state);
-                    } else {
-                        setHoveredFeatureId(info.object.properties.GEOID);
-                    }
-                    setHoverInfo(
-                        {
-                            properties: info.object.properties,
-                            x: info.x,
-                            y: info.y,
-                        }
-                    )
-                } else {
-                    setHoverInfo(null);
-                    setHoveredFeatureId(null);
-                }
-            }
+        const baseLayer = generateMapLayer({
+            tileLink,
+            uniqueProperty,
+            hoveredFeatureId,
+            setHoveredFeatureId,
+            setHoverInfo,
+            colorScale,
+            mode,
+            backgroundLayer,
+            colorProperties
         });
         lossLayers.push(baseLayer);
     }
@@ -435,7 +494,8 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         </Stack>
 
                     </Stack>
-                    {hoverInfo && <HoverInfoComponent layer={backgroundLayer} mode={mode} hoverInfo={hoverInfo} showJobs={mode !== 'county'}/>}
+                    {hoverInfo && <HoverInfoComponent layer={backgroundLayer} mode={mode} hoverInfo={hoverInfo}
+                                                      showJobs={mode !== 'county'} displayMode={hoverInfoMode}/>}
 
                     <div style={{
                         position: 'absolute',
