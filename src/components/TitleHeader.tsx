@@ -10,6 +10,18 @@ const basicTextStyle = {
     textShadow: '1px 1px 2px rgba(255, 255, 255, 0.5)' // Subtle text shadow
 }
 
+function idcOnly() {
+    return <Flex justify="center" gap="md" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
+        <Text>
+            <div>
+                <Text span size={textSize} style={basicTextStyle}>
+                    <b>Future losses:</b> $16B and 68K jobs lost per year
+                </Text>
+            </div>
+        </Text>
+    </Flex>
+}
+
 function idcGrants() {
     return <Flex justify="center" gap="md" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
         <Text>
@@ -97,6 +109,7 @@ export function TitleHeader({baseLayer, overlay}: { baseLayer?: BaseLayer, overl
         </div>
 
         {baseLayer === "IDC" && overlay === "GRANTS" && idcGrants()}
+        {baseLayer === "IDC" && overlay !== "GRANTS" && idcOnly()}
         {baseLayer === "TERM" && overlay === "GRANTS" && termGrants()}
         {baseLayer === "TOTAL" && totalOnly()}
         {(!overlay || !baseLayer) && defaultText()}

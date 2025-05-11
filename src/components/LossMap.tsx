@@ -223,6 +223,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
 
         } else if (baseLayer === 'TERM') {
             setBackgroundLayer('total');
+            setColorProperties(["terminated_econ_loss"])
         } else if (baseLayer === "BLANK") {
             setShowBackgroundLayer(false);
         } else if (baseLayer === "TOTAL") {
@@ -422,13 +423,14 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         if (grantLayerActive) {
                             // @ts-expect-error: objects are defined
                             let grants: GrantTermination[] = event.objects;
-                            if (!grants?.length && event.object?.reporter_url) {
+                            if (!grants?.length && event.object?.terminated_num) {
                                 grants = [event.object];
                             }
                             if (grants?.length) {
                                 setOverlayGrants(grants);
                                 setShowOverlay(true);
                             } else {
+                                console.log({grants, event})
                                 console.log("No grants found");
                             }
                         }
