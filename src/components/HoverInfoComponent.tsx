@@ -102,7 +102,9 @@ export type HoverInfo = {
 
 export enum HoverDisplayMode {
     IDC_GRANTS,
-    TOTAL
+    TOTAL,
+    TERM
+
 
 }
 
@@ -277,6 +279,36 @@ function generateTotalHover({
     </Flex>;
 }
 
+function generateTermHover({
+                                hoverInfo,
+                                state,
+                                county,
+                                repName,
+                                regionIndicator
+                            }: HoverContentProps) {
+
+    const tileProperties = hoverInfo.properties as CombinedTileProperties;
+
+    // Current Losses (Cancelled Grants):
+    const currentEconLoss: number = tileProperties.terminated_econ_loss;
+    const currentJobLoss = tileProperties.terminated_job_loss;
+
+
+    const currentEconLossString = generateEconLossString(currentEconLoss);
+
+    const currentJobLossString = generateJobLossString(currentJobLoss);
+
+    return <Flex direction="column" gap="xs">
+        {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
+        {state && <Text size="md" style={{color: 'black'}}><b>{regionIndicator}:</b> {state}</Text>}
+        {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
+
+
+        <Text size="md" style={{color: 'black'}}><b>Current
+            Losses:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
+    </Flex>;
+}
+
 export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, showJobs, displayMode}) => {
     if (!hoverInfo) {
         return null;
@@ -317,7 +349,11 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
         hoverContent = generateGrantIDCGrantsHover(commonProps);
     } else if (displayMode === HoverDisplayMode.TOTAL) {
         hoverContent = generateTotalHover(commonProps);
-    } else {
+    } else if (displayMode === HoverDisplayMode.TERM) {
+        hoverContent = generateTermHover(commonProps);
+    }
+
+    else {
         hoverContent = generateDefaultHover(commonProps)
     }
 

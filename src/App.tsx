@@ -77,7 +77,7 @@ function App() {
                 style={{height: "calc(100svh - 3rem)"}}
             >
                 {showLearn && <LearnMore/>}
-                {showAbout && <About/>}
+                {showAbout && <About showTermGrants={baseLayer === "TERM" || baseLayer === "TOTAL"}/>}
                 {takeAction && <Advocacy/>}
                 {showQuiz && <Quiz setActiveTab={setCurrentTab}/>}
             </ScrollArea>}

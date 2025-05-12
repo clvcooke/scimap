@@ -224,6 +224,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
         } else if (baseLayer === 'TERM') {
             setBackgroundLayer('total');
             setColorProperties(["terminated_econ_loss"])
+            setHoverInfoMode(HoverDisplayMode.TERM)
         } else if (baseLayer === "BLANK") {
             setShowBackgroundLayer(false);
         } else if (baseLayer === "TOTAL") {

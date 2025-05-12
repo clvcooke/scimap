@@ -15,7 +15,7 @@ function idcOnly() {
         <Text>
             <div>
                 <Text span size={textSize} style={basicTextStyle}>
-                    <b>Future losses:</b> $16B and 68K jobs lost per year
+                    <b>Future Economic Losses:</b> $16B and 68K jobs lost per year
                 </Text>
             </div>
         </Text>
@@ -30,11 +30,11 @@ function idcGrants() {
                     size={textSize}
                     span
                     style={basicTextStyle}
-                > <b>Current losses:</b> $4.9B and 21K jobs lost</Text>
+                > <b>Current Economic Losses:</b> $4.9B and 21K jobs lost</Text>
             </div>
             <div>
                 <Text span size={textSize} style={basicTextStyle}>
-                    <b>Future losses:</b> $16B and 68K jobs lost per year
+                    <b>Future Economic Losses:</b> $16B and 68K jobs lost per year
                 </Text>
             </div>
         </Text>
@@ -48,7 +48,7 @@ function termGrants() {
                 size={textSize}
                 span
                 style={basicTextStyle}
-            ><b>Economic impact of cancelled grants:</b> $4.9B and 21K jobs lost</Text>
+            ><b>Current Economic Losses:</b> $4.9B and 21K jobs lost</Text>
         </Text>
     </Flex>
 }
