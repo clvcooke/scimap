@@ -23,6 +23,7 @@ function App() {
     const [impactOpen, setImpactOpen] = useState(false);
     const [baseLayer, setBaseLayer] = useState<BaseLayer>(null);
     const [overlayLayer, setOverlayLayer] = useState<Overlay>(null);
+    const [disabledTabs, setDisabledTabs] = useState<TabOption[]>([])
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -55,6 +56,7 @@ function App() {
                 'CONDITION',
                 conditionParam
             );
+            setDisabledTabs(['quiz']);
         }
     }, []);
 
@@ -77,13 +79,13 @@ function App() {
                 style={{height: "calc(100svh - 3rem)"}}
             >
                 {showLearn && <LearnMore/>}
-                {showAbout && <About showTermGrants={baseLayer === "TERM" || baseLayer === "TOTAL"}/>}
+                {showAbout && <About showTermGrants={!!baseLayer && !(overlayLayer === "BLANK" && baseLayer === "IDC")}/>}
                 {takeAction && <Advocacy/>}
                 {showQuiz && <Quiz setActiveTab={setCurrentTab}/>}
             </ScrollArea>}
 
             <div style={{height: "2.7rem"}}>
-                <ActionMenu currentTab={currentTab ?? "map"} setCurrentTab={setCurrentTab}/>
+                <ActionMenu currentTab={currentTab ?? "map"} setCurrentTab={setCurrentTab} disabledTabs={disabledTabs}/>
             </div>
         </Flex>
         <Modal closeOnClickOutside={false} size={"lg"} withinPortal={false} opened={impactOpen} onClose={() => setImpactOpen(false)} withCloseButton={false} centered>

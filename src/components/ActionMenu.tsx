@@ -5,7 +5,9 @@ import { trackPageView } from "../utils/analytics.ts";
 export type TabOption = 'map' | 'quiz' | 'learn' | 'about' | 'action';
 
 
-function ActionMenu({currentTab, setCurrentTab}: { currentTab: TabOption, setCurrentTab: (tab: TabOption) => void }) {
+
+
+function ActionMenu({currentTab, setCurrentTab, disabledTabs}: { currentTab: TabOption, setCurrentTab: (tab: TabOption) => void, disabledTabs?: TabOption[] }) {
     return (
         <Tabs value={currentTab} color="teal" variant="pills" radius="xs" onChange={(tab) => {
             trackPageView(tab, tab);
@@ -23,21 +25,21 @@ function ActionMenu({currentTab, setCurrentTab}: { currentTab: TabOption, setCur
         }}
         >
             <Tabs.List>
-                <Tabs.Tab value="map">
+                {!disabledTabs?.includes('map') && <Tabs.Tab value="map">
                     Map
-                </Tabs.Tab>
-                <Tabs.Tab value="quiz">
+                </Tabs.Tab>}
+                {!disabledTabs?.includes('quiz') &&<Tabs.Tab value="quiz">
                     Quiz
-                </Tabs.Tab>
-                <Tabs.Tab value="action">
+                </Tabs.Tab>}
+                {!disabledTabs?.includes('action') && <Tabs.Tab value="action">
                     Take Action
-                </Tabs.Tab>
-                <Tabs.Tab value="learn">
+                </Tabs.Tab>}
+                {!disabledTabs?.includes('learn') && <Tabs.Tab value="learn">
                     Learn More
-                </Tabs.Tab>
-                <Tabs.Tab value="about">
+                </Tabs.Tab>}
+                {!disabledTabs?.includes('about') && <Tabs.Tab value="about">
                     About
-                </Tabs.Tab>
+                </Tabs.Tab>}
             </Tabs.List>
         </Tabs>
     );
