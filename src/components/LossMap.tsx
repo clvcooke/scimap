@@ -24,8 +24,8 @@ import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
 
 const ALPHA_COLOR = 200;
 const TILE_VERSION = '16'
+const TOTAL_TILE_VERSION = '19';
 const domain = "https://data.scienceimpacts.org"
-
 
 const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
 const idcTilesStates = `${domain}/tiles_states_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
@@ -35,9 +35,9 @@ const grantTilesCounties = `${domain}/tiles_counties_term_v${TILE_VERSION}/{z}/{
 const grantTilesStates = `${domain}/tiles_states_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
 const grantTilesDistricts = `${domain}/tiles_districts_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
 
-const totalTilesCounties = `${domain}/tiles_counties_total_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const totalTilesStates = `${domain}/tiles_states_total_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const totalTilesDistricts = `${domain}/tiles_districts_total_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const totalTilesCounties = `${domain}/tiles_counties_total_v${TOTAL_TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const totalTilesStates = `${domain}/tiles_states_total_v${TOTAL_TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const totalTilesDistricts = `${domain}/tiles_districts_total_v${TOTAL_TILE_VERSION}/{z}/{x}/{y}.pbf`;
 
 const TILE_LINKS = {
     county: {
