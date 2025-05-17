@@ -54,7 +54,7 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
         <Modal
             opened={opened}
             onClose={onClose}
-            title="Grants Impact"
+            title="Terminated NIH Grants"
             size="md"
             closeOnClickOutside={true}
             withinPortal={false}
