@@ -54,11 +54,21 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
         <Modal
             opened={opened}
             onClose={onClose}
-            title="Terminated NIH Grants"
+            title={
+                <Title size={'h2'}>
+                    Terminated NIH Grants
+                </Title>
+
+            }
             size="md"
             closeOnClickOutside={true}
             withinPortal={false}
         >
+            <Stack gap={'sm'}>
+
+            <Text ta={'left'}>
+                <i>Note: This does not include terminated grants from other federal agencies</i>
+            </Text>
             <ScrollArea style={{ height: "80%" }}>
                 <Stack>
                     {groupedGrants.map(({ orgName, grants }) => {
@@ -88,6 +98,7 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
                     })}
                 </Stack>
             </ScrollArea>
+            </Stack>
         </Modal>
     );
 }
