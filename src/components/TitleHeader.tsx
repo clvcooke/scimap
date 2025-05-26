@@ -1,7 +1,8 @@
 import {Container, Flex, Text, Title} from "@mantine/core";
-import {isMobile} from "react-device-detect";
+// import {isMobile} from "react-device-detect";
 import {BaseLayer, formattedCost, formattedJobs, Overlay} from "../constants.ts";
 
+const isMobile = true;
 
 const textSize = isMobile ? 'sm' : 'md'
 const basicTextStyle = {

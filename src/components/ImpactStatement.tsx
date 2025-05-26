@@ -1,7 +1,7 @@
 import {Flex, Text, Button, Checkbox} from '@mantine/core';
 import {useState} from "react";
 import {ANALYTICS_ACTIONS} from "../constants.ts";
-import { trackEvent } from "../utils/analytics.ts";
+import {trackEvent} from "../utils/analytics.ts";
 
 function ImpactStatement({close}: { close: () => void }) {
     const [consent, setConsent] = useState(true);
@@ -10,16 +10,22 @@ function ImpactStatement({close}: { close: () => void }) {
         <Flex direction="column" gap="sm">
             <Text size="xl" c="dark" ta="center">Medical Research is at Risk</Text>
             <Text size="md" c="dark" ta="left">
-                The <b>National Institutes of Health</b> (NIH) funds crucial health <b>research</b> to address
-                cancer, diabetes, dementia, and more. NIH funding also boosts the economy, returning &gt;250% of
-                the value invested.
+                The <b>National Institutes of Health</b> (NIH) funds crucial health research to address
+                cancer, diabetes, dementia, and more. NIH funding also boosts the economy, returning &gt;250% of the
+                value
+                invested. The White House has ordered major cuts to NIH funding nationwide, which would <b>take back
+                funds</b>
+                already promised to the states.
             </Text>
-            <Text ta={"left"}>On Feb. 7th, 2025, the White House ordered across-the-board cuts to NIH funded
-                research. This website shows how funding cuts reduce economic activity and employment nationwide.
+            <Text size="md" c="dark" ta={"left"}>
+                Many NIH grants for health research have been cancelled, interrupting ongoing studies and clinical
+                trials (current losses). The administration also ordered across-the-board cuts to NIH funding for
+                “indirect costs” of research, which covers essential facilities, equipment, staff, and safety checks
+                (future losses). This website shows the economic impact of <b>current and proposed funding cuts</b> nationwide.
             </Text>
 
             <Button size="md" onClick={() => close()}>
-                See Annual Impact
+                See Impact
             </Button>
             <Checkbox
                 checked={consent}

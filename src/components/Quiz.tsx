@@ -15,7 +15,7 @@ import {
 } from '@mantine/core';
 import {isMobile} from "react-device-detect";
 import {STATE_ARRAY, STATE_LOSSES} from "../data/state-losses.ts";
-import { trackEvent } from "../utils/analytics.ts";
+import {trackEvent} from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
 
 
@@ -46,35 +46,70 @@ interface LossGuessProps {
     setLossGuess: (value: number | undefined) => void;
 }
 
-function LossGuess({stateValue, lossGuess, setLossGuess}: LossGuessProps) {
+function LossGuessCancelled({stateValue, lossGuess, setLossGuess}: LossGuessProps) {
     return (
         <Card shadow="sm" padding="xl" radius="md" withBorder>
             <Stack gap="md">
                 <Text ta='left' size="md">
-                    The White House has <b>ordered major changes to NIH funding</b>, which would <b>take back
+                    The White House has ordered <b>major changes to NIH funding</b>, which would <b>take back
                     funds</b> that were
-                    already promised to the states. States have sued to challenge the order, arguing that the changes
-                    are <b>unlawful</b>.
+                    already promised to the states. States have sued to challenge the orders, arguing that the changes
+                    are <b>unlawful</b>. Universities, hospitals, and other institutions that receive NIH grants
+                    would <b>lose
+                    money that is crucial</b> for operating and conducting research.
                 </Text>
 
                 <Text ta='left' size="md">
-                    One of the changes would greatly reduce NIH funding that covers <b>"indirect costs"</b> of research.
-                    These funds indirectly support research by helping pay for essential facilities, special equipment,
-                    skilled staff, and safety checks that are shared across many research projects.
+                    Many NIH grants for health research have been cancelled, interrupting ongoing studies and clinical
+                    trials. These cancelled grants will cause economic losses in your state.
                 </Text>
 
                 <Text ta='left' size="md">
-                    Medical and health research <b>would not be possible</b> without funding to cover indirect costs.
-                    Universities, hospitals, and other institutions that receive NIH grants would <b>lose money that is
-                    crucial</b> for operating and conducting research.
-                </Text>
-
-                <Text ta='left' size="md">
-                    In <b>{stateValue}</b>, changes to federal research funding would result in <b>economic losses</b>.
+                    Can you guess how many <b>millions of dollars</b> will be lost due to cancelled grants
+                    in <b>{stateValue}</b>?
                 </Text>
 
                 <NumberInput
-                    label="Can you guess how many millions of dollars would be lost in your state?"
+                    placeholder="Millions of dollars"
+                    ta={"left"}
+                    size="lg"
+                    value={lossGuess}
+                    onChange={(value) => setLossGuess(value as number)}
+                    min={0}
+                    max={10_000}
+                    clampBehavior="strict"
+                    step={1}
+                    allowNegative={false}
+                    prefix="$"
+                    suffix=" million"
+                />
+            </Stack>
+        </Card>
+    );
+}
+
+function LossGuessIndirect({stateValue, lossGuess, setLossGuess}: LossGuessProps) {
+    return (
+        <Card shadow="sm" padding="xl" radius="md" withBorder>
+            <Stack gap="md">
+                <Text ta='left' size="md">
+                    Another change would greatly reduce NIH funding that covers <b>"indirect costs"</b> of research.
+                    These
+                    funds help pay for essential facilities, special equipment, skilled staff, and safety checks that
+                    are shared across many research projects.
+                </Text>
+
+                <Text ta='left' size="md">
+                    Cutting funding for indirect costs of research would cause ongoing economic losses in your state
+                    every year.
+                </Text>
+
+                <Text ta='left' size="md">
+                    Can you guess how many <b>millions of dollars</b> would be lost every year in <b>{stateValue}</b> if
+                    funding for indirect costs is cut?
+                </Text>
+
+                <NumberInput
                     placeholder="Millions of dollars"
                     ta={"left"}
                     size="lg"
@@ -95,42 +130,57 @@ function LossGuess({stateValue, lossGuess, setLossGuess}: LossGuessProps) {
 
 interface ResultsDisplayProps {
     stateValue: string;
-    lossGuess: number;
-    jobLoss: number;
-    actualLoss: number;
+    lossGuessCancelled: number;
+    lossGuessIndirect: number;
+    jobLossCancelled: number;
+    jobLossIndirect: number;
+    actualCancelledLoss: number;
+    actualIndirectLoss: number;
     approvalRating: number | undefined;
     setApprovalRating: (value: number | undefined) => void;
 }
 
 function ResultsDisplay({
                             stateValue,
-                            lossGuess,
-                            jobLoss,
-                            actualLoss,
+                            lossGuessCancelled,
+                            lossGuessIndirect,
+                            jobLossCancelled,
+                            jobLossIndirect,
+                            actualCancelledLoss,
+                            actualIndirectLoss,
                             approvalRating,
                             setApprovalRating,
                         }: ResultsDisplayProps) {
     return (
         <Card shadow="sm" padding="xl" radius="md" withBorder>
-            <Stack gap="0" mb={'md'}>
-                <Text ta="left" size="lg" fw={500}>
-                    Results for {stateValue}
-                </Text>
-                <Text ta="left">
-                    <b>Your guess:</b> ${lossGuess} million.
-                </Text>
-                <Text ta="left">
-                    <b>Answer:</b> ${actualLoss} million.
-                </Text>
-            </Stack>
-            <Stack gap="sm">
-                <Text ta="left">
-                    In <b>{stateValue}</b>, the changes to federal funding for research are projected to cause a loss
-                    of <b>${actualLoss} million</b> for the state economy.
-                </Text>
-                <Text ta="left">
-                    The changes would also result in the loss of approximately <b>{jobLoss} jobs</b> in your state.
-                </Text>
+            <Stack>
+                <Stack gap="xs">
+                    <Text ta="left" size="lg" fw={500}>
+                        Cancelled NIH Grants:
+                    </Text>
+                    <Text ta="left" ml={'md'}>
+                        You guessed that <b>{stateValue}</b> would lose <b>${lossGuessCancelled} million</b> due to
+                        cancelled grants.
+                    </Text>
+                    <Text ta="left" ml={'md'}>
+                        Currently, cancelled grants in <b>{stateValue}</b> are projected to cause losses
+                        of <b>${actualCancelledLoss} million</b> and <b>{jobLossCancelled} jobs</b>.
+                    </Text>
+                </Stack>
+                <Stack gap="xs">
+                    <Text ta="left" size="lg" fw={500}>
+                        Cutting Funding for Indirect Costs:
+                    </Text>
+                    <Text ta="left" ml={'md'}>
+                        You guessed that <b>{stateValue}</b> will lose <b>${lossGuessIndirect} million</b> each year if
+                        funding for indirect costs is cut.
+                    </Text>
+                    <Text ta="left" ml={'md'}>
+                        Each year, <b>{stateValue}</b> is projected to
+                        lose <b>${actualIndirectLoss} million</b> and <b>{jobLossIndirect} jobs</b> if funding for
+                        indirect costs is cut.
+                    </Text>
+                </Stack>
                 <Text ta="left">
                     After learning about impact for your state, how much do you <b>approve or disapprove</b> of proposed
                     changes to federal funding for scientific research?
@@ -150,8 +200,9 @@ function Quiz({setActiveTab}) {
 
     const [initialApprovalRating, setInitialApprovalRating] = useState<number>();
     const [finalApprovalRating, setFinalApprovalRating] = useState<number>();
-    const [lossGuess, setLossGuess] = useState<number>();
-    const canSubmit = finalApprovalRating !== undefined && lossGuess !== undefined && initialApprovalRating !== undefined;
+    const [lossGuessCancelled, setLossGuessCancelled] = useState<number>();
+    const [lossGuessIndirect, setLossGuessIndirect] = useState<number>();
+    const canSubmit = finalApprovalRating !== undefined && lossGuessCancelled !== undefined && lossGuessIndirect !== undefined && initialApprovalRating !== undefined;
     const [stateValue, setStateValue] = useState('');
     const [showShare, setShowShare] = useState(false);
 
@@ -162,7 +213,7 @@ function Quiz({setActiveTab}) {
             'QuizSubmissionV1',
             JSON.stringify({
                 initialApprovalRating,
-                lossGuess,
+                lossGuess: lossGuessIndirect,
                 finalApprovalRating,
                 stateValue,
             })
@@ -187,7 +238,8 @@ function Quiz({setActiveTab}) {
     ));
 
     const stepOneDisabled = !STATE_ARRAY.includes(stateValue) || initialApprovalRating === undefined;
-    const stepTwoDisabled = lossGuess === undefined;
+    const stepTwoDisabled = lossGuessCancelled === undefined;
+    const stepThreeDisabled = lossGuessIndirect === undefined;
 
     useEffect(() => {
         // we need to wait for options to render before we can select first one
@@ -213,7 +265,7 @@ function Quiz({setActiveTab}) {
                             >
                                 <Combobox.Target>
                                     <TextInput
-                                        label="In which U.S. state or territory do you currently reside?"
+                                        label="Which U.S. state do you live in?"
                                         placeholder="Select a state"
                                         value={stateValue}
                                         onChange={(event) => {
@@ -233,7 +285,7 @@ function Quiz({setActiveTab}) {
                                 </Combobox.Dropdown>
                             </Combobox>
                             <Text mt={"lg"}>
-                                Currently, how much do you approve or disapprove of proposed decreases to federal
+                                How much do you <b>approve</b> or <b>disapprove</b> of the <b>decreases</b> to federal
                                 funding for scientific research?
                             </Text>
                             <ApprovalSlider value={initialApprovalRating}
@@ -242,21 +294,33 @@ function Quiz({setActiveTab}) {
 
                     )}
                 </Stepper.Step>
-                <Stepper.Step label="Guess">
+                <Stepper.Step label="Cancelled Grants">
                     {active === 1 && (
                         <div>
-                            <LossGuess lossGuess={lossGuess} setLossGuess={setLossGuess} stateValue={stateValue}/>
+                            <LossGuessCancelled lossGuess={lossGuessCancelled} setLossGuess={setLossGuessCancelled}
+                                                stateValue={stateValue}/>
+                        </div>
+                    )}
+                </Stepper.Step>
+                <Stepper.Step label="Indirect Costs">
+                    {active === 2 && (
+                        <div>
+                            <LossGuessIndirect lossGuess={lossGuessIndirect} setLossGuess={setLossGuessIndirect}
+                                               stateValue={stateValue}/>
                         </div>
                     )}
                 </Stepper.Step>
                 <Stepper.Step label="Results">
-                    {active === 2 && lossGuess !== undefined && (
+                    {active === 3 && lossGuessIndirect !== undefined && lossGuessCancelled !== undefined && (
                         <div>
                             <ResultsDisplay
                                 stateValue={stateValue}
-                                lossGuess={lossGuess}
-                                actualLoss={Math.round(STATE_LOSSES[stateValue].loss / 1_000_000)}
-                                jobLoss={Math.round(STATE_LOSSES[stateValue].jobs_loss)}
+                                lossGuessCancelled={lossGuessCancelled}
+                                lossGuessIndirect={lossGuessIndirect}
+                                actualCancelledLoss={Math.round(STATE_LOSSES[stateValue].loss / 1_000_000)}
+                                actualIndirectLoss={Math.round(STATE_LOSSES[stateValue].loss / 1_000_000)}
+                                jobLossCancelled={Math.round(STATE_LOSSES[stateValue].jobs_loss)}
+                                jobLossIndirect={Math.round(STATE_LOSSES[stateValue].jobs_loss)}
                                 approvalRating={finalApprovalRating}
                                 setApprovalRating={setFinalApprovalRating}
                             />
@@ -268,16 +332,17 @@ function Quiz({setActiveTab}) {
                 </Stepper.Completed>
             </Stepper>
             <Group justify="center" mt="xl">
-                {active < 2 && (
+                {active < 3 && (
                     <>
                         {active > 0 && <Button variant="default" onClick={prevStep}>Back</Button>}
                         <Button disabled={
                             (active === 0 && stepOneDisabled) ||
-                            (active === 1 && stepTwoDisabled)
+                            (active === 1 && stepTwoDisabled) ||
+                            (active === 2 && stepThreeDisabled)
                         } onClick={nextStep}>Next step</Button>
                     </>
                 )}
-                {active === 2 && (
+                {active === 3 && (
                     <Button disabled={!canSubmit} onClick={handleSubmit}>Submit</Button>
                 )}
             </Group>
