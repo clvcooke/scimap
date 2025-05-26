@@ -26,7 +26,7 @@ import MapControls from "./MapControls.tsx";
 
 const ALPHA_COLOR = 200;
 const TILE_VERSION = '16'
-const TOTAL_TILE_VERSION = '19';
+const TOTAL_TILE_VERSION = '20';
 const domain = "https://data.scienceimpacts.org"
 
 const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
