@@ -78,7 +78,7 @@ function About() {
                             change. There can also be lags between when a grant is terminated or restored and when the
                             change appears in the database.
                         </Text>
-                        <Text ta={"left"}>
+                        <Text ta={"left"} mt={'sm'}>
                             For terminated grants, we assume that losses are equivalent to the remaining grant funds
                             that were not spent at the time of cancellation. Terminated grants from adjacent divisions
                             within the same institution (e.g., the main campus and medical school of the same
@@ -94,7 +94,7 @@ function About() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            Another proposed change would greatly reduce NIH funding that covers <a
+                            One proposed change would greatly reduce NIH funding that covers <a
                             href={"https://grants.nih.gov/grants/guide/notice-files/NOT-OD-25-068.html"}
                             target={"_blank"}>“indirect costs” of
                             research</a>. Funding for indirect costs helps pay for essential facilities, equipment,
@@ -102,7 +102,7 @@ function About() {
                             staff, and safety checks needed across many research projects. Medical research would not be
                             possible without funding to cover indirect costs.
                         </Text>
-                        <Text ta={"left"}>
+                        <Text ta={"left"} mt={'sm'}>
                             At many institutions, indirect costs are 40%-60% of the budget allocated to direct costs of
                             research. The proposed changes would cap funding for indirect costs at 15%, taking back
                             billions of dollars that were promised to the states. States have sued to challenge the

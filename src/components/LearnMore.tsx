@@ -125,7 +125,7 @@ function LearnMore() {
                         </Text>
                         <Text ta={"left"} mt="sm">
                             SCIMaP currently focuses on cuts to NIH funding, but similar cuts have been proposed at the
-                            <b>National Science Foundation</b> (NSF). Cuts include a proposal that would impose a 15%
+                            <b> National Science Foundation</b> (NSF). Cuts include a proposal that would impose a 15%
                             cap on
                             indirect costs for grants from the National Science Foundation (NSF), and a proposal to
                             reduce the NSF budget by 66%. NSF’s mission is to “promote the progress of science; to

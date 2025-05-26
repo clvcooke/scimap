@@ -1,5 +1,5 @@
 import {MouseEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react'
-import {IconGps, IconShare, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
+import {IconGps, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
 
 import {Map} from 'react-map-gl/maplibre';
 import DeckGL from '@deck.gl/react';
@@ -8,12 +8,12 @@ import {MVTLayer} from '@deck.gl/geo-layers';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
 import {interpolateOrRd,} from 'd3-scale-chromatic';
 import {HoverDisplayMode, HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
-import {ActionIcon, Button, Group, Modal, Select, Stack, Switch, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Group, Modal, Stack, useMantineTheme} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
-import {ANALYTICS_ACTIONS, BaseLayer, Overlay} from "../constants.ts";
-import {trackEvent, trackPageView} from "../utils/analytics.ts";
+import {BaseLayer, Overlay} from "../constants.ts";
+import {trackPageView} from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
@@ -21,6 +21,7 @@ import IconClusterLayer from "../layers/icon-cluster-layer.ts";
 import GrantsOverlay from "./GrantsOverlay.tsx";
 import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
 import {MapRef} from "react-map-gl/mapbox-legacy";
+import MapControls from "./MapControls.tsx";
 // import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 const ALPHA_COLOR = 200;
@@ -533,60 +534,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         mapStyle={labelsOnlyStyle}
 
                     />}
-                    <Stack style={{
-                        position: 'absolute',
-                        top: titleHeaderHeight + 15,
-                        right: 10,
-                        zIndex: 10,
-                        m: 10,
-                        pointerEvents: 'auto',
 
-                    }} gap="xs">
-                        <Stack style={{
-                            backgroundColor: theme.colors.gray[0],
-                            padding: 10
-                        }} gap={"sm"}>
-                            <Select
-                                label="Background"
-                                ta={'left'}
-                                size={'xs'}
-                                inputSize={'xs'}
-                                w={'10rem'}
-                                value={mode.slice(0, 1).toUpperCase() + mode.slice(1) === "Districts" ? "House Districts" : mode.slice(0, 1).toUpperCase() + mode.slice(1)}
-                                onChange={(value) => {
-                                    if (value === "House Districts") {
-                                        value = "Districts";
-                                    }
-                                    const selectedMode = value?.toLowerCase() as 'county' | 'state' | 'districts' ?? 'county';
-                                    setMode(selectedMode);
-                                    trackEvent(
-                                        ANALYTICS_ACTIONS.layer,
-                                        selectedMode
-                                    );
-                                }}
-                                data={[
-                                    'County',
-                                    'State',
-                                    'House Districts',
-                                ]}
-                            />
-                            <Switch
-                                label={"Show Cancelled Grants"}
-                                checked={showGrants}
-                                size={'xs'}
-                                onChange={(event) => setShowGrants(event.currentTarget.checked)}
-                                styles={{
-                                    label: {
-                                        marginLeft: -5 // Reduce the gap between toggle and label
-                                    }
-                                }}
-
-                            />
-                            <Button size={"xs"} rightSection={<IconShare size={16}/>}
-                                    onClick={() => setShowShare(true)}>Share</Button>
-                        </Stack>
-
-                    </Stack>
                     {hoverInfo && <HoverInfoComponent layer={backgroundLayer} mode={mode} hoverInfo={hoverInfo}
                                                       showJobs={mode !== 'county'} displayMode={hoverInfoMode}/>}
 
@@ -610,29 +558,21 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         color: theme.colors.gray[9],
                         padding: 10,
                     }} gap="xs">
-                        <ActionIcon variant="transparent" aria-label="Location"
-                                    size={'xl'}
-                                    style={{
-                                        color: theme.colors.gray[9],
-                                    }}
+                        <ActionIcon aria-label="Location"
+                                    radius={'xl'}
                                     onClick={getLocation}
                         >
                             <IconGps style={{width: '70%', height: '70%'}}/>
                         </ActionIcon>
-                        <ActionIcon variant="transparent" aria-label="Zoom In"
-                                    size={'xl'}
-                                    style={{
-                                        color: theme.colors.gray[9],
-                                    }}
+                        <ActionIcon  aria-label="Zoom In"
+                                    radius={'xl'}
                                     onClick={zoomIn}
                         >
                             <IconZoomIn style={{width: '70%', height: '70%'}}/>
                         </ActionIcon>
-                        <ActionIcon variant="transparent" aria-label="Zoom Out"
-                                    size={'xl'}
-                                    style={{
-                                        color: theme.colors.gray[9],
-                                    }}
+                        <ActionIcon  aria-label="Zoom Out"
+                                    radius={'xl'}
+
                                     onClick={zoomOut}
                         >
                             <IconZoomOut style={{width: '70%', height: '70%'}}/>
@@ -648,6 +588,22 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                     <GrantsOverlay grants={overlayGrants} opened={showOverlay} onClose={() => setShowOverlay(false)}/>
                 </DeckGL>
             </Group>
+            <Stack style={{
+                position: 'absolute',
+                top: titleHeaderHeight + 15,
+                right: 10,
+                zIndex: 10,
+                m: 10,
+                pointerEvents: 'auto',
+            }} gap="xs">
+                <MapControls
+                    mode={mode}
+                    setMode={(selectedMode) => setMode(selectedMode)}
+                    showGrants={showGrants}
+                    setShowGrants={setShowGrants}
+                    setShowShare={setShowShare}
+                />
+            </Stack>
         </Group>
     )
         ;

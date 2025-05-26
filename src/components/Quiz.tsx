@@ -17,6 +17,7 @@ import {isMobile} from "react-device-detect";
 import {STATE_ARRAY, STATE_LOSSES} from "../data/state-losses.ts";
 import {trackEvent} from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
+import {NUMBER_FORMATTER_LONG} from "../constants.ts";
 
 
 function ApprovalSlider({value, onChange}: { value?: number; onChange: (newValue: number) => void; }) {
@@ -159,12 +160,12 @@ function ResultsDisplay({
                         Cancelled NIH Grants:
                     </Text>
                     <Text ta="left" ml={'md'}>
-                        You guessed that <b>{stateValue}</b> would lose <b>${lossGuessCancelled} million</b> due to
+                        You guessed that <b>{stateValue}</b> would lose <b>${NUMBER_FORMATTER_LONG.format(lossGuessCancelled * 1_000_000)}</b> due to
                         cancelled grants.
                     </Text>
                     <Text ta="left" ml={'md'}>
                         Currently, cancelled grants in <b>{stateValue}</b> are projected to cause losses
-                        of <b>${actualCancelledLoss} million</b> and <b>{jobLossCancelled} jobs</b>.
+                        of <b>${NUMBER_FORMATTER_LONG.format(actualCancelledLoss)}</b> and <b>{NUMBER_FORMATTER_LONG.format(Math.round(jobLossCancelled) ? Math.round(jobLossCancelled) : 1 )} jobs</b>.
                     </Text>
                 </Stack>
                 <Stack gap="xs">
@@ -172,12 +173,12 @@ function ResultsDisplay({
                         Cutting Funding for Indirect Costs:
                     </Text>
                     <Text ta="left" ml={'md'}>
-                        You guessed that <b>{stateValue}</b> will lose <b>${lossGuessIndirect} million</b> each year if
+                        You guessed that <b>{stateValue}</b> will lose <b>${NUMBER_FORMATTER_LONG.format(lossGuessIndirect*1_000_000)}</b> each year if
                         funding for indirect costs is cut.
                     </Text>
                     <Text ta="left" ml={'md'}>
                         Each year, <b>{stateValue}</b> is projected to
-                        lose <b>${actualIndirectLoss} million</b> and <b>{jobLossIndirect} jobs</b> if funding for
+                        lose <b>${NUMBER_FORMATTER_LONG.format(actualIndirectLoss)}</b> and <b>{NUMBER_FORMATTER_LONG.format(Math.round(jobLossIndirect) ? Math.round(jobLossIndirect) : 1 )} jobs</b> if funding for
                         indirect costs is cut.
                     </Text>
                 </Stack>
@@ -214,6 +215,7 @@ function Quiz({setActiveTab}) {
             JSON.stringify({
                 initialApprovalRating,
                 lossGuess: lossGuessIndirect,
+                lossGuessCancelled,
                 finalApprovalRating,
                 stateValue,
             })
@@ -317,10 +319,10 @@ function Quiz({setActiveTab}) {
                                 stateValue={stateValue}
                                 lossGuessCancelled={lossGuessCancelled}
                                 lossGuessIndirect={lossGuessIndirect}
-                                actualCancelledLoss={Math.round(STATE_LOSSES[stateValue].loss / 1_000_000)}
-                                actualIndirectLoss={Math.round(STATE_LOSSES[stateValue].loss / 1_000_000)}
-                                jobLossCancelled={Math.round(STATE_LOSSES[stateValue].jobs_loss)}
-                                jobLossIndirect={Math.round(STATE_LOSSES[stateValue].jobs_loss)}
+                                actualCancelledLoss={STATE_LOSSES[stateValue].term_loss}
+                                actualIndirectLoss={STATE_LOSSES[stateValue].idc_loss}
+                                jobLossCancelled={STATE_LOSSES[stateValue].term_job_loss}
+                                jobLossIndirect={STATE_LOSSES[stateValue].idc_job_loss}
                                 approvalRating={finalApprovalRating}
                                 setApprovalRating={setFinalApprovalRating}
                             />
@@ -351,8 +353,8 @@ function Quiz({setActiveTab}) {
                 setActiveTab('map');
             }}
                    title={<Title size="xl" ta="center">Response submitted. Next, share your state impact:</Title>}>
-                {active === 2 && <SharePage title={
-                    `${stateValue} could lose ${Math.round(STATE_LOSSES[stateValue].loss / 1_000_000)} million due to federal health research cuts. Visit scienceimpacts.org to learn more.`
+                {active === 3 && <SharePage title={
+                    `${stateValue} could lose ${Math.round(STATE_LOSSES[stateValue].idc_loss / 1_000_000)} million due to federal health research cuts. Visit scienceimpacts.org to learn more.`
                 }/>}
             </Modal>
 
