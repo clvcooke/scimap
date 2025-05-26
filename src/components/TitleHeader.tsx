@@ -1,6 +1,6 @@
 import {Container, Flex, Text, Title} from "@mantine/core";
 import {isMobile} from "react-device-detect";
-import {BaseLayer, formattedCost, formattedJobs, Overlay} from "../constants.ts";
+import {BaseLayer, formattedCost, formattedJobs, formattedTermCost, formattedTermJobs, Overlay} from "../constants.ts";
 import {Icon} from "@radix-ui/themes/components/callout";
 
 const textSize = isMobile ? 'sm' : 'md'
@@ -30,11 +30,11 @@ function idcGrants() {
                     size={textSize}
                     span
                     style={basicTextStyle}
-                > <b>Current Economic Loss:</b> $4.9B and 21K jobs</Text>
+                > <b>Current Economic Loss:</b> ${formattedTermCost} and {formattedTermJobs} jobs</Text>
             </div>
             <div>
                 <Text span size={textSize} style={basicTextStyle}>
-                    <b>Future Economic Loss:</b> $16B and 68K jobs per year
+                    <b>Future Economic Loss:</b> ${formattedCost} and {formattedJobs} jobs per year
                 </Text>
             </div>
         </Text>

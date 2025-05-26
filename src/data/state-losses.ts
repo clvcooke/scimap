@@ -367,6 +367,7 @@ export const STATE_LOSSES: {
 };
 
 export const TOTAL_IDC_JOB_LOSS = Object.values(STATE_LOSSES).reduce((acc, state) => acc + state.idc_job_loss, 0);
+
 export const TOTAL_TERM_JOB_LOSS = Object.values(STATE_LOSSES).reduce((acc, state) => acc + state.term_job_loss, 0);
 export const TOTAL_IDC_LOSS = Object.values(STATE_LOSSES).reduce((acc, state) => acc + state.idc_loss, 0);
 export const TOTAL_TERM_LOSS = Object.values(STATE_LOSSES).reduce((acc, state) => acc + state.term_loss, 0);
