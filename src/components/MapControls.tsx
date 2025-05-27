@@ -1,7 +1,5 @@
 import {ActionIcon, Button, Drawer, Group, Select, Stack, Switch, useMantineTheme} from "@mantine/core";
 import {
-    IconMapPin,
-    IconMapPinCancel,
     IconMapPinFilled,
     IconMapPinOff,
     IconSettings,
