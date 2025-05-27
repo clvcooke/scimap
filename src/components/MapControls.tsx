@@ -1,8 +1,15 @@
 import {ActionIcon, Button, Drawer, Group, Select, Stack, Switch, useMantineTheme} from "@mantine/core";
-import { IconSettings, IconShare } from "@tabler/icons-react";
-import { isMobile } from "react-device-detect";
-import { ANALYTICS_ACTIONS } from "../constants.ts";
-import { trackEvent } from "../utils/analytics.ts";
+import {
+    IconMapPin,
+    IconMapPinCancel,
+    IconMapPinFilled,
+    IconMapPinOff,
+    IconSettings,
+    IconShare
+} from "@tabler/icons-react";
+import {isMobile} from "react-device-detect";
+import {ANALYTICS_ACTIONS} from "../constants.ts";
+import {trackEvent} from "../utils/analytics.ts";
 import {useState} from "react";
 
 interface MapControlsProps {
@@ -15,7 +22,7 @@ interface MapControlsProps {
 }
 
 
-function MapControls({ mode, setMode, showGrants, setShowGrants, setShowShare }: MapControlsProps) {
+function MapControls({mode, setMode, showGrants, setShowGrants, setShowShare}: MapControlsProps) {
     const theme = useMantineTheme();
     const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -45,7 +52,7 @@ function MapControls({ mode, setMode, showGrants, setShowGrants, setShowShare }:
                 ta={'left'}
                 size={'xs'}
                 inputSize={'xs'}
-                w={'10rem'}
+                w={'11rem'}
                 value={modeLabel}
                 onChange={handleModeChange}
                 data={[
@@ -55,7 +62,10 @@ function MapControls({ mode, setMode, showGrants, setShowGrants, setShowShare }:
                 ]}
             />
             <Switch
-                label={"Terminated Grants"}
+                label={<Group gap={'xs'} wrap={'nowrap'} align={'center'}><span>Terminated Grants</span>
+                    {showGrants && <IconMapPinFilled color={'#0073ff'} size={'1rem'}/>}
+                    {!showGrants && <IconMapPinOff color={'#0073ff'} size={'1rem'}/>}
+            </Group>}
                 checked={showGrants}
                 size={'xs'}
                 onChange={(event) => setShowGrants(event.currentTarget.checked)}
@@ -79,14 +89,14 @@ function MapControls({ mode, setMode, showGrants, setShowGrants, setShowShare }:
                         onClick={() => setDrawerOpen(true)}
                         aria-label="Settings"
                     >
-                        <IconSettings style={{width: '70%', height: '70%'}} />
+                        <IconSettings style={{width: '70%', height: '70%'}}/>
                     </ActionIcon>
                     <ActionIcon
                         radius="xl"
                         onClick={() => setShowShare(true)}
                         aria-label="Share"
                     >
-                        <IconShare size={18} />
+                        <IconShare size={18}/>
                     </ActionIcon>
                 </Group>
                 <div style={{
@@ -94,16 +104,16 @@ function MapControls({ mode, setMode, showGrants, setShowGrants, setShowShare }:
                     left: 0,
                     top: 0,
                 }}>
-                <Drawer
-                    opened={drawerOpen}
-                    position={"bottom"}
-                    withinPortal={false}
-                    onClose={() => setDrawerOpen(false)}
-                    title="Map Settings"
-                    size="sm"
-                >
-                    {controlsContent}
-                </Drawer>
+                    <Drawer
+                        opened={drawerOpen}
+                        position={"bottom"}
+                        withinPortal={false}
+                        onClose={() => setDrawerOpen(false)}
+                        title="Map Settings"
+                        size="sm"
+                    >
+                        {controlsContent}
+                    </Drawer>
                 </div>
             </>
         );
