@@ -86,6 +86,7 @@ function MapControls({mode, setMode, showGrants, setShowGrants, setShowShare}: M
                         radius={'xl'}
                         onClick={() => setDrawerOpen(true)}
                         aria-label="Settings"
+                        size={'lg'}
                     >
                         <IconSettings style={{width: '70%', height: '70%'}}/>
                     </ActionIcon>
@@ -93,6 +94,7 @@ function MapControls({mode, setMode, showGrants, setShowGrants, setShowShare}: M
                         radius="xl"
                         onClick={() => setShowShare(true)}
                         aria-label="Share"
+                        size={'lg'}
                     >
                         <IconShare size={18}/>
                     </ActionIcon>

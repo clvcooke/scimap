@@ -2,6 +2,7 @@ import {Flex, Text, Button, Checkbox, Group, Box} from '@mantine/core';
 import {useState} from "react";
 import {ANALYTICS_ACTIONS} from "../constants.ts";
 import {trackEvent} from "../utils/analytics.ts";
+import {isMobile} from "react-device-detect";
 
 function ImpactStatement({close}: { close: () => void }) {
     const [consent, setConsent] = useState(true);
@@ -13,7 +14,7 @@ function ImpactStatement({close}: { close: () => void }) {
     return (
         <Flex direction="column" gap="sm">
             <Text size="xl" c="dark" ta="center">Medical Research is at Risk</Text>
-            <Box h={150} style={{overflow: 'auto'}}
+            <Box h={isMobile ? '18rem' : 150} style={{overflow: 'auto'}}
             >
                 {active === 0 && <Text size="md" c="dark" ta="left" mb="md">
                     The <b>National Institutes of Health</b> (NIH) funds crucial health research to address

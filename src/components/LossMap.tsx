@@ -354,7 +354,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
             pointRadiusMinPixels: 5,
             pointRadiusMaxPixels: 5,
             lineWidthMinPixels: 2,
-            getFillColor: [34, 114, 242, 200], // Light blue color
+            getFillColor: [18, 184, 134, 200],
             getLineColor: [255, 255, 255, 255], // White border
             getLineWidth: 2,
             getPointRadius: 5,
@@ -560,18 +560,21 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                     }} gap="xs">
                         <ActionIcon aria-label="Location"
                                     radius={'xl'}
+                                    size={'lg'}
                                     onClick={getLocation}
                         >
                             <IconGps style={{width: '70%', height: '70%'}}/>
                         </ActionIcon>
                         <ActionIcon  aria-label="Zoom In"
                                     radius={'xl'}
+                                     size={'lg'}
                                     onClick={zoomIn}
                         >
                             <IconZoomIn style={{width: '70%', height: '70%'}}/>
                         </ActionIcon>
                         <ActionIcon  aria-label="Zoom Out"
                                     radius={'xl'}
+                                     size={'lg'}
 
                                     onClick={zoomOut}
                         >
