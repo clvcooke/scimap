@@ -68,7 +68,7 @@ function LearnMore() {
                         <Text ta={"left"}>
                             Currently, the White House has ordered <strong>major changes to NIH funding</strong>, which
                             would <strong>take back funds</strong> that were already promised to the states. States have
-                            sued to challenge the order, arguing that the changes are <strong>unlawful</strong>
+                            sued to challenge the order, arguing that the changes are <strong>unlawful</strong>.
                         </Text>
                         <Text ta={"left"} mt="sm">
                             There are two major sources of cuts to NIH funding, which will result in current and future

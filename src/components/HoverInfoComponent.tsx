@@ -1,5 +1,6 @@
 import {Card, Text, Flex} from '@mantine/core';
 import {JSX} from "react";
+import {NUMBER_FORMATTER} from "../constants.ts";
 
 type BaseIDCTile = {
     state: string;
@@ -146,8 +147,7 @@ function generateEconLossString(econLoss: number) {
     if (econLoss < 100) {
         econLossString = "<$100"
     } else {
-        econLossString = '$' + (econLoss >= 1000000 ? `${Math.round(econLoss / 1000000)}` + 'M' :
-            econLoss >= 1000 ? `${Math.round(econLoss / 1000)}` + 'K' : `${Math.round(econLoss)}`);
+        econLossString = `$${NUMBER_FORMATTER.format(econLoss)}`;
     }
     return econLossString
 }

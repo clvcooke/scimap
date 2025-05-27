@@ -26,7 +26,7 @@ import MapControls from "./MapControls.tsx";
 
 const ALPHA_COLOR = 200;
 const TILE_VERSION = '16'
-const TOTAL_TILE_VERSION = '20';
+const TOTAL_TILE_VERSION = '21';
 const domain = "https://data.scienceimpacts.org"
 
 const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
@@ -389,9 +389,9 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
             data: GRANT_LOSSES,
             getPosition: (d: GrantTermination) => [d.lon, d.lat],
             getSize: 50,
-            iconAtlas: '/location-icon-atlas-v2.png',
+            iconAtlas: '/location-icon-atlas-v3.png',
             iconMapping: '/location-icon-mapping.json',
-            getColor: () => [0, 255, 0],
+            getColor: () => [0, 255, 0, 100],
             id: 'icon-cluster',
             sizeScale: 40,
             pickable: true

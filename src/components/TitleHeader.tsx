@@ -1,7 +1,6 @@
 import {Container, Flex, Text, Title} from "@mantine/core";
 import {isMobile} from "react-device-detect";
 import {BaseLayer, formattedCost, formattedJobs, formattedTermCost, formattedTermJobs, Overlay} from "../constants.ts";
-import {Icon} from "@radix-ui/themes/components/callout";
 
 const textSize = isMobile ? 'sm' : 'md'
 const basicTextStyle = {
@@ -90,7 +89,6 @@ function defaultText() {
 }
 
 export function TitleHeader({baseLayer, overlay}: { baseLayer?: BaseLayer, overlay?: Overlay }) {
-
     return <Container>
         <div style={{position: 'relative', width: '100%'}}>
             <div style={{textAlign: 'center'}}>
@@ -103,8 +101,8 @@ export function TitleHeader({baseLayer, overlay}: { baseLayer?: BaseLayer, overl
                         marginBottom: '5px',
                     }}
                 >
-                    <Icon></Icon>
-                    SCIMaP: Health Research Cuts
+                    {isMobile && "Federal Health Research Cuts"}
+                    {!isMobile && "SCIMaP: View Impact of Federal Health Research Cuts"}
                 </Title>
             </div>
         </div>

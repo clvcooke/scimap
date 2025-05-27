@@ -13,14 +13,12 @@ function ImpactStatement({close}: { close: () => void }) {
     return (
         <Flex direction="column" gap="sm">
             <Text size="xl" c="dark" ta="center">Medical Research is at Risk</Text>
-            <Box h={150} style={{ overflow: 'auto' }}
+            <Box h={150} style={{overflow: 'auto'}}
             >
                 {active === 0 && <Text size="md" c="dark" ta="left" mb="md">
                     The <b>National Institutes of Health</b> (NIH) funds crucial health research to address
                     cancer, diabetes, dementia, and more. NIH funding also boosts the economy, returning &gt;250% of the
                     value invested.
-
-
                 </Text>}
                 {active === 0 && <Text size="md" c="dark" ta="left">
                     The White House has ordered major cuts to NIH funding nationwide, which would <b>take back

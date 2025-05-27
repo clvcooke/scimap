@@ -213,7 +213,7 @@ function About() {
                             been made based on improved commuter flow data from the US census.
                         </Text>
                         <Text ta={"left"} mt="sm">
-                            <b>May 26, 2025</b>
+                            <b>May 27, 2025</b>
                         </Text>
                         <Text ta={"left"}>
                             Terminated NIH grants are now included on the map, displaying current local economic losses
