@@ -11,7 +11,7 @@ import Advocacy from "./components/Advocacy.tsx";
 
 import Quiz from "./components/Quiz.tsx";
 import {ANALYTICS_ACTIONS, BaseLayer, Overlay} from "./constants.ts";
-import { initializeGA, initializePostHog, trackEvent } from "./utils/analytics.ts";
+import {initializeGA, initializePostHog, trackEvent} from "./utils/analytics.ts";
 
 
 function App() {
@@ -21,8 +21,8 @@ function App() {
 
     const [currentTab, setCurrentTab] = useState<TabOption>("map");
     const [impactOpen, setImpactOpen] = useState(false);
-    const [baseLayer, setBaseLayer] = useState<BaseLayer>(null);
-    const [overlayLayer, setOverlayLayer] = useState<Overlay>(null);
+    const [baseLayer, setBaseLayer] = useState<BaseLayer>("IDC");
+    const [overlayLayer, setOverlayLayer] = useState<Overlay>("GRANTS");
     const [disabledTabs, setDisabledTabs] = useState<TabOption[]>([])
 
     useEffect(() => {
@@ -33,8 +33,8 @@ function App() {
 
         const [baseLayer, overlayLayer] = conditionParam?.split("_") ?? [];
 
-        setBaseLayer(baseLayer?.toUpperCase() as BaseLayer);
-        setOverlayLayer(overlayLayer?.toUpperCase() as Overlay);
+        setBaseLayer((baseLayer?.toUpperCase() ?? "IDC") as BaseLayer);
+        setOverlayLayer((overlayLayer?.toUpperCase() ?? "GRANTS") as Overlay);
         console.log({baseLayer, overlayLayer, skipWelcome});
         if (skipWelcome?.toLocaleLowerCase() === "true") {
             setImpactOpen(false);
@@ -71,7 +71,7 @@ function App() {
               style={{minHeight: '100svh', maxHeight: '100svh', width: '100%', position: 'relative'}}>
             {showMap &&
                 <div className="Map Container" style={{width: '100%', flex: 1, position: 'relative'}}>
-                    <LossMap baseLayer={baseLayer} overlay={overlayLayer} />
+                    <LossMap baseLayer={baseLayer} overlay={overlayLayer}/>
                 </div>
             }
             {!showMap && <ScrollArea
@@ -79,7 +79,7 @@ function App() {
                 style={{height: "calc(100svh - 3rem)"}}
             >
                 {showLearn && <LearnMore/>}
-                {showAbout && <About showTermGrants={!!baseLayer && !(overlayLayer === "BLANK" && baseLayer === "IDC")}/>}
+                {showAbout && <About/>}
                 {takeAction && <Advocacy/>}
                 {showQuiz && <Quiz setActiveTab={setCurrentTab}/>}
             </ScrollArea>}
@@ -88,7 +88,8 @@ function App() {
                 <ActionMenu currentTab={currentTab ?? "map"} setCurrentTab={setCurrentTab} disabledTabs={disabledTabs}/>
             </div>
         </Flex>
-        <Modal closeOnClickOutside={false} size={"lg"} withinPortal={false} opened={impactOpen} onClose={() => setImpactOpen(false)} withCloseButton={false} centered>
+        <Modal closeOnClickOutside={false} size={"lg"} withinPortal={false} opened={impactOpen}
+               onClose={() => setImpactOpen(false)} withCloseButton={false} centered>
             <ImpactStatement close={() => {
                 trackEvent(
                     ANALYTICS_ACTIONS.action,

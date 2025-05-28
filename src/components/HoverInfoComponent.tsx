@@ -1,5 +1,6 @@
 import {Card, Text, Flex} from '@mantine/core';
 import {JSX} from "react";
+import {NUMBER_FORMATTER} from "../constants.ts";
 
 type BaseIDCTile = {
     state: string;
@@ -146,8 +147,7 @@ function generateEconLossString(econLoss: number) {
     if (econLoss < 100) {
         econLossString = "<$100"
     } else {
-        econLossString = '$' + (econLoss >= 1000000 ? `${Math.round(econLoss / 1000000)}` + 'M' :
-            econLoss >= 1000 ? `${Math.round(econLoss / 1000)}` + 'K' : `${Math.round(econLoss)}`);
+        econLossString = `$${NUMBER_FORMATTER.format(econLoss)}`;
     }
     return econLossString
 }
@@ -228,8 +228,8 @@ function generateGrantIDCGrantsHover({
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
 
         <Text size="md" style={{color: 'black'}}><b>Current
-            Losses:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
-        <Text size="md" style={{color: 'black'}}><b>Annual Future Losses:</b>
+            Loss:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
+        <Text size="md" style={{color: 'black'}}><b>Annual Future Loss:</b>
             {" "} {futureEconLossString} and {futureJobLossString} jobs</Text>
     </Flex>;
 }
@@ -244,15 +244,15 @@ function generateTotalHover({
 
     const tileProperties = hoverInfo.properties as CombinedTileProperties;
 
-    // Total Losses (Current + Future):
+    // Total Loss (Current + Future):
     const totalEconLoss = tileProperties.combined_econ_loss;
     const totalJobLoss = tileProperties.combined_job_loss;
 
-    // Current Losses (Cancelled Grants):
+    // Current Loss (Cancelled Grants):
     const currentEconLoss: number = tileProperties.terminated_econ_loss;
     const currentJobLoss = tileProperties.terminated_job_loss;
 
-    // Annual Future Losses (Indirect Costs):
+    // Annual Future Loss (Indirect Costs):
     const futureEconLoss = tileProperties.IDC_econ_loss;
     const futureJobLoss = tileProperties.IDC_job_loss;
 
@@ -271,10 +271,10 @@ function generateTotalHover({
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
 
         <Text size="md" style={{color: 'black'}}><b>Total
-            Losses:</b> {totalEconLossString} and {totalJobLossString} jobs</Text>
+            Loss:</b> {totalEconLossString} and {totalJobLossString} jobs</Text>
         <Text size="md" style={{color: 'black'}}><b>Current
-            Losses:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
-        <Text size="md" style={{color: 'black'}}><b>Annual Future Losses:</b>
+            Loss:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
+        <Text size="md" style={{color: 'black'}}><b>Annual Future Loss:</b>
             {" "} {futureEconLossString} and {futureJobLossString} jobs</Text>
     </Flex>;
 }
@@ -289,7 +289,7 @@ function generateTermHover({
 
     const tileProperties = hoverInfo.properties as CombinedTileProperties;
 
-    // Current Losses (Cancelled Grants):
+    // Current Loss (Cancelled Grants):
     const currentEconLoss: number = tileProperties.terminated_econ_loss;
     const currentJobLoss = tileProperties.terminated_job_loss;
 
@@ -305,7 +305,7 @@ function generateTermHover({
 
 
         <Text size="md" style={{color: 'black'}}><b>Current
-            Losses:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
+            Loss:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
     </Flex>;
 }
 

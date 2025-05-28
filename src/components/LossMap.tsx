@@ -1,5 +1,5 @@
-import {MouseEvent, useCallback, useEffect, useMemo, useState} from 'react'
-import {IconGps, IconShare, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
+import {MouseEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {IconGps, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
 
 import {Map} from 'react-map-gl/maplibre';
 import DeckGL from '@deck.gl/react';
@@ -8,23 +8,25 @@ import {MVTLayer} from '@deck.gl/geo-layers';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
 import {interpolateOrRd,} from 'd3-scale-chromatic';
 import {HoverDisplayMode, HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
-import {ActionIcon, Button, Group, Modal, Radio, Stack, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Group, Modal, Stack, useMantineTheme} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
-import {ANALYTICS_ACTIONS, BaseLayer, Overlay} from "../constants.ts";
-import {trackEvent, trackPageView} from "../utils/analytics.ts";
+import {BaseLayer, Overlay} from "../constants.ts";
+import {trackPageView} from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
 import IconClusterLayer from "../layers/icon-cluster-layer.ts";
 import GrantsOverlay from "./GrantsOverlay.tsx";
 import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
+import {MapRef} from "react-map-gl/mapbox-legacy";
+import MapControls from "./MapControls.tsx";
 // import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 const ALPHA_COLOR = 200;
 const TILE_VERSION = '16'
-const TOTAL_TILE_VERSION = '19';
+const TOTAL_TILE_VERSION = '21';
 const domain = "https://data.scienceimpacts.org"
 
 const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
@@ -115,7 +117,7 @@ function generateMapLayer({
         id: 'xyz-mvt',
         data: [tileLink],
         binary: true, // Try setting this to true
-        getLineColor: [192, 192, 192, ALPHA_COLOR / 2],
+        getLineColor: [192, 192, 192, ALPHA_COLOR / 3],
         lineWidthMinPixels: 1,
         pickable: true,
         highlightedFeatureId: hoveredFeatureId,
@@ -210,6 +212,29 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
     const [showGrants, setShowGrants] = useState(true);
     const [hoverInfoMode, setHoverInfoMode] = useState<HoverDisplayMode | null>(null);
 
+    const [titleHeaderHeight, setTitleHeaderHeight] = useState(0);
+
+    const titleHeaderRef = useCallback((node: HTMLDivElement | null) => {
+        if (node) {
+            // Get the height immediately when the node is available
+            const height = node.getBoundingClientRect().height;
+            setTitleHeaderHeight(height);
+
+            // Set up a resize observer to update the height when window resizes
+            const resizeObserver = new ResizeObserver(entries => {
+                for (const entry of entries) {
+                    setTitleHeaderHeight(entry.contentRect.height);
+                }
+            });
+
+            resizeObserver.observe(node);
+
+            // Clean up observer when component unmounts
+            return () => resizeObserver.disconnect();
+        }
+    }, []);
+
+
     useEffect(() => {
         setHoverInfoMode(null);
         if (baseLayer === 'IDC') {
@@ -245,10 +270,6 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
         }
     }, [overlay]);
 
-    console.log("SETTINGS", {
-        colorProperties,
-        backgroundLayer
-    })
 
     const lossDomain: [number, number] = useMemo(() => {
         if (!mode || !backgroundLayer) {
@@ -333,7 +354,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
             pointRadiusMinPixels: 5,
             pointRadiusMaxPixels: 5,
             lineWidthMinPixels: 2,
-            getFillColor: [34, 114, 242, 200], // Light blue color
+            getFillColor: [18, 184, 134, 200],
             getLineColor: [255, 255, 255, 255], // White border
             getLineWidth: 2,
             getPointRadius: 5,
@@ -368,9 +389,9 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
             data: GRANT_LOSSES,
             getPosition: (d: GrantTermination) => [d.lon, d.lat],
             getSize: 50,
-            iconAtlas: '/location-icon-atlas-v2.png',
+            iconAtlas: '/location-icon-atlas-v3.png',
             iconMapping: '/location-icon-mapping.json',
-            getColor: () => [0, 255, 0],
+            getColor: () => [0, 255, 0, 100],
             id: 'icon-cluster',
             sizeScale: 40,
             pickable: true
@@ -378,32 +399,83 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
         lossLayers.push(superGrantLayer);
     }
 
-    // const mapWidth = isMobile ? '100vw' : '80vw';
     const mapWidth = '100vw';
+    const labelsMapRef = useRef<MapRef>(null);
+    const [labelsOnlyStyle, setLabelsOnlyStyle] = useState(null);
+    useEffect(() => {
+        async function fetchAndModifyStyle() {
+            try {
+                // Fetch the original style
+                const response = await fetch("https://basemaps.cartocdn.com/gl/positron-gl-style/style.json");
+                const originalStyle = await response.json();
+
+                // Create a modified style with only label layers
+                const labelsStyle = {
+                    ...originalStyle,
+                    // @ts-expect-error: error
+                    layers: originalStyle.layers.map(layer => {
+                        // Keep only label layers visible
+                        if (layer.id.includes('label') || layer.id.includes('place') || layer.id.includes('poi')) {
+                            return layer;
+                        }
+                        // Hide all other layers by setting visibility to 'none'
+                        return {
+                            ...layer,
+                            layout: {
+                                ...layer.layout,
+                                visibility: 'none'
+                            }
+                        };
+                    })
+                };
+
+                setLabelsOnlyStyle(labelsStyle);
+            } catch (error) {
+                console.error("Error fetching or modifying map style:", error);
+            }
+        }
+
+        fetchAndModifyStyle();
+    }, []);
+
+
+    // Filter map layers to show only labels after map loads
+    useEffect(() => {
+        const labelsMap = labelsMapRef.current;
+        if (!labelsMap || !labelsMap.getMap) return;
+
+        const map = labelsMap.getMap();
+
+        // Wait for the map to load
+        if (!map.isStyleLoaded()) {
+            map.once('style.load', setupLabelLayers);
+        } else {
+            setupLabelLayers();
+        }
+
+        function setupLabelLayers() {
+            // Get all style layers
+            const layers = map.getStyle().layers;
+
+            // Hide all non-label layers
+            // @ts-expect-error: layer is untyped
+            layers.forEach(layer => {
+                const { id } = layer;
+                // Keep only label, text, symbol, place, or poi layers
+                if (!(id.includes('label') ||
+                    id.includes('text') ||
+                    id.includes('place') ||
+                    id.includes('poi') ||
+                    layer.type === 'symbol')) {
+                    map.setLayoutProperty(id, 'visibility', 'none');
+                }
+            });
+        }
+    }, []);
+
 
     return (
         <Group h={"100%"} w={"100%"} preventGrowOverflow={true} gap={0}>
-            {/*{!isMobile && <div style={{*/}
-            {/*    width: '20vw',*/}
-            {/*    height: "calc(100svh - 3rem)"*/}
-            {/*}}>*/}
-            {/*    <MapSettings*/}
-            {/*        baseLayer={mode}*/}
-            {/*        setBaseLayer={setMode}*/}
-            {/*        isNormalized={isNormalized} setIsNormalized={setIsNormalized} showAnnotations={showAnnotations}*/}
-            {/*        setShowAnnotations={setShowAnnotations}*/}
-            {/*    />*/}
-            {/*</div>}*/}
-
-            {/*{isMobile && <MapControlsDrawer opened={showControls} onClose={() => {*/}
-            {/*    console.log("close");*/}
-            {/*    setShowControls(false)*/}
-            {/*}} baseLayer={mode}*/}
-            {/*                                setBaseLayer={setMode}*/}
-            {/*                                isNormalized={isNormalized} setIsNormalized={setIsNormalized}*/}
-            {/*                                showAnnotations={showAnnotations}*/}
-            {/*                                setShowAnnotations={setShowAnnotations}/>}*/}
-
             <Group grow style={{
                 width: mapWidth,
                 height: "calc(100svh - 3rem)",
@@ -450,53 +522,19 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                     }}
                          onMouseOver={(event) => event.stopPropagation()}
                          onMouseOut={(event) => event.stopPropagation()}
+                         ref={titleHeaderRef}
                     >
                         <TitleHeader
                             baseLayer={baseLayer} overlay={overlay}></TitleHeader>
                     </div>
-                    <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
-                    <Stack style={{
-                        position: 'absolute',
-                        top: 100,
-                        right: 10,
-                        zIndex: 10,
-                        m: 10,
-                        pointerEvents: 'auto',
+                    <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"/>
+                    {labelsOnlyStyle && <Map
+                        {...viewState}
+                        interactive={false}
+                        mapStyle={labelsOnlyStyle}
 
-                    }} gap="xs">
-                        <Stack style={{
-                            backgroundColor: theme.colors.gray[0],
-                            padding: 10
-                        }} gap={"xs"}>
-                            <Radio checked={mode === 'county'} onChange={() => {
-                                setMode('county')
-                                trackEvent(
-                                    ANALYTICS_ACTIONS.layer,
-                                    'county'
-                                );
-                            }} label="County"/>
-                            <Radio
-                                checked={mode === 'state'} onChange={() => {
-                                setMode('state')
-                                trackEvent(
-                                    ANALYTICS_ACTIONS.layer,
-                                    'state'
-                                );
-                            }} label="State"/>
-                            <Radio checked={mode === 'districts'} onChange={() => {
-                                setMode('districts')
-                                trackEvent(
-                                    ANALYTICS_ACTIONS.layer,
-                                    'districts'
-                                );
-                            }} label="House District"
-                            />
-                            {/*<Button size={'xs'} onClick={() => setShowControls(true)}>More Options</Button>*/}
-                            <Button size={"xs"} rightSection={<IconShare size={16}/>}
-                                    onClick={() => setShowShare(true)}>Share</Button>
-                        </Stack>
+                    />}
 
-                    </Stack>
                     {hoverInfo && <HoverInfoComponent layer={backgroundLayer} mode={mode} hoverInfo={hoverInfo}
                                                       showJobs={mode !== 'county'} displayMode={hoverInfoMode}/>}
 
@@ -516,33 +554,28 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
-                        zIndex: 1,
+                        zIndex: 10,
                         color: theme.colors.gray[9],
                         padding: 10,
                     }} gap="xs">
-                        <ActionIcon variant="transparent" aria-label="Location"
-                                    size={'xl'}
-                                    style={{
-                                        color: theme.colors.gray[9],
-                                    }}
+                        <ActionIcon aria-label="Location"
+                                    radius={'xl'}
+                                    size={'lg'}
                                     onClick={getLocation}
                         >
                             <IconGps style={{width: '70%', height: '70%'}}/>
                         </ActionIcon>
-                        <ActionIcon variant="transparent" aria-label="Zoom In"
-                                    size={'xl'}
-                                    style={{
-                                        color: theme.colors.gray[9],
-                                    }}
+                        <ActionIcon  aria-label="Zoom In"
+                                    radius={'xl'}
+                                     size={'lg'}
                                     onClick={zoomIn}
                         >
                             <IconZoomIn style={{width: '70%', height: '70%'}}/>
                         </ActionIcon>
-                        <ActionIcon variant="transparent" aria-label="Zoom Out"
-                                    size={'xl'}
-                                    style={{
-                                        color: theme.colors.gray[9],
-                                    }}
+                        <ActionIcon  aria-label="Zoom Out"
+                                    radius={'xl'}
+                                     size={'lg'}
+
                                     onClick={zoomOut}
                         >
                             <IconZoomOut style={{width: '70%', height: '70%'}}/>
@@ -558,7 +591,22 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                     <GrantsOverlay grants={overlayGrants} opened={showOverlay} onClose={() => setShowOverlay(false)}/>
                 </DeckGL>
             </Group>
-
+            <Stack style={{
+                position: 'absolute',
+                top: titleHeaderHeight + 15,
+                right: 10,
+                zIndex: 10,
+                m: 10,
+                pointerEvents: 'auto',
+            }} gap="xs">
+                <MapControls
+                    mode={mode}
+                    setMode={(selectedMode) => setMode(selectedMode)}
+                    showGrants={showGrants}
+                    setShowGrants={setShowGrants}
+                    setShowShare={setShowShare}
+                />
+            </Stack>
         </Group>
     )
         ;

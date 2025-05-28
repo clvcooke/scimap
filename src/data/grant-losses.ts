@@ -23,10 +23,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Texas Medical Branch Galveston",
     "lat": 29.311028,
     "lon": -94.778007,
-    "terminated_loss": 39168123,
-    "terminated_num": 2,
-    "terminated_loss_noself": 39168123,
-    "terminated_num_noself": 2
+    "terminated_loss": 39368014,
+    "terminated_num": 3,
+    "terminated_loss_noself": 39368014,
+    "terminated_num_noself": 3
 }, {
     "org_name": "University of Texas MD Anderson Cancer Center",
     "lat": 29.706319,
@@ -36,7 +36,7 @@ const grant_losses_2: GrantTermination[] = [{
     "terminated_loss_noself": 980197,
     "terminated_num_noself": 2
 }, {
-    "org_name": "Florida Agricultural and Mechanical University",
+    "org_name": "Florida A&M University",
     "lat": 30.428914,
     "lon": -84.289766,
     "terminated_loss": 7522925,
@@ -47,18 +47,18 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Texas Southwestern Medical Center",
     "lat": 32.811963,
     "lon": -96.837534,
-    "terminated_loss": 5396439,
-    "terminated_num": 2,
-    "terminated_loss_noself": 5396439,
-    "terminated_num_noself": 2
+    "terminated_loss": 10165846,
+    "terminated_num": 9,
+    "terminated_loss_noself": 10165846,
+    "terminated_num_noself": 9
 }, {
     "org_name": "Clark Atlanta University",
     "lat": 33.747725,
     "lon": -84.41301,
     "terminated_loss": 294345,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 294345,
+    "terminated_num_noself": 1
 }, {
     "org_name": "Charles R. Drew University of Medicine & Science",
     "lat": 33.923952,
@@ -68,37 +68,29 @@ const grant_losses_2: GrantTermination[] = [{
     "terminated_loss_noself": 36542151,
     "terminated_num_noself": 1
 }, {
-    "org_name": "Keck Graduate Institute of Applied Life Sciences",
-    "lat": 34.092479,
-    "lon": -117.722006,
-    "terminated_loss": 1050053,
-    "terminated_num": 1,
-    "terminated_loss_noself": 1050053,
-    "terminated_num_noself": 1
-}, {
     "org_name": "California Polytechnic State University, San Luis Obispo",
     "lat": 35.299317,
     "lon": -120.656618,
     "terminated_loss": 141319,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 141319,
+    "terminated_num_noself": 1
 }, {
     "org_name": "Wake Forest University Health Sciences",
     "lat": 36.059402,
     "lon": -80.321981,
-    "terminated_loss": 2021976,
-    "terminated_num": 2,
-    "terminated_loss_noself": 2021976,
-    "terminated_num_noself": 2
+    "terminated_loss": 4313591,
+    "terminated_num": 7,
+    "terminated_loss_noself": 4313591,
+    "terminated_num_noself": 7
 }, {
     "org_name": "Virginia Polytechnic Institute and State University",
     "lat": 37.233061,
     "lon": -80.421005,
-    "terminated_loss": 5250625,
-    "terminated_num": 3,
-    "terminated_loss_noself": 5250625,
-    "terminated_num_noself": 3
+    "terminated_loss": 7474196,
+    "terminated_num": 9,
+    "terminated_loss_noself": 7474196,
+    "terminated_num_noself": 8
 }, {
     "org_name": "WETA TV 26",
     "lat": 38.84087,
@@ -121,8 +113,8 @@ const grant_losses_2: GrantTermination[] = [{
     "lon": -75.123053,
     "terminated_loss": 175867,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 175867,
+    "terminated_num_noself": 1
 }, {
     "org_name": "The Research Institute at Nationwide Children's Hospital",
     "lat": 39.95251,
@@ -151,26 +143,34 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Weill Medical College of Cornell University",
     "lat": 40.7607,
     "lon": -73.9603,
-    "terminated_loss": 19624763,
-    "terminated_num": 1,
-    "terminated_loss_noself": 19624763,
-    "terminated_num_noself": 1
+    "terminated_loss": 20351988,
+    "terminated_num": 4,
+    "terminated_loss_noself": 20351988,
+    "terminated_num_noself": 4
 }, {
     "org_name": "The Research Foundation for Mental Hygiene, Inc.",
     "lat": 40.843076,
     "lon": -73.944206,
-    "terminated_loss": 2746069,
-    "terminated_num": 5,
-    "terminated_loss_noself": 2746069,
-    "terminated_num_noself": 4
+    "terminated_loss": 5439618,
+    "terminated_num": 7,
+    "terminated_loss_noself": 5439618,
+    "terminated_num_noself": 6
+}, {
+    "org_name": "Fordham University",
+    "lat": 40.86209,
+    "lon": -73.88639,
+    "terminated_loss": 1493094,
+    "terminated_num": 2,
+    "terminated_loss_noself": 1493094,
+    "terminated_num_noself": 1
 }, {
     "org_name": "Pennsylvania State University",
     "lat": 40.870717,
     "lon": -77.83415,
-    "terminated_loss": 134263,
-    "terminated_num": 1,
-    "terminated_loss_noself": 134263,
-    "terminated_num_noself": 1
+    "terminated_loss": 5947579,
+    "terminated_num": 5,
+    "terminated_loss_noself": 5947579,
+    "terminated_num_noself": 5
 }, {
     "org_name": "Butler Hospital",
     "lat": 41.843586,
@@ -183,10 +183,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Massachusetts Medical School Worcester",
     "lat": 42.2802,
     "lon": -71.758245,
-    "terminated_loss": 102036,
-    "terminated_num": 3,
-    "terminated_loss_noself": 102036,
-    "terminated_num_noself": 3
+    "terminated_loss": 3009850,
+    "terminated_num": 7,
+    "terminated_loss_noself": 3009850,
+    "terminated_num_noself": 6
 }, {
     "org_name": "Rosalind Franklin University of Medicine & Science",
     "lat": 42.302294,
@@ -207,10 +207,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Henry Ford Health and Michigan State University Health Sciences",
     "lat": 42.653979,
     "lon": -84.492032,
-    "terminated_loss": 743448,
-    "terminated_num": 1,
-    "terminated_loss_noself": 743448,
-    "terminated_num_noself": 1
+    "terminated_loss": 1607192,
+    "terminated_num": 4,
+    "terminated_loss_noself": 1607192,
+    "terminated_num_noself": 4
 }, {
     "org_name": "Van Andel Research Institute",
     "lat": 42.969389,
@@ -231,42 +231,42 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Boston University",
     "lat": 42.33639,
     "lon": -71.07097,
-    "terminated_loss": 1855033,
-    "terminated_num": 4,
-    "terminated_loss_noself": 1855033,
-    "terminated_num_noself": 4
+    "terminated_loss": 5163906,
+    "terminated_num": 8,
+    "terminated_loss_noself": 5163906,
+    "terminated_num_noself": 8
 }, {
     "org_name": "Tufts University",
     "lat": 42.3498,
     "lon": -71.06149,
-    "terminated_loss": 1122319,
-    "terminated_num": 2,
-    "terminated_loss_noself": 1122319,
-    "terminated_num_noself": 2
+    "terminated_loss": 5317173,
+    "terminated_num": 5,
+    "terminated_loss_noself": 5317173,
+    "terminated_num_noself": 5
 }, {
     "org_name": "Columbia University",
     "lat": 40.8415,
     "lon": -73.9414,
-    "terminated_loss": 495391014,
-    "terminated_num": 168,
-    "terminated_loss_noself": 490263274,
-    "terminated_num_noself": 156
+    "terminated_loss": 424288144,
+    "terminated_num": 180,
+    "terminated_loss_noself": 397671252,
+    "terminated_num_noself": 158
 }, {
     "org_name": "University of Miami",
     "lat": 25.713468,
     "lon": -80.277246,
-    "terminated_loss": 5393248,
-    "terminated_num": 12,
-    "terminated_loss_noself": 5393248,
-    "terminated_num_noself": 12
+    "terminated_loss": 7614041,
+    "terminated_num": 18,
+    "terminated_loss_noself": 7614041,
+    "terminated_num_noself": 18
 }, {
     "org_name": "University of Hawaii at Manoa",
     "lat": 21.299198,
     "lon": -157.820371,
-    "terminated_loss": 24991709,
-    "terminated_num": 2,
-    "terminated_loss_noself": 24991709,
-    "terminated_num_noself": 2
+    "terminated_loss": 32437107,
+    "terminated_num": 7,
+    "terminated_loss_noself": 32437107,
+    "terminated_num_noself": 7
 }, {
     "org_name": "Florida International University",
     "lat": 25.761055,
@@ -281,8 +281,8 @@ const grant_losses_2: GrantTermination[] = [{
     "lon": -80.242565,
     "terminated_loss": 58463,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 58463,
+    "terminated_num_noself": 1
 }, {
     "org_name": "University of Central Florida",
     "lat": 28.601027,
@@ -297,72 +297,72 @@ const grant_losses_2: GrantTermination[] = [{
     "lon": -98.560605,
     "terminated_loss": 90808,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 90808,
+    "terminated_num_noself": 1
 }, {
     "org_name": "University of Texas San Antonio",
     "lat": 29.567119,
     "lon": -98.605723,
-    "terminated_loss": 492768,
-    "terminated_num": 1,
-    "terminated_loss_noself": 492768,
-    "terminated_num_noself": 1
+    "terminated_loss": 2972579,
+    "terminated_num": 6,
+    "terminated_loss_noself": 2972579,
+    "terminated_num_noself": 6
 }, {
     "org_name": "University of Florida",
     "lat": 29.643443,
     "lon": -82.349637,
-    "terminated_loss": 732966,
-    "terminated_num": 1,
-    "terminated_loss_noself": 732966,
-    "terminated_num_noself": 1
+    "terminated_loss": 20669982,
+    "terminated_num": 10,
+    "terminated_loss_noself": 20669982,
+    "terminated_num_noself": 10
 }, {
     "org_name": "Baylor College of Medicine",
     "lat": 29.70926,
     "lon": -95.400851,
-    "terminated_loss": 5355163,
-    "terminated_num": 3,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss": 8842943,
+    "terminated_num": 10,
+    "terminated_loss_noself": 8815306,
+    "terminated_num_noself": 8
 }, {
     "org_name": "University of Houston",
     "lat": 29.718091,
     "lon": -95.336483,
-    "terminated_loss": 26394,
-    "terminated_num": 1,
-    "terminated_loss_noself": 26394,
-    "terminated_num_noself": 1
+    "terminated_loss": 599836,
+    "terminated_num": 3,
+    "terminated_loss_noself": 599836,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Texas State University",
     "lat": 29.888774,
     "lon": -97.937445,
     "terminated_loss": 729745,
     "terminated_num": 2,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 476085,
+    "terminated_num_noself": 1
 }, {
     "org_name": "Tulane University of Louisiana",
     "lat": 29.935429,
     "lon": -90.12279,
-    "terminated_loss": 6317602,
+    "terminated_loss": 7069008,
     "terminated_num": 3,
-    "terminated_loss_noself": 6317602,
+    "terminated_loss_noself": 7069008,
     "terminated_num_noself": 3
 }, {
     "org_name": "University of Texas at Austin",
     "lat": 30.291188,
     "lon": -97.737568,
-    "terminated_loss": 1797000,
-    "terminated_num": 2,
-    "terminated_loss_noself": 1325627,
-    "terminated_num_noself": 1
+    "terminated_loss": 4389178,
+    "terminated_num": 5,
+    "terminated_loss_noself": 4389178,
+    "terminated_num_noself": 5
 }, {
     "org_name": "Louisiana State University A&M College Baton Rouge",
     "lat": 30.408018,
     "lon": -91.188669,
-    "terminated_loss": 223951,
-    "terminated_num": 1,
-    "terminated_loss_noself": 223951,
-    "terminated_num_noself": 1
+    "terminated_loss": 394342,
+    "terminated_num": 3,
+    "terminated_loss_noself": 394342,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Florida State University",
     "lat": 30.441455,
@@ -377,24 +377,24 @@ const grant_losses_2: GrantTermination[] = [{
     "lon": -106.504149,
     "terminated_loss": 3681291,
     "terminated_num": 2,
-    "terminated_loss_noself": 3195599,
-    "terminated_num_noself": 1
+    "terminated_loss_noself": 3681291,
+    "terminated_num_noself": 2
 }, {
     "org_name": "University of Arizona",
     "lat": 32.232844,
     "lon": -110.959467,
-    "terminated_loss": 403597,
-    "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss": 6687315,
+    "terminated_num": 11,
+    "terminated_loss_noself": 6283718,
+    "terminated_num_noself": 10
 }, {
     "org_name": "University of Mississippi Medical Center",
     "lat": 32.328724,
     "lon": -90.175537,
-    "terminated_loss": 807258,
-    "terminated_num": 2,
-    "terminated_loss_noself": 807258,
-    "terminated_num_noself": 2
+    "terminated_loss": 1428882,
+    "terminated_num": 3,
+    "terminated_loss_noself": 1428882,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Auburn University at Auburn",
     "lat": 32.602139,
@@ -408,57 +408,41 @@ const grant_losses_2: GrantTermination[] = [{
     "lat": 32.749542,
     "lon": -97.36903,
     "terminated_loss": 10000000,
-    "terminated_num": 1,
+    "terminated_num": 2,
     "terminated_loss_noself": 10000000,
     "terminated_num_noself": 1
 }, {
     "org_name": "San Diego State University",
     "lat": 32.762178,
     "lon": -117.069156,
-    "terminated_loss": 9909355,
-    "terminated_num": 7,
-    "terminated_loss_noself": 9693484,
-    "terminated_num_noself": 6
+    "terminated_loss": 12571599,
+    "terminated_num": 11,
+    "terminated_loss_noself": 12355728,
+    "terminated_num_noself": 10
 }, {
     "org_name": "Medical University of South Carolina",
     "lat": 32.786754,
     "lon": -79.947265,
-    "terminated_loss": 554948,
-    "terminated_num": 1,
-    "terminated_loss_noself": 554948,
-    "terminated_num_noself": 1
-}, {
-    "org_name": "La Jolla Institute for Immunology",
-    "lat": 32.838775,
-    "lon": -117.253243,
-    "terminated_loss": 5324218,
-    "terminated_num": 2,
-    "terminated_loss_noself": 5324218,
-    "terminated_num_noself": 2
+    "terminated_loss": 2199078,
+    "terminated_num": 3,
+    "terminated_loss_noself": 2199078,
+    "terminated_num_noself": 3
 }, {
     "org_name": "University of California, San Diego",
     "lat": 32.876991,
     "lon": -117.24087,
-    "terminated_loss": 8142727,
-    "terminated_num": 4,
-    "terminated_loss_noself": 8142727,
-    "terminated_num_noself": 4
-}, {
-    "org_name": "Scripps Research Institute, the",
-    "lat": 32.903062,
-    "lon": -117.243592,
-    "terminated_loss": 13394989,
-    "terminated_num": 1,
-    "terminated_loss_noself": 13394989,
-    "terminated_num_noself": 1
+    "terminated_loss": 59246465,
+    "terminated_num": 18,
+    "terminated_loss_noself": 44002059,
+    "terminated_num_noself": 17
 }, {
     "org_name": "Arizona State University-Tempe Campus",
     "lat": 33.423954,
     "lon": -111.940687,
-    "terminated_loss": 776497,
-    "terminated_num": 2,
-    "terminated_loss_noself": 776497,
-    "terminated_num_noself": 2
+    "terminated_loss": 4644476,
+    "terminated_num": 4,
+    "terminated_loss_noself": 4644476,
+    "terminated_num_noself": 4
 }, {
     "org_name": "Center for Innovative Public Health Research",
     "lat": 33.430039,
@@ -479,10 +463,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Alabama at Birmingham",
     "lat": 33.50591,
     "lon": -86.799772,
-    "terminated_loss": 9948119,
-    "terminated_num": 7,
-    "terminated_loss_noself": 9944949,
-    "terminated_num_noself": 6
+    "terminated_loss": 17916287,
+    "terminated_num": 14,
+    "terminated_loss_noself": 17916287,
+    "terminated_num_noself": 14
 }, {
     "org_name": "Texas Tech University",
     "lat": 33.584696,
@@ -495,10 +479,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of California-Irvine",
     "lat": 33.64852,
     "lon": -117.82136,
-    "terminated_loss": 1241682,
-    "terminated_num": 4,
-    "terminated_loss_noself": 1241682,
-    "terminated_num_noself": 3
+    "terminated_loss": 5090349,
+    "terminated_num": 14,
+    "terminated_loss_noself": 5090349,
+    "terminated_num_noself": 13
 }, {
     "org_name": "Spelman College",
     "lat": 33.745247,
@@ -513,40 +497,40 @@ const grant_losses_2: GrantTermination[] = [{
     "lon": -84.414781,
     "terminated_loss": 4282843,
     "terminated_num": 2,
-    "terminated_loss_noself": 1619792,
-    "terminated_num_noself": 1
+    "terminated_loss_noself": 4282843,
+    "terminated_num_noself": 2
 }, {
     "org_name": "Georgia State University",
     "lat": 33.753531,
     "lon": -84.384483,
-    "terminated_loss": 534643,
-    "terminated_num": 2,
-    "terminated_loss_noself": 459283,
-    "terminated_num_noself": 1
+    "terminated_loss": 913225,
+    "terminated_num": 4,
+    "terminated_loss_noself": 913225,
+    "terminated_num_noself": 4
 }, {
     "org_name": "Emory University",
     "lat": 33.791247,
     "lon": -84.3249,
-    "terminated_loss": 85110194,
-    "terminated_num": 17,
-    "terminated_loss_noself": 84249951,
-    "terminated_num_noself": 14
+    "terminated_loss": 99296250,
+    "terminated_num": 22,
+    "terminated_loss_noself": 99296250,
+    "terminated_num_noself": 21
 }, {
     "org_name": "California State University Fullerton",
     "lat": 33.8781,
     "lon": -117.884245,
-    "terminated_loss": 290915,
-    "terminated_num": 1,
-    "terminated_loss_noself": 290915,
-    "terminated_num_noself": 1
+    "terminated_loss": 486761,
+    "terminated_num": 2,
+    "terminated_loss_noself": 486761,
+    "terminated_num_noself": 2
 }, {
     "org_name": "University of Georgia",
     "lat": 33.931173,
     "lon": -83.378873,
-    "terminated_loss": 2768181,
-    "terminated_num": 1,
-    "terminated_loss_noself": 2768181,
-    "terminated_num_noself": 1
+    "terminated_loss": 3337989,
+    "terminated_num": 3,
+    "terminated_loss_noself": 3337989,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Loyola Marymount University",
     "lat": 33.969677,
@@ -559,10 +543,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of South Carolina at Columbia",
     "lat": 33.999623,
     "lon": -81.028249,
-    "terminated_loss": 6082130,
-    "terminated_num": 3,
-    "terminated_loss_noself": 6082130,
-    "terminated_num_noself": 3
+    "terminated_loss": 10927317,
+    "terminated_num": 7,
+    "terminated_loss_noself": 10927317,
+    "terminated_num_noself": 7
 }, {
     "org_name": "Rand Corporation",
     "lat": 34.009659,
@@ -575,10 +559,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Southern California",
     "lat": 34.017282,
     "lon": -118.281254,
-    "terminated_loss": 218830,
-    "terminated_num": 1,
-    "terminated_loss_noself": 218830,
-    "terminated_num_noself": 1
+    "terminated_loss": 3683510,
+    "terminated_num": 10,
+    "terminated_loss_noself": 3683510,
+    "terminated_num_noself": 9
 }, {
     "org_name": "Public Health Foundation Enterprises",
     "lat": 34.029482,
@@ -593,24 +577,16 @@ const grant_losses_2: GrantTermination[] = [{
     "lon": -84.574275,
     "terminated_loss": 327856,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 327856,
+    "terminated_num_noself": 1
 }, {
     "org_name": "University of California Los Angeles",
     "lat": 34.070199,
     "lon": -118.45102,
-    "terminated_loss": 2861503,
-    "terminated_num": 4,
-    "terminated_loss_noself": 2861503,
-    "terminated_num_noself": 4
-}, {
-    "org_name": "Cedars-Sinai Medical Center",
-    "lat": 34.076544,
-    "lon": -118.380004,
-    "terminated_loss": 1583259,
-    "terminated_num": 1,
-    "terminated_loss_noself": 1583259,
-    "terminated_num_noself": 1
+    "terminated_loss": 15553252,
+    "terminated_num": 13,
+    "terminated_loss_noself": 15553252,
+    "terminated_num_noself": 13
 }, {
     "org_name": "Children's Hospital of Los Angeles",
     "lat": 34.098065,
@@ -623,16 +599,16 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "California State University Northridge",
     "lat": 34.245875,
     "lon": -118.501885,
-    "terminated_loss": 175254,
+    "terminated_loss": 701153,
     "terminated_num": 1,
-    "terminated_loss_noself": 175254,
+    "terminated_loss_noself": 701153,
     "terminated_num_noself": 1
 }, {
     "org_name": "University of Mississippi",
     "lat": 34.36739,
     "lon": -89.528956,
     "terminated_loss": 100956,
-    "terminated_num": 1,
+    "terminated_num": 2,
     "terminated_loss_noself": 0,
     "terminated_num_noself": 0
 }, {
@@ -649,16 +625,16 @@ const grant_losses_2: GrantTermination[] = [{
     "lon": -79.198114,
     "terminated_loss": 99598,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 99598,
+    "terminated_num_noself": 1
 }, {
     "org_name": "University of Arkansas for Medical Sciences",
     "lat": 34.749005,
     "lon": -92.320097,
-    "terminated_loss": 1054137,
-    "terminated_num": 1,
-    "terminated_loss_noself": 1054137,
-    "terminated_num_noself": 1
+    "terminated_loss": 3758302,
+    "terminated_num": 3,
+    "terminated_loss_noself": 3758302,
+    "terminated_num_noself": 3
 }, {
     "org_name": "University of Tennessee Chattanooga",
     "lat": 35.045822,
@@ -671,18 +647,18 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of New Mexico",
     "lat": 35.090226,
     "lon": -106.625292,
-    "terminated_loss": 7312808,
-    "terminated_num": 1,
-    "terminated_loss_noself": 7312808,
-    "terminated_num_noself": 1
+    "terminated_loss": 12762243,
+    "terminated_num": 3,
+    "terminated_loss_noself": 12762243,
+    "terminated_num_noself": 3
 }, {
     "org_name": "University of New Mexico Health Sciences Center",
     "lat": 35.090968,
     "lon": -106.617544,
-    "terminated_loss": 11567156,
-    "terminated_num": 2,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss": 11587094,
+    "terminated_num": 3,
+    "terminated_loss_noself": 535730,
+    "terminated_num_noself": 2
 }, {
     "org_name": "University of Memphis",
     "lat": 35.120123,
@@ -695,18 +671,18 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of North Carolina Charlotte",
     "lat": 35.301652,
     "lon": -80.731452,
-    "terminated_loss": 784594,
-    "terminated_num": 2,
-    "terminated_loss_noself": 784594,
-    "terminated_num_noself": 2
+    "terminated_loss": 1263353,
+    "terminated_num": 3,
+    "terminated_loss_noself": 1263353,
+    "terminated_num_noself": 3
 }, {
     "org_name": "University of Oklahoma Health Sciences Center",
     "lat": 35.47459,
     "lon": -97.505034,
-    "terminated_loss": 1161494,
-    "terminated_num": 4,
-    "terminated_loss_noself": 1161494,
-    "terminated_num_noself": 3
+    "terminated_loss": 1723592,
+    "terminated_num": 6,
+    "terminated_loss_noself": 1723592,
+    "terminated_num_noself": 5
 }, {
     "org_name": "Cherokee Nation",
     "lat": 35.85318,
@@ -727,10 +703,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of North Carolina Chapel Hill",
     "lat": 35.9316,
     "lon": -79.057377,
-    "terminated_loss": 35382909,
-    "terminated_num": 14,
-    "terminated_loss_noself": 29951313,
-    "terminated_num_noself": 12
+    "terminated_loss": 24049467,
+    "terminated_num": 23,
+    "terminated_loss_noself": 19267365,
+    "terminated_num_noself": 20
 }, {
     "org_name": "University of Tennessee Knoxville",
     "lat": 35.954943,
@@ -751,26 +727,26 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Family Health International",
     "lat": 35.992834,
     "lon": -78.903914,
-    "terminated_loss": 437174682,
+    "terminated_loss": 428387441,
     "terminated_num": 1,
-    "terminated_loss_noself": 437174682,
+    "terminated_loss_noself": 428387441,
     "terminated_num_noself": 1
 }, {
     "org_name": "Duke University",
     "lat": 36.007766,
     "lon": -78.926475,
-    "terminated_loss": 154037454,
-    "terminated_num": 6,
-    "terminated_loss_noself": 153099057,
-    "terminated_num_noself": 5
+    "terminated_loss": 9188561,
+    "terminated_num": 14,
+    "terminated_loss_noself": 9188561,
+    "terminated_num_noself": 13
 }, {
     "org_name": "University of Nevada Las Vegas",
     "lat": 36.109517,
     "lon": -115.141947,
-    "terminated_loss": 981566,
-    "terminated_num": 2,
-    "terminated_loss_noself": 981566,
-    "terminated_num_noself": 2
+    "terminated_loss": 4847717,
+    "terminated_num": 3,
+    "terminated_loss_noself": 4847717,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Oklahoma State University Stillwater",
     "lat": 36.115627,
@@ -783,10 +759,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Vanderbilt University",
     "lat": 36.143381,
     "lon": -86.803365,
-    "terminated_loss": 6227653,
-    "terminated_num": 6,
-    "terminated_loss_noself": 6227653,
-    "terminated_num_noself": 4
+    "terminated_loss": 9356289,
+    "terminated_num": 13,
+    "terminated_loss_noself": 9356289,
+    "terminated_num_noself": 11
 }, {
     "org_name": "Meharry Medical College",
     "lat": 36.166904,
@@ -799,58 +775,50 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of California Santa Cruz",
     "lat": 36.97756,
     "lon": -122.055836,
-    "terminated_loss": 3387402,
-    "terminated_num": 2,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss": 9355310,
+    "terminated_num": 6,
+    "terminated_loss_noself": 9355310,
+    "terminated_num_noself": 6
 }, {
     "org_name": "San Jose State University",
     "lat": 37.340938,
     "lon": -121.889413,
     "terminated_loss": 96159,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 96159,
+    "terminated_num_noself": 1
 }, {
     "org_name": "Stanford University",
     "lat": 37.426852,
     "lon": -122.17047,
-    "terminated_loss": 36667854,
-    "terminated_num": 7,
-    "terminated_loss_noself": 35965362,
-    "terminated_num_noself": 5
-}, {
-    "org_name": "Genendeavor, LLC",
-    "lat": 37.52099,
-    "lon": -121.948289,
-    "terminated_loss": 270078,
-    "terminated_num": 1,
-    "terminated_loss_noself": 270078,
-    "terminated_num_noself": 1
+    "terminated_loss": 10454784,
+    "terminated_num": 10,
+    "terminated_loss_noself": 10454784,
+    "terminated_num_noself": 9
 }, {
     "org_name": "Virginia Commonwealth University",
     "lat": 37.549807,
     "lon": -77.452775,
-    "terminated_loss": 7669,
-    "terminated_num": 2,
-    "terminated_loss_noself": 7669,
-    "terminated_num_noself": 1
+    "terminated_loss": 3577663,
+    "terminated_num": 5,
+    "terminated_loss_noself": 3577663,
+    "terminated_num_noself": 4
 }, {
     "org_name": "San Francisco State University",
     "lat": 37.72091,
     "lon": -122.476074,
-    "terminated_loss": 1194713,
-    "terminated_num": 2,
-    "terminated_loss_noself": 1194713,
-    "terminated_num_noself": 2
+    "terminated_loss": 1621727,
+    "terminated_num": 3,
+    "terminated_loss_noself": 1621727,
+    "terminated_num_noself": 3
 }, {
     "org_name": "University of California, San Francisco",
     "lat": 37.767442,
     "lon": -122.413937,
-    "terminated_loss": 33407648,
-    "terminated_num": 17,
-    "terminated_loss_noself": 31231989,
-    "terminated_num_noself": 14
+    "terminated_loss": 72015393,
+    "terminated_num": 31,
+    "terminated_loss_noself": 71079332,
+    "terminated_num_noself": 30
 }, {
     "org_name": "University of San Francisco",
     "lat": 37.775292,
@@ -860,21 +828,13 @@ const grant_losses_2: GrantTermination[] = [{
     "terminated_loss_noself": 555385,
     "terminated_num_noself": 1
 }, {
-    "org_name": "Kaiser Foundation Research Institute",
-    "lat": 37.805769,
-    "lon": -122.265214,
-    "terminated_loss": 1217017,
-    "terminated_num": 1,
-    "terminated_loss_noself": 1217017,
-    "terminated_num_noself": 1
-}, {
     "org_name": "University of California Berkeley",
     "lat": 37.870017,
     "lon": -122.268624,
-    "terminated_loss": 46201,
-    "terminated_num": 1,
-    "terminated_loss_noself": 46201,
-    "terminated_num_noself": 1
+    "terminated_loss": 4622977,
+    "terminated_num": 10,
+    "terminated_loss_noself": 4622977,
+    "terminated_num_noself": 10
 }, {
     "org_name": "University of the Pacific-Stockton",
     "lat": 37.984345,
@@ -887,26 +847,26 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Kentucky",
     "lat": 38.040959,
     "lon": -84.505885,
-    "terminated_loss": 740004,
+    "terminated_loss": 1005288,
     "terminated_num": 2,
-    "terminated_loss_noself": 740004,
+    "terminated_loss_noself": 1005288,
     "terminated_num_noself": 2
 }, {
     "org_name": "University of Virginia",
     "lat": 38.050527,
     "lon": -78.500531,
-    "terminated_loss": 23948237,
-    "terminated_num": 2,
-    "terminated_loss_noself": 23339678,
-    "terminated_num_noself": 1
+    "terminated_loss": 23973375,
+    "terminated_num": 3,
+    "terminated_loss_noself": 23973375,
+    "terminated_num_noself": 3
 }, {
     "org_name": "University of Louisville",
     "lat": 38.215024,
     "lon": -85.760145,
-    "terminated_loss": 2096359,
-    "terminated_num": 2,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss": 2803089,
+    "terminated_num": 4,
+    "terminated_loss_noself": 2803089,
+    "terminated_num_noself": 4
 }, {
     "org_name": "Neurovations",
     "lat": 38.325376,
@@ -919,34 +879,26 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of California at Davis",
     "lat": 38.543366,
     "lon": -121.72946,
-    "terminated_loss": 12301466,
-    "terminated_num": 2,
-    "terminated_loss_noself": 12301466,
-    "terminated_num_noself": 2
+    "terminated_loss": 8345120,
+    "terminated_num": 14,
+    "terminated_loss_noself": 8345120,
+    "terminated_num_noself": 14
 }, {
     "org_name": "Washington University",
     "lat": 38.664368,
     "lon": -90.323797,
-    "terminated_loss": 2512555,
-    "terminated_num": 4,
-    "terminated_loss_noself": 1426634,
-    "terminated_num_noself": 3
-}, {
-    "org_name": "University of Colorado",
-    "lat": 38.891282,
-    "lon": -104.800059,
-    "terminated_loss": 443260,
-    "terminated_num": 1,
-    "terminated_loss_noself": 443260,
-    "terminated_num_noself": 1
+    "terminated_loss": 11548066,
+    "terminated_num": 15,
+    "terminated_loss_noself": 10462145,
+    "terminated_num_noself": 14
 }, {
     "org_name": "George Washington University",
     "lat": 38.898075,
     "lon": -77.043933,
-    "terminated_loss": 4108441,
-    "terminated_num": 5,
-    "terminated_loss_noself": 4108441,
-    "terminated_num_noself": 5
+    "terminated_loss": 4124591,
+    "terminated_num": 6,
+    "terminated_loss_noself": 4124591,
+    "terminated_num_noself": 6
 }, {
     "org_name": "Gerontological Society of America",
     "lat": 38.903389,
@@ -983,10 +935,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Maryland, College Park",
     "lat": 38.992333,
     "lon": -76.952986,
-    "terminated_loss": 803391,
-    "terminated_num": 3,
-    "terminated_loss_noself": 803391,
-    "terminated_num_noself": 3
+    "terminated_loss": 4433914,
+    "terminated_num": 5,
+    "terminated_loss_noself": 4433914,
+    "terminated_num_noself": 5
 }, {
     "org_name": "University of Missouri Kansas City",
     "lat": 39.034521,
@@ -1008,25 +960,25 @@ const grant_losses_2: GrantTermination[] = [{
     "lat": 39.094626,
     "lon": -77.181453,
     "terminated_loss": 10317273,
-    "terminated_num": 2,
+    "terminated_num": 1,
     "terminated_loss_noself": 10317273,
     "terminated_num_noself": 1
 }, {
     "org_name": "University of Cincinnati",
     "lat": 39.129719,
     "lon": -84.520554,
-    "terminated_loss": 3116272,
-    "terminated_num": 3,
-    "terminated_loss_noself": 3116272,
-    "terminated_num_noself": 3
+    "terminated_loss": 3353597,
+    "terminated_num": 4,
+    "terminated_loss_noself": 3353597,
+    "terminated_num_noself": 4
 }, {
     "org_name": "University of Maryland Baltimore",
     "lat": 39.292248,
     "lon": -76.625629,
-    "terminated_loss": 13758647,
-    "terminated_num": 8,
-    "terminated_loss_noself": 13758647,
-    "terminated_num_noself": 8
+    "terminated_loss": 20780478,
+    "terminated_num": 12,
+    "terminated_loss_noself": 20780478,
+    "terminated_num_noself": 12
 }, {
     "org_name": "Friends Research Institute, Inc.",
     "lat": 39.303676,
@@ -1039,18 +991,18 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Johns Hopkins University",
     "lat": 39.325256,
     "lon": -76.605131,
-    "terminated_loss": 18031310,
-    "terminated_num": 22,
-    "terminated_loss_noself": 18005488,
-    "terminated_num_noself": 21
+    "terminated_loss": 18347474,
+    "terminated_num": 24,
+    "terminated_loss_noself": 18347474,
+    "terminated_num_noself": 24
 }, {
     "org_name": "University of Nevada Reno",
     "lat": 39.545077,
     "lon": -119.818277,
-    "terminated_loss": 107144,
-    "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss": 336527,
+    "terminated_num": 2,
+    "terminated_loss_noself": 229383,
+    "terminated_num_noself": 1
 }, {
     "org_name": "University of Denver (Colorado Seminary)",
     "lat": 39.676639,
@@ -1071,26 +1023,26 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Colorado Denver",
     "lat": 39.745098,
     "lon": -104.837605,
-    "terminated_loss": 2424428,
-    "terminated_num": 8,
-    "terminated_loss_noself": 1438098,
-    "terminated_num_noself": 6
+    "terminated_loss": 8329412,
+    "terminated_num": 14,
+    "terminated_loss_noself": 8329412,
+    "terminated_num_noself": 14
 }, {
     "org_name": "Children's Hospital of Philadelphia",
     "lat": 39.946632,
     "lon": -75.196604,
-    "terminated_loss": 999049,
-    "terminated_num": 2,
-    "terminated_loss_noself": 999049,
-    "terminated_num_noself": 2
+    "terminated_loss": 9999120,
+    "terminated_num": 7,
+    "terminated_loss_noself": 9999120,
+    "terminated_num_noself": 7
 }, {
     "org_name": "University of Pennsylvania",
     "lat": 39.953462,
     "lon": -75.193983,
-    "terminated_loss": 3869811,
-    "terminated_num": 6,
-    "terminated_loss_noself": 3869811,
-    "terminated_num_noself": 6
+    "terminated_loss": 23004310,
+    "terminated_num": 18,
+    "terminated_loss_noself": 23004310,
+    "terminated_num_noself": 18
 }, {
     "org_name": "Drexel University",
     "lat": 39.954073,
@@ -1103,18 +1055,18 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Temple University of the Commonwealth",
     "lat": 39.980272,
     "lon": -75.157051,
-    "terminated_loss": 600503,
-    "terminated_num": 3,
-    "terminated_loss_noself": 600503,
-    "terminated_num_noself": 3
+    "terminated_loss": 1682660,
+    "terminated_num": 5,
+    "terminated_loss_noself": 1682660,
+    "terminated_num_noself": 5
 }, {
     "org_name": "Ohio State University",
     "lat": 39.999598,
     "lon": -83.033131,
-    "terminated_loss": 5190229,
-    "terminated_num": 9,
-    "terminated_loss_noself": 5190229,
-    "terminated_num_noself": 8
+    "terminated_loss": 14636077,
+    "terminated_num": 15,
+    "terminated_loss_noself": 14636077,
+    "terminated_num_noself": 14
 }, {
     "org_name": "University of Illinois at Urbana-Champaign",
     "lat": 40.116857,
@@ -1127,10 +1079,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Pennsylvania State University Hershey Medical Center",
     "lat": 40.264414,
     "lon": -76.674014,
-    "terminated_loss": 518498,
-    "terminated_num": 1,
-    "terminated_loss_noself": 518498,
-    "terminated_num_noself": 1
+    "terminated_loss": 5251242,
+    "terminated_num": 3,
+    "terminated_loss_noself": 5251242,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Princeton University",
     "lat": 40.345441,
@@ -1143,9 +1095,9 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Purdue University",
     "lat": 40.41872,
     "lon": -86.910361,
-    "terminated_loss": 478420,
+    "terminated_loss": 263937,
     "terminated_num": 1,
-    "terminated_loss_noself": 478420,
+    "terminated_loss_noself": 263937,
     "terminated_num_noself": 1
 }, {
     "org_name": "Duquesne University",
@@ -1159,42 +1111,42 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Pittsburgh at Pittsburgh",
     "lat": 40.440909,
     "lon": -79.959125,
-    "terminated_loss": 5123753,
-    "terminated_num": 12,
-    "terminated_loss_noself": 4884194,
-    "terminated_num_noself": 10
+    "terminated_loss": 12595199,
+    "terminated_num": 19,
+    "terminated_loss_noself": 12408077,
+    "terminated_num_noself": 18
 }, {
     "org_name": "Rutgers Biomedical and Health Sciences",
     "lat": 40.520984,
     "lon": -74.473247,
-    "terminated_loss": 3530761,
-    "terminated_num": 5,
-    "terminated_loss_noself": 3530761,
-    "terminated_num_noself": 5
+    "terminated_loss": 5071014,
+    "terminated_num": 8,
+    "terminated_loss_noself": 5071014,
+    "terminated_num_noself": 8
 }, {
     "org_name": "Brooklyn College",
     "lat": 40.631637,
     "lon": -73.952868,
     "terminated_loss": 102172,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 102172,
+    "terminated_num_noself": 1
 }, {
     "org_name": "New York University School of Medicine",
     "lat": 40.669895,
     "lon": -73.974354,
-    "terminated_loss": 532596,
-    "terminated_num": 2,
-    "terminated_loss_noself": 532596,
-    "terminated_num_noself": 1
+    "terminated_loss": 4571076,
+    "terminated_num": 7,
+    "terminated_loss_noself": 4571076,
+    "terminated_num_noself": 7
 }, {
     "org_name": "New York University",
     "lat": 40.729659,
     "lon": -73.997018,
-    "terminated_loss": 759251,
-    "terminated_num": 3,
-    "terminated_loss_noself": 759251,
-    "terminated_num_noself": 2
+    "terminated_loss": 1682398,
+    "terminated_num": 5,
+    "terminated_loss_noself": 1682398,
+    "terminated_num_noself": 4
 }, {
     "org_name": "New School University",
     "lat": 40.735382,
@@ -1209,8 +1161,8 @@ const grant_losses_2: GrantTermination[] = [{
     "lon": -73.815751,
     "terminated_loss": 132877,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 132877,
+    "terminated_num_noself": 1
 }, {
     "org_name": "Ecohealth Alliance, Inc.",
     "lat": 40.754061,
@@ -1223,18 +1175,18 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Sloan-Kettering Inst Can Research",
     "lat": 40.764045,
     "lon": -73.956024,
-    "terminated_loss": 23851549,
+    "terminated_loss": 799475,
     "terminated_num": 1,
-    "terminated_loss_noself": 23851549,
+    "terminated_loss_noself": 799475,
     "terminated_num_noself": 1
 }, {
     "org_name": "University of Utah",
     "lat": 40.764542,
     "lon": -111.850317,
-    "terminated_loss": 1482900,
-    "terminated_num": 2,
-    "terminated_loss_noself": 1482900,
-    "terminated_num_noself": 2
+    "terminated_loss": 2465550,
+    "terminated_num": 8,
+    "terminated_loss_noself": 2465550,
+    "terminated_num_noself": 8
 }, {
     "org_name": "New York Blood Center",
     "lat": 40.76519,
@@ -1248,25 +1200,25 @@ const grant_losses_2: GrantTermination[] = [{
     "lat": 40.768737,
     "lon": -73.965182,
     "terminated_loss": 270694,
-    "terminated_num": 3,
+    "terminated_num": 4,
     "terminated_loss_noself": 270694,
     "terminated_num_noself": 3
 }, {
     "org_name": "Icahn School of Medicine at Mount Sinai",
     "lat": 40.790284,
     "lon": -73.946781,
-    "terminated_loss": 12885621,
-    "terminated_num": 7,
-    "terminated_loss_noself": 11879988,
-    "terminated_num_noself": 5
+    "terminated_loss": 21304153,
+    "terminated_num": 13,
+    "terminated_loss_noself": 21304153,
+    "terminated_num_noself": 11
 }, {
     "org_name": "City College of New York",
     "lat": 40.819407,
     "lon": -73.950169,
     "terminated_loss": 130948,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 130948,
+    "terminated_num_noself": 1
 }, {
     "org_name": "University of Nebraska Lincoln",
     "lat": 40.823017,
@@ -1279,26 +1231,26 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Albert Einstein College of Medicine",
     "lat": 40.85103,
     "lon": -73.844379,
-    "terminated_loss": 866537,
-    "terminated_num": 1,
-    "terminated_loss_noself": 866537,
-    "terminated_num_noself": 1
+    "terminated_loss": 6139222,
+    "terminated_num": 7,
+    "terminated_loss_noself": 6139222,
+    "terminated_num_noself": 7
 }, {
     "org_name": "Hackensack University Medical Center",
     "lat": 40.883415,
     "lon": -74.055652,
-    "terminated_loss": 16025697,
-    "terminated_num": 2,
-    "terminated_loss_noself": 16025697,
-    "terminated_num_noself": 2
+    "terminated_loss": 84046,
+    "terminated_num": 1,
+    "terminated_loss_noself": 84046,
+    "terminated_num_noself": 1
 }, {
     "org_name": "State University New York Stony Brook",
     "lat": 40.914561,
     "lon": -73.125169,
-    "terminated_loss": 2815133,
-    "terminated_num": 1,
-    "terminated_loss_noself": 2815133,
-    "terminated_num_noself": 1
+    "terminated_loss": 3640719,
+    "terminated_num": 5,
+    "terminated_loss_noself": 3640719,
+    "terminated_num_noself": 4
 }, {
     "org_name": "Silverbills Inc.",
     "lat": 40.946852,
@@ -1311,10 +1263,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Yale University",
     "lat": 41.310925,
     "lon": -72.926428,
-    "terminated_loss": 11090315,
-    "terminated_num": 18,
-    "terminated_loss_noself": 10775525,
-    "terminated_num_noself": 16
+    "terminated_loss": 14451621,
+    "terminated_num": 26,
+    "terminated_loss_noself": 14451621,
+    "terminated_num_noself": 26
 }, {
     "org_name": "Pro-Change Behavior Systems, Inc.",
     "lat": 41.451027,
@@ -1335,34 +1287,34 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Case Western Reserve University",
     "lat": 41.502739,
     "lon": -81.607334,
-    "terminated_loss": 3168378,
-    "terminated_num": 5,
-    "terminated_loss_noself": 1270403,
-    "terminated_num_noself": 2
+    "terminated_loss": 3812599,
+    "terminated_num": 6,
+    "terminated_loss_noself": 3812599,
+    "terminated_num_noself": 5
 }, {
     "org_name": "University of Iowa",
     "lat": 41.664405,
     "lon": -91.542152,
-    "terminated_loss": 532751,
+    "terminated_loss": 441997,
     "terminated_num": 2,
-    "terminated_loss_noself": 532751,
+    "terminated_loss_noself": 441997,
     "terminated_num_noself": 2
 }, {
     "org_name": "National Opinion Research Center",
     "lat": 41.785875,
     "lon": -87.597545,
-    "terminated_loss": 207652,
-    "terminated_num": 1,
-    "terminated_loss_noself": 207652,
-    "terminated_num_noself": 1
+    "terminated_loss": 289066,
+    "terminated_num": 2,
+    "terminated_loss_noself": 289066,
+    "terminated_num_noself": 2
 }, {
     "org_name": "University of Chicago",
     "lat": 41.789554,
     "lon": -87.601172,
-    "terminated_loss": 7668510,
-    "terminated_num": 6,
-    "terminated_loss_noself": 7668510,
-    "terminated_num_noself": 6
+    "terminated_loss": 14272556,
+    "terminated_num": 12,
+    "terminated_loss_noself": 14272556,
+    "terminated_num_noself": 12
 }, {
     "org_name": "Emma Pendleton Bradley Hospital",
     "lat": 41.792379,
@@ -1383,10 +1335,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Connecticut Storrs",
     "lat": 41.811419,
     "lon": -72.247553,
-    "terminated_loss": 1015168,
-    "terminated_num": 2,
-    "terminated_loss_noself": 1015168,
-    "terminated_num_noself": 2
+    "terminated_loss": 1447488,
+    "terminated_num": 4,
+    "terminated_loss_noself": 1447488,
+    "terminated_num_noself": 4
 }, {
     "org_name": "Rhode Island Hospital",
     "lat": 41.811681,
@@ -1399,10 +1351,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Brown University",
     "lat": 41.826136,
     "lon": -71.404513,
-    "terminated_loss": 2787353,
-    "terminated_num": 6,
-    "terminated_loss_noself": 2652411,
-    "terminated_num_noself": 5
+    "terminated_loss": 5538714,
+    "terminated_num": 11,
+    "terminated_loss_noself": 5538714,
+    "terminated_num_noself": 10
 }, {
     "org_name": "Illinois Institute of Technology",
     "lat": 41.831064,
@@ -1415,18 +1367,18 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Illinois at Chicago",
     "lat": 41.871509,
     "lon": -87.667721,
-    "terminated_loss": 7715798,
-    "terminated_num": 3,
-    "terminated_loss_noself": 7715798,
-    "terminated_num_noself": 3
+    "terminated_loss": 10248489,
+    "terminated_num": 7,
+    "terminated_loss_noself": 10248489,
+    "terminated_num_noself": 7
 }, {
     "org_name": "Rush University Medical Center",
     "lat": 41.87506,
     "lon": -87.668327,
-    "terminated_loss": 656646,
-    "terminated_num": 1,
-    "terminated_loss_noself": 656646,
-    "terminated_num_noself": 1
+    "terminated_loss": 2577509,
+    "terminated_num": 3,
+    "terminated_loss_noself": 2577509,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Lurie Children's Hospital of Chicago",
     "lat": 41.896663,
@@ -1435,14 +1387,6 @@ const grant_losses_2: GrantTermination[] = [{
     "terminated_num": 1,
     "terminated_loss_noself": 179368,
     "terminated_num_noself": 1
-}, {
-    "org_name": "Northwestern University at Chicago",
-    "lat": 42.050479,
-    "lon": -87.680046,
-    "terminated_loss": 47315682,
-    "terminated_num": 15,
-    "terminated_loss_noself": 45254479,
-    "terminated_num_noself": 12
 }, {
     "org_name": "Endeavor Health Clinical Operations",
     "lat": 42.064695,
@@ -1463,10 +1407,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Michigan at Ann Arbor",
     "lat": 42.275494,
     "lon": -83.743038,
-    "terminated_loss": 15380055,
-    "terminated_num": 14,
-    "terminated_loss_noself": 15380055,
-    "terminated_num_noself": 14
+    "terminated_loss": 25905423,
+    "terminated_num": 26,
+    "terminated_loss_noself": 25905423,
+    "terminated_num_noself": 24
 }, {
     "org_name": "Harvard Pilgrim Health Care, Inc.",
     "lat": 42.316808,
@@ -1479,18 +1423,18 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Harvard School of Public Health",
     "lat": 42.335306,
     "lon": -71.102775,
-    "terminated_loss": 2759335,
-    "terminated_num": 2,
-    "terminated_loss_noself": 2759335,
-    "terminated_num_noself": 2
+    "terminated_loss": 594565857,
+    "terminated_num": 157,
+    "terminated_loss_noself": 583296588,
+    "terminated_num_noself": 149
 }, {
     "org_name": "Brigham and Women's Hospital",
     "lat": 42.336107,
     "lon": -71.107481,
-    "terminated_loss": 12506156,
-    "terminated_num": 5,
-    "terminated_loss_noself": 12506156,
-    "terminated_num_noself": 5
+    "terminated_loss": 1134451,
+    "terminated_num": 4,
+    "terminated_loss_noself": 1134451,
+    "terminated_num_noself": 4
 }, {
     "org_name": "Boston Medical Center",
     "lat": 42.336854,
@@ -1503,26 +1447,26 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Boston College",
     "lat": 42.336956,
     "lon": -71.170504,
-    "terminated_loss": 577852,
-    "terminated_num": 2,
-    "terminated_loss_noself": 577852,
-    "terminated_num_noself": 1
+    "terminated_loss": 3254013,
+    "terminated_num": 4,
+    "terminated_loss_noself": 3254013,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Boston Children's Hospital",
     "lat": 42.337481,
     "lon": -71.104964,
-    "terminated_loss": 4237254,
-    "terminated_num": 5,
-    "terminated_loss_noself": 4237254,
-    "terminated_num_noself": 5
+    "terminated_loss": 5254294,
+    "terminated_num": 7,
+    "terminated_loss_noself": 5254294,
+    "terminated_num_noself": 7
 }, {
     "org_name": "Beth Israel Deaconess Medical Center",
     "lat": 42.33982,
     "lon": -71.10568,
-    "terminated_loss": 1207308,
-    "terminated_num": 2,
-    "terminated_loss_noself": 1207308,
-    "terminated_num_noself": 2
+    "terminated_loss": 1478664,
+    "terminated_num": 3,
+    "terminated_loss_noself": 1478664,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Northeastern University",
     "lat": 42.340048,
@@ -1543,26 +1487,26 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Broad Institute, Inc.",
     "lat": 42.363082,
     "lon": -71.087893,
-    "terminated_loss": 3967743,
-    "terminated_num": 1,
-    "terminated_loss_noself": 3967743,
-    "terminated_num_noself": 1
+    "terminated_loss": 8224412,
+    "terminated_num": 2,
+    "terminated_loss_noself": 8224412,
+    "terminated_num_noself": 2
 }, {
     "org_name": "Massachusetts General Hospital",
     "lat": 42.363198,
     "lon": -71.068772,
-    "terminated_loss": 26117784,
-    "terminated_num": 3,
-    "terminated_loss_noself": 26117784,
-    "terminated_num_noself": 3
+    "terminated_loss": 7173553,
+    "terminated_num": 10,
+    "terminated_loss_noself": 7173553,
+    "terminated_num_noself": 10
 }, {
     "org_name": "Harvard University",
     "lat": 42.369697,
     "lon": -71.11193,
-    "terminated_loss": 18146,
-    "terminated_num": 1,
-    "terminated_loss_noself": 18146,
-    "terminated_num_noself": 1
+    "terminated_loss": 173516535,
+    "terminated_num": 139,
+    "terminated_loss_noself": 172506069,
+    "terminated_num_noself": 134
 }, {
     "org_name": "Ibis Reproductive Health",
     "lat": 42.372813,
@@ -1601,32 +1545,24 @@ const grant_losses_2: GrantTermination[] = [{
     "lon": -83.138847,
     "terminated_loss": 99781,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 99781,
+    "terminated_num_noself": 1
 }, {
     "org_name": "Cornell University",
     "lat": 42.438,
     "lon": -76.4625,
-    "terminated_loss": 9209061,
-    "terminated_num": 1,
-    "terminated_loss_noself": 9209061,
-    "terminated_num_noself": 1
-}, {
-    "org_name": "Wadsworth Center",
-    "lat": 42.645888,
-    "lon": -73.797658,
-    "terminated_loss": 587309,
-    "terminated_num": 1,
-    "terminated_loss_noself": 587309,
-    "terminated_num_noself": 1
+    "terminated_loss": 11699070,
+    "terminated_num": 4,
+    "terminated_loss_noself": 11699070,
+    "terminated_num_noself": 4
 }, {
     "org_name": "Michigan State University",
     "lat": 42.653979,
     "lon": -84.492032,
-    "terminated_loss": 1243933,
-    "terminated_num": 2,
-    "terminated_loss_noself": 1243933,
-    "terminated_num_noself": 2
+    "terminated_loss": 922380,
+    "terminated_num": 3,
+    "terminated_loss_noself": 922380,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Roswell Park Cancer Institute Corp",
     "lat": 42.873378,
@@ -1639,34 +1575,34 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "State University of New York at Buffalo",
     "lat": 43.003074,
     "lon": -78.785924,
-    "terminated_loss": 1419042,
-    "terminated_num": 3,
-    "terminated_loss_noself": 1419042,
-    "terminated_num_noself": 3
+    "terminated_loss": 2001498,
+    "terminated_num": 5,
+    "terminated_loss_noself": 2001498,
+    "terminated_num_noself": 5
 }, {
     "org_name": "Marquette University",
     "lat": 43.038728,
     "lon": -87.923307,
     "terminated_loss": 153407,
     "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss_noself": 153407,
+    "terminated_num_noself": 1
 }, {
     "org_name": "Medical College of Wisconsin",
     "lat": 43.04575,
     "lon": -88.020374,
-    "terminated_loss": 1144032,
-    "terminated_num": 4,
-    "terminated_loss_noself": 1144032,
-    "terminated_num_noself": 4
+    "terminated_loss": 2131912,
+    "terminated_num": 7,
+    "terminated_loss_noself": 2131912,
+    "terminated_num_noself": 7
 }, {
     "org_name": "University of Wisconsin-Madison",
     "lat": 43.068519,
     "lon": -89.400858,
-    "terminated_loss": 7524570,
-    "terminated_num": 4,
-    "terminated_loss_noself": 7524570,
-    "terminated_num_noself": 4
+    "terminated_loss": 2723417,
+    "terminated_num": 8,
+    "terminated_loss_noself": 2692326,
+    "terminated_num_noself": 7
 }, {
     "org_name": "University of Wisconsin Milwaukee",
     "lat": 43.075704,
@@ -1679,10 +1615,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Rochester",
     "lat": 43.131774,
     "lon": -77.63546,
-    "terminated_loss": 1249501,
-    "terminated_num": 5,
-    "terminated_loss_noself": 1249501,
-    "terminated_num_noself": 5
+    "terminated_loss": 3030258,
+    "terminated_num": 8,
+    "terminated_loss_noself": 3030258,
+    "terminated_num_noself": 8
 }, {
     "org_name": "Mainehealth",
     "lat": 43.653164,
@@ -1692,21 +1628,13 @@ const grant_losses_2: GrantTermination[] = [{
     "terminated_loss_noself": 21567108,
     "terminated_num_noself": 1
 }, {
-    "org_name": "Mayo Clinic Rochester",
-    "lat": 44.02432,
-    "lon": -92.46011,
-    "terminated_loss": -2,
-    "terminated_num": 1,
-    "terminated_loss_noself": -2,
-    "terminated_num_noself": 1
-}, {
     "org_name": "University of Oregon",
     "lat": 44.045509,
     "lon": -123.069741,
-    "terminated_loss": 6245420,
-    "terminated_num": 4,
-    "terminated_loss_noself": 5566033,
-    "terminated_num_noself": 3
+    "terminated_loss": 1206459,
+    "terminated_num": 3,
+    "terminated_loss_noself": 527072,
+    "terminated_num_noself": 2
 }, {
     "org_name": "Iris Media, Inc.",
     "lat": 44.048722,
@@ -1727,18 +1655,18 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "University of Minnesota",
     "lat": 44.975143,
     "lon": -93.227003,
-    "terminated_loss": 26400315,
-    "terminated_num": 10,
-    "terminated_loss_noself": 22956141,
-    "terminated_num_noself": 9
+    "terminated_loss": 16541454,
+    "terminated_num": 13,
+    "terminated_loss_noself": 13097280,
+    "terminated_num_noself": 12
 }, {
     "org_name": "Oregon Health & Science University",
     "lat": 45.49882,
     "lon": -122.685647,
-    "terminated_loss": 2108233,
-    "terminated_num": 1,
-    "terminated_loss_noself": 2108233,
-    "terminated_num_noself": 1
+    "terminated_loss": 2714225,
+    "terminated_num": 3,
+    "terminated_loss_noself": 2714225,
+    "terminated_num_noself": 3
 }, {
     "org_name": "Montana State University - Bozeman",
     "lat": 45.661963,
@@ -1751,10 +1679,10 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Washington State University",
     "lat": 46.728892,
     "lon": -117.155742,
-    "terminated_loss": 395683,
-    "terminated_num": 1,
-    "terminated_loss_noself": 395683,
-    "terminated_num_noself": 1
+    "terminated_loss": 1425087,
+    "terminated_num": 2,
+    "terminated_loss_noself": 1425087,
+    "terminated_num_noself": 2
 }, {
     "org_name": "University of Idaho",
     "lat": 46.730287,
@@ -1775,34 +1703,34 @@ const grant_losses_2: GrantTermination[] = [{
     "org_name": "Institute for Systems Biology",
     "lat": 47.622538,
     "lon": -122.337533,
-    "terminated_loss": 379955,
-    "terminated_num": 1,
-    "terminated_loss_noself": 0,
-    "terminated_num_noself": 0
+    "terminated_loss": 881875,
+    "terminated_num": 2,
+    "terminated_loss_noself": 881875,
+    "terminated_num_noself": 2
 }, {
     "org_name": "Fred Hutchinson Cancer Center",
     "lat": 47.626482,
     "lon": -122.329606,
-    "terminated_loss": 672987886,
+    "terminated_loss": 7173273,
     "terminated_num": 4,
-    "terminated_loss_noself": 672987886,
+    "terminated_loss_noself": 7173273,
     "terminated_num_noself": 4
 }, {
     "org_name": "University of Washington",
     "lat": 47.660307,
     "lon": -122.315168,
-    "terminated_loss": 3440485,
-    "terminated_num": 8,
-    "terminated_loss_noself": 3075052,
-    "terminated_num_noself": 6
+    "terminated_loss": 7237742,
+    "terminated_num": 12,
+    "terminated_loss_noself": 7237742,
+    "terminated_num_noself": 11
 }, {
     "org_name": "Seattle Children's Hospital",
     "lat": 47.66243,
     "lon": -122.282291,
-    "terminated_loss": 1027648,
-    "terminated_num": 3,
-    "terminated_loss_noself": 1027648,
-    "terminated_num_noself": 3
+    "terminated_loss": 988413,
+    "terminated_num": 2,
+    "terminated_loss_noself": 988413,
+    "terminated_num_noself": 2
 }, {
     "org_name": "Southcentral Foundation",
     "lat": 61.182148,
@@ -1817,9 +1745,745 @@ const grant_losses_2: GrantTermination[] = [{
     "lon": -149.818129,
     "terminated_loss": 92557,
     "terminated_num": 1,
+    "terminated_loss_noself": 92557,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Queen's Medical Center",
+    "lat": 21.307803,
+    "lon": -157.853947,
+    "terminated_loss": 633837,
+    "terminated_num": 1,
+    "terminated_loss_noself": 633837,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Colliga Apps Corp.",
+    "lat": 25.763047,
+    "lon": -80.190448,
+    "terminated_loss": 509577,
+    "terminated_num": 1,
+    "terminated_loss_noself": 509577,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of South Florida",
+    "lat": 28.074039,
+    "lon": -82.395963,
+    "terminated_loss": 186815,
+    "terminated_num": 1,
+    "terminated_loss_noself": 186815,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of Texas Health Science Center",
+    "lat": 29.513091,
+    "lon": -98.577742,
+    "terminated_loss": 5818357,
+    "terminated_num": 6,
+    "terminated_loss_noself": 5818357,
+    "terminated_num_noself": 6
+}, {
+    "org_name": "University of Texas Health Science Center Houston",
+    "lat": 29.703025,
+    "lon": -95.403303,
+    "terminated_loss": 2072672,
+    "terminated_num": 5,
+    "terminated_loss_noself": 2072672,
+    "terminated_num_noself": 5
+}, {
+    "org_name": "LSU Health Scienes Center",
+    "lat": 29.957378,
+    "lon": -90.082793,
+    "terminated_loss": 451936,
+    "terminated_num": 2,
+    "terminated_loss_noself": 451936,
+    "terminated_num_noself": 2
+}, {
+    "org_name": "Dillard University",
+    "lat": 29.996211,
+    "lon": -90.065957,
+    "terminated_loss": 601635,
+    "terminated_num": 1,
+    "terminated_loss_noself": 601635,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Prairie View\u00a0A&M\u00a0University\u00a0",
+    "lat": 30.081335,
+    "lon": -95.992865,
+    "terminated_loss": 464014,
+    "terminated_num": 1,
+    "terminated_loss_noself": 464014,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Mayo Clinic Jacksonville",
+    "lat": 30.264703,
+    "lon": -81.444793,
+    "terminated_loss": 6565,
+    "terminated_num": 1,
+    "terminated_loss_noself": 6565,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of North Florida",
+    "lat": 30.270668,
+    "lon": -81.510431,
+    "terminated_loss": 134693,
+    "terminated_num": 1,
+    "terminated_loss_noself": 134693,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Texas Engineering Experiment Station",
+    "lat": 30.561542,
+    "lon": -96.253207,
+    "terminated_loss": 785667,
+    "terminated_num": 1,
+    "terminated_loss_noself": 785667,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Texas A&M University",
+    "lat": 30.605876,
+    "lon": -96.368771,
+    "terminated_loss": 6696173,
+    "terminated_num": 5,
+    "terminated_loss_noself": 6696173,
+    "terminated_num_noself": 5
+}, {
+    "org_name": "Sam Houston State University",
+    "lat": 30.715211,
+    "lon": -95.549345,
+    "terminated_loss": 64015,
+    "terminated_num": 1,
+    "terminated_loss_noself": 64015,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Baylor University",
+    "lat": 31.555713,
+    "lon": -97.121401,
+    "terminated_loss": 2191762,
+    "terminated_num": 1,
+    "terminated_loss_noself": 2191762,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "New Mexico State University Las Cruces",
+    "lat": 32.279041,
+    "lon": -106.755696,
+    "terminated_loss": 594407,
+    "terminated_num": 2,
+    "terminated_loss_noself": 145280,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of Texas Arlington",
+    "lat": 32.728201,
+    "lon": -97.112604,
+    "terminated_loss": 1328349,
+    "terminated_num": 2,
+    "terminated_loss_noself": 1328349,
+    "terminated_num_noself": 2
+}, {
+    "org_name": "Scripps Health",
+    "lat": 32.887742,
+    "lon": -117.223797,
+    "terminated_loss": 818845,
+    "terminated_num": 1,
+    "terminated_loss_noself": 818845,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "California State University San Marcos",
+    "lat": 33.13799,
+    "lon": -117.151093,
+    "terminated_loss": 275064,
+    "terminated_num": 2,
+    "terminated_loss_noself": 275064,
+    "terminated_num_noself": 2
+}, {
+    "org_name": "Claflin University",
+    "lat": 33.495919,
+    "lon": -80.855463,
+    "terminated_loss": 877815,
+    "terminated_num": 1,
+    "terminated_loss_noself": 877815,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Mayo Clinic Arizona",
+    "lat": 33.589113,
+    "lon": -111.79394,
+    "terminated_loss": 1009100,
+    "terminated_num": 1,
+    "terminated_loss_noself": 1009100,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "California State University Long Beach",
+    "lat": 33.781104,
+    "lon": -118.109903,
+    "terminated_loss": 217726,
+    "terminated_num": 1,
+    "terminated_loss_noself": 217726,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Georgia Institute of Technology",
+    "lat": 33.781897,
+    "lon": -84.404009,
+    "terminated_loss": 63786,
+    "terminated_num": 1,
+    "terminated_loss_noself": 63786,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "California State University - Dominguez Hills",
+    "lat": 33.867141,
+    "lon": -118.255341,
+    "terminated_loss": 12986,
+    "terminated_num": 1,
+    "terminated_loss_noself": 12986,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "California State University Los Angeles",
+    "lat": 34.062539,
+    "lon": -118.169044,
+    "terminated_loss": 979392,
+    "terminated_num": 1,
+    "terminated_loss_noself": 979392,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "California Institute of Technology",
+    "lat": 34.134332,
+    "lon": -118.12652,
+    "terminated_loss": 1368286,
+    "terminated_num": 1,
+    "terminated_loss_noself": 1368286,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "California State University San Bernardino",
+    "lat": 34.176782,
+    "lon": -117.330185,
+    "terminated_loss": 881103,
+    "terminated_num": 1,
+    "terminated_loss_noself": 881103,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Clemson University",
+    "lat": 34.673146,
+    "lon": -82.823962,
+    "terminated_loss": 357075,
+    "terminated_num": 2,
+    "terminated_loss_noself": 357075,
+    "terminated_num_noself": 2
+}, {
+    "org_name": "Fayetteville State University",
+    "lat": 35.071547,
+    "lon": -78.894454,
+    "terminated_loss": 94529,
+    "terminated_num": 1,
+    "terminated_loss_noself": 94529,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "St. Jude Children's Research Hospital",
+    "lat": 35.155607,
+    "lon": -90.045279,
+    "terminated_loss": 681666,
+    "terminated_num": 1,
+    "terminated_loss_noself": 681666,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of Oklahoma",
+    "lat": 35.209223,
+    "lon": -97.443781,
+    "terminated_loss": 1263097,
+    "terminated_num": 1,
+    "terminated_loss_noself": 1263097,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "California State University Bakersfield",
+    "lat": 35.354257,
+    "lon": -119.107587,
+    "terminated_loss": 263388,
+    "terminated_num": 1,
+    "terminated_loss_noself": 263388,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Oklahoma Medical Research Foundation",
+    "lat": 35.482988,
+    "lon": -97.49781,
+    "terminated_loss": 449011,
+    "terminated_num": 1,
+    "terminated_loss_noself": 449011,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Equiti Foods, LLC",
+    "lat": 35.901309,
+    "lon": -79.061049,
+    "terminated_loss": 375652,
+    "terminated_num": 1,
+    "terminated_loss_noself": 375652,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "North Carolina Central University",
+    "lat": 35.97467,
+    "lon": -78.898054,
+    "terminated_loss": 224682,
+    "terminated_num": 1,
+    "terminated_loss_noself": 224682,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of North Carolina Greensboro",
+    "lat": 36.065048,
+    "lon": -79.808967,
+    "terminated_loss": 123287,
+    "terminated_num": 1,
+    "terminated_loss_noself": 123287,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Laureate Institute for Brain Research",
+    "lat": 36.066243,
+    "lon": -95.919455,
+    "terminated_loss": 157685,
+    "terminated_num": 1,
+    "terminated_loss_noself": 157685,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "North Carolina A&T State University",
+    "lat": 36.074178,
+    "lon": -79.775965,
+    "terminated_loss": 107519,
+    "terminated_num": 2,
+    "terminated_loss_noself": 107519,
+    "terminated_num_noself": 2
+}, {
+    "org_name": "Tennessee State University",
+    "lat": 36.168333,
+    "lon": -86.828524,
+    "terminated_loss": 171144,
+    "terminated_num": 1,
+    "terminated_loss_noself": 171144,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Old Dominion University",
+    "lat": 36.888989,
+    "lon": -76.303478,
+    "terminated_loss": 61602,
+    "terminated_num": 1,
+    "terminated_loss_noself": 61602,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Western Kentucky University",
+    "lat": 36.986798,
+    "lon": -86.455375,
+    "terminated_loss": 596490,
+    "terminated_num": 1,
+    "terminated_loss_noself": 596490,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Hampton University",
+    "lat": 37.025661,
+    "lon": -76.347732,
+    "terminated_loss": 116600,
+    "terminated_num": 1,
+    "terminated_loss_noself": 116600,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Fort Lewis College",
+    "lat": 37.274983,
+    "lon": -107.872039,
+    "terminated_loss": 328029,
+    "terminated_num": 1,
+    "terminated_loss_noself": 328029,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of California, Merced",
+    "lat": 37.351306,
+    "lon": -120.4324,
+    "terminated_loss": 64961,
+    "terminated_num": 1,
+    "terminated_loss_noself": 64961,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "San Francisco Department of Public Health",
+    "lat": 37.778128,
+    "lon": -122.418652,
+    "terminated_loss": 924356,
+    "terminated_num": 1,
     "terminated_loss_noself": 0,
     "terminated_num_noself": 0
-}]
+}, {
+    "org_name": "California State University Sacramento",
+    "lat": 38.553853,
+    "lon": -121.421265,
+    "terminated_loss": 104994,
+    "terminated_num": 1,
+    "terminated_loss_noself": 104994,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Isa Associates, Inc.",
+    "lat": 38.805407,
+    "lon": -77.039842,
+    "terminated_loss": 1342974,
+    "terminated_num": 1,
+    "terminated_loss_noself": 1342974,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "American Psychological Association",
+    "lat": 38.89984,
+    "lon": -77.007538,
+    "terminated_loss": 352464,
+    "terminated_num": 1,
+    "terminated_loss_noself": 352464,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "American Society of Nephrology, Inc.",
+    "lat": 38.899995,
+    "lon": -77.034315,
+    "terminated_loss": 183371,
+    "terminated_num": 1,
+    "terminated_loss_noself": 183371,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Endocrine Society",
+    "lat": 38.904115,
+    "lon": -77.046163,
+    "terminated_loss": 1361923,
+    "terminated_num": 1,
+    "terminated_loss_noself": 1361923,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Georgetown University",
+    "lat": 38.905206,
+    "lon": -77.07547,
+    "terminated_loss": 715198,
+    "terminated_num": 1,
+    "terminated_loss_noself": 715198,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Howard University",
+    "lat": 38.923138,
+    "lon": -77.021576,
+    "terminated_loss": 102660,
+    "terminated_num": 1,
+    "terminated_loss_noself": 102660,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Academic Pediatric Association",
+    "lat": 38.937467,
+    "lon": -77.176943,
+    "terminated_loss": 859005,
+    "terminated_num": 1,
+    "terminated_loss_noself": 859005,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of Missouri-Columbia",
+    "lat": 38.948231,
+    "lon": -92.327335,
+    "terminated_loss": 6309313,
+    "terminated_num": 4,
+    "terminated_loss_noself": 6309313,
+    "terminated_num_noself": 4
+}, {
+    "org_name": "American Gastroenterological Association Institute",
+    "lat": 38.989333,
+    "lon": -77.099203,
+    "terminated_loss": 810801,
+    "terminated_num": 1,
+    "terminated_loss_noself": 810801,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Delaware State University",
+    "lat": 39.189379,
+    "lon": -75.541169,
+    "terminated_loss": 741733,
+    "terminated_num": 1,
+    "terminated_loss_noself": 741733,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of Maryland Baltimore County",
+    "lat": 39.252457,
+    "lon": -76.71121,
+    "terminated_loss": 365136,
+    "terminated_num": 1,
+    "terminated_loss_noself": 365136,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Rowan University",
+    "lat": 39.707715,
+    "lon": -75.116897,
+    "terminated_loss": 357462,
+    "terminated_num": 1,
+    "terminated_loss_noself": 357462,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of Delaware",
+    "lat": 39.714507,
+    "lon": -75.738715,
+    "terminated_loss": 249954,
+    "terminated_num": 1,
+    "terminated_loss_noself": 249954,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Indiana University Indianapolis",
+    "lat": 39.779213,
+    "lon": -86.175288,
+    "terminated_loss": 3520214,
+    "terminated_num": 4,
+    "terminated_loss_noself": 3520214,
+    "terminated_num_noself": 4
+}, {
+    "org_name": "Thomas Jefferson University",
+    "lat": 39.948207,
+    "lon": -75.157825,
+    "terminated_loss": 740580,
+    "terminated_num": 1,
+    "terminated_loss_noself": 740580,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of Colorado Boulder",
+    "lat": 40.013296,
+    "lon": -105.251932,
+    "terminated_loss": 3500686,
+    "terminated_num": 3,
+    "terminated_loss_noself": 3500686,
+    "terminated_num_noself": 3
+}, {
+    "org_name": "Rutgers University",
+    "lat": 40.481906,
+    "lon": -74.457066,
+    "terminated_loss": 6215628,
+    "terminated_num": 2,
+    "terminated_loss_noself": 6215628,
+    "terminated_num_noself": 2
+}, {
+    "org_name": "Colorado State University",
+    "lat": 40.57951,
+    "lon": -105.081267,
+    "terminated_loss": 472421,
+    "terminated_num": 2,
+    "terminated_loss_noself": 472421,
+    "terminated_num_noself": 2
+}, {
+    "org_name": "Medgar Evers College",
+    "lat": 40.667136,
+    "lon": -73.951831,
+    "terminated_loss": 65978,
+    "terminated_num": 1,
+    "terminated_loss_noself": 65978,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "New Jersey Institute of Technology",
+    "lat": 40.742916,
+    "lon": -74.176244,
+    "terminated_loss": 779210,
+    "terminated_num": 1,
+    "terminated_loss_noself": 779210,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Bellage, Inc.",
+    "lat": 40.74767,
+    "lon": -73.918101,
+    "terminated_loss": 76717,
+    "terminated_num": 1,
+    "terminated_loss_noself": 76717,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Hospital for Special Surgery",
+    "lat": 40.765324,
+    "lon": -73.953947,
+    "terminated_loss": 4678944,
+    "terminated_num": 1,
+    "terminated_loss_noself": 4678944,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Cold Spring Harbor Laboratory",
+    "lat": 40.86755,
+    "lon": -73.473456,
+    "terminated_loss": 287243,
+    "terminated_num": 1,
+    "terminated_loss_noself": 287243,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Herbert H. Lehman College",
+    "lat": 40.870857,
+    "lon": -73.8866,
+    "terminated_loss": 78384,
+    "terminated_num": 1,
+    "terminated_loss_noself": 78384,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Kent State University",
+    "lat": 41.152425,
+    "lon": -81.337881,
+    "terminated_loss": 555661,
+    "terminated_num": 1,
+    "terminated_loss_noself": 555661,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of Nebraska Medical Center",
+    "lat": 41.265996,
+    "lon": -96.010026,
+    "terminated_loss": 1216903,
+    "terminated_num": 3,
+    "terminated_loss_noself": 1216903,
+    "terminated_num_noself": 3
+}, {
+    "org_name": "University of Notre Dame",
+    "lat": 41.693901,
+    "lon": -86.239284,
+    "terminated_loss": 624957,
+    "terminated_num": 3,
+    "terminated_loss_noself": 624957,
+    "terminated_num_noself": 2
+}, {
+    "org_name": "University of Connecticut School of Medicine",
+    "lat": 41.734182,
+    "lon": -72.793791,
+    "terminated_loss": 208211,
+    "terminated_num": 1,
+    "terminated_loss_noself": 208211,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "University of Hartford",
+    "lat": 41.79337,
+    "lon": -72.716263,
+    "terminated_loss": 8125,
+    "terminated_num": 1,
+    "terminated_loss_noself": 8125,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Northwestern University",
+    "lat": 42.050479,
+    "lon": -87.680046,
+    "terminated_loss": 55346090,
+    "terminated_num": 22,
+    "terminated_loss_noself": 55217792,
+    "terminated_num_noself": 21
+}, {
+    "org_name": "University of Massachusetts Boston",
+    "lat": 42.313703,
+    "lon": -71.062976,
+    "terminated_loss": 1993052,
+    "terminated_num": 1,
+    "terminated_loss_noself": 1993052,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Harvard Medical School",
+    "lat": 42.335672,
+    "lon": -71.104237,
+    "terminated_loss": 446417847,
+    "terminated_num": 340,
+    "terminated_loss_noself": 446417847,
+    "terminated_num_noself": 328
+}, {
+    "org_name": "Wayne State University",
+    "lat": 42.357466,
+    "lon": -83.065294,
+    "terminated_loss": 645931,
+    "terminated_num": 3,
+    "terminated_loss_noself": 645931,
+    "terminated_num_noself": 3
+}, {
+    "org_name": "MGH Institute of Health Professions",
+    "lat": 42.374956,
+    "lon": -71.05421,
+    "terminated_loss": 1149931,
+    "terminated_num": 1,
+    "terminated_loss_noself": 1149931,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "McLean Hospital",
+    "lat": 42.393619,
+    "lon": -71.191142,
+    "terminated_loss": 6831406,
+    "terminated_num": 3,
+    "terminated_loss_noself": 6831406,
+    "terminated_num_noself": 3
+}, {
+    "org_name": "Rensselaer Polytechnic Institute",
+    "lat": 42.732865,
+    "lon": -73.683493,
+    "terminated_loss": 1064934,
+    "terminated_num": 1,
+    "terminated_loss_noself": 1064934,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Syracuse University",
+    "lat": 43.041575,
+    "lon": -76.133784,
+    "terminated_loss": 82267,
+    "terminated_num": 1,
+    "terminated_loss_noself": 82267,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Rochester Institute of Technology",
+    "lat": 43.092171,
+    "lon": -77.674767,
+    "terminated_loss": 222301,
+    "terminated_num": 1,
+    "terminated_loss_noself": 222301,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Central Michigan University",
+    "lat": 43.601402,
+    "lon": -84.787107,
+    "terminated_loss": 310011,
+    "terminated_num": 1,
+    "terminated_loss_noself": 310011,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Dartmouth College",
+    "lat": 43.711386,
+    "lon": -72.270611,
+    "terminated_loss": 496707,
+    "terminated_num": 2,
+    "terminated_loss_noself": 496707,
+    "terminated_num_noself": 2
+}, {
+    "org_name": "Jackson Laboratory",
+    "lat": 44.365361,
+    "lon": -68.196303,
+    "terminated_loss": 957337,
+    "terminated_num": 3,
+    "terminated_loss_noself": 957337,
+    "terminated_num_noself": 3
+}, {
+    "org_name": "Clarkson University",
+    "lat": 44.65482,
+    "lon": -74.95554,
+    "terminated_loss": 84132,
+    "terminated_num": 1,
+    "terminated_loss_noself": 84132,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Missouri Breaks Research, Inc.",
+    "lat": 45.4277,
+    "lon": -101.074481,
+    "terminated_loss": 1019047,
+    "terminated_num": 1,
+    "terminated_loss_noself": 1019047,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Portland State University",
+    "lat": 45.51201,
+    "lon": -122.679476,
+    "terminated_loss": 519657,
+    "terminated_num": 1,
+    "terminated_loss_noself": 519657,
+    "terminated_num_noself": 1
+}, {
+    "org_name": "Allen Institute",
+    "lat": 47.650084,
+    "lon": -122.351604,
+    "terminated_loss": 72390066,
+    "terminated_num": 3,
+    "terminated_loss_noself": 72390066,
+    "terminated_num_noself": 3
+}, {
+    "org_name": "University of North Dakota",
+    "lat": 47.919868,
+    "lon": -97.072819,
+    "terminated_loss": 195698,
+    "terminated_num": 2,
+    "terminated_loss_noself": 195698,
+    "terminated_num_noself": 2
+}, {
+    "org_name": "University of Alaska Fairbanks",
+    "lat": 64.857437,
+    "lon": -147.800301,
+    "terminated_loss": 340281,
+    "terminated_num": 1,
+    "terminated_loss_noself": 340281,
+    "terminated_num_noself": 1
+}];
 
 export const GRANT_LOSSES: GrantTermination[] = grant_losses_2.flatMap(grant => {
     if (grant.terminated_num > 1) {
