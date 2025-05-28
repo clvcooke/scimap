@@ -217,7 +217,7 @@ function About() {
                         </Text>
                         <Text ta={"left"}>
                             Terminated NIH grants are now included on the map, displaying current local economic losses
-                            in the tooltip as well as blue bubbles listing the number of value of grants cancelled at
+                            in the tooltip as well as blue bubbles listing the number and value of grants cancelled at
                             each institution. Prior estimates for annual future losses, based on proposed changes to
                             funding for indirect costs, have been renamed “future economic losses”.
                         </Text>
