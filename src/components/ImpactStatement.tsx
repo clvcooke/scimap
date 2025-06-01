@@ -1,8 +1,7 @@
 import {Flex, Text, Button, Checkbox, Group, Box} from '@mantine/core';
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {ANALYTICS_ACTIONS} from "../constants.ts";
 import {trackEvent} from "../utils/analytics.ts";
-import {isMobile} from "react-device-detect";
 
 function ImpactStatement({close}: { close: () => void }) {
     const [consent, setConsent] = useState(true);
@@ -10,17 +9,27 @@ function ImpactStatement({close}: { close: () => void }) {
 
     const nextStep = () => setActive((current) => (current < 1 ? current + 1 : current));
     const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+    const [height, setHeight] = useState<number>()
+    const textBox = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (textBox.current) {
+          setHeight(textBox.current.clientHeight);
+        }
+      }, []);
 
     return (
         <Flex direction="column" gap="sm">
             <Text size="xl" c="dark" ta="center">Medical Research is at Risk</Text>
-            <Box h={isMobile ? '18rem' : 150} style={{overflow: 'auto'}}
-            >
+            <Box ref={textBox} mih={height}>
                 {active === 0 && <Text size="md" c="dark" ta="left" mb="md">
                     The <b>National Institutes of Health</b> (NIH) funds crucial health research to address
-                    cancer, diabetes, dementia, and more. NIH funding also boosts the economy, returning &gt;250% of the
-                    value invested.
+                    cancer, diabetes, dementia, and more.
                 </Text>}
+                {active === 0 && <Text size='md' c='dark' ta='left' mb={'md'}>
+                     NIH funding also boosts the economy, returning &gt;250% of the
+                    value invested.
+                    </Text>}
                 {active === 0 && <Text size="md" c="dark" ta="left">
                     The White House has ordered major cuts to NIH funding nationwide, which would <b>take back
                     funds</b> promised to the states.
@@ -49,11 +58,6 @@ function ImpactStatement({close}: { close: () => void }) {
                     </Group>
                 )}
             </Group>
-
-
-            {/*<Button size="md" onClick={() => close()}>*/}
-            {/*    See Impact*/}
-            {/*</Button>*/}
             <Checkbox
                 checked={consent}
                 onChange={(event) => {
