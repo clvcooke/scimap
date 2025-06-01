@@ -62,7 +62,6 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
             }
             size="md"
             closeOnClickOutside={true}
-            withinPortal={false}
         >
             <Stack gap={'sm'}>
 

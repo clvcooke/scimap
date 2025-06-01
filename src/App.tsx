@@ -67,8 +67,10 @@ function App() {
     const takeAction = currentTab === "action";
 
     return <>
-        <Flex direction="column" justify="space-between" align="center"
-              style={{minHeight: '100svh', maxHeight: '100svh', width: '100%', position: 'relative'}}>
+        <Flex 
+        direction="column" justify="space-between" align="center"
+              style={{minHeight: '100svh', maxHeight: '100svh', width: '100%', position: 'relative'}}
+              >
             {showMap &&
                 <div className="Map Container" style={{width: '100%', flex: 1, position: 'relative'}}>
                     <LossMap baseLayer={baseLayer} overlay={overlayLayer}/>
@@ -87,8 +89,7 @@ function App() {
             <div style={{height: "2.7rem"}}>
                 <ActionMenu currentTab={currentTab ?? "map"} setCurrentTab={setCurrentTab} disabledTabs={disabledTabs}/>
             </div>
-        </Flex>
-        <Modal closeOnClickOutside={false} size={"lg"} withinPortal={false} opened={impactOpen}
+            <Modal closeOnClickOutside={false} size={"lg"} opened={impactOpen} zIndex={1050}
                onClose={() => setImpactOpen(false)} withCloseButton={false} centered>
             <ImpactStatement close={() => {
                 trackEvent(
@@ -98,6 +99,8 @@ function App() {
                 setImpactOpen(false)
             }}/>
         </Modal>
+        </Flex>
+        
     </>
 }
 

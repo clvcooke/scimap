@@ -81,7 +81,7 @@ function Advocacy() {
                     <Button rightSection={<IconShare size={16}/>} onClick={() => setShowShare(true)}>Share</Button>
                 </Card.Section>
             </Card>
-            <Modal closeOnClickOutside={true} withinPortal={false} opened={showShare}
+            <Modal title={"Share"} closeOnClickOutside={true} opened={showShare}
                    onClose={() => setShowShare(false)} withCloseButton={false}
                    centered>
                 <SharePage

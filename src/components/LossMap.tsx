@@ -8,7 +8,7 @@ import {MVTLayer} from '@deck.gl/geo-layers';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
 import {interpolateOrRd,} from 'd3-scale-chromatic';
 import {HoverDisplayMode, HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
-import {ActionIcon, Group, Modal, Stack, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Group, Modal, Stack, useMantineTheme, Text} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
 import TitleHeader from "./TitleHeader.tsx";
@@ -582,7 +582,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         </ActionIcon>
                     </Stack>
 
-                    <Modal closeOnClickOutside={true} withinPortal={false} opened={showShare}
+                    <Modal title={<Text size='xl'>Share</Text>} closeOnClickOutside={true} opened={showShare}
                            onClose={() => setShowShare(false)}>
                         <SharePage
                             title={"See national impact of federal health research cuts"}

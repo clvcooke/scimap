@@ -107,7 +107,6 @@ function MapControls({mode, setMode, showGrants, setShowGrants, setShowShare}: M
                     <Drawer
                         opened={drawerOpen}
                         position={"bottom"}
-                        withinPortal={false}
                         onClose={() => setDrawerOpen(false)}
                         title="Map Settings"
                         size="sm"

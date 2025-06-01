@@ -348,7 +348,7 @@ function Quiz({setActiveTab}) {
                     <Button disabled={!canSubmit} onClick={handleSubmit}>Submit</Button>
                 )}
             </Group>
-            <Modal closeOnClickOutside={false} centered withinPortal={false} opened={showShare} onClose={() => {
+            <Modal closeOnClickOutside={false} centered opened={showShare} onClose={() => {
                 setShowShare(false)
                 setActiveTab('map');
             }}

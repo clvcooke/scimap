@@ -88,7 +88,6 @@ export function MapControlsDrawer({opened, onClose, ...props}: MapControlsDrawer
             title="Map Controls"
             padding="md"
             size="sm"
-            withinPortal={false}
         >
             <MapControls {...props}/>
         </Drawer>
