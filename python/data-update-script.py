@@ -3,17 +3,23 @@ import geopandas as gpd
 import json
 import os
 import shutil
-from subprocess import Popen, PIPE
-from datetime import datetime
+from subprocess import Popen
+from datetime import datetime, timezone
+
 import tempfile
+import boto3
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Convert absolute paths to relative paths
 REACT_DATA_DIR = os.path.join(SCRIPT_DIR, "..", "src", "data")
 PROJECT_ROOT = SCRIPT_DIR
 
-GITHUB_PAT = os.getenv("GITHUB_PAT")
-assert GITHUB_PAT is not None, "GITHUB_PAT environment variable must be set"
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+print(AWS_ACCESS_KEY_ID)
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_KEY")
+
+assert AWS_SECRET_ACCESS_KEY is not None
+assert AWS_ACCESS_KEY_ID is not None
 
 INPUT_DIR = os.path.join(PROJECT_ROOT, "inputs")
 FINAL_OUTPUT_DIR = os.path.join(PROJECT_ROOT, "outputs")
@@ -64,20 +70,69 @@ def fetch_latest_data():
     """
     # Create a temporary directory
     temp_dir = tempfile.mkdtemp()
+    output_dir = os.path.join(temp_dir, "output")
+    os.makedirs(output_dir, exist_ok=True)
     print("Getting fresh data...")
-    clone_command = [
-        "git",
-        "clone",
-        "--depth",
-        "1",
-        "--single-branch",
-        "--branch",
-        "main",
-        f"https://{GITHUB_PAT}@github.com/mjharris95/Science-Impacts.git",
-        temp_dir,
+    # Initialize S3 client
+    s3_client = boto3.client('s3',
+                             aws_access_key_id=AWS_ACCESS_KEY_ID,
+                             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+                             region_name='us-east-2')
+    bucket_name = 'weitz-sciimpacts-hhs-pdf'
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    dir_response = s3_client.list_objects_v2(
+        Bucket=bucket_name,
+        Delimiter='/',
+        Prefix=f"{today}"
+    )
+
+    # If no directory for today, try yesterday
+    if 'CommonPrefixes' not in dir_response or not dir_response['CommonPrefixes']:
+        yesterday = (datetime.now(timezone.utc) - pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+        print(f"No data found for today ({today}), trying yesterday ({yesterday})")
+        dir_response = s3_client.list_objects_v2(
+            Bucket=bucket_name,
+            Delimiter='/',
+            Prefix=f"{yesterday}"
+        )
+        if 'CommonPrefixes' not in dir_response or not dir_response['CommonPrefixes']:
+            raise Exception(f"No directories found for today ({today}) or yesterday ({yesterday})")
+
+    # Get the latest directory for today
+    latest_prefix = dir_response['CommonPrefixes'][-1]['Prefix']
+    print(f"Latest prefix: {latest_prefix}")
+
+    files_response = s3_client.list_objects_v2(
+                Bucket=bucket_name,
+                Prefix=latest_prefix
+            )
+
+    print("\nContents of latest directory:")
+    if 'Contents' in files_response:
+        for item in files_response['Contents']:
+            file_name = item['Key'].replace(latest_prefix, '')
+            size_mb = item['Size'] / (1024 * 1024)  # Convert to MB
+            print(f"├── {file_name} ({size_mb:.2f} MB)")
+    else:
+        print("Directory is empty")
+
+
+    files_to_download = [
+        'terminated_points.csv',
+        'NIH_impact_state.csv',
+        'NIH_impact_county.csv',
+        'NIH_impact_cong.csv'
     ]
 
-    process = Popen(clone_command).wait()
+    for file_name in files_to_download:
+        s3_path = f"{latest_prefix}{file_name}"
+        local_path = os.path.join(output_dir, file_name)
+        print(f"Downloading {s3_path}...")
+        try:
+            s3_client.download_file(bucket_name, s3_path, local_path)
+        except s3_client.exceptions.NoSuchKey:
+            raise Exception(f"File {file_name} not found in S3 path: {s3_path}")
+
     print("Data downloaded")
     return temp_dir
 
@@ -194,7 +249,7 @@ def generate_terminated_grants(data_dir):
     terminated_grants_filepath = os.path.join(data_dir, "output", TERM_GRANTS_FILENAME)
     grant_losses = []
     for grant in pd.read_csv(terminated_grants_filepath, encoding="latin-1").to_dict(
-        "records"
+            "records"
     ):
         grant_losses.append(grant)
     with open(TERMINATED_GRANTS_OUTPUT_PATH, "w") as fp:
