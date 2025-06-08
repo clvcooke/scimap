@@ -2,7 +2,7 @@ import {ActionIcon, Container, Flex, Popover, Text, Title, Group} from "@mantine
 import {isMobile} from "react-device-detect";
 import {BaseLayer, formattedCost, formattedJobs, formattedTermCost, formattedTermJobs, Overlay} from "../constants.ts";
 import {IconInfoCircleFilled} from "@tabler/icons-react";
-import {TILE_VERSION_NUMBER} from "../data/tile-version.ts";
+import {FORMATTED_TILE_VERSION} from "../data/tile-version.ts";
 
 const textSize = isMobile ? 'sm' : 'md'
 const basicTextStyle = {
@@ -112,7 +112,8 @@ export function TitleHeader({baseLayer, overlay}: { baseLayer?: BaseLayer, overl
                         </ActionIcon>
                     </Popover.Target>
                     <Popover.Dropdown>
-                        <Text>Data Updated: {TILE_VERSION_NUMBER}</Text>
+                        <Text><span style={{fontWeight: 600}}>Data Last Updated: </span>
+                            {FORMATTED_TILE_VERSION}</Text>
                     </Popover.Dropdown>
                 </Popover>
 
