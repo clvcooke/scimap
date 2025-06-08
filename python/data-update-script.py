@@ -250,7 +250,11 @@ def generate_terminated_grants(data_dir):
     for grant in pd.read_csv(terminated_grants_filepath, encoding="latin-1").to_dict(
             "records"
     ):
-        grant_losses.append(grant)
+        if isinstance(grant["org_name"], str):
+            grant_losses.append(grant)
+        else:
+            print("Bad grant values...")
+            print(grant)
     with open(TERMINATED_GRANTS_OUTPUT_PATH, "w") as fp:
         json.dump({"GRANT_LOSSES": grant_losses}, fp)
 
