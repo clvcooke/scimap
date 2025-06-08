@@ -28,17 +28,32 @@ TERMINATED_GRANTS_OUTPUT_PATH = os.path.join(REACT_DATA_DIR, "terminated_grants.
 
 COUNTY_GEO_FILE = os.path.join(INPUT_DIR, "merged_data_counties_CLIP_Compress.geojson")
 STATE_GEO_FILE = os.path.join(INPUT_DIR, "merged_data_states_CLIP.geojson")
-CONGRESSIONAL_GEO_FILE = os.path.join(INPUT_DIR, "CongDist_shp/cb_2022_us_cd118_500k.shp")
+CONGRESSIONAL_GEO_FILE = os.path.join(
+    INPUT_DIR, "CongDist_shp/cb_2022_us_cd118_500k.shp"
+)
 
-COUNTY_OUTPUT_FILE = os.path.join(FINAL_OUTPUT_DIR, "merged_data_counties_total.geojson")
+COUNTY_OUTPUT_FILE = os.path.join(
+    FINAL_OUTPUT_DIR, "merged_data_counties_total.geojson"
+)
 STATE_OUTPUT_FILE = os.path.join(FINAL_OUTPUT_DIR, "merged_data_states_total.geojson")
-CONGRESSIONAL_OUTPUT_FILE = os.path.join(FINAL_OUTPUT_DIR, "merged_data_congs_total.geojson")
+CONGRESSIONAL_OUTPUT_FILE = os.path.join(
+    FINAL_OUTPUT_DIR, "merged_data_congs_total.geojson"
+)
 
 COLUMNS_TO_DROP_COUNTY = [
-    "combined_loss_noself", "terminated_loss_log", "terminated_loss_noself_log",
-    "terminated_econ_loss_log", "terminated_job_loss_log", "terminated_econ_loss_noself_log",
-    "terminated_job_loss_noself_log", "IDC_loss_log", "IDC_econ_loss_log", "IDC_job_loss_log",
-    "grant_funds_log", "grant_funds_econ_log", "combined_job_loss_log"
+    "combined_loss_noself",
+    "terminated_loss_log",
+    "terminated_loss_noself_log",
+    "terminated_econ_loss_log",
+    "terminated_job_loss_log",
+    "terminated_econ_loss_noself_log",
+    "terminated_job_loss_noself_log",
+    "IDC_loss_log",
+    "IDC_econ_loss_log",
+    "IDC_job_loss_log",
+    "grant_funds_log",
+    "grant_funds_econ_log",
+    "combined_job_loss_log",
 ]
 
 
@@ -51,12 +66,15 @@ def fetch_latest_data():
     temp_dir = tempfile.mkdtemp()
     print("Getting fresh data...")
     clone_command = [
-        'git', 'clone',
-        '--depth', '1',
-        '--single-branch',
-        '--branch', 'main',
-        f'https://{GITHUB_PAT}@github.com/mjharris95/Science-Impacts.git',
-        temp_dir
+        "git",
+        "clone",
+        "--depth",
+        "1",
+        "--single-branch",
+        "--branch",
+        "main",
+        f"https://{GITHUB_PAT}@github.com/mjharris95/Science-Impacts.git",
+        temp_dir,
     ]
 
     process = Popen(clone_command).wait()
@@ -64,10 +82,10 @@ def fetch_latest_data():
     return temp_dir
 
 
-def load_data(file_path, file_type='csv', encoding='latin-1', crs="epsg:4326"):
-    if file_type == 'csv':
+def load_data(file_path, file_type="csv", encoding="latin-1", crs="epsg:4326"):
+    if file_type == "csv":
         return pd.read_csv(file_path, encoding=encoding)
-    elif file_type == 'geo':
+    elif file_type == "geo":
         gdf = gpd.read_file(file_path)
         if gdf.crs != crs:
             gdf = gdf.to_crs(crs)
@@ -76,28 +94,25 @@ def load_data(file_path, file_type='csv', encoding='latin-1', crs="epsg:4326"):
 
 
 def merge_data(data_df, geo_df, on, columns):
-    return pd.merge(data_df, geo_df[columns], on=on, how='left')
+    return pd.merge(data_df, geo_df[columns], on=on, how="left")
 
 
 def create_geojson(gdf, columns_to_drop=None):
     if columns_to_drop is not None:
-        gdf = gdf.drop(columns=columns_to_drop, errors='ignore')
+        gdf = gdf.drop(columns=columns_to_drop, errors="ignore")
 
     features = []
     for _, row in gdf.iterrows():
-        if pd.notna(row['geometry']):
-            geometry = gpd.GeoSeries([row['geometry']]).__geo_interface__['features'][0]['geometry']
-            properties = row.drop('geometry').to_dict()
-            features.append({
-                "type": "Feature",
-                "geometry": geometry,
-                "properties": properties
-            })
+        if pd.notna(row["geometry"]):
+            geometry = gpd.GeoSeries([row["geometry"]]).__geo_interface__["features"][
+                0
+            ]["geometry"]
+            properties = row.drop("geometry").to_dict()
+            features.append(
+                {"type": "Feature", "geometry": geometry, "properties": properties}
+            )
 
-    return {
-        "type": "FeatureCollection",
-        "features": features
-    }
+    return {"type": "FeatureCollection", "features": features}
 
 
 def save_geojson(geojson_data, file_path):
@@ -109,10 +124,12 @@ def save_geojson(geojson_data, file_path):
 def process_county_data(data_folder):
     county_total_file = os.path.join(data_folder, "output", COUNTY_TOTAL_FILENAME)
     df_total_county = load_data(county_total_file)
-    counties_gdf = load_data(COUNTY_GEO_FILE, file_type='geo')
+    counties_gdf = load_data(COUNTY_GEO_FILE, file_type="geo")
 
-    merged_gdf = merge_data(df_total_county, counties_gdf, on='FIPS', columns=['FIPS', 'geometry'])
-    merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry='geometry')
+    merged_gdf = merge_data(
+        df_total_county, counties_gdf, on="FIPS", columns=["FIPS", "geometry"]
+    )
+    merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry="geometry")
 
     geojson_data = create_geojson(merged_gdf, columns_to_drop=COLUMNS_TO_DROP_COUNTY)
     save_geojson(geojson_data, COUNTY_OUTPUT_FILE)
@@ -121,10 +138,12 @@ def process_county_data(data_folder):
 def process_state_data(data_folder):
     state_total_file = os.path.join(data_folder, "output", STATE_TOTAL_FILENAME)
     df_total_state = load_data(state_total_file)
-    states_gdf = load_data(STATE_GEO_FILE, file_type='geo')
+    states_gdf = load_data(STATE_GEO_FILE, file_type="geo")
 
-    merged_gdf = merge_data(df_total_state, states_gdf, on='state_code', columns=['state_code', 'geometry'])
-    merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry='geometry')
+    merged_gdf = merge_data(
+        df_total_state, states_gdf, on="state_code", columns=["state_code", "geometry"]
+    )
+    merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry="geometry")
 
     geojson_data = create_geojson(merged_gdf)
     save_geojson(geojson_data, STATE_OUTPUT_FILE)
@@ -132,13 +151,17 @@ def process_state_data(data_folder):
 
 
 def process_congressional_data(data_folder):
-    congressional_total_file = os.path.join(data_folder, "output", CONGRESSIONAL_TOTAL_FILENAME)
+    congressional_total_file = os.path.join(
+        data_folder, "output", CONGRESSIONAL_TOTAL_FILENAME
+    )
     df_total_cong = load_data(congressional_total_file)
-    congs_gdf = load_data(CONGRESSIONAL_GEO_FILE, file_type='geo')
-    congs_gdf['GEOID'] = congs_gdf['GEOID'].astype('int64')
+    congs_gdf = load_data(CONGRESSIONAL_GEO_FILE, file_type="geo")
+    congs_gdf["GEOID"] = congs_gdf["GEOID"].astype("int64")
 
-    merged_gdf = merge_data(df_total_cong, congs_gdf, on='GEOID', columns=['GEOID', 'geometry'])
-    merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry='geometry')
+    merged_gdf = merge_data(
+        df_total_cong, congs_gdf, on="GEOID", columns=["GEOID", "geometry"]
+    )
+    merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry="geometry")
 
     geojson_data = create_geojson(merged_gdf)
     save_geojson(geojson_data, CONGRESSIONAL_OUTPUT_FILE)
@@ -170,9 +193,9 @@ def generate_state_totals(state_dataframe):
 def generate_terminated_grants(data_dir):
     terminated_grants_filepath = os.path.join(data_dir, "output", TERM_GRANTS_FILENAME)
     grant_losses = []
-    for grant in pd.read_csv(
-            terminated_grants_filepath,
-            encoding='latin-1').to_dict("records"):
+    for grant in pd.read_csv(terminated_grants_filepath, encoding="latin-1").to_dict(
+        "records"
+    ):
         grant_losses.append(grant)
     with open(TERMINATED_GRANTS_OUTPUT_PATH, "w") as fp:
         json.dump({"GRANT_LOSSES": grant_losses}, fp)
