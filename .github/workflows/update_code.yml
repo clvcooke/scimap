@@ -1,5 +1,7 @@
 name: Update Data
 on:
+  schedule:
+    - cron: '0 23 * * *'
   workflow_dispatch:
 
 permissions:
@@ -23,7 +25,7 @@ jobs:
         shell: bash -l {0}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_ACCESS_KEY_SECRET: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
         run: |
           python python/data-update-script.py
 
