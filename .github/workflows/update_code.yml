@@ -18,6 +18,8 @@ jobs:
 
       - name: Run data update script
         shell: bash -l {0}
+        env:
+          GITHUB_PAT: ${{ secrets.PAT_GITHUB_TOKEN }}
         run: |
           python python/data-update-script.py
 
