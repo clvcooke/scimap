@@ -10,7 +10,6 @@ export const ANALYTICS_ACTIONS = {
 }
 
 
-
 export const NUMBER_FORMATTER = new Intl.NumberFormat('en-US', {
     notation: 'compact',
     compactDisplay: 'short'

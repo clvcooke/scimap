@@ -1,0 +1,30 @@
+name: Update Data
+on:
+  workflow_dispatch:
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: scimap
+          environment-file: conda_env.yml
+          auto-activate-base: false
+
+      - name: Run data update script
+        shell: bash -l {0}
+        run: |
+          python python/data-update-script.py
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add src/data/*.json
+          git diff --staged --quiet || git commit -m "Update data files $(date +'%Y-%m-%d')"
+          git push

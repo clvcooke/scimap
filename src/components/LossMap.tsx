@@ -22,24 +22,23 @@ import GrantsOverlay from "./GrantsOverlay.tsx";
 import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
 import {MapRef} from "react-map-gl/mapbox-legacy";
 import MapControls from "./MapControls.tsx";
+import {TILE_VERSION_NUMBER} from "../data/tile-version.ts";
 // import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 const ALPHA_COLOR = 200;
-const TILE_VERSION = '16'
-const TOTAL_TILE_VERSION = '21';
 const domain = "https://data.scienceimpacts.org"
 
-const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const idcTilesStates = `${domain}/tiles_states_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const idcTilesDistricts = `${domain}/tiles_districts_idc_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
+const idcTilesStates = `${domain}/tiles_states_idc_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
+const idcTilesDistricts = `${domain}/tiles_districts_idc_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
 
-const grantTilesCounties = `${domain}/tiles_counties_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const grantTilesStates = `${domain}/tiles_states_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const grantTilesDistricts = `${domain}/tiles_districts_term_v${TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const grantTilesCounties = `${domain}/tiles_counties_term_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
+const grantTilesStates = `${domain}/tiles_states_term_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
+const grantTilesDistricts = `${domain}/tiles_districts_term_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
 
-const totalTilesCounties = `${domain}/tiles_counties_total_v${TOTAL_TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const totalTilesStates = `${domain}/tiles_states_total_v${TOTAL_TILE_VERSION}/{z}/{x}/{y}.pbf`;
-const totalTilesDistricts = `${domain}/tiles_districts_total_v${TOTAL_TILE_VERSION}/{z}/{x}/{y}.pbf`;
+const totalTilesCounties = `${domain}/tiles_counties_total_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
+const totalTilesStates = `${domain}/tiles_states_total_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
+const totalTilesDistricts = `${domain}/tiles_districts_total_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
 
 const TILE_LINKS = {
     county: {
