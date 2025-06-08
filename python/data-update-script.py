@@ -15,7 +15,6 @@ REACT_DATA_DIR = os.path.join(SCRIPT_DIR, "..", "src", "data")
 PROJECT_ROOT = SCRIPT_DIR
 
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-print(AWS_ACCESS_KEY_ID)
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_KEY")
 
 assert AWS_SECRET_ACCESS_KEY is not None
