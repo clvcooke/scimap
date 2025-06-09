@@ -30,15 +30,15 @@ const domain = "https://data.scienceimpacts.org"
 
 const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
 const idcTilesStates = `${domain}/tiles_states_idc_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
-const idcTilesDistricts = `${domain}/tiles_districts_idc_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
+const idcTilesDistricts = `${domain}/tiles_congs_idc_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
 
 const grantTilesCounties = `${domain}/tiles_counties_term_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
 const grantTilesStates = `${domain}/tiles_states_term_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
-const grantTilesDistricts = `${domain}/tiles_districts_term_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
+const grantTilesDistricts = `${domain}/tiles_congs_term_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
 
 const totalTilesCounties = `${domain}/tiles_counties_total_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
 const totalTilesStates = `${domain}/tiles_states_total_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
-const totalTilesDistricts = `${domain}/tiles_districts_total_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
+const totalTilesDistricts = `${domain}/tiles_congs_total_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
 
 const TILE_LINKS = {
     county: {
