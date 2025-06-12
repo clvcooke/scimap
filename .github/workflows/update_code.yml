@@ -31,12 +31,11 @@ jobs:
           RCLONE_ENDPOINT: https://17067e7373bbfee2043fe5186d66aeb9.r2.cloudflarestorage.com
           RCLONE_ACL: private
         run: |
+          chmod +x scripts/rclone_setup.sh
+          # Run the script to generate ~/.config/rclone/rclone.conf
+          ./scripts/rclone_setup.sh
           sudo -v; curl https://rclone.org/install.sh | sudo bash
           sudo apt install tippecanoe -y
-          chmod +x scripts/setup_rclone.sh
-          # Run the script to generate ~/.config/rclone/rclone.conf
-          scripts/setup_rclone.sh
-
 
       - name: Run data update script
         shell: bash -l {0}
