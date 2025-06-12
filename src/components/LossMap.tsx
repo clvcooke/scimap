@@ -22,11 +22,12 @@ import GrantsOverlay from "./GrantsOverlay.tsx";
 import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
 import {MapRef} from "react-map-gl/mapbox-legacy";
 import MapControls from "./MapControls.tsx";
-import {TILE_VERSION_NUMBER} from "../data/tile-version.ts";
+// import {TILE_VERSION_NUMBER} from "../data/tile-version.ts";
 // import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 const ALPHA_COLOR = 200;
 const domain = "https://data.scienceimpacts.org"
+const TILE_VERSION_NUMBER = "2025-06-11";
 
 const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
 const idcTilesStates = `${domain}/tiles_states_idc_v${TILE_VERSION_NUMBER}/{z}/{x}/{y}.pbf`;
