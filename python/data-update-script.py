@@ -278,9 +278,9 @@ if __name__ == "__main__":
     generate_terminated_grants(temp_data_dir)
 
     # print("Tiling and Uploading")
-    # tile_and_upload(date_version, "counties")
-    # tile_and_upload(date_version, "states")
-    # tile_and_upload(date_version, "congs")
+    tile_and_upload(date_version, "counties")
+    tile_and_upload(date_version, "states")
+    tile_and_upload(date_version, "congs")
     generate_tile_version_file(date_version)
 
     shutil.rmtree(temp_data_dir)

@@ -21,6 +21,23 @@ jobs:
           environment-file: python/conda_env.yml
           auto-activate-base: false
 
+      - name: Install system dependencies
+        shell: bash -l {0}
+        env:
+          RCLONE_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_SECRET_ACCESS_KEY }}
+          RCLONE_TYPE: s3
+          RCLONE_PROVIDER: AWS
+          RCLONE_ACCESS_KEY_ID: 050899664b571d6b71e8c7ada92c3e11
+          RCLONE_ENDPOINT: https://17067e7373bbfee2043fe5186d66aeb9.r2.cloudflarestorage.com
+          RCLONE_ACL: private
+        run: |
+          sudo -v; curl https://rclone.org/install.sh | sudo bash
+          sudo apt install tippecanoe -y
+          chmod +x scripts/setup_rclone.sh
+          # Run the script to generate ~/.config/rclone/rclone.conf
+          scripts/setup_rclone.sh
+
+
       - name: Run data update script
         shell: bash -l {0}
         env:
