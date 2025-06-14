@@ -3,7 +3,7 @@ import geopandas as gpd
 import json
 import os
 import shutil
-from subprocess import Popen
+import subprocess
 from datetime import datetime, timezone
 
 import tempfile
@@ -227,12 +227,12 @@ def tile_and_upload(version, area: str):
     os.makedirs(output_folder, exist_ok=True)
     print(f"Processing tiles: {area}")
     process_command = f"tippecanoe -z7 -e tiles_{area}_total_v{version} --drop-densest-as-needed --no-tile-size-limit --no-tile-compression {output_folder}/merged_data_{area}_total.geojson"
-    process_response_code = Popen(process_command, shell=True).wait()
+    process_response_code = subprocess.run(process_command, shell=True).returncode
     print(f"Completed upload process with response code of: {process_response_code}")
 
     print(f"Uploading tiles: {area}")
     upload_command = f"rclone copy tiles_{area}_total_v{version}/ r2:scimap-data/tiles_{area}_total_v{version}/ --transfers 32"
-    upload_response_code = Popen(upload_command, shell=True).wait()
+    upload_response_code = subprocess.run(upload_command, shell=True).returncode
     print(f"Completed upload process with response code of: {upload_response_code}")
 
 
