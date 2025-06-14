@@ -84,7 +84,7 @@ def fetch_latest_data():
         Delimiter='/',
         Prefix=f"{today}"
     )
-
+    target_date = today
     # If no directory for today, try yesterday
     if 'CommonPrefixes' not in dir_response or not dir_response['CommonPrefixes']:
         yesterday = (datetime.now(timezone.utc) - pd.Timedelta(days=1)).strftime('%Y-%m-%d')
@@ -94,6 +94,7 @@ def fetch_latest_data():
             Delimiter='/',
             Prefix=f"{yesterday}"
         )
+        target_date = yesterday
         if 'CommonPrefixes' not in dir_response or not dir_response['CommonPrefixes']:
             raise Exception(f"No directories found for today ({today}) or yesterday ({yesterday})")
 
@@ -133,7 +134,7 @@ def fetch_latest_data():
             raise Exception(f"File {file_name} not found in S3 path: {s3_path}")
 
     print("Data downloaded")
-    return temp_dir
+    return temp_dir, target_date
 
 
 def load_data(file_path, file_type="csv", encoding="latin-1", crs="epsg:4326"):
@@ -224,10 +225,15 @@ def process_congressional_data(data_folder):
 def tile_and_upload(version, area: str):
     output_folder = "outputs"
     os.makedirs(output_folder, exist_ok=True)
+    print(f"Processing tiles: {area}")
     process_command = f"tippecanoe -z7 -e tiles_{area}_total_v{version} --drop-densest-as-needed --no-tile-size-limit --no-tile-compression {output_folder}/merged_data_{area}_total.geojson"
+    process_response_code = Popen(process_command, shell=True).wait()
+    print(f"Completed upload process with response code of: {process_response_code}")
+
+    print(f"Uploading tiles: {area}")
     upload_command = f"rclone copy tiles_{area}_total_v{version}/ r2:scimap-data/tiles_{area}_total_v{version}/ --transfers 32"
-    Popen(process_command, shell=True).wait()
-    Popen(upload_command, shell=True).wait()
+    upload_response_code = Popen(upload_command, shell=True).wait()
+    print(f"Completed upload process with response code of: {upload_response_code}")
 
 
 def generate_state_totals(state_dataframe):
@@ -265,8 +271,7 @@ def generate_tile_version_file(data_version):
 
 
 if __name__ == "__main__":
-    temp_data_dir = fetch_latest_data()
-    date_version = datetime.now().strftime("%Y-%m-%d")
+    temp_data_dir, date_version = fetch_latest_data()
 
     print("Processing raw data into GeoJSONs")
     process_county_data(temp_data_dir)
@@ -277,7 +282,7 @@ if __name__ == "__main__":
     generate_state_totals(state_total_dataframe)
     generate_terminated_grants(temp_data_dir)
 
-    # print("Tiling and Uploading")
+    print("Tiling and Uploading")
     tile_and_upload(date_version, "counties")
     tile_and_upload(date_version, "states")
     tile_and_upload(date_version, "congs")
