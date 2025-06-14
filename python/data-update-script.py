@@ -229,10 +229,13 @@ def tile_and_upload(version, area: str):
     process_command = f"tippecanoe -z7 -e tiles_{area}_total_v{version} --drop-densest-as-needed --no-tile-size-limit --no-tile-compression {output_folder}/merged_data_{area}_total.geojson"
     process_response_code = subprocess.run(process_command, shell=True).returncode
     print(f"Completed upload process with response code of: {process_response_code}")
-
+    if process_response_code != 0:
+        raise RuntimeError("Unable to process tiles")
     print(f"Uploading tiles: {area}")
     upload_command = f"rclone copy tiles_{area}_total_v{version}/ r2:scimap-data/tiles_{area}_total_v{version}/ --transfers 32"
     upload_response_code = subprocess.run(upload_command, shell=True).returncode
+    if upload_response_code != 0:
+        raise RuntimeError("Unable to upload tiles")
     print(f"Completed upload process with response code of: {upload_response_code}")
 
 
