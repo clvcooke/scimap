@@ -223,12 +223,18 @@ def process_congressional_data(data_folder):
 
 
 def tile_and_upload(version, area: str):
-    output_folder = "outputs"
-    os.makedirs(output_folder, exist_ok=True)
     print(f"Processing tiles: {area}")
-    process_command = f"tippecanoe -z7 -e tiles_{area}_total_v{version} --drop-densest-as-needed --no-tile-size-limit --no-tile-compression {output_folder}/merged_data_{area}_total.geojson"
+    if area == "congs":
+        geojson_path = CONGRESSIONAL_OUTPUT_FILE
+    elif area == "states":
+        geojson_path = STATE_OUTPUT_FILE
+    elif area == "counties":
+        geojson_path = COUNTY_OUTPUT_FILE
+    else:
+        raise RuntimeError("Invalid area")
+    process_command = f"tippecanoe -z7 -e tiles_{area}_total_v{version} --drop-densest-as-needed --no-tile-size-limit --no-tile-compression {geojson_path}"
     process_response_code = subprocess.run(process_command, shell=True).returncode
-    print(f"Completed upload process with response code of: {process_response_code}")
+    print(f"Completed processing with response code of: {process_response_code}")
     if process_response_code != 0:
         raise RuntimeError("Unable to process tiles")
     print(f"Uploading tiles: {area}")
