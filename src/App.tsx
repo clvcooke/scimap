@@ -79,7 +79,6 @@ function App() {
                     minWidth: '100%',
                     height: 0,
                     minHeight: '100%',
-                    overflow: 'hidden'
                 }}
                 scrolling='no'
                 frameBorder={"0"}
