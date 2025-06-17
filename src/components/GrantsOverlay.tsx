@@ -17,13 +17,6 @@ interface GrantsOverlayProps {
     onClose: () => void;
 }
 
-// Function to title case a string
-const titleCase = (str: string) => {
-    return str.replace(/\w\S*/g, (txt) => {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-};
-
 
 function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
 
@@ -81,7 +74,7 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
 
                         return (
                             <Card key={orgName} shadow="sm" padding="lg" radius="md" withBorder>
-                                <Title order={4}>{titleCase(orgName)}</Title>
+                                <Title order={4}>{orgName}</Title>
                                 <Flex
                                     mt="md"
                                     direction="column" // Stack on smaller screens
