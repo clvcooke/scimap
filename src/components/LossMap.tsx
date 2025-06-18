@@ -1,7 +1,7 @@
-import {MouseEvent, useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {MouseEvent, useCallback, useEffect, useMemo, useState} from 'react'
 import {IconGps, IconZoomIn, IconZoomOut} from '@tabler/icons-react';
 
-import {Map} from 'react-map-gl/maplibre';
+import {Map, AttributionControl} from 'react-map-gl/maplibre';
 import DeckGL from '@deck.gl/react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {MVTLayer} from '@deck.gl/geo-layers';
@@ -20,7 +20,6 @@ import {isMobile} from "react-device-detect";
 import IconClusterLayer from "../layers/icon-cluster-layer.ts";
 import GrantsOverlay from "./GrantsOverlay.tsx";
 import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
-import {MapRef} from "react-map-gl/mapbox-legacy";
 import MapControls from "./MapControls.tsx";
 import {TILE_VERSION_NUMBER} from "../data/tile-version.ts";
 // import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
@@ -59,6 +58,7 @@ const TILE_LINKS = {
     }
 }
 
+const ATTRIBUTION = "SCIMaP © CC BY 4.0"
 
 // const COUNTY_DOMAIN: [number, number] = [0,    8_886110.52051];
 const COUNTY_DOMAIN: [number, number] = [0, 25_000_000];
@@ -400,79 +400,6 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
     }
 
     const mapWidth = '100vw';
-    const labelsMapRef = useRef<MapRef>(null);
-    const [labelsOnlyStyle, setLabelsOnlyStyle] = useState(null);
-    useEffect(() => {
-        async function fetchAndModifyStyle() {
-            try {
-                // Fetch the original style
-                const response = await fetch("https://basemaps.cartocdn.com/gl/positron-gl-style/style.json");
-                const originalStyle = await response.json();
-
-                // Create a modified style with only label layers
-                const labelsStyle = {
-                    ...originalStyle,
-                    // @ts-expect-error: error
-                    layers: originalStyle.layers.map(layer => {
-                        // Keep only label layers visible
-                        if (layer.id.includes('label') || layer.id.includes('place') || layer.id.includes('poi')) {
-                            return layer;
-                        }
-                        // Hide all other layers by setting visibility to 'none'
-                        return {
-                            ...layer,
-                            layout: {
-                                ...layer.layout,
-                                visibility: 'none'
-                            }
-                        };
-                    })
-                };
-
-                setLabelsOnlyStyle(labelsStyle);
-            } catch (error) {
-                console.error("Error fetching or modifying map style:", error);
-            }
-        }
-
-        fetchAndModifyStyle();
-    }, []);
-
-
-    // Filter map layers to show only labels after map loads
-    useEffect(() => {
-        const labelsMap = labelsMapRef.current;
-        if (!labelsMap || !labelsMap.getMap) return;
-
-        const map = labelsMap.getMap();
-
-        // Wait for the map to load
-        if (!map.isStyleLoaded()) {
-            map.once('style.load', setupLabelLayers);
-        } else {
-            setupLabelLayers();
-        }
-
-        function setupLabelLayers() {
-            // Get all style layers
-            const layers = map.getStyle().layers;
-
-            // Hide all non-label layers
-            // @ts-expect-error: layer is untyped
-            layers.forEach(layer => {
-                const { id } = layer;
-                // Keep only label, text, symbol, place, or poi layers
-                if (!(id.includes('label') ||
-                    id.includes('text') ||
-                    id.includes('place') ||
-                    id.includes('poi') ||
-                    layer.type === 'symbol')) {
-                    map.setLayoutProperty(id, 'visibility', 'none');
-                }
-            });
-        }
-    }, []);
-
 
     return (
         <Group h={"100%"} w={"100%"} preventGrowOverflow={true} gap={0}>
@@ -527,13 +454,12 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         <TitleHeader
                             baseLayer={baseLayer} overlay={overlay}></TitleHeader>
                     </div>
-                    <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"/>
-                    {labelsOnlyStyle && <Map
-                        {...viewState}
-                        interactive={false}
-                        mapStyle={labelsOnlyStyle}
+                    <Map
+                        attributionControl={false}
+                        mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json">
+                        <AttributionControl customAttribution={ATTRIBUTION} />
 
-                    />}
+                    </Map>
 
                     {hoverInfo && <HoverInfoComponent layer={backgroundLayer} mode={mode} hoverInfo={hoverInfo}
                                                       showJobs={mode !== 'county'} displayMode={hoverInfoMode}/>}
