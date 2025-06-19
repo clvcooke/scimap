@@ -12,6 +12,7 @@ import Advocacy from "./components/Advocacy.tsx";
 import Quiz from "./components/Quiz.tsx";
 import {ANALYTICS_ACTIONS, BaseLayer, Overlay} from "./constants.ts";
 import {initializeGA, initializePostHog, trackEvent} from "./utils/analytics.ts";
+import FS26Map from "./components/FS26Map.tsx";
 
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
     const showLearn = currentTab === "learn";
     const showAbout = currentTab === "about";
     const takeAction = currentTab === "action";
+    const showBudget = currentTab === "budget";
 
     return <>
         <Flex 
@@ -76,7 +78,12 @@ function App() {
                     <LossMap baseLayer={baseLayer} overlay={overlayLayer}/>
                 </div>
             }
-            {!showMap && <ScrollArea
+            {showBudget &&
+                <div className="Map Container" style={{width: '100%', flex: 1, position: 'relative'}}>
+                    <FS26Map baseLayer={baseLayer} overlay={overlayLayer}/>
+                </div>
+            }
+            {!showMap && !showBudget && <ScrollArea
                 // style={{flex: 1}}
                 style={{height: "calc(100svh - 3rem)"}}
             >

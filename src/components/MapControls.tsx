@@ -13,8 +13,8 @@ import {useState} from "react";
 interface MapControlsProps {
     mode: "county" | "districts" | "state" | "";
     setMode: (mode: "county" | "districts" | "state") => void;
-    showGrants: boolean;
-    setShowGrants: (show: boolean) => void;
+    showGrants?: boolean;
+    setShowGrants?: (show: boolean) => void;
     setShowShare: (show: boolean) => void;
 
 }
@@ -59,15 +59,15 @@ function MapControls({mode, setMode, showGrants, setShowGrants, setShowShare}: M
                     'House Districts',
                 ]}
             />
-            <Switch
+            {setShowGrants && <Switch
                 label={<Group gap={'xs'} wrap={'nowrap'} align={'center'}><span>Terminated Grants</span>
                     {showGrants && <IconMapPinFilled color={'#0073ff'} size={'1rem'}/>}
                     {!showGrants && <IconMapPinOff color={'#0073ff'} size={'1rem'}/>}
-            </Group>}
+                </Group>}
                 checked={showGrants}
                 size={'xs'}
                 onChange={(event) => setShowGrants(event.currentTarget.checked)}
-            />
+            />}
 
         </Stack>
     );

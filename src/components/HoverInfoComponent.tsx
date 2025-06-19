@@ -34,6 +34,26 @@ type BaseCombinedTile = {
     IDC_job_loss: number;
 }
 
+type BaseBudgetTile = {
+    state: string;
+    state_code: string;
+    budg_NIH_cuts: number;
+    budg_NIH_cuts_econ_loss: number;
+    budg_NIH_cuts_job_loss: number;
+}
+
+export type CountyBudgetTileProperties = BaseBudgetTile & {
+    FIPS: number;
+    county: string;
+}
+
+export type StateBudgetTileProperties = BaseBudgetTile;
+export type DistrictBudgetTileProperties = BaseBudgetTile & {
+    GEOID: number;
+    rep_name: string;
+    pol_party: string;
+};
+
 export type CountyIDCTileProperties = BaseIDCTile & {
     FIPS: number;
     county: string;
@@ -96,7 +116,7 @@ type DistrictTile = DistrictCombinedTileProperties | DistrictGrantTileProperties
 
 
 export type HoverInfo = {
-    properties: IDCTileProperties | GrantTileProperties | CombinedTileProperties;
+    properties: IDCTileProperties | GrantTileProperties | CombinedTileProperties | BaseBudgetTile;
     x: number;
     y: number;
 }
@@ -104,15 +124,14 @@ export type HoverInfo = {
 export enum HoverDisplayMode {
     IDC_GRANTS,
     TOTAL,
-    TERM
-
-
+    TERM,
+    BUDGET,
 }
 
 type Props = {
     hoverInfo: HoverInfo | null;
     mode: "county" | "state" | 'districts' | "";
-    layer: "idc" | "grant" | "total";
+    layer: "idc" | "grant" | "total" | 'budget';
     showJobs: boolean;
     displayMode?: HoverDisplayMode | null;
 };
@@ -181,6 +200,10 @@ function generateDefaultHover({
         const tileProperties = hoverInfo.properties as CombinedTileProperties;
         econ_loss = tileProperties.combined_econ_loss;
         jobs_loss = tileProperties.combined_job_loss;
+    } else if (layer === 'budget') {
+        const tileProperties = hoverInfo.properties as BaseBudgetTile;
+        econ_loss = tileProperties.budg_NIH_cuts_econ_loss;
+        jobs_loss = tileProperties.budg_NIH_cuts_job_loss;
     } else {
         const tileProperties = hoverInfo.properties as GrantTileProperties;
         econ_loss = tileProperties.terminated_econ_loss;
