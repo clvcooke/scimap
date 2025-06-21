@@ -1,9 +1,10 @@
-import {Card, Text, Flex} from '@mantine/core';
+import {Card, Text, Flex, Stack} from '@mantine/core';
 import {JSX} from "react";
 import {NUMBER_FORMATTER} from "../constants.ts";
 
 type BaseIDCTile = {
     state: string;
+    state_code: string;
     grant_funds: number;
     IDC_loss: number;
     econ_loss: number;
@@ -40,6 +41,9 @@ type BaseBudgetTile = {
     budg_NIH_cuts: number;
     budg_NIH_cuts_econ_loss: number;
     budg_NIH_cuts_job_loss: number;
+    budg_NIA_cuts_econ_loss: number;
+    budg_NCI_cuts_econ_loss: number;
+    budg_NIAID_cuts_econ_loss: number;
 }
 
 export type CountyBudgetTileProperties = BaseBudgetTile & {
@@ -52,6 +56,7 @@ export type DistrictBudgetTileProperties = BaseBudgetTile & {
     GEOID: number;
     rep_name: string;
     pol_party: string;
+    CD118FP: string;
 };
 
 export type CountyIDCTileProperties = BaseIDCTile & {
@@ -78,18 +83,21 @@ export type DistrictIDCTileProperties = BaseIDCTile & {
     GEOID: number;
     rep_name: string;
     pol_party: string;
+    CD118FP: string;
 }
 
 export type DistrictGrantTileProperties = BaseGrantTile & {
     GEOID: number;
     rep_name: string;
     pol_party: string;
+    CD118FP: string;
 }
 
 export type DistrictCombinedTileProperties = BaseCombinedTile & {
     GEOID: number;
     rep_name: string;
     pol_party: string;
+    CD118FP: string;
 }
 
 export type StateGrantTileProperties = BaseGrantTile;
@@ -112,7 +120,11 @@ type CombinedTileProperties =
     | StateCombinedTileProperties;
 
 type CountyTile = CountyGrantTileProperties | CountyIDCTileProperties | CountyCombinedTileProperties;
-type DistrictTile = DistrictCombinedTileProperties | DistrictGrantTileProperties | DistrictIDCTileProperties;
+type DistrictTile =
+    DistrictCombinedTileProperties
+    | DistrictGrantTileProperties
+    | DistrictIDCTileProperties
+    | DistrictBudgetTileProperties;
 
 
 export type HoverInfo = {
@@ -141,7 +153,7 @@ type HoverContentProps = Props & {
     county: string | null;
     state: string;
     repName: string | null;
-    regionIndicator: string;
+    district: string | null;
 }
 
 function processRepName(repName: string, party: string): string {
@@ -175,7 +187,7 @@ function generateJobLossString(jobLoss: number) {
     if (jobLoss < 10) {
         return "<10"
     } else {
-        return `${Math.round(jobLoss)}`;
+        return `${NUMBER_FORMATTER.format(jobLoss)}`;
     }
 }
 
@@ -187,11 +199,14 @@ function generateDefaultHover({
                                   state,
                                   county,
                                   repName,
-                                  regionIndicator
+                                  district
                               }: HoverContentProps) {
     let econ_loss: number;
     let jobs_loss: number;
-
+    let aging_loss: string | undefined = undefined;
+    let cancer_loss: string | undefined = undefined;
+    let infect_loss: string | undefined = undefined;
+    let econ_loss_string = "Economic Loss"
     if (layer === "idc") {
         const tileProperties = hoverInfo.properties as IDCTileProperties;
         econ_loss = tileProperties.econ_loss;
@@ -204,6 +219,11 @@ function generateDefaultHover({
         const tileProperties = hoverInfo.properties as BaseBudgetTile;
         econ_loss = tileProperties.budg_NIH_cuts_econ_loss;
         jobs_loss = tileProperties.budg_NIH_cuts_job_loss;
+        aging_loss = generateEconLossString(tileProperties.budg_NIA_cuts_econ_loss);
+        cancer_loss = generateEconLossString(tileProperties.budg_NCI_cuts_econ_loss);
+        infect_loss = generateEconLossString(tileProperties.budg_NIAID_cuts_econ_loss);
+        econ_loss_string = "Total Economic Loss"
+        showJobs = true;
     } else {
         const tileProperties = hoverInfo.properties as GrantTileProperties;
         econ_loss = tileProperties.terminated_econ_loss;
@@ -212,15 +232,24 @@ function generateDefaultHover({
 
     const econLossString = generateEconLossString(econ_loss);
     const jobLossString = generateJobLossString(jobs_loss)
+    const showSubLosses = aging_loss !== undefined || cancer_loss !== undefined || infect_loss !== undefined;
 
-
-    return <Flex direction="column" gap="xs">
+    return <Flex direction="column" gap="0.1rem">
+        {state && <Text size="lg" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
-        {state && <Text size="md" style={{color: 'black'}}><b>{regionIndicator}:</b> {state}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
-        <Text size="md" style={{color: 'black'}}><b>Economic
-            Loss:</b> {econLossString}</Text>
-        {showJobs && <Text size="md" style={{color: 'black'}}><b>Jobs Lost:</b> {jobLossString}</Text>}
+        {showJobs && <Text size="md" style={{color: 'black'}}><b>Total Jobs Lost:</b> {jobLossString}</Text>}
+        {showSubLosses && <Stack gap={"0.05rem"}>
+            <Text size="md" style={{color: 'black'}}><b>{econ_loss_string}:</b> {econLossString}</Text>
+            {aging_loss !== undefined &&
+                <Text size="sm" style={{color: 'black'}}><b>&#8226; Aging:</b> {aging_loss}</Text>}
+            {cancer_loss !== undefined &&
+                <Text size="sm" style={{color: 'black'}}><b>&#8226; Cancer:</b> {cancer_loss}</Text>}
+            {infect_loss !== undefined &&
+                <Text size="sm" style={{color: 'black'}}><b>&#8226; Infectious Disease:</b> {infect_loss}</Text>}
+        </Stack>}
+
+
     </Flex>
 }
 
@@ -229,7 +258,7 @@ function generateGrantIDCGrantsHover({
                                          state,
                                          county,
                                          repName,
-                                         regionIndicator
+    district
                                      }: HoverContentProps) {
 
     const tileProperties = hoverInfo.properties as CombinedTileProperties;
@@ -246,8 +275,8 @@ function generateGrantIDCGrantsHover({
     const futureJobLossString = generateJobLossString(futureJobLoss)
 
     return <Flex direction="column" gap="xs">
+        {state && <Text size="lg" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
-        {state && <Text size="md" style={{color: 'black'}}><b>{regionIndicator}:</b> {state}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
 
         <Text size="md" style={{color: 'black'}}><b>Current
@@ -258,12 +287,11 @@ function generateGrantIDCGrantsHover({
 }
 
 function generateTotalHover({
-                                         hoverInfo,
-                                         state,
-                                         county,
-                                         repName,
-                                         regionIndicator
-                                     }: HoverContentProps) {
+                                hoverInfo,
+                                state,
+                                county,
+                                repName,
+                            }: HoverContentProps) {
 
     const tileProperties = hoverInfo.properties as CombinedTileProperties;
 
@@ -289,8 +317,8 @@ function generateTotalHover({
     const futureJobLossString = generateJobLossString(futureJobLoss)
 
     return <Flex direction="column" gap="xs">
+        {state && <Text size="lg" style={{color: 'black'}}><b>{state}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
-        {state && <Text size="md" style={{color: 'black'}}><b>{regionIndicator}:</b> {state}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
 
         <Text size="md" style={{color: 'black'}}><b>Total
@@ -303,12 +331,11 @@ function generateTotalHover({
 }
 
 function generateTermHover({
-                                hoverInfo,
-                                state,
-                                county,
-                                repName,
-                                regionIndicator
-                            }: HoverContentProps) {
+                               hoverInfo,
+                               state,
+                               county,
+                               repName,
+                           }: HoverContentProps) {
 
     const tileProperties = hoverInfo.properties as CombinedTileProperties;
 
@@ -322,8 +349,8 @@ function generateTermHover({
     const currentJobLossString = generateJobLossString(currentJobLoss);
 
     return <Flex direction="column" gap="xs">
+        {state && <Text size="lg" style={{color: 'black'}}><b>{state}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
-        {state && <Text size="md" style={{color: 'black'}}><b>{regionIndicator}:</b> {state}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
 
 
@@ -340,18 +367,17 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
     const state = hoverInfo.properties.state;
     let county: string | null = null;
     let repName: string | null = null;
+    let district: string | null = null;
     if (mode === "county") {
         county = (hoverInfo.properties as CountyTile).county;
     } else if (mode === "districts") {
         const districtTileProperties = (hoverInfo.properties as DistrictTile);
         const raw_rep_name = districtTileProperties.rep_name;
         const raw_pol_party = districtTileProperties.pol_party;
-        repName = processRepName(raw_rep_name, raw_pol_party)
-    }
-
-    let regionIndicator = "State"
-    if (state === "Puerto Rico" || state === "District of Columbia") {
-        regionIndicator = "Territory"
+        repName = processRepName(raw_rep_name, raw_pol_party);
+        // 0 for at-large, otherwise number
+        const districtNumber = districtTileProperties.CD118FP;
+        district = `${districtTileProperties.state_code}-${districtNumber === "00" ? "AL" : districtNumber}`;
     }
 
     let hoverContent: JSX.Element;
@@ -364,8 +390,7 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
         county,
         state,
         repName,
-        regionIndicator
-
+        district
     }
 
     if (displayMode === HoverDisplayMode.IDC_GRANTS) {
@@ -374,9 +399,7 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
         hoverContent = generateTotalHover(commonProps);
     } else if (displayMode === HoverDisplayMode.TERM) {
         hoverContent = generateTermHover(commonProps);
-    }
-
-    else {
+    } else {
         hoverContent = generateDefaultHover(commonProps)
     }
 

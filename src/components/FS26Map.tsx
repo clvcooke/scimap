@@ -21,9 +21,9 @@ import MapControls from "./MapControls.tsx";
 const ALPHA_COLOR = 200;
 const domain = "https://data.scienceimpacts.org"
 
-const countyTiles = `${domain}/tiles_counties_budget_v0/{z}/{x}/{y}.pbf`;
-const stateTiles = `${domain}/tiles_states_budget_v0/{z}/{x}/{y}.pbf`;
-const districtTiles = `${domain}/tiles_districts_budget_v0/{z}/{x}/{y}.pbf`;
+const countyTiles = `${domain}/tiles_counties_budget_v1/{z}/{x}/{y}.pbf`;
+const stateTiles = `${domain}/tiles_states_budget_v1/{z}/{x}/{y}.pbf`;
+const districtTiles = `${domain}/tiles_districts_budget_v1/{z}/{x}/{y}.pbf`;
 
 const ATTRIBUTION = "SCIMaP © CC BY 4.0"
 
@@ -76,7 +76,7 @@ function generateMapLayer({
                 colorProperties.map((p) =>
                     feature.properties[p] ?? 0).reduce((previous, current) => previous + current, 0)
             );
-
+            console.log("PROPERTIES", {props: feature.properties})
             const colorString = interpolateOrRd(colorScale(value));
 
 
@@ -135,7 +135,7 @@ function FY26Map({baseLayer, overlay}: LossMapProps) {
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
     const [showShare, setShowShare] = useState(false);
 
-    const [mode, setMode] = useState<"county" | "districts" | "state" | ''>('county');
+    const [mode, setMode] = useState<"county" | "districts" | "state" | ''>('districts');
     const theme = useMantineTheme();
     const uniqueProperty = useMemo(() => mode === "county" ? "FIPS" : mode === "districts" ? "GEOID" : "state", [mode]);
     const [titleHeaderHeight, setTitleHeaderHeight] = useState(0);
