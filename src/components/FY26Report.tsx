@@ -14,23 +14,6 @@ export function FY26Report({
                            }: FinancialReportModalProps) {
     const imageUrl = 'https://data.scienceimpacts.org/FY2026-Loss-CD.png';
     const pdfUrl = 'https://scimap.org/images/FY26Report.pdf';
-    const handleImageDownload = () => {
-        const link = document.createElement('a');
-        link.href = imageUrl;
-        link.download = 'FY2026-Loss-CD.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    const handlePdfDownload = () => {
-        const link = document.createElement('a');
-        link.href = pdfUrl;
-        link.download = 'financial-report-2026.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
 
     return (
         <Modal
