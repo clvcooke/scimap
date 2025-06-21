@@ -214,7 +214,7 @@ def process_congressional_data(data_folder):
     congs_gdf["GEOID"] = congs_gdf["GEOID"].astype("int64")
 
     merged_gdf = merge_data(
-        df_total_cong, congs_gdf, on="GEOID", columns=["GEOID", "geometry"]
+        df_total_cong, congs_gdf, on="GEOID", columns=["GEOID", "geometry", "CD118FP"]
     )
     merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry="geometry")
 
