@@ -9,7 +9,7 @@ interface CopyrightHeaderProps {
     year?: number;
 }
 
-function CopyrightHeader({ year = 2025 }: CopyrightHeaderProps) {
+function CopyrightHeader({year = 2025}: CopyrightHeaderProps) {
     return (
         <Title order={6} mb="md">
             <Group gap={4} justify="center" wrap="nowrap">
@@ -25,12 +25,12 @@ function CopyrightHeader({ year = 2025 }: CopyrightHeaderProps) {
                 <img
                     src="https://mirrors.creativecommons.org/presskit/icons/cc.svg"
                     alt="Creative Commons License"
-                    style={{ maxWidth: '1em', maxHeight: '1em' }}
+                    style={{maxWidth: '1em', maxHeight: '1em'}}
                 />
                 <img
                     src="https://mirrors.creativecommons.org/presskit/icons/by.svg"
                     alt="Attribution License"
-                    style={{ maxWidth: '1em', maxHeight: '1em' }}
+                    style={{maxWidth: '1em', maxHeight: '1em'}}
                 />
             </Group>
         </Title>
@@ -89,10 +89,15 @@ function About() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            The White House has ordered large cuts to federal funding for scientific research. These changes include a proposal to reduce support for all health-related research nationwide, and cancellations of many grants for specific research projects. We aim to share how these proposed changes impact science, the economy, and healthcare.
+                            The White House has ordered large cuts to federal funding for scientific research. These
+                            changes include a proposal to reduce support for all health-related research nationwide, and
+                            cancellations of many grants for specific research projects. We aim to share how these
+                            proposed changes impact science, the economy, and healthcare.
                         </Text>
                         <Text ta={"left"} mt={'sm'}>
-                            Our <a href='https://www.nature.com/articles/s41562-025-02238-x' target='_blank'>recent correspondence piece</a> published in Nature Human Behaviour describes our approach to communicating the impact of these funding cuts nationwide.
+                            Our <a href='https://www.nature.com/articles/s41562-025-02238-x' target='_blank'>recent
+                            correspondence piece</a> published in Nature Human Behaviour describes our approach to
+                            communicating the impact of these funding cuts nationwide.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
@@ -174,6 +179,59 @@ function About() {
                             and work</a> to estimate how economic activity generated in each county can spread to
                             adjacent
                             counties.
+                        </Text>
+                        <Text ta={'left'} mt={'sm'}>
+                            Note that terminated grants do not count toward the estimates of future losses that would
+                            result from a 15% cap on indirect costs, to prevent double-counting. This means that
+                            estimates of total loss are not necessarily the sum of future and current losses.
+                        </Text>
+                        <Text ta={"left"} mt="sm">
+                            Our approach is similar to that implemented in <a
+                            href={"https://www.nytimes.com/interactive/2025/02/13/upshot/nih-trump-funding-cuts.html"}
+                            target={"_blank"}>The Upshot</a> and in policy analysis by higher
+                            education specialist, <a
+                            href={"https://jamessmurphy.com/2025/02/09/the-impact-of-an-nih-15-indirect-cost-rate/"}>James
+                            Murphy</a>. Both of these analyses focused on institution-specific
+                            and state-level impacts using similar approaches to estimate impacts of cuts to
+                            NIH-negotiated indirect cost rates on medical research. Our approach combines these methods
+                            with US census data and interactive visualizations to engage with impacts at county levels
+                            nationwide. Our data and code are <a href={"http://doi.org/10.17605/OSF.IO/H398E"}
+                                                                 target={"_blank"}>publicly available here</a>.
+                        </Text>
+                        <Text ta={"left"} mt="sm">
+                            View an illustrated summary of our method here.
+                        </Text>
+                        <Zoom>
+                            <img
+                                alt="Calculation Methods"
+                                src="https://data.scienceimpacts.org/methodsFigsV2.png"
+                                width="50%"
+                            />
+                        </Zoom>
+                    </Accordion.Panel>
+                </AccordionItem>
+                <AccordionItem value="fy-2026">
+                    <Accordion.Control>
+                        <Title order={textOrder}>
+                            Proposed Impact: FY2026 Budget
+                        </Title>
+                    </Accordion.Control>
+                    <Accordion.Panel>
+                        <Text ta={"left"}>
+                            We compare the proposed NIH FY 2026 <a target={"_blank"}
+                                                                   href={"https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf"}>budget</a> to
+                            the FY2024 budget to estimate the proportion
+                            of funding lost. We calculate the inflation-adjusted five-year <a target={"_blank"}
+                                                                                              href={"https://reporter.nih.gov/"}>average</a> of
+                            funding across
+                            active grants within a given Congressional District from FY2020-2024. We exclude FY2025 from
+                            the analysis because grant terminations and freezes have reduced fund distribution compared
+                            to historic levels. We exclude grant funding received from agencies outside of the NIH
+                            (e.g., FDA and CDC). We similarly calculate reductions in funding for three ICs that would
+                            be maintained under the proposed reorganization: the National Institute of Allergy and
+                            Infectious Diseases (NIAID), the National Cancer Institute, and the National Institute on
+                            Aging (NIA). We assume that cuts will be distributed evenly across regions and research
+                            topics
                         </Text>
                         <Text ta={'left'} mt={'sm'}>
                             Note that terminated grants do not count toward the estimates of future losses that would

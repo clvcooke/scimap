@@ -30,6 +30,9 @@ function ActionMenu({currentTab, setCurrentTab, disabledTabs}: {
                 {!disabledTabs?.includes('map') && <Tabs.Tab value="map">
                     Map
                 </Tabs.Tab>}
+                {!disabledTabs?.includes('budget') && <Tabs.Tab value="budget">
+                    2026 Budget
+                </Tabs.Tab>}
                 {!disabledTabs?.includes('quiz') && <Tabs.Tab value="quiz">
                     Quiz
                 </Tabs.Tab>}
@@ -42,9 +45,7 @@ function ActionMenu({currentTab, setCurrentTab, disabledTabs}: {
                 {!disabledTabs?.includes('about') && <Tabs.Tab value="about">
                     About
                 </Tabs.Tab>}
-                {!disabledTabs?.includes('budget') && <Tabs.Tab value="budget">
-                    2026 Budget
-                </Tabs.Tab>}
+
             </Tabs.List>
         </Tabs>
     );

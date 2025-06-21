@@ -1,4 +1,4 @@
-import {ActionIcon, Container, Flex, Popover, Text, Title, Group} from "@mantine/core";
+import {ActionIcon, Container, Flex, Popover, Text, Title, Group, Stack} from "@mantine/core";
 import {isMobile} from "react-device-detect";
 import {BaseLayer, formattedCost, formattedJobs, formattedTermCost, formattedTermJobs, Overlay} from "../constants.ts";
 import {IconInfoCircleFilled} from "@tabler/icons-react";
@@ -88,6 +88,48 @@ function defaultText() {
             </Text>
         </Text>
     </Flex>
+}
+
+export function FY26TitleHeader() {
+    return <Container>
+        <div style={{position: 'relative', width: '100%'}}>
+            <Group align={'center'} gap={'0.2rem'} justify={'center'}>
+                <Title
+                    size={isMobile ? 'h4' : 'h2'}
+                    style={{
+                        fontFamily: 'Roboto, sans-serif',
+                        fontWeight: 700,
+                        color: 'rgba(0, 0, 0, 0.9)',
+                    }}
+                >
+                    {isMobile && "Federal Health Research Cuts"}
+                    {!isMobile && "SCIMaP: View Impact of Federal Health Research Cuts"}
+                </Title>
+                <Popover withArrow>
+                    <Popover.Target>
+                        <ActionIcon variant={'transparent'} size={isMobile ? 'xs' : 'md'}>
+                            <IconInfoCircleFilled/>
+                        </ActionIcon>
+                    </Popover.Target>
+                    <Popover.Dropdown>
+                        <Text><span style={{fontWeight: 600}}>Data Last Updated: </span>
+                            {FORMATTED_TILE_VERSION}</Text>
+                    </Popover.Dropdown>
+                </Popover>
+
+            </Group>
+        </div>
+        <Stack justify="center" gap="0" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
+            <Text>
+                <Text
+                    size={textSize}
+                    span
+                    style={basicTextStyle}
+                ><b>FY26 Projected Economic Loss:</b> $47B and 202K Jobs Lost</Text>
+            </Text>
+        </Stack>
+    </Container>
+
 }
 
 export function TitleHeader({baseLayer, overlay}: { baseLayer?: BaseLayer, overlay?: Overlay }) {

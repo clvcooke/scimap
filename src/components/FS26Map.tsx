@@ -11,7 +11,7 @@ import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
 import {ActionIcon, Group, Modal, Stack, useMantineTheme, Text} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
-import TitleHeader from "./TitleHeader.tsx";
+import TitleHeader, {FY26TitleHeader} from "./TitleHeader.tsx";
 import {BaseLayer, Overlay} from "../constants.ts";
 import {trackPageView} from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
@@ -318,8 +318,7 @@ function FY26Map({baseLayer, overlay}: LossMapProps) {
                          onMouseOut={(event) => event.stopPropagation()}
                          ref={titleHeaderRef}
                     >
-                        <TitleHeader
-                            baseLayer={baseLayer} overlay={overlay}></TitleHeader>
+                        <FY26TitleHeader/>
                     </div>
                     <Map
                         attributionControl={false}
