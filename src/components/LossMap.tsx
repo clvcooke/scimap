@@ -58,7 +58,7 @@ const TILE_LINKS = {
     }
 }
 
-const ATTRIBUTION = "SCIMaP © CC BY 4.0"
+const ATTRIBUTION = !isMobile ? "SCIMaP © CC BY 4.0" : ""
 
 // const COUNTY_DOMAIN: [number, number] = [0,    8_886110.52051];
 const COUNTY_DOMAIN: [number, number] = [0, 25_000_000];
@@ -457,7 +457,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                     <Map
                         attributionControl={false}
                         mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json">
-                        <AttributionControl customAttribution={ATTRIBUTION} />
+                        <AttributionControl customAttribution={ATTRIBUTION} compact={false}/>
 
                     </Map>
 

@@ -2,20 +2,67 @@ import {Tabs} from '@mantine/core';
 import {isMobile} from 'react-device-detect';
 import {trackPageView} from "../utils/analytics.ts";
 
-export type TabOption = 'map' | 'quiz' | 'learn' | 'about' | 'action' | 'budget';
+export type TabOption = 'map' | 'quiz' | 'learn' | 'about' | 'action' | 'budget' | 'more';
 
+type Tab = {
+    tab: TabOption, name: string, desktopOnly?: boolean, mobileOnly?: boolean
+}
 
 function ActionMenu({currentTab, setCurrentTab, disabledTabs}: {
     currentTab: TabOption,
     setCurrentTab: (tab: TabOption) => void,
     disabledTabs?: TabOption[]
 }) {
+
+    const tabValues: Tab[] = [
+        {
+            tab: 'map',
+            name: 'Map',
+            desktopOnly: false
+        },
+        {
+            tab: 'budget',
+            name: '2026 Budget',
+            desktopOnly: false
+        },
+        {
+            tab: 'learn',
+            name: isMobile ? 'Learn' : 'Learn More',
+            desktopOnly: false
+        },
+        {
+            tab: 'quiz',
+            name: 'Quiz',
+            desktopOnly: true
+        },
+        {
+            tab: 'action',
+            name: 'Take Action',
+            desktopOnly: true
+        },
+        {
+            tab: 'about',
+            name: 'About',
+            desktopOnly: true
+        }, {
+            tab: 'more',
+            name: 'More',
+            mobileOnly: true
+        }
+    ];
+
+    const shouldShowTab = (tabInfo: Tab) => {
+        if (disabledTabs?.includes(tabInfo.tab)) return false;
+        if (tabInfo.desktopOnly && isMobile) return false;
+        return !(tabInfo.mobileOnly && !isMobile);
+    };
+
+
     return (
         <Tabs value={currentTab} color="teal" variant="pills" radius="xs" onChange={(tab) => {
             trackPageView(tab, tab);
-            if (tab && ["map", "quiz", "learn", "about", 'action', 'budget'].includes(tab)) {
-                // @ts-expect-error: bad TS
-                setCurrentTab(tab);
+            if (tab && ["map", "quiz", "learn", "about", 'action', 'budget', 'more'].includes(tab)) {
+                setCurrentTab(tab as TabOption);
             } else {
                 setCurrentTab("map");
             }
@@ -27,26 +74,19 @@ function ActionMenu({currentTab, setCurrentTab, disabledTabs}: {
         }}
         >
             <Tabs.List>
-                {!disabledTabs?.includes('map') && <Tabs.Tab value="map">
-                    Map
-                </Tabs.Tab>}
-                {!disabledTabs?.includes('budget') && <Tabs.Tab value="budget">
-                    2026 Budget
-                </Tabs.Tab>}
-                {!disabledTabs?.includes('quiz') && <Tabs.Tab value="quiz">
-                    Quiz
-                </Tabs.Tab>}
-                {!disabledTabs?.includes('action') && <Tabs.Tab value="action">
-                    Take Action
-                </Tabs.Tab>}
-                {!disabledTabs?.includes('learn') && <Tabs.Tab value="learn">
-                    Learn More
-                </Tabs.Tab>}
-                {!disabledTabs?.includes('about') && <Tabs.Tab value="about">
-                    About
-                </Tabs.Tab>}
-
+                {tabValues
+                    .filter(shouldShowTab)
+                    .map(tabInfo => (
+                        <Tabs.Tab
+                            key={tabInfo.tab}
+                            value={tabInfo.tab}
+                        >
+                            {tabInfo.name}
+                        </Tabs.Tab>
+                    ))
+                }
             </Tabs.List>
+
         </Tabs>
     );
 }

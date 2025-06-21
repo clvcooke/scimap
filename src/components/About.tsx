@@ -17,7 +17,7 @@ function CopyrightHeader({year = 2025}: CopyrightHeaderProps) {
                     SCIMaP
                 </Text>
                 <Text span inherit>
-                    © {year} is licensed xunder
+                    © {year} is licensed under
                 </Text>
                 <Text component="a" href="https://creativecommons.org/licenses/by/4.0/" inherit>
                     CC BY 4.0
@@ -233,34 +233,6 @@ function About() {
                             Aging (NIA). We assume that cuts will be distributed evenly across regions and research
                             topics
                         </Text>
-                        <Text ta={'left'} mt={'sm'}>
-                            Note that terminated grants do not count toward the estimates of future losses that would
-                            result from a 15% cap on indirect costs, to prevent double-counting. This means that
-                            estimates of total loss are not necessarily the sum of future and current losses.
-                        </Text>
-                        <Text ta={"left"} mt="sm">
-                            Our approach is similar to that implemented in <a
-                            href={"https://www.nytimes.com/interactive/2025/02/13/upshot/nih-trump-funding-cuts.html"}
-                            target={"_blank"}>The Upshot</a> and in policy analysis by higher
-                            education specialist, <a
-                            href={"https://jamessmurphy.com/2025/02/09/the-impact-of-an-nih-15-indirect-cost-rate/"}>James
-                            Murphy</a>. Both of these analyses focused on institution-specific
-                            and state-level impacts using similar approaches to estimate impacts of cuts to
-                            NIH-negotiated indirect cost rates on medical research. Our approach combines these methods
-                            with US census data and interactive visualizations to engage with impacts at county levels
-                            nationwide. Our data and code are <a href={"http://doi.org/10.17605/OSF.IO/H398E"}
-                                                                 target={"_blank"}>publicly available here</a>.
-                        </Text>
-                        <Text ta={"left"} mt="sm">
-                            View an illustrated summary of our method here.
-                        </Text>
-                        <Zoom>
-                            <img
-                                alt="Calculation Methods"
-                                src="https://data.scienceimpacts.org/methodsFigsV2.png"
-                                width="50%"
-                            />
-                        </Zoom>
                     </Accordion.Panel>
                 </AccordionItem>
 

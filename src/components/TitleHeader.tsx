@@ -1,4 +1,4 @@
-import {ActionIcon, Container, Flex, Popover, Text, Title, Group, Stack} from "@mantine/core";
+import {ActionIcon, Container, Flex, Popover, Text, Title, Group, Stack, Anchor} from "@mantine/core";
 import {isMobile} from "react-device-detect";
 import {BaseLayer, formattedCost, formattedJobs, formattedTermCost, formattedTermJobs, Overlay} from "../constants.ts";
 import {IconInfoCircleFilled} from "@tabler/icons-react";
@@ -90,7 +90,7 @@ function defaultText() {
     </Flex>
 }
 
-export function FY26TitleHeader() {
+export function FY26TitleHeader({onClickReport}: { onClickReport: () => void}) {
     return <Container>
         <div style={{position: 'relative', width: '100%'}}>
             <Group align={'center'} gap={'0.2rem'} justify={'center'}>
@@ -125,8 +125,10 @@ export function FY26TitleHeader() {
                     size={textSize}
                     span
                     style={basicTextStyle}
-                ><b>FY26 Projected Economic Loss:</b> $47B and 202K Jobs Lost</Text>
+                ><b>FY26{!isMobile && " Projected"} Economic Loss:</b> $47B and 202K Jobs Lost</Text>
             </Text>
+            <Anchor underline={'always'} onClick={onClickReport}><b>See the report</b></Anchor>
+
         </Stack>
     </Container>
 

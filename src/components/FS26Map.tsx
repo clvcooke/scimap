@@ -11,13 +11,14 @@ import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
 import {ActionIcon, Group, Modal, Stack, useMantineTheme, Text} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
-import TitleHeader, {FY26TitleHeader} from "./TitleHeader.tsx";
-import {BaseLayer, Overlay} from "../constants.ts";
+import {FY26TitleHeader} from "./TitleHeader.tsx";
 import {trackPageView} from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
 import MapControls from "./MapControls.tsx";
+import {FY26Report} from "./FY26Report.tsx";
+
 const ALPHA_COLOR = 200;
 const domain = "https://data.scienceimpacts.org"
 
@@ -25,17 +26,11 @@ const countyTiles = `${domain}/tiles_counties_budget_v1/{z}/{x}/{y}.pbf`;
 const stateTiles = `${domain}/tiles_states_budget_v1/{z}/{x}/{y}.pbf`;
 const districtTiles = `${domain}/tiles_districts_budget_v1/{z}/{x}/{y}.pbf`;
 
-const ATTRIBUTION = "SCIMaP © CC BY 4.0"
+const ATTRIBUTION = !isMobile ? "SCIMaP © CC BY 4.0" : ""
 
 const COUNTY_DOMAIN: [number, number] = [0, 25_000_000];
 const DISTRICTS_DOMAIN: [number, number] = [250_000, 50_000_000];
 const STATE_DOMAIN: [number, number] = [10_000, 2_500_000_000];
-
-
-interface LossMapProps {
-    baseLayer?: BaseLayer;
-    overlay?: Overlay
-}
 
 
 function generateMapLayer({
@@ -119,7 +114,7 @@ function generateMapLayer({
     });
 }
 
-function FY26Map({baseLayer, overlay}: LossMapProps) {
+function FY26Map() {
 
     useEffect(() => {
         trackPageView("map", "map");
@@ -132,6 +127,7 @@ function FY26Map({baseLayer, overlay}: LossMapProps) {
         latitude: 39.8283,  // Approximate center latitude of the USA
         zoom: 3.5             // Adjust the zoom level to fit the continental USA
     });
+    const [showReport, setShowReport] = useState(false);
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
     const [showShare, setShowShare] = useState(false);
 
@@ -159,7 +155,6 @@ function FY26Map({baseLayer, overlay}: LossMapProps) {
             return () => resizeObserver.disconnect();
         }
     }, []);
-
 
 
     const lossDomain: [number, number] = useMemo(() => {
@@ -192,7 +187,7 @@ function FY26Map({baseLayer, overlay}: LossMapProps) {
         }
         if (mode === "county") {
             return countyTiles;
-        } else  if (mode === "districts") {
+        } else if (mode === "districts") {
             return districtTiles;
         } else if (mode === "state") {
             return stateTiles;
@@ -268,18 +263,18 @@ function FY26Map({baseLayer, overlay}: LossMapProps) {
         });
     }, [userLocation]);
 
-    const [colorProperties, ] = useState<string[]>(["budg_NIH_cuts_econ_loss"])
+    const [colorProperties,] = useState<string[]>(["budg_NIH_cuts_econ_loss"])
     const lossLayers: (MVTLayer)[] = [
         generateMapLayer({
-                    tileLink,
-                    uniqueProperty,
-                    hoveredFeatureId,
-                    setHoveredFeatureId,
-                    setHoverInfo,
-                    colorScale,
-                    mode,
-                    colorProperties
-                })
+            tileLink,
+            uniqueProperty,
+            hoveredFeatureId,
+            setHoveredFeatureId,
+            setHoverInfo,
+            colorScale,
+            mode,
+            colorProperties
+        })
     ];
 
     const mapWidth = '100vw';
@@ -318,14 +313,18 @@ function FY26Map({baseLayer, overlay}: LossMapProps) {
                          onMouseOut={(event) => event.stopPropagation()}
                          ref={titleHeaderRef}
                     >
-                        <FY26TitleHeader/>
+                        <FY26TitleHeader onClickReport={() => setShowReport(true)}/>
                     </div>
                     <Map
                         attributionControl={false}
                         mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json">
-                        <AttributionControl customAttribution={ATTRIBUTION} />
+                        <AttributionControl customAttribution={ATTRIBUTION} compact={false}/>
 
                     </Map>
+                    <FY26Report
+                        opened={showReport}
+                        onClose={() => setShowReport(false)}
+                    />
 
                     {hoverInfo && <HoverInfoComponent layer={'budget'} mode={mode} hoverInfo={hoverInfo}
                                                       showJobs={mode !== 'county'} displayMode={null}/>}
@@ -357,16 +356,16 @@ function FY26Map({baseLayer, overlay}: LossMapProps) {
                         >
                             <IconGps style={{width: '70%', height: '70%'}}/>
                         </ActionIcon>
-                        <ActionIcon  aria-label="Zoom In"
+                        <ActionIcon aria-label="Zoom In"
                                     radius={'xl'}
-                                     size={'lg'}
+                                    size={'lg'}
                                     onClick={zoomIn}
                         >
                             <IconZoomIn style={{width: '70%', height: '70%'}}/>
                         </ActionIcon>
-                        <ActionIcon  aria-label="Zoom Out"
+                        <ActionIcon aria-label="Zoom Out"
                                     radius={'xl'}
-                                     size={'lg'}
+                                    size={'lg'}
 
                                     onClick={zoomOut}
                         >
