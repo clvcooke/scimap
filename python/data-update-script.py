@@ -134,7 +134,7 @@ def fetch_latest_data():
             raise Exception(f"File {file_name} not found in S3 path: {s3_path}")
 
     print("Data downloaded")
-    return temp_dir, target_date
+    return temp_dir, f"{target_date}-v2"
 
 
 def load_data(file_path, file_type="csv", encoding="latin-1", crs="epsg:4326"):
