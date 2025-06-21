@@ -26,7 +26,7 @@ export const formattedCost = NUMBER_FORMATTER.format(TOTAL_IDC_LOSS);
 export const formattedTermCost = NUMBER_FORMATTER.format(TOTAL_TERM_LOSS)
 
 export const REACT_APP_PUBLIC_POSTHOG_KEY= "phc_7xCOByPPLiPt1qyRf23Ga7ra7qPrAv6NkIkCn4lkZUH"
-export const REACT_APP_PUBLIC_POSTHOG_HOST= "https://us.i.posthog.com"
+export const REACT_APP_PUBLIC_POSTHOG_HOST= "https://posthog.scienceimpacts.org"
 
 export type Condition = 'IDC' | 'GRANTS' | 'IDC_GRANTS' | null;
 
