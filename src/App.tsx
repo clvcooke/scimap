@@ -75,6 +75,14 @@ function App() {
     const showBudget = currentTab === "budget";
     const showMore = currentTab === "more";
 
+    useEffect(() => {
+        if (currentTab === "budget") {
+            window.history.replaceState(null, "FY2026 NIH Budget Proposal Economic Impact", "/fy26")
+        } else {
+            window.history.replaceState(null, "SCIMaP - Impacts of Federal Cuts to Science and Medical Research", "/")
+        }
+    }, [currentTab])
+
     return <>
         <Flex
             direction="column" justify="space-between" align="center"

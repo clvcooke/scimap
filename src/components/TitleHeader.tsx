@@ -105,7 +105,7 @@ export function FY26TitleHeader({onClickReport}: { onClickReport: () => void}) {
                     {isMobile && "NIH Budget Proposal Economic Impact"}
                     {!isMobile && "SCIMaP: View Impact of the FY26 NIH Budget Proposal"}
                 </Title>
-                
+
 
             </Group>
         </div>
