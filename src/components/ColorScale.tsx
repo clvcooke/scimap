@@ -1,5 +1,5 @@
 import {scaleLinear} from 'd3-scale';
-import {interpolateOrRd} from 'd3-scale-chromatic';
+import {interpolateOrRd, interpolateMagma} from 'd3-scale-chromatic';
 import {Text, Flex} from '@mantine/core';
 import {isMobile} from "react-device-detect";
 
@@ -9,11 +9,12 @@ interface ColorScaleProps {
     domain: [number, number];
     buckets?: number;
     logScale?: boolean;
+    useMagma?: boolean
 }
 
 let previousValue = "";
 
-function ColorScale({width = 10, height = 200, domain, buckets = 6, logScale = true}: ColorScaleProps) {
+function ColorScale({width = 10, height = 200, domain, buckets = 6, logScale = true, useMagma}: ColorScaleProps) {
     const steps = Array.from({length: buckets});
 
     const colorScale = scaleLinear()
@@ -69,7 +70,12 @@ function ColorScale({width = 10, height = 200, domain, buckets = 6, logScale = t
                 {steps.map((_, i) => {
                     const y1 = i * (height / buckets);
                     const y2 = (i + 1) * (height / buckets);
-                    const color = interpolateOrRd(colorScale(buckets - 1 - i));
+                    let color;
+                    if (useMagma) {
+                        color = interpolateMagma(1 - colorScale(buckets - 1 - i));
+                    } else {
+                        color = interpolateOrRd(colorScale(buckets - 1 - i));
+                    }
 
                     return (
                         <rect

@@ -6,7 +6,7 @@ import DeckGL from '@deck.gl/react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {MVTLayer} from '@deck.gl/geo-layers';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
-import {interpolateOrRd,} from 'd3-scale-chromatic';
+import {interpolateMagma,} from 'd3-scale-chromatic';
 import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
 import {ActionIcon, Group, Modal, Stack, useMantineTheme, Text} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
@@ -28,9 +28,9 @@ const districtTiles = `${domain}/tiles_districts_budget_v1/{z}/{x}/{y}.pbf`;
 
 const ATTRIBUTION = !isMobile ? "SCIMaP © CC BY 4.0" : ""
 
-const COUNTY_DOMAIN: [number, number] = [0, 25_000_000];
-const DISTRICTS_DOMAIN: [number, number] = [250_000, 50_000_000];
-const STATE_DOMAIN: [number, number] = [10_000, 2_500_000_000];
+const COUNTY_DOMAIN: [number, number] = [100_000, 100_000_000];
+const DISTRICTS_DOMAIN: [number, number] = [5_000_000, 500_000_000];
+const STATE_DOMAIN: [number, number] = [10_000_000, 5_000_000_000];
 
 
 function generateMapLayer({
@@ -72,7 +72,7 @@ function generateMapLayer({
                     feature.properties[p] ?? 0).reduce((previous, current) => previous + current, 0)
             );
             console.log("PROPERTIES", {props: feature.properties})
-            const colorString = interpolateOrRd(colorScale(value));
+            const colorString = interpolateMagma(1 - colorScale(value));
 
 
             let rgbValues;
@@ -336,7 +336,7 @@ function FY26Map() {
                         zIndex: 1,
                         pointerEvents: 'none',
                     }}>
-                        <ColorScale width={isMobile ? 5 : 10} height={isMobile ? 110 : 180} domain={lossDomain}
+                        <ColorScale useMagma={true} width={isMobile ? 5 : 10} height={isMobile ? 110 : 180} domain={lossDomain}
                                     logScale={true}/>
                     </div>
 

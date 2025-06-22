@@ -102,20 +102,10 @@ export function FY26TitleHeader({onClickReport}: { onClickReport: () => void}) {
                         color: 'rgba(0, 0, 0, 0.9)',
                     }}
                 >
-                    {isMobile && "Federal Health Research Cuts"}
-                    {!isMobile && "SCIMaP: View Impact of Federal Health Research Cuts"}
+                    {isMobile && "NIH Budget Proposal Economic Impact"}
+                    {!isMobile && "SCIMaP: View Impact of the FY26 NIH Budget Proposal"}
                 </Title>
-                <Popover withArrow>
-                    <Popover.Target>
-                        <ActionIcon variant={'transparent'} size={isMobile ? 'xs' : 'md'}>
-                            <IconInfoCircleFilled/>
-                        </ActionIcon>
-                    </Popover.Target>
-                    <Popover.Dropdown>
-                        <Text><span style={{fontWeight: 600}}>Data Last Updated: </span>
-                            {FORMATTED_TILE_VERSION}</Text>
-                    </Popover.Dropdown>
-                </Popover>
+                
 
             </Group>
         </div>
@@ -127,8 +117,7 @@ export function FY26TitleHeader({onClickReport}: { onClickReport: () => void}) {
                     style={basicTextStyle}
                 ><b>FY26{!isMobile && " Projected"} Economic Loss:</b> $47B and 202K Jobs Lost</Text>
             </Text>
-            <Anchor underline={'always'} onClick={onClickReport}><b>See the report</b></Anchor>
-
+            <Anchor underline={'always'} onClick={onClickReport}><b>Read the Full Report</b></Anchor>
         </Stack>
     </Container>
 

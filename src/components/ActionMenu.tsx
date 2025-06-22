@@ -22,7 +22,7 @@ function ActionMenu({currentTab, setCurrentTab, disabledTabs}: {
         },
         {
             tab: 'budget',
-            name: '2026 Budget',
+            name: 'FY26 Budget Map',
             desktopOnly: false
         },
         {

@@ -13,8 +13,7 @@ export function FY26Report({
                                onClose,
                            }: FinancialReportModalProps) {
     const imageUrl = 'https://data.scienceimpacts.org/FY2026-Loss-CD.png';
-    const pdfUrl = 'https://scimap.org/images/FY26Report.pdf';
-
+    const pdfUrl = 'https://data.scienceimpacts.org/scimap_whitehouse_fy2026_nih_budget_062325.pdf';
     return (
         <Modal
             opened={opened}
