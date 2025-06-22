@@ -18,6 +18,7 @@ import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
 import MapControls from "./MapControls.tsx";
 import {FY26Report} from "./FY26Report.tsx";
+import {generateStateOutlineLayer} from "../layers/state-outline-layer.ts";
 
 const ALPHA_COLOR = 200;
 const domain = "https://data.scienceimpacts.org"
@@ -135,6 +136,8 @@ function FY26Map() {
     const theme = useMantineTheme();
     const uniqueProperty = useMemo(() => mode === "county" ? "FIPS" : mode === "districts" ? "GEOID" : "state", [mode]);
     const [titleHeaderHeight, setTitleHeaderHeight] = useState(0);
+
+    const stateLayer = generateStateOutlineLayer();
 
     const titleHeaderRef = useCallback((node: HTMLDivElement | null) => {
         if (node) {
@@ -274,7 +277,8 @@ function FY26Map() {
             colorScale,
             mode,
             colorProperties
-        })
+        }),
+        stateLayer,
     ];
 
     const mapWidth = '100vw';
@@ -336,7 +340,8 @@ function FY26Map() {
                         zIndex: 1,
                         pointerEvents: 'none',
                     }}>
-                        <ColorScale useMagma={true} width={isMobile ? 5 : 10} height={isMobile ? 110 : 180} domain={lossDomain}
+                        <ColorScale useMagma={true} width={isMobile ? 5 : 10} height={isMobile ? 110 : 180}
+                                    domain={lossDomain}
                                     logScale={true}/>
                     </div>
 

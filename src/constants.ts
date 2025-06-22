@@ -32,3 +32,5 @@ export type Condition = 'IDC' | 'GRANTS' | 'IDC_GRANTS' | null;
 
 export type BaseLayer = "IDC" | "TERM" | "TOTAL" | "BLANK" | null;
 export type Overlay = "GRANTS" | "BLANK" | null;
+
+export const STATE_LAYER_LINK = "https://data.scienceimpacts.org/tiles_states_budget_v1/{z}/{x}/{y}.pbf"

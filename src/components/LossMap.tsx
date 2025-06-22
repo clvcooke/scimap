@@ -22,6 +22,7 @@ import GrantsOverlay from "./GrantsOverlay.tsx";
 import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
 import MapControls from "./MapControls.tsx";
 import {TILE_VERSION_NUMBER} from "../data/tile-version.ts";
+import {generateStateOutlineLayer} from "../layers/state-outline-layer.ts";
 // import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 const ALPHA_COLOR = 200;
@@ -381,7 +382,10 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
             backgroundLayer,
             colorProperties
         });
+
         lossLayers.push(baseLayer);
+        lossLayers.push(generateStateOutlineLayer())
+
     }
 
     if (showGrants) {
@@ -491,16 +495,16 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         >
                             <IconGps style={{width: '70%', height: '70%'}}/>
                         </ActionIcon>
-                        <ActionIcon  aria-label="Zoom In"
+                        <ActionIcon aria-label="Zoom In"
                                     radius={'xl'}
-                                     size={'lg'}
+                                    size={'lg'}
                                     onClick={zoomIn}
                         >
                             <IconZoomIn style={{width: '70%', height: '70%'}}/>
                         </ActionIcon>
-                        <ActionIcon  aria-label="Zoom Out"
+                        <ActionIcon aria-label="Zoom Out"
                                     radius={'xl'}
-                                     size={'lg'}
+                                    size={'lg'}
 
                                     onClick={zoomOut}
                         >
