@@ -114,7 +114,7 @@ function App() {
             </div>
             <Modal closeOnClickOutside={false} size={"lg"} opened={impactOpen} zIndex={1050}
                    onClose={() => setImpactOpen(false)} withCloseButton={false} centered>
-                <ImpactStatement close={() => {
+                <ImpactStatement fy26={showBudget} close={() => {
                     trackEvent(
                         ANALYTICS_ACTIONS.action,
                         'CLOSE_IMPACT_STATEMENT'

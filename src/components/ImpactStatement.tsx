@@ -1,10 +1,23 @@
-import { Flex, Text, Button, Checkbox, Group, Box } from '@mantine/core';
-import { useLayoutEffect, useRef, useState } from "react";
-import { ANALYTICS_ACTIONS } from "../constants.ts";
-import { trackEvent } from "../utils/analytics.ts";
+import {Flex, Text, Button, Checkbox, Group, Box} from '@mantine/core';
+import {useLayoutEffect, useRef, useState} from "react";
+import {ANALYTICS_ACTIONS} from "../constants.ts";
+import {trackEvent} from "../utils/analytics.ts";
 
 
-const ImpactStatementPart1 = ({ active, ref }: { active: boolean, ref: any }) => {
+const FY26ImpactStatement = () => {
+    return <Box>
+        <Text size="md" c="dark" ta="left" mb="md">
+            The White House <b>FY 2026 budget proposal</b> substantially cuts NIH research funding. Budget cuts are
+            projected to lead to &gt;$46B in lost economic activity in the upcoming year.
+        </Text>
+        <Text size='md' c='dark' ta='left' mb={'md'}>
+            This website shows the economic impact of NIH budget cuts, cancelled grants, and reduced funding for
+            research infrastructure.
+        </Text>
+    </Box>
+}
+
+const ImpactStatementPart1 = ({active, ref}: { active: boolean, ref: any }) => {
     return <Box
         ref={ref}
         style={{
@@ -23,14 +36,14 @@ const ImpactStatementPart1 = ({ active, ref }: { active: boolean, ref: any }) =>
         </Text>
         <Text size="md" c="dark" ta="left">
             The White House has ordered major cuts to NIH funding nationwide, which would <b>take back
-                funds</b> promised to the states.
+            funds</b> promised to the states.
         </Text>
     </Box>
 }
 
-const ImpactStatementPart2 = ({ active, ref }: { active: boolean, ref: any }) => {
+const ImpactStatementPart2 = ({active, ref}: { active: boolean, ref: any }) => {
     return <Box
-    ref={ref}
+        ref={ref}
         style={{
             position: 'absolute',
             visibility: active ? 'visible' : 'hidden',
@@ -51,7 +64,7 @@ const ImpactStatementPart2 = ({ active, ref }: { active: boolean, ref: any }) =>
 }
 
 
-function ImpactStatement({ close }: { close: () => void }) {
+function ImpactStatement({close, fy26}: { close: () => void, fy26?: boolean }) {
     const [consent, setConsent] = useState(true);
     const [active, setActive] = useState(0);
 
@@ -62,7 +75,6 @@ function ImpactStatement({ close }: { close: () => void }) {
     const textBox2 = useRef<HTMLDivElement>(null);
 
 
-
     useLayoutEffect(() => {
         const height0 = textBox1.current?.clientHeight ?? 0;
         const height1 = textBox2.current?.clientHeight ?? 0;
@@ -71,17 +83,19 @@ function ImpactStatement({ close }: { close: () => void }) {
         }
     }, []);
 
+
     return (
         <Flex direction="column" gap="sm">
             <Text size="xl" c="dark" ta="center">Medical Research is at Risk</Text>
-            <Box mih={height} style={{
+            {!fy26 && <Box mih={height} style={{
                 position: 'relative'
             }}>
                 <ImpactStatementPart1 active={active === 0} ref={textBox1}/>
                 <ImpactStatementPart2 active={active === 1} ref={textBox2}/>
-            </Box>
+            </Box>}
+            {fy26 && <FY26ImpactStatement></FY26ImpactStatement>}
 
-            <Group justify="center" mt="sm">
+            {!fy26 && <Group justify="center" mt="sm">
                 {active === 0 ? (
                     <Button size="md" onClick={nextStep} fullWidth>Next</Button>
                 ) : (
@@ -90,7 +104,8 @@ function ImpactStatement({ close }: { close: () => void }) {
                         <Button size="md" onClick={() => close()}>See Impact</Button>
                     </Group>
                 )}
-            </Group>
+            </Group>}
+            {fy26 && <Button size="md" onClick={() => close()}>See Impact</Button>}
             <Checkbox
                 checked={consent}
                 onChange={(event) => {
@@ -110,7 +125,7 @@ function ImpactStatement({ close }: { close: () => void }) {
                 }}
                 ta={'left'}
                 size={'xs'}
-                label="We collect anonymous data from users for research purposes. Please check this box if you are 18+ years of age and agree to share anonymous data. (Not required to use the website)" />
+                label="We collect anonymous data from users for research purposes. Please check this box if you are 18+ years of age and agree to share anonymous data. (Not required to use the website)"/>
         </Flex>
     );
 }
