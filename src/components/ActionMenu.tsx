@@ -17,12 +17,12 @@ function ActionMenu({currentTab, setCurrentTab, disabledTabs}: {
     const tabValues: Tab[] = [
         {
             tab: 'map',
-            name: 'Map',
+            name: 'NIH Grants',
             desktopOnly: false
         },
         {
             tab: 'budget',
-            name: 'FY26 Budget Map',
+            name: 'FY26 Budget',
             desktopOnly: false
         },
         {

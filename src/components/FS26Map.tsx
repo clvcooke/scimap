@@ -376,6 +376,8 @@ function FY26Map() {
                     <Modal title={<Text size='xl'>Share</Text>} closeOnClickOutside={true} opened={showShare}
                            onClose={() => setShowShare(false)}>
                         <SharePage
+                            summary={"FY26 NIH Budget Impact Map"}
+                            text={"See the impact of the FY26 NIH Budget Proposal"}
                             title={"See national impact of federal health research cuts"}
                         />
                     </Modal>
