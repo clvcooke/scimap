@@ -275,8 +275,10 @@ def generate_terminated_grants(data_dir):
 
 
 def generate_tile_version_file(data_version):
+    # Data version of the from YYYY-mm-DD-{v}
+    date = "-".join(data_version.split("-")[0:3])
     with open(os.path.join(REACT_DATA_DIR, "tile_version.json"), "w") as fp:
-        json.dump({"TILE_VERSION": data_version}, fp)
+        json.dump({"TILE_VERSION": date}, fp)
 
 
 if __name__ == "__main__":
