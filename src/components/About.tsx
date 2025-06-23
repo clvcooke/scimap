@@ -1,7 +1,7 @@
-import {Container, Title, Text, Accordion, AccordionItem, Group} from '@mantine/core';
+import { Container, Title, Text, Accordion, AccordionItem, Group } from '@mantine/core';
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
-import {isMobile} from "react-device-detect";
+import { isMobile } from "react-device-detect";
 
 const textOrder = isMobile ? 4 : 3;
 
@@ -9,7 +9,7 @@ interface CopyrightHeaderProps {
     year?: number;
 }
 
-function CopyrightHeader({year = 2025}: CopyrightHeaderProps) {
+function CopyrightHeader({ year = 2025 }: CopyrightHeaderProps) {
     return (
         <Title order={6} mb="md">
             <Group gap={4} justify="center" wrap="nowrap">
@@ -25,12 +25,12 @@ function CopyrightHeader({year = 2025}: CopyrightHeaderProps) {
                 <img
                     src="https://mirrors.creativecommons.org/presskit/icons/cc.svg"
                     alt="Creative Commons License"
-                    style={{maxWidth: '1em', maxHeight: '1em'}}
+                    style={{ maxWidth: '1em', maxHeight: '1em' }}
                 />
                 <img
                     src="https://mirrors.creativecommons.org/presskit/icons/by.svg"
                     alt="Attribution License"
-                    style={{maxWidth: '1em', maxHeight: '1em'}}
+                    style={{ maxWidth: '1em', maxHeight: '1em' }}
                 />
             </Group>
         </Title>
@@ -45,7 +45,7 @@ function About() {
             <Title mt="md" mb={'sm'}>
                 Science & Community Impacts Mapping Project (SCIMaP)
             </Title>
-            <CopyrightHeader/>
+            <CopyrightHeader />
 
             <Accordion variant="contained" radius="md">
                 <AccordionItem value="goal">
@@ -96,7 +96,7 @@ function About() {
                         </Text>
                         <Text ta={"left"} mt={'sm'}>
                             Our <a href='https://www.nature.com/articles/s41562-025-02238-x' target='_blank'>recent
-                            correspondence piece</a> published in Nature Human Behaviour describes our approach to
+                                correspondence piece</a> published in Nature Human Behaviour describes our approach to
                             communicating the impact of these funding cuts nationwide.
                         </Text>
                     </Accordion.Panel>
@@ -111,7 +111,7 @@ function About() {
                         <Text ta={"left"}>
                             Many NIH grants for health research have already been cancelled, interrupting ongoing
                             studies and clinical trials. To track terminated grants, we use the <a
-                            href={"https://grant-watch.us/nih-data.html"} target={"_blank"}> Grant Watch database</a>,
+                                href={"https://grant-watch.us/nih-data.html"} target={"_blank"}> Grant Watch database</a>,
                             which is based on reports from government sources and researchers. Please note that
                             terminations (and sometimes restorations) of grants are ongoing, so data are subject to
                             change. There can also be lags between when a grant is terminated or restored and when the
@@ -134,9 +134,9 @@ function About() {
                     <Accordion.Panel>
                         <Text ta={"left"}>
                             One proposed change would greatly reduce NIH funding that covers <a
-                            href={"https://grants.nih.gov/grants/guide/notice-files/NOT-OD-25-068.html"}
-                            target={"_blank"}>“indirect costs” of
-                            research</a>. Funding for indirect costs helps pay for essential facilities, equipment,
+                                href={"https://grants.nih.gov/grants/guide/notice-files/NOT-OD-25-068.html"}
+                                target={"_blank"}>“indirect costs” of
+                                research</a>. Funding for indirect costs helps pay for essential facilities, equipment,
                             skilled
                             staff, and safety checks needed across many research projects. Medical research would not be
                             possible without funding to cover indirect costs.
@@ -146,14 +146,14 @@ function About() {
                             research. The proposed changes would cap funding for indirect costs at 15%, taking back
                             billions of dollars that were promised to the states. States have sued to challenge the
                             order, arguing that the changes are unlawful. Currently, a federal judge has issued <a
-                            href={"https://storage.courtlistener.com/recap/gov.uscourts.mad.280590/gov.uscourts.mad.280590.25.0.pdf"}
-                            target={"_blank"}>an
-                            injunction</a> to temporarily block the changes. To estimate decreases in funding, we
+                                href={"https://storage.courtlistener.com/recap/gov.uscourts.mad.280590/gov.uscourts.mad.280590.25.0.pdf"}
+                                target={"_blank"}>an
+                                injunction</a> to temporarily block the changes. To estimate decreases in funding, we
                             calculate
                             the difference between current funding for indirect costs and proposed funding with a 15%
                             maximum for current NIH grants. We source our data from a <a target={"_blank"}
-                                                                                         href={"https://report.nih.gov/award/index.cfm"}>public
-                            database of NIH grants</a> that
+                                href={"https://report.nih.gov/award/index.cfm"}>public
+                                database of NIH grants</a> that
                             were active in 2024.
                         </Text>
                     </Accordion.Panel>
@@ -169,14 +169,14 @@ function About() {
                             For estimates of economic losses in communities, resulting from changes to funding for
                             indirect costs as well as terminated grants, we multiply direct loss values by 2.56. This
                             multiplier is derived from <a target={"_blank"}
-                                                          href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"}>a
-                            recent report</a>, which found that every dollar invested in NIH
+                                href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"}>a
+                                recent report</a>, which found that every dollar invested in NIH
                             generated $2.56 in new economic activity in 2024. To estimate the number of jobs that would
                             be lost if NIH funding is cut, we used the ratio of the number of jobs supported / research
                             funds awarded in the 2024 fiscal year. We also use <a target={"_blank"}
-                                                                                  href={"https://lehd.ces.census.gov/data/"}>Census
-                            data on where U.S. commuters live
-                            and work</a> to estimate how economic activity generated in each county can spread to
+                                href={"https://lehd.ces.census.gov/data/"}>Census
+                                data on where U.S. commuters live
+                                and work</a> to estimate how economic activity generated in each county can spread to
                             adjacent
                             counties.
                         </Text>
@@ -187,16 +187,16 @@ function About() {
                         </Text>
                         <Text ta={"left"} mt="sm">
                             Our approach is similar to that implemented in <a
-                            href={"https://www.nytimes.com/interactive/2025/02/13/upshot/nih-trump-funding-cuts.html"}
-                            target={"_blank"}>The Upshot</a> and in policy analysis by higher
+                                href={"https://www.nytimes.com/interactive/2025/02/13/upshot/nih-trump-funding-cuts.html"}
+                                target={"_blank"}>The Upshot</a> and in policy analysis by higher
                             education specialist, <a
-                            href={"https://jamessmurphy.com/2025/02/09/the-impact-of-an-nih-15-indirect-cost-rate/"}>James
-                            Murphy</a>. Both of these analyses focused on institution-specific
+                                href={"https://jamessmurphy.com/2025/02/09/the-impact-of-an-nih-15-indirect-cost-rate/"}>James
+                                Murphy</a>. Both of these analyses focused on institution-specific
                             and state-level impacts using similar approaches to estimate impacts of cuts to
                             NIH-negotiated indirect cost rates on medical research. Our approach combines these methods
                             with US census data and interactive visualizations to engage with impacts at county levels
                             nationwide. Our data and code are <a href={"http://doi.org/10.17605/OSF.IO/H398E"}
-                                                                 target={"_blank"}>publicly available here</a>.
+                                target={"_blank"}>publicly available here</a>.
                         </Text>
                         <Text ta={"left"} mt="sm">
                             View an illustrated summary of our method here.
@@ -219,10 +219,10 @@ function About() {
                     <Accordion.Panel>
                         <Text ta={"left"}>
                             We compare the proposed NIH FY 2026 <a target={"_blank"}
-                                                                   href={"https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf"}>budget</a> to
+                                href={"https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf"}>budget</a> to
                             the FY2024 budget to estimate the proportion
                             of funding lost. We calculate the inflation-adjusted five-year <a target={"_blank"}
-                                                                                              href={"https://reporter.nih.gov/"}>average</a> of
+                                href={"https://reporter.nih.gov/"}>average</a> of
                             funding across
                             active grants within a given Congressional District from FY2020-2024. We exclude FY2025 from
                             the analysis because grant terminations and freezes have reduced fund distribution compared
@@ -245,7 +245,7 @@ function About() {
                     <Accordion.Panel>
                         <Text ta={"left"}>
                             For questions, comments, and press inquiries, please email <a
-                            href="mailto:contact@scienceimpacts.org">contact@scienceimpacts.org</a>
+                                href="mailto:contact@scienceimpacts.org">contact@scienceimpacts.org</a>
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
@@ -259,9 +259,9 @@ function About() {
                         <Text ta={"left"}>
                             SCIMaP updates its data and visualization to reflect the current state of funding cuts. For
                             the full data history you can reference the <a
-                            href={"http://doi.org/10.17605/OSF.IO/H398E"}>
-                            publicly available data at the Open Science
-                            Framework link</a>.
+                                href={"http://doi.org/10.17605/OSF.IO/H398E"}>
+                                publicly available data at the Open Science
+                                Framework link</a>.
                         </Text>
                         <Text ta={"left"} mt="sm">
                             <b>March 27, 2025</b>
@@ -284,6 +284,12 @@ function About() {
                             in the tooltip as well as blue bubbles listing the number and value of grants cancelled at
                             each institution. Prior estimates for annual future losses, based on proposed changes to
                             funding for indirect costs, have been renamed “future economic losses”.
+                        </Text>
+                        <Text ta={"left"} mt="sm">
+                            June 22, 2025:
+                        </Text>
+                        <Text ta={"left"}>
+                            The effects of the proposed FY2026 budget are now included in a separate tab.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>

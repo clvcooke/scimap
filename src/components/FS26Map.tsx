@@ -58,7 +58,7 @@ function generateMapLayer({
         id: 'xyz-mvt',
         data: [tileLink],
         binary: true, // Try setting this to true
-        getLineColor: [192, 192, 192, ALPHA_COLOR / 3],
+        getLineColor: [255, 255, 255, ALPHA_COLOR / 3],
         lineWidthMinPixels: 1,
         pickable: true,
         highlightedFeatureId: hoveredFeatureId,
