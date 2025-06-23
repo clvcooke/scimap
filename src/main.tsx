@@ -4,8 +4,8 @@ import {createRoot} from 'react-dom/client'
 import App from './App.tsx'
 import {MantineProvider} from "@mantine/core";
 import '@mantine/core/styles.css';
-import {Helmet} from "react-helmet";
 import * as Sentry from "@sentry/react";
+import {SocialMetaTags} from "./components/SocialMetaTags.tsx";
 
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
@@ -17,12 +17,9 @@ Sentry.init({
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-            <MantineProvider>
-                <Helmet>
-                    <title>SCIMaP</title>
-                    <meta name="description" content="The Science & Community Impacts Mapping Project"/>
-                </Helmet>
-                <App/>
-            </MantineProvider>
+        <MantineProvider>
+            <SocialMetaTags/>
+            <App/>
+        </MantineProvider>
     </StrictMode>,
 )
