@@ -2,6 +2,8 @@ import {Modal, Button, Text, Group, Stack} from '@mantine/core';
 import {IconDownload} from '@tabler/icons-react';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import {trackEvent} from "../utils/analytics.ts";
+import {ANALYTICS_ACTIONS} from "../constants.ts";
 
 interface FinancialReportModalProps {
     opened: boolean;
@@ -40,7 +42,9 @@ export function FY26Report({
                     <a href={imageUrl} download={'FY2026-Loss-CD.png'} target="_blank">
                         <Button
                             leftSection={<IconDownload size={20}/>}
-                            // onClick={handleImageDownload}
+                            onClick={() => {
+                                trackEvent(ANALYTICS_ACTIONS.downloadReport, 'download-report-image');
+                            }}
                             variant="light"
                         >
                             Download Image
@@ -49,7 +53,9 @@ export function FY26Report({
                     <a href={pdfUrl} download={'FY2026-Loss-CD.png'} target="_blank">
                         <Button
                             leftSection={<IconDownload size={20}/>}
-                            // onClick={handleImageDownload}
+                            onClick={() => {
+                                trackEvent(ANALYTICS_ACTIONS.downloadReport, 'download-report-pdf');
+                            }}
                             variant="blue"
                         >
                             Download PDF Report

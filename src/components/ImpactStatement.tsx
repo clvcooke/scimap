@@ -133,7 +133,7 @@ function ImpactStatement({close, fy26}: { close: () => void, fy26?: boolean }) {
                 size={'xs'}
                 label="We collect anonymous data from users for research purposes. Please check this box if you are 18+ years of age and agree to share anonymous data. (Not required to use the website)"/>
         </Flex>
-    );
+    )
 }
 
 export default ImpactStatement;

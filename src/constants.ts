@@ -7,6 +7,8 @@ export const ANALYTICS_ACTIONS = {
     consent: 'Consent',
     layer: 'Layer',
     condition: 'Condition',
+    readReport: 'Read Report',
+    downloadReport: 'Download Report',
 }
 
 
