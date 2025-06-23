@@ -54,7 +54,7 @@ function Advocacy() {
                         <List.Item>Federally funded scientific and medical research improves health, drives innovation,
                             creates jobs, and grows the economy.</List.Item>
                         <List.Item>Every dollar invested in scientific research through NIH produces, on average, $2.56
-                            of economic activity in return – <b>over 250% gain.</b></List.Item>
+                            of economic activity in return – <b>over a 250% gain.</b></List.Item>
                         <List.Item>NIH research supports over 400,000 jobs across the U.S.</List.Item>
                         <List.Item>Reducing indirect cost rates to 15% would undermine the ability of universities,
                             hospitals, and research institutes to conduct life saving, medical research.</List.Item>

@@ -9,7 +9,7 @@ interface CopyrightHeaderProps {
     year?: number;
 }
 
-function CopyrightHeader({ year = 2025 }: CopyrightHeaderProps) {
+function CopyrightHeader({year = 2025}: CopyrightHeaderProps) {
     return (
         <Title order={6} mb="md">
             <Group gap={4} justify="center" wrap="nowrap">
@@ -17,7 +17,7 @@ function CopyrightHeader({ year = 2025 }: CopyrightHeaderProps) {
                     SCIMaP
                 </Text>
                 <Text span inherit>
-                    © {year} is licensed xunder
+                    © {year} is licensed under
                 </Text>
                 <Text component="a" href="https://creativecommons.org/licenses/by/4.0/" inherit>
                     CC BY 4.0
@@ -25,12 +25,12 @@ function CopyrightHeader({ year = 2025 }: CopyrightHeaderProps) {
                 <img
                     src="https://mirrors.creativecommons.org/presskit/icons/cc.svg"
                     alt="Creative Commons License"
-                    style={{ maxWidth: '1em', maxHeight: '1em' }}
+                    style={{maxWidth: '1em', maxHeight: '1em'}}
                 />
                 <img
                     src="https://mirrors.creativecommons.org/presskit/icons/by.svg"
                     alt="Attribution License"
-                    style={{ maxWidth: '1em', maxHeight: '1em' }}
+                    style={{maxWidth: '1em', maxHeight: '1em'}}
                 />
             </Group>
         </Title>
@@ -89,10 +89,15 @@ function About() {
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            The White House has ordered large cuts to federal funding for scientific research. These changes include a proposal to reduce support for all health-related research nationwide, and cancellations of many grants for specific research projects. We aim to share how these proposed changes impact science, the economy, and healthcare.
+                            The White House has ordered large cuts to federal funding for scientific research. These
+                            changes include a proposal to reduce support for all health-related research nationwide, and
+                            cancellations of many grants for specific research projects. We aim to share how these
+                            proposed changes impact science, the economy, and healthcare.
                         </Text>
                         <Text ta={"left"} mt={'sm'}>
-                            Our <a href='https://www.nature.com/articles/s41562-025-02238-x' target='_blank'>recent correspondence piece</a> published in Nature Human Behaviour describes our approach to communicating the impact of these funding cuts nationwide.
+                            Our <a href='https://www.nature.com/articles/s41562-025-02238-x' target='_blank'>recent
+                            correspondence piece</a> published in Nature Human Behaviour describes our approach to
+                            communicating the impact of these funding cuts nationwide.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
@@ -203,6 +208,31 @@ function About() {
                                 width="50%"
                             />
                         </Zoom>
+                    </Accordion.Panel>
+                </AccordionItem>
+                <AccordionItem value="fy-2026">
+                    <Accordion.Control>
+                        <Title order={textOrder}>
+                            Proposed Impact: FY2026 Budget
+                        </Title>
+                    </Accordion.Control>
+                    <Accordion.Panel>
+                        <Text ta={"left"}>
+                            We compare the proposed NIH FY 2026 <a target={"_blank"}
+                                                                   href={"https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf"}>budget</a> to
+                            the FY2024 budget to estimate the proportion
+                            of funding lost. We calculate the inflation-adjusted five-year <a target={"_blank"}
+                                                                                              href={"https://reporter.nih.gov/"}>average</a> of
+                            funding across
+                            active grants within a given Congressional District from FY2020-2024. We exclude FY2025 from
+                            the analysis because grant terminations and freezes have reduced fund distribution compared
+                            to historic levels. We exclude grant funding received from agencies outside of the NIH
+                            (e.g., FDA and CDC). We similarly calculate reductions in funding for three ICs that would
+                            be maintained under the proposed reorganization: the National Institute of Allergy and
+                            Infectious Diseases (NIAID), the National Cancer Institute, and the National Institute on
+                            Aging (NIA). We assume that cuts will be distributed evenly across regions and research
+                            topics
+                        </Text>
                     </Accordion.Panel>
                 </AccordionItem>
 

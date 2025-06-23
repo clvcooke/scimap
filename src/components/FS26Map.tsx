@@ -6,89 +6,32 @@ import DeckGL from '@deck.gl/react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {MVTLayer} from '@deck.gl/geo-layers';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
-import {interpolateOrRd,} from 'd3-scale-chromatic';
-import {HoverDisplayMode, HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
+import {interpolateMagma,} from 'd3-scale-chromatic';
+import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
 import {ActionIcon, Group, Modal, Stack, useMantineTheme, Text} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
 import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
-import TitleHeader from "./TitleHeader.tsx";
-import {BaseLayer, Overlay} from "../constants.ts";
+import {FY26TitleHeader} from "./TitleHeader.tsx";
 import {trackPageView} from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
 import ColorScale from "./ColorScale.tsx";
 import {isMobile} from "react-device-detect";
-import IconClusterLayer from "../layers/icon-cluster-layer.ts";
-import GrantsOverlay from "./GrantsOverlay.tsx";
-import {GRANT_LOSSES, GrantTermination} from "../data/grant-losses.ts";
 import MapControls from "./MapControls.tsx";
-import {TILE_VERSION_NUMBER} from "../data/tile-version.ts";
+import {FY26Report} from "./FY26Report.tsx";
 import {generateStateOutlineLayer} from "../layers/state-outline-layer.ts";
-// import MapSettings, {MapControlsDrawer} from "./MapSettings.tsx";
 
 const ALPHA_COLOR = 200;
 const domain = "https://data.scienceimpacts.org"
-// const TILE_VERSION_NUMBER = "2025-06-12";
 
-const idcTilesCounties = `${domain}/tiles_counties_idc_v${TILE_VERSION_NUMBER}-v2/{z}/{x}/{y}.pbf`;
-const idcTilesStates = `${domain}/tiles_states_idc_v${TILE_VERSION_NUMBER}-v2/{z}/{x}/{y}.pbf`;
-const idcTilesDistricts = `${domain}/tiles_congs_idc_v${TILE_VERSION_NUMBER}-v2/{z}/{x}/{y}.pbf`;
-
-const grantTilesCounties = `${domain}/tiles_counties_term_v${TILE_VERSION_NUMBER}-v2/{z}/{x}/{y}.pbf`;
-const grantTilesStates = `${domain}/tiles_states_term_v${TILE_VERSION_NUMBER}-v2/{z}/{x}/{y}.pbf`;
-const grantTilesDistricts = `${domain}/tiles_congs_term_v${TILE_VERSION_NUMBER}-v2/{z}/{x}/{y}.pbf`;
-
-const totalTilesCounties = `${domain}/tiles_counties_total_v${TILE_VERSION_NUMBER}-v2/{z}/{x}/{y}.pbf`;
-const totalTilesStates = `${domain}/tiles_states_total_v${TILE_VERSION_NUMBER}-v2/{z}/{x}/{y}.pbf`;
-const totalTilesDistricts = `${domain}/tiles_congs_total_v${TILE_VERSION_NUMBER}-v2/{z}/{x}/{y}.pbf`;
-
-const TILE_LINKS = {
-    county: {
-        idc: idcTilesCounties,
-        grant: grantTilesCounties,
-        total: totalTilesCounties,
-    },
-    state: {
-        idc: idcTilesStates,
-        grant: grantTilesStates,
-        total: totalTilesStates
-    },
-    districts: {
-        idc: idcTilesDistricts,
-        grant: grantTilesDistricts,
-        total: totalTilesDistricts
-    }
-}
+const countyTiles = `${domain}/tiles_counties_budget_v1/{z}/{x}/{y}.pbf`;
+const stateTiles = `${domain}/tiles_states_budget_v1/{z}/{x}/{y}.pbf`;
+const districtTiles = `${domain}/tiles_districts_budget_v1/{z}/{x}/{y}.pbf`;
 
 const ATTRIBUTION = !isMobile ? "SCIMaP © CC BY 4.0" : ""
 
-// const COUNTY_DOMAIN: [number, number] = [0,    8_886110.52051];
-const COUNTY_DOMAIN: [number, number] = [0, 25_000_000];
-const DISTRICTS_DOMAIN: [number, number] = [250_000, 50_000_000];
-const STATE_DOMAIN: [number, number] = [10_000, 2_500_000_000];
-
-const DOMAINS = {
-    county: {
-        idc: COUNTY_DOMAIN,
-        grant: COUNTY_DOMAIN,
-        total: COUNTY_DOMAIN
-    },
-    state: {
-        idc: STATE_DOMAIN,
-        grant: STATE_DOMAIN,
-        total: STATE_DOMAIN
-    },
-    districts: {
-        idc: DISTRICTS_DOMAIN,
-        grant: DISTRICTS_DOMAIN,
-        total: DISTRICTS_DOMAIN
-    }
-}
-
-
-interface LossMapProps {
-    baseLayer?: BaseLayer;
-    overlay?: Overlay
-}
+const COUNTY_DOMAIN: [number, number] = [100_000, 100_000_000];
+const DISTRICTS_DOMAIN: [number, number] = [5_000_000, 500_000_000];
+const STATE_DOMAIN: [number, number] = [10_000_000, 5_000_000_000];
 
 
 function generateMapLayer({
@@ -100,14 +43,11 @@ function generateMapLayer({
                               setHoverInfo,
                               colorScale,
                               colorProperties,
-
-
                           }: {
     tileLink: string;
     hoveredFeatureId: number | string | null;
     uniqueProperty: string;
     mode: string | null;
-    backgroundLayer: string | null;
     setHoveredFeatureId: (featureId: number | null | string) => void;
     setHoverInfo: (info: HoverInfo | null) => void;
     colorScale: ScaleLinear<number, number>;
@@ -132,16 +72,8 @@ function generateMapLayer({
                 colorProperties.map((p) =>
                     feature.properties[p] ?? 0).reduce((previous, current) => previous + current, 0)
             );
-            //
-            //
-            // if (backgroundLayer === "total") {
-            //     property_name = "combined_econ_loss";
-            // } else if (backgroundLayer === 'grant') {
-            //     property_name = "terminated_econ_loss";
-            // }
-            // const value = Math.log(feature.properties[property_name]);
-
-            const colorString = interpolateOrRd(colorScale(value));
+            console.log("PROPERTIES", {props: feature.properties})
+            const colorString = interpolateMagma(1 - colorScale(value));
 
 
             let rgbValues;
@@ -183,37 +115,29 @@ function generateMapLayer({
     });
 }
 
-function LossMap({baseLayer, overlay}: LossMapProps) {
+function FY26Map() {
 
     useEffect(() => {
         trackPageView("map", "map");
     }, [])
 
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
-
-    // const [showControls, setShowControls] = useState(false);
-    // const [isNormalized, setIsNormalized] = useState(false);
-    // const [showAnnotations, setShowAnnotations] = useState(false);
     const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
     const [viewState, setViewState] = useState<MapViewState>({
         longitude: -98.5795, // Approximate center longitude of the USA
         latitude: 39.8283,  // Approximate center latitude of the USA
         zoom: 3.5             // Adjust the zoom level to fit the continental USA
     });
+    const [showReport, setShowReport] = useState(false);
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
     const [showShare, setShowShare] = useState(false);
 
-    const [mode, setMode] = useState<"county" | "districts" | "state" | ''>('county');
+    const [mode, setMode] = useState<"county" | "districts" | "state" | ''>('districts');
     const theme = useMantineTheme();
     const uniqueProperty = useMemo(() => mode === "county" ? "FIPS" : mode === "districts" ? "GEOID" : "state", [mode]);
-    const [backgroundLayer, setBackgroundLayer] = useState<"idc" | "grant" | "total">('idc');
-    // TODO type this stricter
-    const [colorProperties, setColorProperties] = useState<string[]>(["econ_loss"])
-    const [showBackgroundLayer, setShowBackgroundLayer] = useState(true);
-    const [showGrants, setShowGrants] = useState(true);
-    const [hoverInfoMode, setHoverInfoMode] = useState<HoverDisplayMode | null>(null);
-
     const [titleHeaderHeight, setTitleHeaderHeight] = useState(0);
+
+    const stateLayer = generateStateOutlineLayer();
 
     const titleHeaderRef = useCallback((node: HTMLDivElement | null) => {
         if (node) {
@@ -236,48 +160,20 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
     }, []);
 
 
-    useEffect(() => {
-        setHoverInfoMode(null);
-        if (baseLayer === 'IDC') {
-            setBackgroundLayer('total');
-            if (overlay === "GRANTS") {
-                setColorProperties(["IDC_econ_loss"]);
-                setHoverInfoMode(HoverDisplayMode.IDC_GRANTS)
-            } else {
-                setColorProperties(["IDC_econ_loss"]);
-            }
-
-        } else if (baseLayer === 'TERM') {
-            setBackgroundLayer('total');
-            setColorProperties(["terminated_econ_loss"])
-            setHoverInfoMode(HoverDisplayMode.TERM)
-        } else if (baseLayer === "BLANK") {
-            setShowBackgroundLayer(false);
-        } else if (baseLayer === "TOTAL") {
-            setBackgroundLayer('total');
-            setMode('county');
-            setColorProperties(["combined_econ_loss"])
-            setHoverInfoMode(HoverDisplayMode.TOTAL)
-        } else {
-            setBackgroundLayer('idc');
-        }
-    }, [baseLayer, overlay]);
-
-    useEffect(() => {
-        if (overlay === 'GRANTS') {
-            setShowGrants(true);
-        } else {
-            setShowGrants(false);
-        }
-    }, [overlay]);
-
-
     const lossDomain: [number, number] = useMemo(() => {
-        if (!mode || !backgroundLayer) {
+        if (!mode) {
             return [0, 10000000];
         }
-        return DOMAINS[mode][backgroundLayer];
-    }, [mode, backgroundLayer]);
+        if (mode === 'county') {
+            return COUNTY_DOMAIN;
+        } else if (mode === 'districts') {
+            return DISTRICTS_DOMAIN;
+        } else if (mode === 'state') {
+            return STATE_DOMAIN;
+        } else {
+            return STATE_DOMAIN
+        }
+    }, [mode]);
     const colorScale = useMemo(() => {
 
         const lower = lossDomain[0] > 1 ? Math.log(lossDomain[0]) : 0;
@@ -289,11 +185,19 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
     }, [lossDomain]);
 
     const tileLink = useMemo(() => {
-        if (!mode || !backgroundLayer) {
-            return null;
+        if (!mode) {
+            return countyTiles;
         }
-        return TILE_LINKS[mode][backgroundLayer];
-    }, [mode, backgroundLayer]);
+        if (mode === "county") {
+            return countyTiles;
+        } else if (mode === "districts") {
+            return districtTiles;
+        } else if (mode === "state") {
+            return stateTiles;
+        } else {
+            return stateTiles;
+        }
+    }, [mode]);
 
     const flyTo = useCallback((location: [number, number] | null) => {
         if (!location) {
@@ -362,16 +266,9 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
         });
     }, [userLocation]);
 
-    const grantLayerActive = useMemo(() => true, []);
-
-    const [overlayGrants, setOverlayGrants] = useState<GrantTermination[]>([]);
-    const [showOverlay, setShowOverlay] = useState(false);
-
-
-    const lossLayers: (IconClusterLayer | MVTLayer)[] = [];
-
-    if (tileLink && showBackgroundLayer) {
-        const baseLayer = generateMapLayer({
+    const [colorProperties,] = useState<string[]>(["budg_NIH_cuts_econ_loss"])
+    const lossLayers: (MVTLayer)[] = [
+        generateMapLayer({
             tileLink,
             uniqueProperty,
             hoveredFeatureId,
@@ -379,29 +276,10 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
             setHoverInfo,
             colorScale,
             mode,
-            backgroundLayer,
             colorProperties
-        });
-
-        lossLayers.push(baseLayer);
-        lossLayers.push(generateStateOutlineLayer())
-
-    }
-
-    if (showGrants) {
-        const superGrantLayer = new IconClusterLayer({
-            data: GRANT_LOSSES,
-            getPosition: (d: GrantTermination) => [d.lon, d.lat],
-            getSize: 50,
-            iconAtlas: '/location-icon-atlas-v3.png',
-            iconMapping: '/location-icon-mapping.json',
-            getColor: () => [0, 255, 0, 100],
-            id: 'icon-cluster',
-            sizeScale: 40,
-            pickable: true
-        });
-        lossLayers.push(superGrantLayer);
-    }
+        }),
+        stateLayer,
+    ];
 
     const mapWidth = '100vw';
 
@@ -420,26 +298,10 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         setViewState(newViewState as MapViewState);
                     }}
 
-                    controller={!showOverlay}
+                    controller={true}
                     layers={[...lossLayers, userLocationLayer]}
                     style={{overflow: 'hidden'}}
-                    onClick={(event) => {
-                        if (grantLayerActive) {
-                            // @ts-expect-error: objects are defined
-                            let grants: GrantTermination[] = event.objects;
-                            if (!grants?.length && event.object?.terminated_num) {
-                                grants = [event.object];
-                            }
-                            if (grants?.length) {
-                                setOverlayGrants(grants);
-                                setShowOverlay(true);
-                            } else {
-                                console.log({grants, event})
-                                console.log("No grants found");
-                            }
-                        }
-                    }}
-                    _pickable={!showOverlay}
+                    _pickable={true}
                 >
                     <div style={{
                         position: 'absolute',
@@ -455,8 +317,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                          onMouseOut={(event) => event.stopPropagation()}
                          ref={titleHeaderRef}
                     >
-                        <TitleHeader
-                            baseLayer={baseLayer} overlay={overlay}></TitleHeader>
+                        <FY26TitleHeader onClickReport={() => setShowReport(true)}/>
                     </div>
                     <Map
                         attributionControl={false}
@@ -464,9 +325,13 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         <AttributionControl customAttribution={ATTRIBUTION} compact={false}/>
 
                     </Map>
+                    <FY26Report
+                        opened={showReport}
+                        onClose={() => setShowReport(false)}
+                    />
 
-                    {hoverInfo && <HoverInfoComponent layer={backgroundLayer} mode={mode} hoverInfo={hoverInfo}
-                                                      showJobs={mode !== 'county'} displayMode={hoverInfoMode}/>}
+                    {hoverInfo && <HoverInfoComponent layer={'budget'} mode={mode} hoverInfo={hoverInfo}
+                                                      showJobs={mode !== 'county'} displayMode={null}/>}
 
                     <div style={{
                         position: 'absolute',
@@ -475,7 +340,8 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         zIndex: 1,
                         pointerEvents: 'none',
                     }}>
-                        <ColorScale width={isMobile ? 5 : 10} height={isMobile ? 110 : 180} domain={lossDomain}
+                        <ColorScale useMagma={true} width={isMobile ? 5 : 10} height={isMobile ? 110 : 180}
+                                    domain={lossDomain}
                                     logScale={true}/>
                     </div>
 
@@ -515,10 +381,11 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                     <Modal title={<Text size='xl'>Share</Text>} closeOnClickOutside={true} opened={showShare}
                            onClose={() => setShowShare(false)}>
                         <SharePage
+                            summary={"FY26 NIH Budget Impact Map"}
+                            text={"See the impact of the FY26 NIH Budget Proposal"}
                             title={"See national impact of federal health research cuts"}
                         />
                     </Modal>
-                    <GrantsOverlay grants={overlayGrants} opened={showOverlay} onClose={() => setShowOverlay(false)}/>
                 </DeckGL>
             </Group>
             <Stack style={{
@@ -532,8 +399,6 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                 <MapControls
                     mode={mode}
                     setMode={(selectedMode) => setMode(selectedMode)}
-                    showGrants={showGrants}
-                    setShowGrants={setShowGrants}
                     setShowShare={setShowShare}
                 />
             </Stack>
@@ -542,4 +407,4 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
         ;
 }
 
-export default LossMap
+export default FY26Map

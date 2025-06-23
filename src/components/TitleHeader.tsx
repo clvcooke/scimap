@@ -1,8 +1,17 @@
-import {ActionIcon, Container, Flex, Popover, Text, Title, Group} from "@mantine/core";
+import {ActionIcon, Container, Flex, Popover, Text, Title, Group, Stack, Anchor} from "@mantine/core";
 import {isMobile} from "react-device-detect";
-import {BaseLayer, formattedCost, formattedJobs, formattedTermCost, formattedTermJobs, Overlay} from "../constants.ts";
+import {
+    ANALYTICS_ACTIONS,
+    BaseLayer,
+    formattedCost,
+    formattedJobs,
+    formattedTermCost,
+    formattedTermJobs,
+    Overlay
+} from "../constants.ts";
 import {IconInfoCircleFilled} from "@tabler/icons-react";
 import {FORMATTED_TILE_VERSION} from "../data/tile-version.ts";
+import {trackEvent} from "../utils/analytics.ts";
 
 const textSize = isMobile ? 'sm' : 'md'
 const basicTextStyle = {
@@ -88,6 +97,45 @@ function defaultText() {
             </Text>
         </Text>
     </Flex>
+}
+
+export function FY26TitleHeader({onClickReport}: { onClickReport: () => void}) {
+    return <Container>
+        <div style={{position: 'relative', width: '100%'}}>
+            <Group align={'center'} gap={'0.2rem'} justify={'center'}>
+                <Title
+                    size={isMobile ? 'h4' : 'h2'}
+                    style={{
+                        fontFamily: 'Roboto, sans-serif',
+                        fontWeight: 700,
+                        color: 'rgba(0, 0, 0, 0.9)',
+                    }}
+                >
+                    {isMobile && "NIH Budget Proposal Economic Impact"}
+                    {!isMobile && "SCIMaP: View Impact of the FY26 NIH Budget Proposal"}
+                </Title>
+
+
+            </Group>
+        </div>
+        <Stack justify="center" gap="0" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
+            <Text>
+                <Text
+                    size={textSize}
+                    span
+                    style={basicTextStyle}
+                ><b>FY26{!isMobile && " Projected"} Economic Loss:</b> $47B and 202K Jobs Lost</Text>
+            </Text>
+            <Anchor underline={'always'} onClick={ () => {
+                trackEvent(
+                    ANALYTICS_ACTIONS.readReport,
+                    'open_report_modal',
+                )
+                onClickReport()
+            }}><b>Read the Full Report</b></Anchor>
+        </Stack>
+    </Container>
+
 }
 
 export function TitleHeader({baseLayer, overlay}: { baseLayer?: BaseLayer, overlay?: Overlay }) {

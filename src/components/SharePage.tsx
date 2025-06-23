@@ -15,7 +15,7 @@ import {
 } from 'react-share';
 
 
-function SharePage({title}: { title: string }) {
+function SharePage({title, text, summary}: { title: string, text?: string, summary?: string}) {
     const pageUrl = window.location.href;
 
     const trackShare = (platform: string) => {
@@ -25,12 +25,14 @@ function SharePage({title}: { title: string }) {
         );
     };
 
+    const shareText = text ?? `Impact: $${formattedCost} and ${formattedJobs} Jobs Lost`;
+    const shareTitle = summary ?? 'Federal Health Research Cuts';
     const handleShare = async () => {
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: 'Federal Health Research Cuts',
-                    text: `Impact: $${formattedCost} and ${formattedJobs} Jobs Lost`,
+                    title: shareTitle,
+                    text: shareText,
                     url: pageUrl,
                 });
                 trackShare("Generic")
@@ -47,27 +49,27 @@ function SharePage({title}: { title: string }) {
             Share on your preferred platform
         </Text>
         <Group mt="md" gap="xs" align="center" style={{width: '100%'}}>
-            <FacebookShareButton url={pageUrl} title={title} hashtag="#SCIMaP" onClick={() => trackShare('Facebook')}
+            <FacebookShareButton url={pageUrl} title={shareTitle} hashtag="#SCIMaP" onClick={() => trackShare('Facebook')}
             >
                 <FacebookIcon size={32} round/>
             </FacebookShareButton>
-            <BlueskyShareButton url={pageUrl} title={title} onClick={() => trackShare('BlueSky')}
+            <BlueskyShareButton url={pageUrl} title={shareTitle} onClick={() => trackShare('BlueSky')}
             >
                 <BlueskyIcon size={32} round/>
             </BlueskyShareButton>
 
-            <TwitterShareButton url={pageUrl} title={title} onClick={() => trackShare('X/Twitter')}
+            <TwitterShareButton url={pageUrl} title={shareTitle} onClick={() => trackShare('X/Twitter')}
             >
                 <XIcon size={32} round/>
             </TwitterShareButton>
-            <ThreadsShareButton url={pageUrl} title={title} onClick={() => trackShare('Threads')}
+            <ThreadsShareButton url={pageUrl} title={shareTitle} onClick={() => trackShare('Threads')}
             >
                 <ThreadsIcon size={32} round/>
             </ThreadsShareButton>
-            <WhatsappShareButton url={pageUrl} title={title} onClick={() => trackShare('WhatsApp')}>
+            <WhatsappShareButton url={pageUrl} title={shareTitle} onClick={() => trackShare('WhatsApp')}>
                 <WhatsappIcon size={32} round/>
             </WhatsappShareButton>
-            <EmailShareButton url={pageUrl} subject={title} body={title} onClick={() => trackShare('Email')}>
+            <EmailShareButton url={pageUrl} subject={shareTitle} body={shareText} onClick={() => trackShare('Email')}>
                 <EmailIcon size={32} round/>
             </EmailShareButton>
             {isMobile && (
