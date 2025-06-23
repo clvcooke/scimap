@@ -4,8 +4,15 @@ import {ANALYTICS_ACTIONS} from "../constants.ts";
 import {trackEvent} from "../utils/analytics.ts";
 
 
-const FY26ImpactStatement = () => {
-    return <Box>
+const FY26ImpactStatement = ({active, ref}: { active: boolean, ref: any }) => {
+    return <Box
+        ref={ref}
+        style={{
+            position: 'absolute',
+            visibility: active ? 'visible' : 'hidden',
+            zIndex: active ? 1 : 0, // Ensure active is on top
+        }}
+    >
         <Text size="md" c="dark" ta="left" mb="md">
             The White House <b>FY 2026 budget proposal</b> substantially cuts NIH research funding. Budget cuts are
             projected to lead to &gt;$46B in lost economic activity in the upcoming year.
@@ -87,15 +94,15 @@ function ImpactStatement({close, fy26}: { close: () => void, fy26?: boolean }) {
     return (
         <Flex direction="column" gap="sm">
             <Text size="xl" c="dark" ta="center">Medical Research is at Risk</Text>
-            {!fy26 && <Box mih={height} style={{
+            <Box mih={height} style={{
                 position: 'relative'
             }}>
                 <ImpactStatementPart1 active={active === 0} ref={textBox1}/>
-                <ImpactStatementPart2 active={active === 1} ref={textBox2}/>
-            </Box>}
-            {fy26 && <FY26ImpactStatement></FY26ImpactStatement>}
+                {!fy26 && <ImpactStatementPart2 active={active === 1} ref={textBox2}/>}
+                {fy26 && <FY26ImpactStatement active={active === 1} ref={textBox2}/>}
+            </Box>
 
-            {!fy26 && <Group justify="center" mt="sm">
+            <Group justify="center" mt="sm">
                 {active === 0 ? (
                     <Button size="md" onClick={nextStep} fullWidth>Next</Button>
                 ) : (
@@ -104,8 +111,7 @@ function ImpactStatement({close, fy26}: { close: () => void, fy26?: boolean }) {
                         <Button size="md" onClick={() => close()}>See Impact</Button>
                     </Group>
                 )}
-            </Group>}
-            {fy26 && <Button size="md" onClick={() => close()}>See Impact</Button>}
+            </Group>
             <Checkbox
                 checked={consent}
                 onChange={(event) => {
