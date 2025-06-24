@@ -47,7 +47,7 @@ export function FY26Report({
                             }}
                             variant="light"
                         >
-                            Download Image
+                            Download Map Image
                         </Button>
                     </a>
                     <a href={pdfUrl} download={'FY2026-Loss-CD.png'} target="_blank">
@@ -58,7 +58,7 @@ export function FY26Report({
                             }}
                             variant="blue"
                         >
-                            Download PDF Report
+                            Download the Full Report
                         </Button>
                     </a>
                 </Group>
