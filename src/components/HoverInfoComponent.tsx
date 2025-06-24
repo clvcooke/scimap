@@ -1,6 +1,7 @@
 import {Card, Text, Flex, Stack} from '@mantine/core';
 import {JSX} from "react";
 import {NUMBER_FORMATTER} from "../constants.ts";
+import {HOUSE_REPS} from "../data/reps.ts";
 
 type BaseIDCTile = {
     state: string;
@@ -372,12 +373,14 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
         county = (hoverInfo.properties as CountyTile).county;
     } else if (mode === "districts") {
         const districtTileProperties = (hoverInfo.properties as DistrictTile);
-        const raw_rep_name = districtTileProperties.rep_name;
-        const raw_pol_party = districtTileProperties.pol_party;
-        repName = processRepName(raw_rep_name, raw_pol_party);
+        let raw_rep_name = districtTileProperties.rep_name;
+        let raw_pol_party = districtTileProperties.pol_party;
         // 0 for at-large, otherwise number
         const districtNumber = districtTileProperties.CD118FP;
         district = `${districtTileProperties.state_code}-${districtNumber === "00" ? "AL" : districtNumber}`;
+        raw_rep_name = HOUSE_REPS[district]?.name ?? raw_rep_name;
+        raw_pol_party = HOUSE_REPS[district]?.party ?? raw_pol_party;
+        repName = processRepName(raw_rep_name, raw_pol_party);
     }
 
     let hoverContent: JSX.Element;
