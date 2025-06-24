@@ -14,7 +14,7 @@ export function FY26Report({
                                opened,
                                onClose,
                            }: FinancialReportModalProps) {
-    const imageUrl = 'https://data.scienceimpacts.org/scimap_whitehouse_fy2026_nih_budget-map.png';
+    const imageUrl = 'https://data.scienceimpacts.org/scimap_whitehouse_fy2026_nih_budget-map-v2.png';
     const pdfUrl = 'https://data.scienceimpacts.org/scimap_whitehouse_fy2026_nih_budget_062325.pdf';
     return (
         <Modal
