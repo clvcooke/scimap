@@ -393,7 +393,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
             data: GRANT_LOSSES,
             getPosition: (d: GrantTermination) => [d.lon, d.lat],
             getSize: 50,
-            iconAtlas: '/location-icon-atlas-v3.png',
+            iconAtlas: '/location-icon-atlas-v6.png',
             iconMapping: '/location-icon-mapping.json',
             getColor: () => [0, 255, 0, 100],
             id: 'icon-cluster',
