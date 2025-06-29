@@ -43,7 +43,7 @@ export async function onRequest(context) {
     html = html.replace('__DESCRIPTION__', url_preview_data.description);
     html = html.replace('__PREVIEW_IMAGE__', url_preview_data.image);
 
-    console.log("Replaced HTML")
+    console.log("Replaced HTML", html)
     // Return a new response with the modified HTML
     return new Response(html, {
         headers: response.headers,
