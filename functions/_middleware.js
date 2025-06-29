@@ -6,7 +6,7 @@ const URL_PREVIEWS = {
     fy26: {
         description: "View Projected Impact of the FY2026 Budget Cuts to the NIH",
         title: DEFAULT_TITLE,
-        image: "FY26-preview.png",
+        image: "https://data.scienceimpacts.org/FY26-preview.png",
     },
     default: {
         description: DEFAULT_DESCRIPTION,
