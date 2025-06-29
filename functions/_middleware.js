@@ -39,9 +39,9 @@ export async function onRequest(context) {
     console.log("URL preview data", url_preview_data);
 
     // Replace the placeholder with the current time
-    html = html.replace('__TITLE__', url_preview_data.title);
-    html = html.replace('__DESCRIPTION__', url_preview_data.description);
-    html = html.replace('__PREVIEW_IMAGE__', url_preview_data.image);
+    html = html.replace(/__TITLE__/g, url_preview_data.title);
+    html = html.replace(/__DESCRIPTION__/g, url_preview_data.description);
+    html = html.replace(/__PREVIEW_IMAGE__/g, url_preview_data.image);
 
     console.log("Replaced HTML", html)
     // Return a new response with the modified HTML
