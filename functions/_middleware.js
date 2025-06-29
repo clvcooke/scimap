@@ -1,7 +1,24 @@
+const DEFAULT_DESCRIPTION = "Developed by an interdisciplinary research team, this website shows how funding cuts reduce economic activity and employment nationwide";
+const DEFAULT_TITLE = "SCIMaP - Impacts of Federal Cuts to Science and Medical Research";
+const DEFAULT_IMAGE = "https://data.scienceimpacts.org/preview2.png";
+
+const URL_PREVIEWS = {
+    fy26: {
+        description: DEFAULT_DESCRIPTION,
+        title: "FY26",
+        image: "https://data.scienceimpacts.org/FY2026-Loss-CD.png",
+    },
+    default: {
+        description: DEFAULT_DESCRIPTION,
+        title: DEFAULT_TITLE,
+        image: DEFAULT_IMAGE,
+    }
+}
+
+
 export async function onRequest(context) {
     // Get the original response by continuing the middleware chain
     const response = await context.next();
-    const url = new URL(context.request.url);
 
     // Ensure we are only modifying HTML responses
     const contentType = response.headers.get("content-type") || "";
@@ -9,14 +26,20 @@ export async function onRequest(context) {
         return response;
     }
 
-    // Get the current time
-    const currentTime = new Date().toISOString();
-
     // Read the original HTML response
     let html = await response.text();
+    let url_preview_data = URL_PREVIEWS.default;
+
+    const url = new URL(context.request.url);
+    const pathPart = url.pathname.toLowerCase();
+    if (pathPart in ["/fy26", "/fy2026"]) {
+        url_preview_data = URL_PREVIEWS.fy26;
+    }
 
     // Replace the placeholder with the current time
-    html = html.replace('__OG_DESCRIPTION__', `Page generated at: ${currentTime} for path ${url.pathname}`);
+    html = html.replace('__TITLE__', url_preview_data.title);
+    html = html.replace('__DESCRIPTION__', url_preview_data.description);
+    html = html.replace('__PREVIEW_IMAGE__', url_preview_data.image);
 
     // Return a new response with the modified HTML
     return new Response(html, {
