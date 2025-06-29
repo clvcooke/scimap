@@ -19,28 +19,31 @@ const URL_PREVIEWS = {
 export async function onRequest(context) {
     // Get the original response by continuing the middleware chain
     const response = await context.next();
-
+    console.log("Got request");
     // Ensure we are only modifying HTML responses
     const contentType = response.headers.get("content-type") || "";
     if (!contentType.startsWith("text/html")) {
         return response;
     }
-
+    console.log("Is HTML");
     // Read the original HTML response
     let html = await response.text();
     let url_preview_data = URL_PREVIEWS.default;
 
     const url = new URL(context.request.url);
     const pathPart = url.pathname.toLowerCase();
+    console.log("Path part", pathPart);
     if (pathPart in ["/fy26", "/fy2026"]) {
         url_preview_data = URL_PREVIEWS.fy26;
     }
+    console.log("URL preview data", url_preview_data);
 
     // Replace the placeholder with the current time
     html = html.replace('__TITLE__', url_preview_data.title);
     html = html.replace('__DESCRIPTION__', url_preview_data.description);
     html = html.replace('__PREVIEW_IMAGE__', url_preview_data.image);
 
+    console.log("Replaced HTML")
     // Return a new response with the modified HTML
     return new Response(html, {
         headers: response.headers,
