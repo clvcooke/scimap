@@ -33,7 +33,7 @@ export async function onRequest(context) {
     const url = new URL(context.request.url);
     const pathPart = url.pathname.toLowerCase();
     console.log("Path part", pathPart);
-    if (pathPart in ["/fy26", "/fy2026"]) {
+    if (["/fy26", "/fy2026"].includes(pathPart)) {
         url_preview_data = URL_PREVIEWS.fy26;
     }
     console.log("URL preview data", url_preview_data);
