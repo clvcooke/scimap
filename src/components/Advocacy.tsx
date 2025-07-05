@@ -58,7 +58,7 @@ function Advocacy() {
                         <List.Item>NIH research supports over 400,000 jobs across the U.S.</List.Item>
                         <List.Item>Reducing indirect cost rates to 15% would undermine the ability of universities,
                             hospitals, and research institutes to conduct life saving, medical research.</List.Item>
-                        <List.Item>Terminating grants wastes funds by interrupting ongoing research projects, including
+                        <List.Item>Cancelling or freezing grants wastes funds by interrupting ongoing research projects, including
                             active clinical trials, at institutions across the country.</List.Item>
                     </List>
                 </Card.Section>

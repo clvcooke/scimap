@@ -104,22 +104,23 @@ function About() {
                 <AccordionItem value="current-impact-term-grants">
                     <Accordion.Control>
                         <Title order={textOrder}>
-                            Current Impact: Terminated Grants
+                            Current Impact: Cancelled and Frozen Grants
                         </Title>
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
-                            Many NIH grants for health research have already been cancelled, interrupting ongoing
-                            studies and clinical trials. To track terminated grants, we use the <a
+                            Many NIH grants for health research have already been cancelled (formally terminated) or
+                            frozen (funds withheld without justification), interrupting ongoing
+                            studies and clinical trials. To track canceled and frozen grants, we use the <a
                             href={"https://grant-watch.us/nih-data.html"} target={"_blank"}> Grant Watch database</a>,
-                            which is based on reports from government sources and researchers. Please note that
-                            terminations (and sometimes restorations) of grants are ongoing, so data are subject to
-                            change. There can also be lags between when a grant is terminated or restored and when the
-                            change appears in the database.
+                            which is based on reports from government sources and researchers. Please note that changes
+                            to grants are ongoing, so data are subject to change. Grants that are restored or unfrozen
+                            are removed from our loss estimates. There can also be lags between when a grant is affected
+                            and when the change appears in the database.
                         </Text>
                         <Text ta={"left"} mt={'sm'}>
-                            For terminated grants, we assume that losses are equivalent to the remaining grant funds
-                            that were not spent at the time of cancellation. Terminated grants from adjacent divisions
+                            For cancelled and frozen grants, we assume that losses are equivalent to the remaining grant funds
+                            that were not spent at the time of cancellation. Cancelled and frozen grants from adjacent divisions
                             within the same institution (e.g., the main campus and medical school of the same
                             university) are combined under one broader institution label (e.g., “Columbia University”).
                         </Text>
@@ -167,7 +168,7 @@ function About() {
                     <Accordion.Panel>
                         <Text ta={"left"}>
                             For estimates of economic losses in communities, resulting from changes to funding for
-                            indirect costs as well as terminated grants, we multiply direct loss values by 2.56. This
+                            indirect costs as well as cancelled/frozen grants, we multiply direct loss values by 2.56. This
                             multiplier is derived from <a target={"_blank"}
                                                           href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"}>a
                             recent report</a>, which found that every dollar invested in NIH
@@ -181,7 +182,7 @@ function About() {
                             counties.
                         </Text>
                         <Text ta={'left'} mt={'sm'}>
-                            Note that terminated grants do not count toward the estimates of future losses that would
+                            Note that cancelled and frozen grants do not count toward the estimates of future losses that would
                             result from a 15% cap on indirect costs, to prevent double-counting. This means that
                             estimates of total loss are not necessarily the sum of future and current losses.
                         </Text>
@@ -295,6 +296,12 @@ function About() {
                         </Text>
                         <Text ta={"left"}>
                             The effects of the proposed FY2026 budget are now included in a separate tab.
+                        </Text>
+                        <Text ta={"left"} mt="sm">
+                            <b>June 30, 2025</b>
+                        </Text>
+                        <Text ta={"left"}>
+                            Following an update to Grant Watch, we now track frozen grants in addition to cancelled grants under current losses.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>

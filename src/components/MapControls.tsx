@@ -60,7 +60,7 @@ function MapControls({mode, setMode, showGrants, setShowGrants, setShowShare}: M
                 ]}
             />
             {setShowGrants && <Switch
-                label={<Group gap={'xs'} wrap={'nowrap'} align={'center'}><span>Terminated Grants</span>
+                label={<Group gap={'xs'} wrap={'nowrap'} align={'center'}><span>Cancelled Grants</span>
                     {showGrants && <IconMapPinFilled color={'#0073ff'} size={'1rem'}/>}
                     {!showGrants && <IconMapPinOff color={'#0073ff'} size={'1rem'}/>}
                 </Group>}

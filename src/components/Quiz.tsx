@@ -61,12 +61,12 @@ function LossGuessCancelled({stateValue, lossGuess, setLossGuess}: LossGuessProp
                 </Text>
 
                 <Text ta='left' size="md">
-                    Many NIH grants for health research have been cancelled, interrupting ongoing studies and clinical
+                    Many NIH grants for health research have been cancelled or frozen, interrupting ongoing studies and clinical
                     trials. These cancelled grants will cause economic losses in your state.
                 </Text>
 
                 <Text ta='left' size="md">
-                    Can you guess how many <b>millions of dollars</b> will be lost due to cancelled grants
+                    Can you guess how many <b>millions of dollars</b> will be lost due to cancelled and frozen grants
                     in <b>{stateValue}</b>?
                 </Text>
 
@@ -157,11 +157,11 @@ function ResultsDisplay({
             <Stack>
                 <Stack gap="xs">
                     <Text ta="left" size="lg" fw={500}>
-                        Cancelled NIH Grants:
+                        Cancelled and Frozen NIH Grants:
                     </Text>
                     <Text ta="left" ml={'md'}>
                         You guessed that <b>{stateValue}</b> would lose <b>${NUMBER_FORMATTER_LONG.format(lossGuessCancelled * 1_000_000)}</b> due to
-                        cancelled grants.
+                        cancelled and frozen grants.
                     </Text>
                     <Text ta="left" ml={'md'}>
                         Currently, cancelled grants in <b>{stateValue}</b> are projected to cause losses

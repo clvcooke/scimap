@@ -58,7 +58,7 @@ const ImpactStatementPart2 = ({active, ref}: { active: boolean, ref: any }) => {
         }}
     >
         <Text size="md" c="dark" ta="left" mb="md">
-            Many NIH grants for health research have been cancelled, interrupting ongoing studies and clinical
+            Many NIH grants for health research have been cancelled or frozen, interrupting ongoing studies and clinical
             trials <b>(current losses)</b>. The administration also ordered across-the-board cuts to NIH funding
             for
             "indirect costs" of research, which covers essential facilities, equipment, staff, and safety checks

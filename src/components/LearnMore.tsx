@@ -72,7 +72,7 @@ function LearnMore() {
                         </Text>
                         <Text ta={"left"} mt="sm">
                             There are two major sources of cuts to NIH funding, which will result in current and future
-                            losses. First, many NIH grants for health research have already been cancelled, interrupting
+                            losses. First, many NIH grants for health research have already been cancelled or frozen, interrupting
                             ongoing studies and clinical trials.
                         </Text>
                         <Text ta={"left"} mt="sm">
@@ -135,8 +135,7 @@ function LearnMore() {
                             Other threats to research include cancellations of grants from other federal agencies,
                             elimination of doctoral student training opportunities, and mass layoffs of scientists and
                             staff working at NIH, CDC, and other health agencies. There are also widespread opportunity
-                            costs due to cancelled funding opportunities, disrupted review of grant proposals, and funds
-                            that are being withheld from institutions.
+                            costs due to cancelled funding opportunities, disrupted review of grant proposals.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>

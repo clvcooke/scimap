@@ -49,7 +49,7 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
             onClose={onClose}
             title={
                 <Title size={'h2'}>
-                    Terminated NIH Grants
+                    Cancelled & Frozen NIH Grants
                 </Title>
 
             }
@@ -59,7 +59,7 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
             <Stack gap={'sm'}>
 
             <Text ta={'left'}>
-                <i>Note: This does not include terminated grants from other federal agencies</i>
+                <i>Note: This does not include canceled and frozen grants from other federal agencies</i>
             </Text>
             <ScrollArea style={{ height: "80%" }}>
                 <Stack>
@@ -81,8 +81,8 @@ function GrantsOverlay({ grants, opened, onClose }: GrantsOverlayProps) {
                                     align="start"
                                     justify="space-between"
                                 >
-                                    <Text fw={500}>Grants Cancelled: {grants.length}</Text>
-                                    <Text fw={500}>Funding Lost: {formattedDollarsLost}</Text>
+                                    <Text fw={400}>Grants Cancelled/Frozen: {grants.length}</Text>
+                                    <Text fw={400}>Funding Lost: {formattedDollarsLost}</Text>
                                 </Flex>
                             </Card>
                         );
