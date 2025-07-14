@@ -1,7 +1,5 @@
 import { ActionIcon, Button, Drawer, Group, Select, Stack, Switch, useMantineTheme } from "@mantine/core";
 import {
-    IconMapPinFilled,
-    IconMapPinOff,
     IconSettings,
     IconShare
 } from "@tabler/icons-react";
