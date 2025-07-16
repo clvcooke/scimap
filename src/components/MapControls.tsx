@@ -17,6 +17,9 @@ interface MapControlsProps {
 
 }
 
+const LOCATION_MARKER_OFF_PATH = "https://data.scienceimpacts.org/location-marker-off.png"
+const LOCATION_MARKER_ON_PATH = "https://data.scienceimpacts.org/location-marker-on.png"
+
 
 function MapControls({ mode, setMode, showGrants, setShowGrants, setShowShare }: MapControlsProps) {
     const theme = useMantineTheme();
@@ -59,11 +62,11 @@ function MapControls({ mode, setMode, showGrants, setShowGrants, setShowShare }:
             />
             {setShowGrants && <Switch
                 label={<Group gap={'xs'} wrap={'nowrap'} align={'center'}><span>Cancelled Grants</span>
-                    {showGrants && <img src="public/location-marker-on.png" style={{
+                    {showGrants && <img src={LOCATION_MARKER_ON_PATH} style={{
                         height: '1rem',
                         width: '1rem'
                     }}></img>}
-                    {!showGrants && <img src="public/location-marker-off.png" style={{
+                    {!showGrants && <img src={LOCATION_MARKER_OFF_PATH} style={{
                         height: '1rem',
                         width: '1rem',
                         opacity: '0.5',
