@@ -440,6 +440,7 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                         }
                     }}
                     _pickable={!showOverlay}
+                    getCursor={({isDragging}) => isDragging ? 'grabbing' : hoverInfo ? 'grab' : 'pointer'}
                 >
                     <div style={{
                         position: 'absolute',
