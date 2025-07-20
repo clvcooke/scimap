@@ -93,21 +93,20 @@ function App() {
         }
     }, [currentTab, showReport]);
 
-
     if (showReport) {
         return <ReportCard
-            stateCode="CA"
-            districtId="CA-12"
-            representativeName="Nancy Pelosi (D)"
-            senatorNames={["Dianne Feinstein (D)", "Alex Padilla (D)"]}
+            stateCode="PA"
+            districtId="PA-12"
+            representativeName="Brain Fitzpatrick (R)"
+            senatorNames={["Dave McCormick (R)", "John Fetterman (D)"]}
             econLoss={125_000_000}
             jobsLoss={1250}
             grantFunds={450_000_000}
             terminatedLoss={35_000_000}
-            minLat={39.97636653642282}
-            minLon={-75.28291270099605}
-            maxLat={40.1204579782761}
-            maxLon={-74.97111791695097}
+            minLat={40.08546510220388}
+            minLon={-75.57801070248541}
+            maxLat={40.58879179335094}
+            maxLon={ -74.70599577527773}
         />
 
     }

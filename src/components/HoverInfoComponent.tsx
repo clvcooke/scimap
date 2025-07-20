@@ -1,7 +1,7 @@
 import {Card, Text, Flex, Stack} from '@mantine/core';
 import {JSX} from "react";
-import {NUMBER_FORMATTER} from "../constants.ts";
 import {HOUSE_REPS} from "../data/reps.ts";
+import {generateEconLossString, generateJobLossString, processRepName} from "../utils/info.ts";
 
 type BaseIDCTile = {
     state: string;
@@ -155,41 +155,6 @@ type HoverContentProps = Props & {
     state: string;
     repName: string | null;
     district: string | null;
-}
-
-function processRepName(repName: string, party: string): string {
-    let rep_name = repName;
-    if (party?.startsWith("Republican")) {
-        rep_name = `${rep_name} (R)`;
-    } else if (party?.startsWith("Democrat")) {
-        rep_name = `${rep_name} (D)`;
-    } else {
-        if (!rep_name?.trim()) {
-            rep_name = `Vacant Seat`;
-        } else {
-            rep_name = `${rep_name} (I)`;
-        }
-    }
-    rep_name = rep_name.replace('""', '"').replace('""', '"');
-    return rep_name;
-}
-
-function generateEconLossString(econLoss: number) {
-    let econLossString: string;
-    if (econLoss < 100) {
-        econLossString = "<$100"
-    } else {
-        econLossString = `$${NUMBER_FORMATTER.format(econLoss)}`;
-    }
-    return econLossString
-}
-
-function generateJobLossString(jobLoss: number) {
-    if (jobLoss < 10) {
-        return "<10"
-    } else {
-        return `${NUMBER_FORMATTER.format(jobLoss)}`;
-    }
 }
 
 
