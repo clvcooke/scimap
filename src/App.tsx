@@ -14,6 +14,7 @@ import {ANALYTICS_ACTIONS, BaseLayer, Overlay} from "./constants.ts";
 import {initializeGA, initializePostHog, trackEvent} from "./utils/analytics.ts";
 import FS26Map from "./components/FS26Map.tsx";
 import {More} from "./components/More.tsx";
+import {ReportCard} from "./components/ReportCard.tsx";
 
 
 function App() {
@@ -25,7 +26,9 @@ function App() {
     const [impactOpen, setImpactOpen] = useState(false);
     const [baseLayer, setBaseLayer] = useState<BaseLayer>("IDC");
     const [overlayLayer, setOverlayLayer] = useState<Overlay>("GRANTS");
-    const [disabledTabs, setDisabledTabs] = useState<TabOption[]>([])
+    const [disabledTabs, setDisabledTabs] = useState<TabOption[]>([]);
+    const [showReport, setShowReport] = useState(false);
+
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -35,8 +38,13 @@ function App() {
 
         const [baseLayer, overlayLayer] = conditionParam?.split("_") ?? [];
 
-        if (["/fy26", "/fy2026"].includes(window.location.pathname.toLowerCase())) {
+        const path = window.location.pathname.toLowerCase();
+        if (["/fy26", "/fy2026"].includes(path)) {
             setCurrentTab('budget');
+        }
+
+        if (["/report"].includes(path)) {
+            setShowReport(true);
         }
 
 
@@ -76,13 +84,33 @@ function App() {
     const showMore = currentTab === "more";
 
     useEffect(() => {
-        if (currentTab === "budget") {
+        if (showReport) {
+            window.history.replaceState(null, "FY2026 NIH Budget Report Card", "/report")
+        } else if (currentTab === "budget") {
             window.history.replaceState(null, "FY2026 NIH Budget Proposal Economic Impact", "/fy26")
         } else {
             window.history.replaceState(null, "SCIMaP - Impacts of Federal Cuts to Science and Medical Research", "/")
         }
-    }, [currentTab])
+    }, [currentTab, showReport]);
 
+
+    if (showReport) {
+        return <ReportCard
+            stateCode="CA"
+            districtId="CA-12"
+            representativeName="Nancy Pelosi (D)"
+            senatorNames={["Dianne Feinstein (D)", "Alex Padilla (D)"]}
+            econLoss={125_000_000}
+            jobsLoss={1250}
+            grantFunds={450_000_000}
+            terminatedLoss={35_000_000}
+            minLat={39.97636653642282}
+            minLon={-75.28291270099605}
+            maxLat={40.1204579782761}
+            maxLon={-74.97111791695097}
+        />
+
+    }
     return <>
         <Flex
             direction="column" justify="space-between" align="center"
