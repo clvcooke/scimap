@@ -1,20 +1,20 @@
 import {NUMBER_FORMATTER} from "../constants.ts";
 
-export function processRepName(repName: string, party: string): string {
-    let rep_name = repName;
+export function processPoliticianName(name: string, party: string): string {
+    let formatted_name = name;
     if (party?.startsWith("Republican")) {
-        rep_name = `${rep_name} (R)`;
+        formatted_name = `${formatted_name} (R)`;
     } else if (party?.startsWith("Democrat")) {
-        rep_name = `${rep_name} (D)`;
+        formatted_name = `${formatted_name} (D)`;
     } else {
-        if (!rep_name?.trim()) {
-            rep_name = `Vacant Seat`;
+        if (!formatted_name?.trim()) {
+            formatted_name = `Vacant Seat`;
         } else {
-            rep_name = `${rep_name} (I)`;
+            formatted_name = `${formatted_name} (I)`;
         }
     }
-    rep_name = rep_name.replace('""', '"').replace('""', '"');
-    return rep_name;
+    formatted_name = formatted_name.replace('""', '"').replace('""', '"');
+    return formatted_name;
 }
 
 export function generateEconLossString(econLoss: number) {

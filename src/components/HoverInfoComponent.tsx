@@ -1,7 +1,7 @@
 import {Card, Text, Flex, Stack} from '@mantine/core';
 import {JSX} from "react";
-import {HOUSE_REPS} from "../data/reps.ts";
-import {generateEconLossString, generateJobLossString, processRepName} from "../utils/info.ts";
+import {generateEconLossString, generateJobLossString, processPoliticianName} from "../utils/info.ts";
+import {getHouseRep, getSenators} from "../data/legislature.ts";
 
 type BaseIDCTile = {
     state: string;
@@ -155,6 +155,7 @@ type HoverContentProps = Props & {
     state: string;
     repName: string | null;
     district: string | null;
+    senatorNames: string[];
 }
 
 
@@ -165,7 +166,8 @@ function generateDefaultHover({
                                   state,
                                   county,
                                   repName,
-                                  district
+                                  district,
+    senatorNames
                               }: HoverContentProps) {
     let econ_loss: number;
     let jobs_loss: number;
@@ -204,6 +206,7 @@ function generateDefaultHover({
         {state && <Text size="lg" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
+        {senatorNames.map(senatorName => <Text size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>)}
         {showJobs && <Text size="md" style={{color: 'black'}}><b>Total Jobs Lost:</b> {jobLossString}</Text>}
         {showSubLosses && <Stack gap={"0.05rem"}>
             <Text size="md" style={{color: 'black'}}><b>{econ_loss_string}:</b> {econLossString}</Text>
@@ -224,7 +227,8 @@ function generateGrantIDCGrantsHover({
                                          state,
                                          county,
                                          repName,
-    district
+                                         district,
+                                         senatorNames
                                      }: HoverContentProps) {
 
     const tileProperties = hoverInfo.properties as CombinedTileProperties;
@@ -244,7 +248,9 @@ function generateGrantIDCGrantsHover({
         {state && <Text size="lg" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
-
+        {senatorNames.map(senatorName => (
+            <Text size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
+        ))}
         <Text size="md" style={{color: 'black'}}><b>Current
             Loss:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
         <Text size="md" style={{color: 'black'}}><b>Annual Future Loss:</b>
@@ -257,6 +263,7 @@ function generateTotalHover({
                                 state,
                                 county,
                                 repName,
+    senatorNames
                             }: HoverContentProps) {
 
     const tileProperties = hoverInfo.properties as CombinedTileProperties;
@@ -286,7 +293,7 @@ function generateTotalHover({
         {state && <Text size="lg" style={{color: 'black'}}><b>{state}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
-
+        {senatorNames.map(senatorName =><Text size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text> )}
         <Text size="md" style={{color: 'black'}}><b>Total
             Loss:</b> {totalEconLossString} and {totalJobLossString} jobs</Text>
         <Text size="md" style={{color: 'black'}}><b>Current
@@ -301,6 +308,7 @@ function generateTermHover({
                                state,
                                county,
                                repName,
+    senatorNames,
                            }: HoverContentProps) {
 
     const tileProperties = hoverInfo.properties as CombinedTileProperties;
@@ -318,6 +326,7 @@ function generateTermHover({
         {state && <Text size="lg" style={{color: 'black'}}><b>{state}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
+        {senatorNames.map(senatorName => <Text size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>)}
 
 
         <Text size="md" style={{color: 'black'}}><b>Current
@@ -329,13 +338,22 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
     if (!hoverInfo) {
         return null;
     }
-    console.log("HOVER INFO", {hoverInfo})
     const state = hoverInfo.properties.state;
     let county: string | null = null;
     let repName: string | null = null;
     let district: string | null = null;
+    const senatorNames: string[] = [];
     if (mode === "county") {
         county = (hoverInfo.properties as CountyTile).county;
+    } else if (mode === "state") {
+        const stateCode = hoverInfo.properties.state_code;
+        const senators = getSenators(stateCode);
+        if (senators.junior) {
+            senatorNames.push(processPoliticianName(senators.junior.name, senators.junior.party));
+        }
+        if (senators.senior) {
+            senatorNames.push(processPoliticianName(senators.senior.name, senators.senior.party));
+        }
     } else if (mode === "districts") {
         const districtTileProperties = (hoverInfo.properties as DistrictTile);
         let raw_rep_name = districtTileProperties.rep_name;
@@ -343,9 +361,10 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
         // 0 for at-large, otherwise number
         const districtNumber = districtTileProperties.CD118FP;
         district = `${districtTileProperties.state_code}-${districtNumber === "00" ? "AL" : districtNumber}`;
-        raw_rep_name = HOUSE_REPS[district]?.name ?? raw_rep_name;
-        raw_pol_party = HOUSE_REPS[district]?.party ?? raw_pol_party;
-        repName = processRepName(raw_rep_name, raw_pol_party);
+        const rep = getHouseRep(district);
+        raw_rep_name = rep?.name ?? raw_rep_name;
+        raw_pol_party = rep?.party ?? raw_pol_party;
+        repName = processPoliticianName(raw_rep_name, raw_pol_party);
     }
 
     let hoverContent: JSX.Element;
@@ -358,7 +377,8 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
         county,
         state,
         repName,
-        district
+        district,
+        senatorNames
     }
 
     if (displayMode === HoverDisplayMode.IDC_GRANTS) {

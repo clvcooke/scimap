@@ -3,30 +3,32 @@ import {generateJobLossString} from "../../utils/info.ts";
 import {generateEconLossString} from "../../utils/info.ts";
 
 export const ReportInfoCard = ({
-                                 stateCode,
-                                 districtId,
-                                 representativeName,
-                                 senatorNames,
-                                 econLoss,
-                                 jobsLoss,
-                                 grantFunds,
-                                 terminatedLoss
+                                   state,
+                                   districtId,
+                                   representativeName,
+                                   juniorSenator,
+    seniorSenator,
+                                   econLoss,
+                                   jobsLoss,
+                                   terminatedLoss
 
-                             }: {
-    stateCode: string,
+                               }: {
+    state: string,
     districtId: string,
     representativeName?: string,
-    senatorNames?: string[],
+    juniorSenator: string;
+    seniorSenator: string;
     econLoss: number,
     jobsLoss: number,
-    grantFunds: number,
     terminatedLoss: number,
-}) => (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+}) => {
+    const districtName = districtId == '00' ? 'At Large' : `District ${districtId}`;
+
+    return <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Stack gap="md">
             <Group justify="space-between" align="flex-start">
                 <Text size="xl" fw={700} c="dark">
-                    {stateCode} {districtId && `District ${districtId.split('-')[1]}`}
+                    {state} {districtName}
                 </Text>
             </Group>
 
@@ -38,12 +40,14 @@ export const ReportInfoCard = ({
                         <Text size="sm" fw={500}>{representativeName}</Text>
                     </Group>
                 )}
-                {senatorNames?.map((senator, index) => (
-                    <Group key={index} justify="space-between">
-                        <Text size="sm" c="dimmed">Senator:</Text>
-                        <Text size="sm" fw={500}>{senator}</Text>
-                    </Group>
-                ))}
+                <Group justify="space-between">
+                    <Text size="sm" c="dimmed">Junior Senator:</Text>
+                    <Text size="sm" fw={500}>{juniorSenator}</Text>
+                </Group>
+                <Group justify="space-between">
+                    <Text size="sm" c="dimmed">Senior Senator:</Text>
+                    <Text size="sm" fw={500}>{seniorSenator}</Text>
+                </Group>
             </Stack>
 
             <Stack gap="sm">
@@ -57,14 +61,10 @@ export const ReportInfoCard = ({
                     <Text size="sm" fw={600}>{generateJobLossString(jobsLoss)}</Text>
                 </Group>
                 <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Grant Funding:</Text>
-                    <Text size="sm" fw={600}>{generateEconLossString(grantFunds)}</Text>
-                </Group>
-                <Group justify="space-between">
                     <Text size="sm" c="dimmed">Terminated Funding:</Text>
                     <Text size="sm" fw={600}>{generateEconLossString(terminatedLoss)}</Text>
                 </Group>
             </Stack>
         </Stack>
     </Card>
-);
+};

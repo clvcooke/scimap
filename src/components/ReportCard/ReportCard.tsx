@@ -7,70 +7,66 @@ import {
     Grid,
 } from '@mantine/core';
 
-import {ReportInfoCard} from "./ReportCard/ReportInfoCard.tsx";
-import {ReportMapCard} from "./ReportCard/ReportMapCard.tsx";
+import {ReportInfoCard} from "./ReportInfoCard.tsx";
+import {ReportMapCard} from "./ReportMapCard.tsx";
+import {getReportCardData} from "../../data/report-card-data.ts";
 
 interface ReportCardProps {
-    stateCode?: string;
-    districtId?: string;
-    representativeName?: string;
-    senatorNames?: string[];
-
-    // Mock data - replace with actual data fetching
-    econLoss?: number;
-    jobsLoss?: number;
-    grantFunds?: number;
-    terminatedLoss?: number;
-
-    // Viewport bounds
-    minLat: number;
-    maxLat: number;
-    minLon: number;
-    maxLon: number;
+    stateCode: string;
+    districtId: string;
 }
 
-
 export const ReportCard: React.FC<ReportCardProps> = ({
-                                                          stateCode = "NJ",
-                                                          districtId = "NJ-03",
-                                                          representativeName = "Andy Kim (D)",
-                                                          senatorNames = ["Cory Booker (D)", "Bob Menendez (D)"],
-                                                          econLoss = 45_600_000,
-                                                          jobsLoss = 456,
-                                                          grantFunds = 125_000_000,
-                                                          terminatedLoss = 12_300_000,
-                                                          minLat,
-                                                          maxLat,
-                                                          minLon,
-                                                          maxLon
+                                                          stateCode,
+                                                          districtId,
                                                       }) => {
+
+    const reportCardData = getReportCardData({stateCode, districtId});
+    if (!reportCardData) {
+        return null;
+    }
+    const {
+        district_bounds,
+        state_bounds,
+        state,
+        IDC_econ_loss,
+        IDC_job_loss,
+        terminated_econ_loss,
+        GEOID,
+        processedRepName,
+        processedJuniorSenator,
+        processedSeniorSenator
+    } = reportCardData;
+
+
     const reportInfoCard = <ReportInfoCard
-        stateCode={stateCode}
+        state={state}
         districtId={districtId}
-        econLoss={econLoss}
-        jobsLoss={jobsLoss}
-        grantFunds={grantFunds}
-        terminatedLoss={terminatedLoss}
-        senatorNames={senatorNames}
-        representativeName={representativeName}
+        econLoss={IDC_econ_loss}
+        jobsLoss={IDC_job_loss}
+        terminatedLoss={terminated_econ_loss}
+        juniorSenator={processedJuniorSenator}
+        seniorSenator={processedSeniorSenator}
+        representativeName={processedRepName}
     />;
-    const minLatState = 39.74357822344452;
-    const maxLatState = 42.28248;
-    const minLonState = -80.5003234699697;
-    const maxLonState = -74.71600701755278;
+
     const stateMapCard = <ReportMapCard
-        minLat={minLatState}
-        maxLat={maxLatState}
-        minLon={minLonState}
-        maxLon={maxLonState}
+        minLat={state_bounds.min_lat}
+        maxLat={state_bounds.max_lat}
+        minLon={state_bounds.min_lng}
+        maxLon={state_bounds.max_lng}
         paddingPx={10}
-        cardType={'state'}/>
+        cardType={'state'}
+        targetDistrict={GEOID}
+        targetState={stateCode}
+    />
     const districtMapCard = <ReportMapCard
-        minLat={minLat}
-        maxLat={maxLat}
-        minLon={minLon}
-        maxLon={maxLon}
+        minLat={district_bounds.min_lat}
+        maxLat={district_bounds.max_lat}
+        minLon={district_bounds.min_lng}
+        maxLon={district_bounds.max_lng}
         cardType={'district'}
+        targetDistrict={GEOID}
     />
 
 
@@ -91,8 +87,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                 <Grid gutter={'sm'}>
                     <Grid.Col span={4}>
                         <Stack gap={'sm'}>
-                        {reportInfoCard}
-                        {stateMapCard}
+                            {reportInfoCard}
+                            {stateMapCard}
                         </Stack>
                     </Grid.Col>
                     <Grid.Col span={8}>

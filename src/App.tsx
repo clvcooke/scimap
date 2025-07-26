@@ -14,7 +14,7 @@ import {ANALYTICS_ACTIONS, BaseLayer, Overlay} from "./constants.ts";
 import {initializeGA, initializePostHog, trackEvent} from "./utils/analytics.ts";
 import FS26Map from "./components/FS26Map.tsx";
 import {More} from "./components/More.tsx";
-import {ReportCard} from "./components/ReportCard.tsx";
+import {ReportCardWrapper} from "./components/ReportCardWrapper.tsx";
 
 
 function App() {
@@ -27,24 +27,21 @@ function App() {
     const [baseLayer, setBaseLayer] = useState<BaseLayer>("IDC");
     const [overlayLayer, setOverlayLayer] = useState<Overlay>("GRANTS");
     const [disabledTabs, setDisabledTabs] = useState<TabOption[]>([]);
-    const [showReport, setShowReport] = useState(false);
+    const urlParams = new URLSearchParams(window.location.search)
+    const path = window.location.pathname.toLowerCase();
+    const showReport = ["/report"].includes(path);
 
 
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
+        ;
         const conditionParam = urlParams.get('CONDITION') || urlParams.get('condition') || urlParams.get('Condition');
         const skipWelcome = urlParams.get('SKIP_WELCOME') || urlParams.get('skip_welcome') || urlParams.get('Skip_Welcome');
         const prolificPidParam = urlParams.get('PROLIFIC_PID') || urlParams.get('prolific_pid') || urlParams.get('Prolific_PID');
 
         const [baseLayer, overlayLayer] = conditionParam?.split("_") ?? [];
 
-        const path = window.location.pathname.toLowerCase();
         if (["/fy26", "/fy2026"].includes(path)) {
             setCurrentTab('budget');
-        }
-
-        if (["/report"].includes(path)) {
-            setShowReport(true);
         }
 
 
@@ -85,31 +82,19 @@ function App() {
 
     useEffect(() => {
         if (showReport) {
-            window.history.replaceState(null, "FY2026 NIH Budget Report Card", "/report")
+            return;
         } else if (currentTab === "budget") {
             window.history.replaceState(null, "FY2026 NIH Budget Proposal Economic Impact", "/fy26")
         } else {
+            console.log("Replacing history")
             window.history.replaceState(null, "SCIMaP - Impacts of Federal Cuts to Science and Medical Research", "/")
         }
     }, [currentTab, showReport]);
 
     if (showReport) {
-        return <ReportCard
-            stateCode="PA"
-            districtId="PA-12"
-            representativeName="Brain Fitzpatrick (R)"
-            senatorNames={["Dave McCormick (R)", "John Fetterman (D)"]}
-            econLoss={125_000_000}
-            jobsLoss={1250}
-            grantFunds={450_000_000}
-            terminatedLoss={35_000_000}
-            minLat={40.08546510220388}
-            minLon={-75.57801070248541}
-            maxLat={40.58879179335094}
-            maxLon={ -74.70599577527773}
-        />
-
+        return <ReportCardWrapper />;
     }
+
     return <>
         <Flex
             direction="column" justify="space-between" align="center"

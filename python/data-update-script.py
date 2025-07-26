@@ -8,6 +8,8 @@ from datetime import datetime, timezone
 
 import tempfile
 import boto3
+import requests
+import yaml
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Convert absolute paths to relative paths
@@ -39,6 +41,9 @@ CONGRESSIONAL_GEO_FILE = os.path.join(
 
 COUNTY_OUTPUT_FILE = os.path.join(
     FINAL_OUTPUT_DIR, "merged_data_counties_total.geojson"
+)
+DISTRICT_INFO_OUTPUT_PATH = os.path.join(
+    FINAL_OUTPUT_DIR, "district_info.json"
 )
 STATE_OUTPUT_FILE = os.path.join(FINAL_OUTPUT_DIR, "merged_data_states_total.geojson")
 CONGRESSIONAL_OUTPUT_FILE = os.path.join(
@@ -103,9 +108,9 @@ def fetch_latest_data():
     print(f"Latest prefix: {latest_prefix}")
 
     files_response = s3_client.list_objects_v2(
-                Bucket=bucket_name,
-                Prefix=latest_prefix
-            )
+        Bucket=bucket_name,
+        Prefix=latest_prefix
+    )
 
     print("\nContents of latest directory:")
     if 'Contents' in files_response:
@@ -115,7 +120,6 @@ def fetch_latest_data():
             print(f"├── {file_name} ({size_mb:.2f} MB)")
     else:
         print("Directory is empty")
-
 
     files_to_download = [
         'terminated_points.csv',
@@ -202,7 +206,7 @@ def process_state_data(data_folder):
 
     geojson_data = create_geojson(merged_gdf)
     save_geojson(geojson_data, STATE_OUTPUT_FILE)
-    return df_total_state
+    return df_total_state, merged_gdf
 
 
 def process_congressional_data(data_folder):
@@ -220,6 +224,7 @@ def process_congressional_data(data_folder):
 
     geojson_data = create_geojson(merged_gdf)
     save_geojson(geojson_data, CONGRESSIONAL_OUTPUT_FILE)
+    return merged_gdf
 
 
 def tile_and_upload(version, area: str):
@@ -259,6 +264,43 @@ def generate_state_totals(state_dataframe):
         json.dump({"STATE_LOSSES": state_losses}, fp)
 
 
+def generate_district_info(congression_geojson, state_geojson):
+    all_info = {}
+    for row in congression_geojson.to_dict("records"):
+        state_code = row["state_code"]
+        district_num = row["CD118FP"]
+        district_geometry = row["geometry"]
+        state_row = state_geojson[state_geojson["state_code"] == state_code].iloc[0]
+        state_geometry = state_row["geometry"]
+
+        district_bounds = district_geometry.bounds
+        state_bounds = state_geometry.bounds
+
+        row_without_geometry = row.copy()
+        del row_without_geometry['geometry']
+
+        district_info = {
+            "district_bounds": {
+                "min_lng": district_bounds[0],
+                "min_lat": district_bounds[1],
+                "max_lng": district_bounds[2],
+                "max_lat": district_bounds[3]
+            },
+            "state_bounds": {
+                "min_lng": state_bounds[0],
+                "min_lat": state_bounds[1],
+                "max_lng": state_bounds[2],
+                "max_lat": state_bounds[3]
+            },
+            **row_without_geometry
+        }
+
+        all_info[f"{state_code}-{district_num}"] = district_info
+    with open(os.path.join(REACT_DATA_DIR, "report_card_info.json"), "w") as fp:
+        json.dump(all_info, fp)
+    return all_info
+
+
 def generate_terminated_grants(data_dir):
     terminated_grants_filepath = os.path.join(data_dir, "output", TERM_GRANTS_FILENAME)
     grant_losses = []
@@ -280,23 +322,65 @@ def generate_tile_version_file(data_version):
     with open(os.path.join(REACT_DATA_DIR, "tile_version.json"), "w") as fp:
         json.dump({"TILE_VERSION": date}, fp)
 
+def generate_legislatures():
+    # URL of the YAML file
+    url = "https://raw.githubusercontent.com/unitedstates/congress-legislators/refs/heads/main/legislators-current.yaml"
+    # Fetch the content from the URL
+    try:
+        response = requests.get(url)
+        # Raise an exception if the request was unsuccessful
+        response.raise_for_status()
+
+        # Load the YAML content directly from the response text
+        data = yaml.safe_load(response.text)
+        reps_by_district = {}
+        sen_by_state = {}
+
+        for d in data:
+            current_term = d['terms'][-1]
+            state = current_term['state']
+            if current_term['type'] == 'sen':
+                if state not in sen_by_state:
+                    sen_by_state[state] = {}
+                sen_by_state[state][current_term['state_rank']] = {
+                    "name": d['name']["official_full"],
+                    "party": current_term['party'],
+                }
+            else:
+                reps_by_district[f"{state}-{current_term['district']:02d}"] = {
+                    'name': d['name']["official_full"],
+                    'party': current_term['party'],
+                }
+        with open(os.path.join(REACT_DATA_DIR, "legislators.json"),"w") as fp:
+            json.dump({
+                "reps": reps_by_district,
+                "sens": sen_by_state,
+            }, fp)
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching the URL: {e}")
+    except yaml.YAMLError as e:
+        print(f"Error parsing the YAML file: {e}")
 
 if __name__ == "__main__":
     temp_data_dir, date_version = fetch_latest_data()
 
     print("Processing raw data into GeoJSONs")
     process_county_data(temp_data_dir)
-    state_total_dataframe = process_state_data(temp_data_dir)
+    state_total_dataframe, states_gdf = process_state_data(temp_data_dir)
     process_congressional_data(temp_data_dir)
+    congressional_gdf = process_congressional_data(temp_data_dir)
 
     print("Generating summary files")
     generate_state_totals(state_total_dataframe)
     generate_terminated_grants(temp_data_dir)
+    generate_district_info(congressional_gdf, states_gdf)
+    print("Generating legislators")
+    generate_legislatures()
 
-    print("Tiling and Uploading")
-    tile_and_upload(date_version, "counties")
-    tile_and_upload(date_version, "states")
-    tile_and_upload(date_version, "congs")
-    generate_tile_version_file(date_version)
+    # print("Tiling and Uploading")
+    # tile_and_upload(date_version, "counties")
+    # tile_and_upload(date_version, "states")
+    # tile_and_upload(date_version, "congs")
+    # generate_tile_version_file(date_version)
 
-    shutil.rmtree(temp_data_dir)
+    # shutil.rmtree(temp_data_dir)

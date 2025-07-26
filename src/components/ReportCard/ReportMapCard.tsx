@@ -3,12 +3,11 @@ import {ScaleLinear, scaleLinear} from "d3-scale";
 import {interpolateMagma} from "d3-scale-chromatic";
 import {MVTLayer} from "@deck.gl/geo-layers";
 import {Card, Stack, Text} from "@mantine/core";
-import {isMobile} from "react-device-detect";
 import DeckGL from "@deck.gl/react";
 import {getViewStateFromBounds} from "../../utils/map-utils";
 import {MapViewState} from "@deck.gl/core";
 import {Map} from 'react-map-gl/maplibre';
-import {generateDistrictOutlineLayer, generateStateOutlineLayer} from "../../layers/state-outline-layer.ts";
+import {generateDistrictOutlineLayer} from "../../layers/state-outline-layer.ts";
 
 
 interface MapCardProps {
@@ -19,6 +18,8 @@ interface MapCardProps {
     minLon: number;
     maxLon: number;
     cardType: 'state' | 'district';
+    targetState?: string;
+    targetDistrict: number;
 }
 
 
@@ -94,7 +95,9 @@ export const ReportMapCard = ({
                                   maxLat,
                                   minLon,
                                   maxLon,
-                                  cardType
+                                  cardType,
+                                  targetDistrict,
+                                  targetState,
                               }: MapCardProps) => {
 
     const colorScaleDistrict = useMemo(() => {
@@ -124,9 +127,9 @@ export const ReportMapCard = ({
                     colorScale: colorScaleState,
                     id: 'state-map-layer',
                     uniqueProperty: 'state_code',
-                    targetId: 'PA'
+                    targetId: targetState
                 }),
-                generateDistrictOutlineLayer('GEOID', 4201, [255, 255, 255], 2)
+                generateDistrictOutlineLayer('GEOID', targetDistrict, [255, 255, 255], 2)
             ]
         } else {
             return [
@@ -135,28 +138,13 @@ export const ReportMapCard = ({
                     colorScale: colorScaleDistrict,
                     id: 'district-map-layer',
                     uniqueProperty: 'GEOID',
-                    targetId: 4201,
+                    targetId: targetDistrict,
                 }),
-                generateDistrictOutlineLayer('GEOID', 4201)
+                generateDistrictOutlineLayer('GEOID', targetDistrict)
             ]
         }
 
-    }, [colorScaleDistrict, colorScaleState, isState])
-
-    const mapLayer = useMemo(() =>
-        isState ? generateMapLayer({
-            tileLink: stateTiles,
-            colorScale: colorScaleState,
-            id: 'state-map-layer',
-            uniqueProperty: 'state_code',
-            targetId: 'PA'
-        }) : generateMapLayer({
-            tileLink: districtTiles,
-            colorScale: colorScaleDistrict,
-            id: 'district-map-layer',
-            uniqueProperty: 'GEOID',
-            targetId: 4201,
-        }), [colorScaleDistrict, colorScaleState, isState]);
+    }, [colorScaleDistrict, colorScaleState, isState, targetDistrict, targetState])
 
     const [viewState, setViewState] = useState<MapViewState>({
         longitude: (minLon + maxLon) / 2,
@@ -186,7 +174,7 @@ export const ReportMapCard = ({
                 {title && <Text size="lg" fw={600} c="dark">{title}</Text>}
                 <div
                     ref={mapContainerRef}
-                    style={{height: isState ? 300 : 702, position: 'relative'}}
+                    style={{height: isState ? 300 : 670, position: 'relative'}}
                 >
                     <DeckGL
                         initialViewState={viewState}
