@@ -35,7 +35,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         GEOID,
         processedRepName,
         processedJuniorSenator,
-        processedSeniorSenator
+        processedSeniorSenator,
+        top_five_impact,
     } = reportCardData;
 
 

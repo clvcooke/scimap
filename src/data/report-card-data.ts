@@ -1,6 +1,7 @@
 import {processPoliticianName} from "../utils/info.ts";
 import {getHouseRep, getSenators} from "./legislature.ts";
 import reportCardData from "./report_card_info.json"
+
 /**
  * Represents the geographical bounding box with minimum and maximum latitude and longitude.
  */
@@ -11,12 +12,23 @@ interface Bounds {
     max_lat: number;
 }
 
+export interface TopImpact {
+    org_name: string;
+    terminated_loss: number;
+    terminated_econ_loss: number;
+    terminated_job_loss: number;
+    IDC_loss: number;
+    IDC_econ_loss: number;
+    IDC_job_loss: number;
+}
+
 /**
  * Represents the comprehensive data for a congressional district.
  */
 type DistrictData = {
     district_bounds: Bounds;
     state_bounds: Bounds;
+    top_five_impact: TopImpact[];
     state: string;
     state_code: string;
     GEOID: number;
@@ -75,7 +87,7 @@ export function getReportCardData({
 } | null {
     const key = `${stateCode}-${districtId}`;
     // @ts-expect-error: district data is dynamically generated
-    const districtData =  reportCardData[key] as DistrictData || null;
+    const districtData = reportCardData[key] as DistrictData || null;
     if (!districtData) {
         return null;
     }
@@ -83,7 +95,8 @@ export function getReportCardData({
     const senators = getSenators(stateCode);
     const repName = processPoliticianName(rep.name, rep.party);
 
-    return {...districtData,
+    return {
+        ...districtData,
         processedRepName: repName,
         processedJuniorSenator: processPoliticianName(senators.junior.name, senators.junior.party),
         processedSeniorSenator: processPoliticianName(senators.senior.name, senators.senior.party),

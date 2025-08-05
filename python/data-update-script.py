@@ -4,7 +4,7 @@ import json
 import os
 import shutil
 import subprocess
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 import tempfile
 import boto3
@@ -29,6 +29,8 @@ TERM_GRANTS_FILENAME = "terminated_points.csv"
 COUNTY_TOTAL_FILENAME = "NIH_impact_county.csv"
 STATE_TOTAL_FILENAME = "NIH_impact_state.csv"
 CONGRESSIONAL_TOTAL_FILENAME = "NIH_impact_cong.csv"
+
+TOP_FIVE_CONG_IMPACT = "inputs/cong_NIH_top5inst.csv"
 
 STATE_TOTAL_LOSSES_OUTPUT_PATH = os.path.join(REACT_DATA_DIR, "state_total_losses.json")
 TERMINATED_GRANTS_OUTPUT_PATH = os.path.join(REACT_DATA_DIR, "terminated_grants.json")
@@ -92,7 +94,7 @@ def fetch_latest_data():
     target_date = today
     # If no directory for today, try yesterday
     if 'CommonPrefixes' not in dir_response or not dir_response['CommonPrefixes']:
-        yesterday = (datetime.now(timezone.utc) - pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+        yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime('%Y-%m-%d')
         print(f"No data found for today ({today}), trying yesterday ({yesterday})")
         dir_response = s3_client.list_objects_v2(
             Bucket=bucket_name,
@@ -266,10 +268,15 @@ def generate_state_totals(state_dataframe):
 
 def generate_district_info(congression_geojson, state_geojson):
     all_info = {}
+    top_nih_cong = pd.read_csv(TOP_FIVE_CONG_IMPACT)
+
     for row in congression_geojson.to_dict("records"):
         state_code = row["state_code"]
         district_num = row["CD118FP"]
         district_geometry = row["geometry"]
+        GEOID = row["GEOID"]
+        filtered_data = top_nih_cong[top_nih_cong['GEOID'] == int(GEOID)]
+        top_district_data = filtered_data.to_dict(orient='records')
         state_row = state_geojson[state_geojson["state_code"] == state_code].iloc[0]
         state_geometry = state_row["geometry"]
 
@@ -292,6 +299,7 @@ def generate_district_info(congression_geojson, state_geojson):
                 "max_lng": state_bounds[2],
                 "max_lat": state_bounds[3]
             },
+            "top_five_impact": top_district_data,
             **row_without_geometry
         }
 

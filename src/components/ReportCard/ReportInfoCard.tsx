@@ -1,6 +1,7 @@
 import {Card, Group, Stack, Text} from "@mantine/core";
 import {generateJobLossString} from "../../utils/info.ts";
 import {generateEconLossString} from "../../utils/info.ts";
+import {TopImpact} from "../../data/report-card-data.ts";
 
 export const ReportInfoCard = ({
                                    state,
@@ -10,7 +11,8 @@ export const ReportInfoCard = ({
     seniorSenator,
                                    econLoss,
                                    jobsLoss,
-                                   terminatedLoss
+                                   terminatedLoss,
+    topFiveImpact,
 
                                }: {
     state: string,
@@ -21,6 +23,7 @@ export const ReportInfoCard = ({
     econLoss: number,
     jobsLoss: number,
     terminatedLoss: number,
+    topFiveImpact: TopImpact[],
 }) => {
     const districtName = districtId == '00' ? 'At Large' : `District ${districtId}`;
 
