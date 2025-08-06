@@ -5,7 +5,11 @@ import {
     Stack,
     Container,
     Grid,
+    Group,
+    Box,
 } from '@mantine/core';
+
+import {QRCodeSVG} from 'qrcode.react';
 
 import {ReportInfoCard} from "./ReportInfoCard.tsx";
 import {ReportMapCard} from "./ReportMapCard.tsx";
@@ -39,6 +43,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         top_five_impact,
     } = reportCardData;
 
+    // Get the current page URL for the QR code
+    const currentUrl = window.location.href;
 
     const reportInfoCard = <ReportInfoCard
         state={state}
@@ -49,6 +55,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         juniorSenator={processedJuniorSenator}
         seniorSenator={processedSeniorSenator}
         representativeName={processedRepName}
+        topFiveImpact={top_five_impact}
     />;
 
     const stateMapCard = <ReportMapCard
@@ -74,16 +81,35 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     return (
         <Container size="xl" py="xl">
             <Stack gap="md">
-                {/* Header */}
-                <Stack gap={0}>
-                    <Text size="xl" fw={700} c="dark">
-                        Science Research Impact Report
-                    </Text>
-                    <Text size="lg" c="dimmed" mt="xs">
-                        Economic impact of federal health research cuts
-                    </Text>
-                </Stack>
+                {/* Header with QR Code */}
+                <Group justify="space-between" align="flex-start">
+                    <Stack gap={0} style={{ flex: 1 }}>
+                        <Text size="xl" fw={700} c="dark">
+                            Science Research Impact Report
+                        </Text>
+                        <Text size="lg" c="dimmed" mt="xs">
+                            Economic impact of federal health research cuts
+                        </Text>
+                    </Stack>
 
+                    {/* QR Code in top right */}
+                    <Box
+                        style={{
+                            padding: '8px 8px 4px 8px',
+                            backgroundColor: 'white',
+                            borderRadius: '8px',
+                            border: '1px solid #e9ecef',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                        }}
+                    >
+                        <QRCodeSVG
+                            value={currentUrl}
+                            size={60}
+                            level="M"
+                            marginSize={0}
+                        />
+                    </Box>
+                </Group>
 
                 <Grid gutter={'sm'}>
                     <Grid.Col span={4}>
@@ -106,47 +132,4 @@ export const ReportCard: React.FC<ReportCardProps> = ({
             </Stack>
         </Container>
     );
-    //
-    // return (
-    //     <Container size="xl" py="xl">
-    //         <Stack gap="md">
-    //             {/* Header */}
-    //             <Stack gap={'xs'}>
-    //                 <Text size="xl" fw={700} c="dark">
-    //                     Science Research Impact Report
-    //                 </Text>
-    //                 <Text size="lg" c="dimmed" mt="xs">
-    //                     Economic impact of federal health research cuts
-    //                 </Text>
-    //             </Stack>
-    //
-    //             {isMobile ? (
-    //                 <Stack gap="lg">
-    //                     {reportInfoCard}
-    //                     {stateMapCard}
-    //                     {districtMapCard}
-    //                 </Stack>
-    //             ) : (
-    //                 <Grid>
-    //                     <Grid.Col span={4}>
-    //                         {reportInfoCard}
-    //                     </Grid.Col>
-    //                     <Grid.Col span={4}>
-    //                         {stateMapCard}
-    //                     </Grid.Col>
-    //                     <Grid.Col span={4}>
-    //                         {districtMapCard}
-    //                     </Grid.Col>
-    //                 </Grid>
-    //             )}
-    //
-    //             {/* Footer */}
-    //             <div style={{textAlign: 'center'}}>
-    //                 <Text size="sm" c="dimmed">
-    //                     Data sourced from federal grant databases and economic impact models
-    //                 </Text>
-    //             </div>
-    //         </Stack>
-    //     </Container>
-    // );
 };

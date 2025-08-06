@@ -8,11 +8,6 @@ export function generateStateOutlineLayer(targetProperty?: string, targetValue?:
         binary: true,
         getLineColor: (feature: {properties: any}) => {
             let alpha = 200;
-            console.log({
-                targetProperty,
-                targetValue,
-                feature
-            })
             if (targetProperty && targetValue) {
                 if (feature.properties[targetProperty] !== targetValue) {
                     alpha = 10;

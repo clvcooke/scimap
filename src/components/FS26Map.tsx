@@ -72,7 +72,6 @@ function generateMapLayer({
                 colorProperties.map((p) =>
                     feature.properties[p] ?? 0).reduce((previous, current) => previous + current, 0)
             );
-            console.log("PROPERTIES", {props: feature.properties})
             const colorString = interpolateMagma(1 - colorScale(value));
 
 

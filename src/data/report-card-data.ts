@@ -73,6 +73,33 @@ type DistrictData = {
     CD118FP: string;
 }
 
+export function getAvailableDistricts() {
+    const districtsByState: {
+        [state: string]: string[];
+    } = {};
+    Object.keys(reportCardData).forEach(key => {
+        // @ts-expect-error: district data is dynamically generated
+        const districtData =  reportCardData[key] as DistrictData;
+        const state = districtData.state;
+        const districtId = districtData.CD118FP;
+        if (!districtsByState[state]) {
+            districtsByState[state] = [];
+        }
+        districtsByState[state].push(districtId);
+    });
+    return districtsByState;
+}
+
+
+export function getStateNameToCodeMapping(): Record<string, string> {
+    const mapping: Record<string, string> = {};
+    Object.values(reportCardData).forEach((districtData: any) => {
+        mapping[districtData.state] = districtData.state_code;
+    });
+    return mapping;
+}
+
+
 export function getReportCardData({
                                       stateCode,
                                       districtId

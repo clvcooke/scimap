@@ -8,12 +8,11 @@ export const ReportInfoCard = ({
                                    districtId,
                                    representativeName,
                                    juniorSenator,
-    seniorSenator,
+                                   seniorSenator,
                                    econLoss,
                                    jobsLoss,
                                    terminatedLoss,
-    topFiveImpact,
-
+                                   topFiveImpact,
                                }: {
     state: string,
     districtId: string,
@@ -27,47 +26,70 @@ export const ReportInfoCard = ({
 }) => {
     const districtName = districtId == '00' ? 'At Large' : `District ${districtId}`;
 
-    return <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <Stack gap="md">
-            <Group justify="space-between" align="flex-start">
-                <Text size="xl" fw={700} c="dark">
-                    {state} {districtName}
-                </Text>
-            </Group>
+    return <Card shadow="sm" padding="md" radius="md" withBorder>
+        <Stack gap="sm">
+            <Text size="xl" fw={700} c="dark" mb={2}>
+                {state} {districtName}
+            </Text>
 
-            <Stack gap="sm">
-                <Text size="lg" fw={600} c="dark">Representatives</Text>
+            <Stack gap={2}>
+                <Text size="md" fw={600} c="dark" mb={2}>Representatives</Text>
                 {representativeName && (
-                    <Group justify="space-between">
-                        <Text size="sm" c="dimmed">Representative:</Text>
-                        <Text size="sm" fw={500}>{representativeName}</Text>
+                    <Group justify="space-between" gap="xs">
+                        <Text size="sm" c="dark">Representative:</Text>
+                        <Text size="sm" fw={500} ta="right" style={{ flex: 1 }}>{representativeName}</Text>
                     </Group>
                 )}
-                <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Junior Senator:</Text>
-                    <Text size="sm" fw={500}>{juniorSenator}</Text>
+                <Group justify="space-between" gap="xs">
+                    <Text size="sm" c="dark">Junior Senator:</Text>
+                    <Text size="sm" fw={500} ta="right" style={{ flex: 1 }}>{juniorSenator}</Text>
                 </Group>
-                <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Senior Senator:</Text>
-                    <Text size="sm" fw={500}>{seniorSenator}</Text>
+                <Group justify="space-between" gap="xs">
+                    <Text size="sm" c="dark">Senior Senator:</Text>
+                    <Text size="sm" fw={500} ta="right" style={{ flex: 1 }}>{seniorSenator}</Text>
                 </Group>
             </Stack>
 
-            <Stack gap="sm">
-                <Text size="lg" fw={600} c="dark">Economic Impact</Text>
-                <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Total Economic Loss:</Text>
-                    <Text size="sm" fw={600}>{generateEconLossString(econLoss)}</Text>
+            <Stack gap={2}>
+                <Text size="md" fw={600} c="dark" mb={2}>Economic Impact</Text>
+                <Group justify="space-between" gap="xs">
+                    <Text size="sm" c="dark">Total Economic Loss:</Text>
+                    <Text size="sm" fw={600} c="red.7" ta="right">{generateEconLossString(econLoss)}</Text>
                 </Group>
-                <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Jobs Lost:</Text>
-                    <Text size="sm" fw={600}>{generateJobLossString(jobsLoss)}</Text>
+                <Group justify="space-between" gap="xs">
+                    <Text size="sm" c="dark">Jobs Lost:</Text>
+                    <Text size="sm" fw={600} c="red.7" ta="right">{generateJobLossString(jobsLoss)}</Text>
                 </Group>
-                <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Terminated Funding:</Text>
-                    <Text size="sm" fw={600}>{generateEconLossString(terminatedLoss)}</Text>
+                <Group justify="space-between" gap="xs">
+                    <Text size="sm" c="dark">Terminated Funding:</Text>
+                    <Text size="sm" fw={600} c="red.7" ta="right">{generateEconLossString(terminatedLoss)}</Text>
                 </Group>
             </Stack>
+
+            {topFiveImpact && topFiveImpact.length > 0 && (
+                <Stack gap={2}>
+                    <Text size="md" fw={600} c="dark" mb={2}>Most Affected Institutions</Text>
+                    <Stack gap={1}>
+                        {topFiveImpact.slice(0, 5).map((institution, index) => (
+                            <Group key={index} justify="space-between" align="flex-start" gap="xs" wrap="nowrap">
+                                <Text ta={'left'} size="sm"  c="dark" style={{
+                                    flex: 1,
+                                    lineHeight: 1.3,
+                                    minWidth: 0 // Allows text to shrink
+                                }}>
+                                    {institution.org_name}
+                                </Text>
+                                <Text size="sm" fw={600} c="red.7" ta="right" style={{
+                                    whiteSpace: 'nowrap',
+                                    marginLeft: '8px'
+                                }}>
+                                    {generateEconLossString(institution.terminated_econ_loss + institution.IDC_econ_loss)}
+                                </Text>
+                            </Group>
+                        ))}
+                    </Stack>
+                </Stack>
+            )}
         </Stack>
     </Card>
 };

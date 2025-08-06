@@ -64,8 +64,6 @@ function generateMapLayer({
                     feature.properties[p] ?? 0).reduce((previous, current) => previous + current, 0)
             );
 
-            console.log(`${id} ${feature.properties.state}`, {props: feature.properties})
-
             const colorString = interpolateMagma(1 - colorScale(value));
 
             let rgbValues;
@@ -174,12 +172,13 @@ export const ReportMapCard = ({
                 {title && <Text size="lg" fw={600} c="dark">{title}</Text>}
                 <div
                     ref={mapContainerRef}
-                    style={{height: isState ? 300 : 670, position: 'relative'}}
+                    style={{height: isState ? 300 : 735, position: 'relative'}}
                 >
                     <DeckGL
                         initialViewState={viewState}
                         controller={false}
                         layers={mapLayers}
+                        getCursor={() => 'default'}
                     >
                         <Map
                             attributionControl={false}

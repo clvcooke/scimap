@@ -47,7 +47,6 @@ function App() {
 
         setBaseLayer((baseLayer?.toUpperCase() ?? "IDC") as BaseLayer);
         setOverlayLayer((overlayLayer?.toUpperCase() ?? "GRANTS") as Overlay);
-        console.log({baseLayer, overlayLayer, skipWelcome});
         if (skipWelcome?.toLocaleLowerCase() === "true") {
             setImpactOpen(false);
         } else {
@@ -86,7 +85,6 @@ function App() {
         } else if (currentTab === "budget") {
             window.history.replaceState(null, "FY2026 NIH Budget Proposal Economic Impact", "/fy26")
         } else {
-            console.log("Replacing history")
             window.history.replaceState(null, "SCIMaP - Impacts of Federal Cuts to Science and Medical Research", "/")
         }
     }, [currentTab, showReport]);
