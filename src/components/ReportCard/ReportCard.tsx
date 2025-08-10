@@ -6,7 +6,7 @@ import {
     Container,
     Grid,
     Group,
-    Box,
+    Box, Image,
 } from '@mantine/core';
 
 import {QRCodeSVG} from 'qrcode.react';
@@ -92,8 +92,15 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         <Container size="xl" py="xl">
             <Stack gap="md">
                 {/* Header with QR Code */}
+
                 <Group justify="space-between" align="flex-start">
-                    <Stack gap={0} style={{ flex: 1 }}>
+                    <Image src={"/science.png"}
+                           h={76}
+                           w={76}
+                           p={8}
+                    >
+                    </Image>
+                    <Stack gap={0} style={{flex: 1}}>
                         <Text size="xl" fw={700} c="dark">
                             Science Research Impact Report
                         </Text>
