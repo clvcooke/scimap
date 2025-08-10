@@ -4,20 +4,15 @@ Alternative webpage screenshot script using Playwright
 """
 
 import asyncio
+import json
 import os
 import sys
-from datetime import datetime
-import argparse
+from tqdm.asyncio import tqdm
 
-try:
-    from playwright.async_api import async_playwright
-except ImportError:
-    print("Playwright not installed. Install with: pip install playwright")
-    print("Then run: playwright install")
-    sys.exit(1)
+from playwright.async_api import async_playwright
 
 
-async def take_screenshot_playwright(url, output_path=None, wait_time=5000, full_page=True, viewport_size=(1920, 1080)):
+async def take_screenshot_playwright(url, output_path, wait_time=5000, full_page=True, viewport_size=(1920, 1080)):
     """
     Take a screenshot using Playwright.
 
@@ -48,21 +43,13 @@ async def take_screenshot_playwright(url, output_path=None, wait_time=5000, full
             # Wait for specified time
             await page.wait_for_timeout(wait_time)
 
-            # Generate filename if not provided
-            if not output_path:
-                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                domain = url.split("//")[-1].split("/")[0].replace(".", "_")
-                output_path = f"screenshot_{domain}_{timestamp}.png"
 
             # Ensure output directory exists
             output_dir = os.path.dirname(output_path) if os.path.dirname(output_path) else "."
             os.makedirs(output_dir, exist_ok=True)
 
             # Take screenshot
-            print("Taking screenshot...")
             await page.screenshot(path=output_path, full_page=full_page)
-
-            print(f"Screenshot saved to: {output_path}")
             return output_path
 
         except Exception as e:
@@ -73,42 +60,138 @@ async def take_screenshot_playwright(url, output_path=None, wait_time=5000, full
             await browser.close()
 
 
+async def process_district(semaphore, district):
+    """
+    Process a single district with semaphore to limit concurrent operations.
+
+    Args:
+        semaphore: Asyncio semaphore to limit concurrency
+        district: District identifier string
+
+    Returns:
+        tuple: (district, screenshot_path, expected_path)
+    """
+    os.makedirs("outputs/report-cards", exist_ok=True)
+    async with semaphore:
+        try:
+            # Run screenshot
+            district_parts = district.split("-")
+            expected_path = f"outputs/report-cards/report-card-{district}.png"
+            url = f"http://localhost:5173/report?stateCode={district_parts[0]}&districtId={district_parts[1]}"
+
+            screenshot_path = await take_screenshot_playwright(
+                url=url,
+                output_path=expected_path,
+                wait_time=1000,
+                full_page=False,
+                viewport_size=(1920, 1080)
+            )
+
+            return (district, screenshot_path, expected_path)
+        except Exception as e:
+            print(f"Error processing district {district}: {e}")
+            return (district, None, expected_path)
+
+
+def validate_screenshots(results):
+    """
+    Validate that all screenshots were successfully saved.
+
+    Args:
+        results: List of tuples (district, screenshot_path, expected_path)
+
+    Returns:
+        tuple: (successful_count, missing_files)
+    """
+    print("\n" + "="*60)
+    print("VALIDATION RESULTS")
+    print("="*60)
+
+    successful = []
+    missing = []
+
+    for district, screenshot_path, expected_path in results:
+        if screenshot_path and os.path.exists(screenshot_path):
+            # Verify file size is reasonable (> 0 bytes)
+            file_size = os.path.getsize(screenshot_path)
+            if file_size > 0:
+                successful.append((district, screenshot_path, file_size))
+                print(f"✅ {district}: {screenshot_path} ({file_size:,} bytes)")
+            else:
+                missing.append((district, expected_path, "Empty file"))
+                print(f"❌ {district}: {expected_path} (File exists but is empty)")
+        else:
+            missing.append((district, expected_path, "File not found"))
+            print(f"❌ {district}: {expected_path} (File not found)")
+
+    print("\n" + "-"*60)
+    print(f"SUMMARY:")
+    print(f"✅ Successfully generated: {len(successful)} screenshots")
+    print(f"❌ Failed/Missing: {len(missing)} screenshots")
+
+    if missing:
+        print(f"\nMISSED DISTRICTS:")
+        for district, path, reason in missing:
+            print(f"  - {district}: {reason}")
+
+    total_size = sum(size for _, _, size in successful)
+    if successful:
+        print(f"\nTotal size of generated screenshots: {total_size:,} bytes")
+        print(f"Average file size: {total_size // len(successful):,} bytes")
+
+    print("="*60)
+
+    return len(successful), missing
+
+
+async def main_playwright_async():
+    """
+    Main async function to process multiple districts concurrently.
+    """
+    report_card_district_data = "/home/colin/code/scimap/src/data/report_card_info.json"
+    with open(report_card_district_data) as fp:
+        report_card_data = json.load(fp)
+
+    # Create a semaphore to limit concurrent operations to 10
+    semaphore = asyncio.Semaphore(10)
+
+    # Get list of districts to process (currently limited to first 3, but you can change this)
+    districts = list(report_card_data.keys())
+
+    print(f"Starting to process {len(districts)} districts...")
+
+    # Create tasks for all districts
+    tasks = [process_district(semaphore, district) for district in districts]
+
+    # Run all tasks concurrently with progress bar
+    results = []
+    for task in tqdm.as_completed(tasks, desc="Processing districts"):
+        result = await task
+        results.append(result)
+
+    # Validate all screenshots
+    successful_count, missing_files = validate_screenshots(results)
+
+    return results, successful_count, missing_files
+
+
 def main_playwright():
-    """Main function for Playwright version."""
-    # parser = argparse.ArgumentParser(description="Take a screenshot using Playwright")
-    # parser.add_argument("url", help="URL of the webpage to screenshot")
-    # parser.add_argument("-o", "--output", help="Output path for the screenshot")
-    # parser.add_argument("-w", "--wait", type=int, default=5000, help="Wait time in milliseconds")
-    # parser.add_argument("--viewport-only", action="store_true", help="Screenshot viewport only")
-    # parser.add_argument("--width", type=int, default=1920, help="Viewport width")
-    # parser.add_argument("--height", type=int, default=1080, help="Viewport height")
+    """
+    Wrapper function to run the async main function.
+    """
+    results, successful_count, missing_files = asyncio.run(main_playwright_async())
 
-    # args = parser.parse_args()
-
-    url = "http://localhost:5173/report"
-
-    # Validate URL
-    # if not args.url.startswith(("http://", "https://")):
-    #     args.url = "https://" + args.url
-
-    # Run screenshot
-    screenshot_path = asyncio.run(
-        take_screenshot_playwright(
-            url=url,
-            output_path="test.png",
-            wait_time=1000,
-            full_page=False,
-            viewport_size=(1920, 1080)
-        )
-    )
-
-    if screenshot_path:
-        print(f"✅ Screenshot completed successfully!")
-        print(f"📸 Saved as: {screenshot_path}")
-    else:
-        print("❌ Screenshot failed!")
+    # Exit with error code if any screenshots are missing
+    if missing_files:
+        print(f"\n⚠️  Warning: {len(missing_files)} screenshots were not generated successfully!")
         sys.exit(1)
+    else:
+        print(f"\n🎉 All {successful_count} screenshots generated successfully!")
+        sys.exit(0)
 
 
 if __name__ == "__main__":
     main_playwright()
+
+
+# rclone copy report-cards/ r2:scimap-data/report-cards-v0/ --transfers 32
