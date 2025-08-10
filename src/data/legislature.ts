@@ -16,7 +16,7 @@ interface Senators {
     }
 }
 
-export function getHouseRep(district: string): Rep {
+export function getHouseRep(district: string): Rep | null {
     // @ts-expect-error: parsing dynamic JSON data
     return legislatureData["reps"][district] as Rep;
 }

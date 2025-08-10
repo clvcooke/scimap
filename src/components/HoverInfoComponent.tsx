@@ -57,7 +57,7 @@ export type DistrictBudgetTileProperties = BaseBudgetTile & {
     GEOID: number;
     rep_name: string;
     pol_party: string;
-    CD118FP: string;
+    CD119FP: string;
 };
 
 export type CountyIDCTileProperties = BaseIDCTile & {
@@ -84,21 +84,21 @@ export type DistrictIDCTileProperties = BaseIDCTile & {
     GEOID: number;
     rep_name: string;
     pol_party: string;
-    CD118FP: string;
+    CD119FP: string;
 }
 
 export type DistrictGrantTileProperties = BaseGrantTile & {
     GEOID: number;
     rep_name: string;
     pol_party: string;
-    CD118FP: string;
+    CD119FP: string;
 }
 
 export type DistrictCombinedTileProperties = BaseCombinedTile & {
     GEOID: number;
     rep_name: string;
     pol_party: string;
-    CD118FP: string;
+    CD119FP: string;
 }
 
 export type StateGrantTileProperties = BaseGrantTile;
@@ -359,7 +359,7 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
         let raw_rep_name = districtTileProperties.rep_name;
         let raw_pol_party = districtTileProperties.pol_party;
         // 0 for at-large, otherwise number
-        const districtNumber = districtTileProperties.CD118FP;
+        const districtNumber = districtTileProperties.CD119FP;
         district = `${districtTileProperties.state_code}-${districtNumber === "00" ? "AL" : districtNumber}`;
         const rep = getHouseRep(district);
         raw_rep_name = rep?.name ?? raw_rep_name;

@@ -26,7 +26,7 @@ interface MapCardProps {
 const ALPHA_COLOR = 200;
 const domain = "https://data.scienceimpacts.org";
 const stateTiles = `${domain}/tiles_states_budget_v1/{z}/{x}/{y}.pbf`;
-const districtTiles = `${domain}/tiles_districts_budget_v1/{z}/{x}/{y}.pbf`;
+const districtTiles = `${domain}/tiles_districts_budget_119_v2/{z}/{x}/{y}.pbf`;
 
 
 const DISTRICTS_DOMAIN: [number, number] = [5_000_000, 500_000_000];

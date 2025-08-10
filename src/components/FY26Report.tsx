@@ -14,8 +14,8 @@ export function FY26Report({
                                opened,
                                onClose,
                            }: FinancialReportModalProps) {
-    const imageUrl = 'https://data.scienceimpacts.org/scimap_whitehouse_fy2026_nih_budget-map-v2.png';
-    const pdfUrl = 'https://data.scienceimpacts.org/scimap_whitehouse_fy2026_nih_budget_062325.pdf';
+    const imageUrl = 'https://data.scienceimpacts.org/scimap_whitehouse_fy2026_nih_budget-map-v3.png';
+    const pdfUrl = 'https://data.scienceimpacts.org/scimap_whitehouse_fy2026_nih_budget_v2.pdf';
     return (
         <Modal
             opened={opened}
@@ -61,6 +61,9 @@ export function FY26Report({
                             Download the Full Report
                         </Button>
                     </a>
+                </Group>
+                <Group>
+                    <Text size={'xs'}>The report for the 118th congressional districts can be found <a target={"_blank"} href={"https://data.scienceimpacts.org/scimap_whitehouse_fy2026_nih_budget_062325.pdf"}>here</a></Text>
                 </Group>
             </Stack>
         </Modal>

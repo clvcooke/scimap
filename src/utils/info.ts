@@ -1,7 +1,11 @@
 import {NUMBER_FORMATTER} from "../constants.ts";
 
-export function processPoliticianName(name: string, party: string): string {
+export function processPoliticianName(name?: string, party?: string): string {
+    if (!name) {
+        return "Vacant Seat"
+    }
     let formatted_name = name;
+
     if (party?.startsWith("Republican")) {
         formatted_name = `${formatted_name} (R)`;
     } else if (party?.startsWith("Democrat")) {

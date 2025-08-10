@@ -70,7 +70,7 @@ type DistrictData = {
     combined_loss_noself_log: number;
     rep_name: string;
     pol_party: string;
-    CD118FP: string;
+    CD119FP: string;
 }
 
 export function getAvailableDistricts() {
@@ -81,7 +81,7 @@ export function getAvailableDistricts() {
         // @ts-expect-error: district data is dynamically generated
         const districtData =  reportCardData[key] as DistrictData;
         const state = districtData.state;
-        const districtId = districtData.CD118FP;
+        const districtId = districtData.CD119FP;
         if (!districtsByState[state]) {
             districtsByState[state] = [];
         }
@@ -120,7 +120,7 @@ export function getReportCardData({
     }
     const rep = getHouseRep(key);
     const senators = getSenators(stateCode);
-    const repName = processPoliticianName(rep.name, rep.party);
+    const repName = processPoliticianName(rep?.name, rep?.party);
 
     return {
         ...districtData,

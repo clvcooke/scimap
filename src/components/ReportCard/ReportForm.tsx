@@ -37,6 +37,7 @@ function StateDistrictSelector({ onSubmit, disabled = false }: StateDistrictSele
 
         if (selectedState) {
             const districts = districtsByState[selectedState] || [];
+            console.log({districts});
             setAvailableDistricts(districts);
 
             // Auto-select district if there's only one (at-large)

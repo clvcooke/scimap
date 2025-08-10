@@ -25,7 +25,7 @@ const domain = "https://data.scienceimpacts.org"
 
 const countyTiles = `${domain}/tiles_counties_budget_v1/{z}/{x}/{y}.pbf`;
 const stateTiles = `${domain}/tiles_states_budget_v1/{z}/{x}/{y}.pbf`;
-const districtTiles = `${domain}/tiles_districts_budget_v1/{z}/{x}/{y}.pbf`;
+const districtTiles = `${domain}/tiles_districts_budget_119_v2/{z}/{x}/{y}.pbf`;
 
 const ATTRIBUTION = !isMobile ? "SCIMaP © CC BY 4.0" : ""
 

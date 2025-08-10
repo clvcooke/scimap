@@ -2,11 +2,9 @@ import pandas as pd
 import geopandas as gpd
 import json
 import os
-import shutil
 import subprocess
 from datetime import datetime, timezone, timedelta
 
-import tempfile
 import boto3
 import requests
 import yaml
@@ -38,7 +36,7 @@ TERMINATED_GRANTS_OUTPUT_PATH = os.path.join(REACT_DATA_DIR, "terminated_grants.
 COUNTY_GEO_FILE = os.path.join(INPUT_DIR, "merged_data_counties_CLIP_Compress.geojson")
 STATE_GEO_FILE = os.path.join(INPUT_DIR, "merged_data_states_CLIP.geojson")
 CONGRESSIONAL_GEO_FILE = os.path.join(
-    INPUT_DIR, "CongDist_shp/cb_2022_us_cd118_500k.shp"
+    INPUT_DIR, "CongDist_shp_119/Congressional_Districts.shp"
 )
 
 COUNTY_OUTPUT_FILE = os.path.join(
@@ -75,7 +73,7 @@ def fetch_latest_data():
     Returns the path to the temporary directory containing the data
     """
     # Create a temporary directory
-    temp_dir = tempfile.mkdtemp()
+    temp_dir = "/home/colin/data/scimap"
     output_dir = os.path.join(temp_dir, "output")
     os.makedirs(output_dir, exist_ok=True)
     print("Getting fresh data...")
@@ -217,10 +215,14 @@ def process_congressional_data(data_folder):
     )
     df_total_cong = load_data(congressional_total_file)
     congs_gdf = load_data(CONGRESSIONAL_GEO_FILE, file_type="geo")
-    congs_gdf["GEOID"] = congs_gdf["GEOID"].astype("int64")
+    congs = gpd.read_file('inputs/CongDist_shp_119/Congressional_Districts.shp')
+    congs = congs[congs["GEOID"] != "09ZZ"]
+    congs = congs[congs["GEOID"] != "17ZZ"]
+    congs = congs[congs["GEOID"] != "33ZZ"]
+    congs_gdf["GEOID"] = congs["GEOID"].astype("int64")
 
     merged_gdf = merge_data(
-        df_total_cong, congs_gdf, on="GEOID", columns=["GEOID", "geometry", "CD118FP"]
+        df_total_cong, congs_gdf, on="GEOID", columns=["GEOID", "geometry", "CD119FP"]
     )
     merged_gdf = gpd.GeoDataFrame(merged_gdf, geometry="geometry")
 
@@ -272,7 +274,7 @@ def generate_district_info(congression_geojson, state_geojson):
 
     for row in congression_geojson.to_dict("records"):
         state_code = row["state_code"]
-        district_num = row["CD118FP"]
+        district_num = row["CD119FP"]
         district_geometry = row["geometry"]
         GEOID = row["GEOID"]
         filtered_data = top_nih_cong[top_nih_cong['GEOID'] == int(GEOID)]
