@@ -2,6 +2,7 @@ import {Container, Title, Text, Accordion, AccordionItem, Group} from '@mantine/
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 import {isMobile} from "react-device-detect";
+import NewsItem from "./NewsItem.tsx";
 
 const textOrder = isMobile ? 4 : 3;
 
@@ -36,6 +37,101 @@ function CopyrightHeader({year = 2025}: CopyrightHeaderProps) {
         </Title>
     );
 }
+
+const newsItems: {
+    date: string,
+    title: string,
+    url: string,
+    isOngoing?: boolean
+}[] = [
+    {
+        date: "Ongoing",
+        title: "Stand Up for Science, \"Powered by SCIMaP\"",
+        url: "https://www.standupforscience.net/resources",
+        isOngoing: true
+    },
+    {
+        date: "July 23rd, 2025",
+        title: "Center for American Progress",
+        url: "https://www.americanprogress.org/article/mapping-federal-funding-cuts-to-us-colleges-and-universities/"
+    },
+    {
+        date: "July 23rd, 2025",
+        title: "Your Local Epidemiologist",
+        url: "https://yourlocalepidemiologist.substack.com/p/nih-the-quiet-engine-of-science-is"
+    },
+    {
+        date: "July 23, 2025",
+        title: "Inside Higher Education",
+        url: "https://www.insidehighered.com/news/faculty-issues/research/2025/07/23/feds-axed-grants-across-red-blue-states-report-finds"
+    },
+    {
+        date: "July 3rd, 2025",
+        title: "STAT News",
+        url: "https://www.statnews.com/2025/07/03/nih-cuts-grant-restoration-complicated-by-limits-to-court-order-trump-dei-restrictions/"
+    },
+    {
+        date: "June 26, 2025",
+        title: "Research!America",
+        url: "https://www.researchamerica.org/marys-letters/whats-at-risk/"
+    },
+    {
+        date: "June 20, 2025",
+        title: "Tampa Bay Newspapers Weekly",
+        url: "https://www.tbnweekly.com/opinion/article_acaccd5e-ef10-4434-8bb6-cadf464009f9.html"
+    },
+    {
+        date: "June 18, 2025",
+        title: "Association of Health Care Journalists",
+        url: "https://healthjournalism.org/blog/2025/06/mapping-local-economic-consequences-of-federal-cuts-to-nih-how-they-did-it/"
+    },
+    {
+        date: "June 2, 2025",
+        title: "Becker's Hospital Review",
+        url: "https://www.beckershospitalreview.com/hospital-management-administration/hhs-faces-31b-cuts-in-proposed-fy-26-budget-6-notes/"
+    },
+    {
+        date: "April 27, 2025",
+        title: "Houston Chronicle",
+        url: "https://www.pressreader.com/usa/houston-chronicle-sunday/20250427/282071987764907?srsltid=AfmBOop1ZNOR-CGUQicuE6yLCwEGiKHhbzzOFTsF2b8vh_ikZ2JHgP72"
+    },
+    {
+        date: "April 18, 2025",
+        title: "Open Campus",
+        url: "https://www.opencampus.org/2025/04/18/the-ripple-effect-of-cuts-to-nih-research-funding/"
+    },
+    {
+        date: "April 17, 2025",
+        title: "Axios Richmond",
+        url: "https://www.axios.com/local/richmond/2025/04/17/trump-health-funding-cuts-virginia"
+    },
+    {
+        date: "April 16, 2025",
+        title: "Modern Healthcare",
+        url: "https://www.modernhealthcare.com/politics-policy/nih-funding-cuts-counties-cook-suffolk"
+    },
+    {
+        date: "April 11, 2025",
+        title: "Axios Raleigh",
+        url: "https://www.axios.com/local/raleigh/2025/04/11/nih-cuts-would-hurt-raleigh-durham-wake-orange"
+    },
+    {
+        date: "April 9, 2025",
+        title: "Axios",
+        url: "https://www.axios.com/2025/04/09/nih-cuts-nationwide-impact-county-map"
+    },
+    {
+        date: "April 2, 2025",
+        title: "MassLive",
+        url: "https://www.axios.com/2025/04/09/nih-cuts-nationwide-impact-county-map"
+    },
+    {
+        date: "March 28, 2025",
+        title: "Flowing Data",
+        url: "https://flowingdata.com/2025/03/28/economic-impact-of-federal-health-research-cuts/"
+    }
+];
+
 
 
 function About() {
@@ -237,7 +333,7 @@ function About() {
                     </Accordion.Panel>
                 </AccordionItem>
 
-                <AccordionItem value="data-sources">
+                <AccordionItem value="contact-us">
                     <Accordion.Control>
                         <Title order={textOrder}>
                             Contact Us
@@ -248,6 +344,18 @@ function About() {
                             For questions, comments, and press inquiries, please email <a
                             href="mailto:contact@scienceimpacts.org">contact@scienceimpacts.org</a>
                         </Text>
+                    </Accordion.Panel>
+                </AccordionItem>
+                <AccordionItem value="in-the-news">
+                    <Accordion.Control>
+                        <Title order={textOrder}>
+                            News and Policy Mentions
+                        </Title>
+                    </Accordion.Control>
+                    <Accordion.Panel>
+                        {newsItems.map(newsItem => (
+                            <NewsItem key={newsItem.title} {...newsItem} />
+                        ))}
                     </Accordion.Panel>
                 </AccordionItem>
                 <AccordionItem value="data-updates">
@@ -301,7 +409,8 @@ function About() {
                             <b>June 30, 2025</b>
                         </Text>
                         <Text ta={"left"}>
-                            Following an update to Grant Watch, we now track frozen grants in addition to cancelled grants under current losses.
+                            Following an update to Grant Watch, we now track frozen grants in addition to cancelled
+                            grants under current losses.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
