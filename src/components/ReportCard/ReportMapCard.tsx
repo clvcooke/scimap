@@ -8,6 +8,7 @@ import {getViewStateFromBounds} from "../../utils/map-utils";
 import {MapViewState} from "@deck.gl/core";
 import {Map} from 'react-map-gl/maplibre';
 import {generateDistrictOutlineLayer} from "../../layers/state-outline-layer.ts";
+import ColorScale from "../ColorScale.tsx";
 
 
 interface MapCardProps {
@@ -185,6 +186,24 @@ export const ReportMapCard = ({
                             mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
                         />
                     </DeckGL>
+
+                    {!isState && (
+                        <div style={{
+                            position: 'absolute',
+                            right: 10,
+                            bottom: 10,
+                            zIndex: 1,
+                            pointerEvents: 'none',
+                        }}>
+                            <ColorScale
+                                width={8}
+                                height={120}
+                                domain={DISTRICTS_DOMAIN}
+                                logScale={true}
+                                useMagma={true}
+                            />
+                        </div>
+                    )}
                 </div>
             </Stack>
         </Card>
