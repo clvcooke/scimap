@@ -41,6 +41,11 @@ type DistrictData = {
     IDC_loss: number;
     IDC_econ_loss: number;
     IDC_job_loss: number;
+    budg_NIH_cuts_econ_loss: number,
+    budg_NIH_cuts_job_loss: number,
+    budg_NIA_cuts_econ_loss: number,
+    budg_NCI_cuts_econ_loss: number,
+    budg_NIAID_cuts_econ_loss: number,
     grant_funds: number;
     grant_funds_econ: number;
     overlap_loss: number;
@@ -93,7 +98,7 @@ export function getAvailableDistricts() {
 
 export function getStateNameToCodeMapping(): Record<string, string> {
     const mapping: Record<string, string> = {};
-    Object.values(reportCardData).forEach((districtData: any) => {
+    Object.values(reportCardData).forEach((districtData: DistrictData) => {
         mapping[districtData.state] = districtData.state_code;
     });
     return mapping;

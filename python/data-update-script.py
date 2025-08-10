@@ -29,6 +29,7 @@ STATE_TOTAL_FILENAME = "NIH_impact_state.csv"
 CONGRESSIONAL_TOTAL_FILENAME = "NIH_impact_cong.csv"
 
 TOP_FIVE_CONG_IMPACT = "inputs/cong_NIH_top5inst.csv"
+NIH_BUDGET_CONG = "inputs/NIH_budget_cong_119.csv"
 
 STATE_TOTAL_LOSSES_OUTPUT_PATH = os.path.join(REACT_DATA_DIR, "state_total_losses.json")
 TERMINATED_GRANTS_OUTPUT_PATH = os.path.join(REACT_DATA_DIR, "terminated_grants.json")
@@ -271,13 +272,15 @@ def generate_state_totals(state_dataframe):
 def generate_district_info(congression_geojson, state_geojson):
     all_info = {}
     top_nih_cong = pd.read_csv(TOP_FIVE_CONG_IMPACT)
-
+    fy26_budg = pd.read_csv(NIH_BUDGET_CONG)
+    fy26_budg["GEOID"] = fy26_budg["GEOID"].astype("int64")
     for row in congression_geojson.to_dict("records"):
         state_code = row["state_code"]
         district_num = row["CD119FP"]
         district_geometry = row["geometry"]
         GEOID = row["GEOID"]
         filtered_data = top_nih_cong[top_nih_cong['GEOID'] == int(GEOID)]
+        filtered_budg = fy26_budg[fy26_budg['GEOID'] == int(GEOID)].iloc[0]
         top_district_data = filtered_data.to_dict(orient='records')
         state_row = state_geojson[state_geojson["state_code"] == state_code].iloc[0]
         state_geometry = state_row["geometry"]
@@ -302,7 +305,12 @@ def generate_district_info(congression_geojson, state_geojson):
                 "max_lat": state_bounds[3]
             },
             "top_five_impact": top_district_data,
-            **row_without_geometry
+            **row_without_geometry,
+            "budg_NIH_cuts_econ_loss": filtered_budg["budg_NIH_cuts_econ_loss"],
+            "budg_NIH_cuts_job_loss": filtered_budg["budg_NIH_cuts_job_loss"],
+            "budg_NIA_cuts_econ_loss": filtered_budg["budg_NIA_cuts_econ_loss"],
+            "budg_NCI_cuts_econ_loss": filtered_budg["budg_NCI_cuts_econ_loss"],
+            "budg_NIAID_cuts_econ_loss": filtered_budg["budg_NIAID_cuts_econ_loss"]
         }
 
         all_info[f"{state_code}-{district_num}"] = district_info

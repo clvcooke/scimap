@@ -9,79 +9,95 @@ export const ReportInfoCard = ({
                                    representativeName,
                                    juniorSenator,
                                    seniorSenator,
-                                   econLoss,
-                                   jobsLoss,
-                                   terminatedLoss,
+                                   econLossFY26,
+                                   agingLossFY26,
+                                   cancerLossFY26,
+                                   infectLossFY26,
+                                   jobLossFY26,
                                    topFiveImpact,
                                }: {
     state: string,
     districtId: string,
-    representativeName?: string,
+    representativeName: string,
     juniorSenator: string;
     seniorSenator: string;
-    econLoss: number,
-    jobsLoss: number,
+    econLossIDC: number,
+    jobLossIDC: number,
+    econLossFY26: number,
+    jobLossFY26: number,
+    agingLossFY26: number,
+    cancerLossFY26: number,
+    infectLossFY26: number,
     terminatedLoss: number,
     topFiveImpact: TopImpact[],
 }) => {
     const districtName = districtId == '00' ? 'At Large' : `District ${districtId}`;
 
-    return <Card shadow="sm" padding="md" radius="md" withBorder>
-        <Stack gap="sm">
-            <Text size="xl" fw={700} c="dark" mb={2}>
+    return <Card shadow="sm" padding="sm" radius="md" withBorder>
+        <Stack gap="xs">
+            <Text size="lg" fw={700} c="dark" lh={1.2}>
                 {state} {districtName}
             </Text>
 
+            {/* Representatives - Consistent alignment */}
+            <Stack gap={1}>
+                <Text size="xs" fw={600} c="dark" tt="uppercase">Representatives</Text>
+                <Group justify="space-between" gap="xs">
+                    <Text size="xs" c="dark">House Representative:</Text>
+                    <Text size="xs" fw={500} c="dark" ta="right" style={{flex: 1}}>{representativeName}</Text>
+                </Group>
+                <Group justify="space-between" gap="xs">
+                    <Text size="xs" c="dark">Junior Senator:</Text>
+                    <Text size="xs" fw={500} c="dark" ta="right" style={{flex: 1}}>{juniorSenator}</Text>
+                </Group>
+                <Group justify="space-between" gap="xs">
+                    <Text size="xs" c="dark">Senior Senator:</Text>
+                    <Text size="xs" fw={500} c="dark" ta="right" style={{flex: 1}}>{seniorSenator}</Text>
+                </Group>
+            </Stack>
+
+            {/* Economic Impact - Compact */}
             <Stack gap={2}>
-                <Text size="md" fw={600} c="dark" mb={2}>Representatives</Text>
-                {representativeName && (
+                <Text size="xs" fw={600} c="dark" tt="uppercase">FY26 Budget Impact</Text>
+                <Group justify="space-between" gap="xs">
+                    <Text size="xs" fw={500} c="dark">Job Loss:</Text>
+                    <Text size="xs" fw={600} c="red.7">{generateJobLossString(jobLossFY26)}</Text>
+                </Group>
+                <Group justify="space-between" gap="xs">
+                    <Text size="xs" fw={500} c="dark">Economic Loss:</Text>
+                    <Text size="xs" fw={600} c="red.7">{generateEconLossString(econLossFY26)}</Text>
+                </Group>
+
+                {/* Research Areas - Consistent alignment */}
+                <Stack gap={1} ml="xs">
                     <Group justify="space-between" gap="xs">
-                        <Text size="sm" c="dark">Representative:</Text>
-                        <Text size="sm" fw={500} ta="right" style={{ flex: 1 }}>{representativeName}</Text>
+                        <Text size="xs" c="dark">• Aging:</Text>
+                        <Text size="xs" fw={500} c="red.6">{generateEconLossString(agingLossFY26)}</Text>
                     </Group>
-                )}
-                <Group justify="space-between" gap="xs">
-                    <Text size="sm" c="dark">Junior Senator:</Text>
-                    <Text size="sm" fw={500} ta="right" style={{ flex: 1 }}>{juniorSenator}</Text>
-                </Group>
-                <Group justify="space-between" gap="xs">
-                    <Text size="sm" c="dark">Senior Senator:</Text>
-                    <Text size="sm" fw={500} ta="right" style={{ flex: 1 }}>{seniorSenator}</Text>
-                </Group>
+                    <Group justify="space-between" gap="xs">
+                        <Text size="xs" c="dark">• Cancer:</Text>
+                        <Text size="xs" fw={500} c="red.6">{generateEconLossString(cancerLossFY26)}</Text>
+                    </Group>
+                    <Group justify="space-between" gap="xs">
+                        <Text size="xs" c="dark">• Infectious Disease:</Text>
+                        <Text size="xs" fw={500} c="red.6">{generateEconLossString(infectLossFY26)}</Text>
+                    </Group>
+                </Stack>
             </Stack>
 
-            <Stack gap={2}>
-                <Text size="md" fw={600} c="dark" mb={2}>Economic Impact</Text>
-                <Group justify="space-between" gap="xs">
-                    <Text size="sm" c="dark">Total Economic Loss:</Text>
-                    <Text size="sm" fw={600} c="red.7" ta="right">{generateEconLossString(econLoss)}</Text>
-                </Group>
-                <Group justify="space-between" gap="xs">
-                    <Text size="sm" c="dark">Jobs Lost:</Text>
-                    <Text size="sm" fw={600} c="red.7" ta="right">{generateJobLossString(jobsLoss)}</Text>
-                </Group>
-                <Group justify="space-between" gap="xs">
-                    <Text size="sm" c="dark">Terminated Funding:</Text>
-                    <Text size="sm" fw={600} c="red.7" ta="right">{generateEconLossString(terminatedLoss)}</Text>
-                </Group>
-            </Stack>
-
+            {/* Top 5 Institutions - Consistent alignment */}
             {topFiveImpact && topFiveImpact.length > 0 && (
                 <Stack gap={2}>
-                    <Text size="md" fw={600} c="dark" mb={2}>Most Affected Institutions</Text>
+                    <Text size="xs" fw={600} c="dark" tt="uppercase">Top 5 Affected Institutions</Text>
                     <Stack gap={1}>
                         {topFiveImpact.slice(0, 5).map((institution, index) => (
                             <Group key={index} justify="space-between" align="flex-start" gap="xs" wrap="nowrap">
-                                <Text ta={'left'} size="sm"  c="dark" style={{
-                                    flex: 1,
-                                    lineHeight: 1.3,
-                                    minWidth: 0 // Allows text to shrink
-                                }}>
+                                <Text size="xs" c="dark">
                                     {institution.org_name}
                                 </Text>
-                                <Text size="sm" fw={600} c="red.7" ta="right" style={{
+                                <Text size="xs" fw={600} c="red.7" style={{
                                     whiteSpace: 'nowrap',
-                                    marginLeft: '8px'
+                                    marginLeft: '4px'
                                 }}>
                                     {generateEconLossString(institution.terminated_econ_loss + institution.IDC_econ_loss)}
                                 </Text>

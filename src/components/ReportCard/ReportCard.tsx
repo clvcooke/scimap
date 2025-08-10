@@ -41,6 +41,11 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         processedJuniorSenator,
         processedSeniorSenator,
         top_five_impact,
+        budg_NCI_cuts_econ_loss,
+        budg_NIA_cuts_econ_loss,
+        budg_NIAID_cuts_econ_loss,
+        budg_NIH_cuts_econ_loss,
+        budg_NIH_cuts_job_loss,
     } = reportCardData;
 
     // Get the current page URL for the QR code
@@ -49,8 +54,13 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     const reportInfoCard = <ReportInfoCard
         state={state}
         districtId={districtId}
-        econLoss={IDC_econ_loss}
-        jobsLoss={IDC_job_loss}
+        econLossIDC={IDC_econ_loss}
+        jobLossIDC={IDC_job_loss}
+        econLossFY26={budg_NIH_cuts_econ_loss}
+        cancerLossFY26={budg_NCI_cuts_econ_loss}
+        infectLossFY26={budg_NIAID_cuts_econ_loss}
+        agingLossFY26={budg_NIA_cuts_econ_loss}
+        jobLossFY26={budg_NIH_cuts_job_loss}
         terminatedLoss={terminated_econ_loss}
         juniorSenator={processedJuniorSenator}
         seniorSenator={processedSeniorSenator}
