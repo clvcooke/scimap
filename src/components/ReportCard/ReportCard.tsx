@@ -8,7 +8,7 @@ import {
     Group,
     Box,
     Image,
-    ActionIcon,
+    ActionIcon, Anchor,
 } from '@mantine/core';
 import {IconDownload} from '@tabler/icons-react';
 
@@ -118,12 +118,15 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                 {/* Header with QR Code and Download Button */}
 
                 <Group justify="space-between" align="flex-start">
-                    <Image src={"/science.png"}
-                           h={76}
-                           w={76}
-                           p={8}
-                    >
-                    </Image>
+                    <Anchor href="/" underline="never">
+                        <Image src={"/science.png"}
+                               h={76}
+                               w={76}
+                               p={8}
+                        >
+                        </Image>
+                    </Anchor>
+
                     <Stack gap={0} style={{flex: 1}}>
                         <Text size="xl" fw={700} c="dark">
                             Science Research Impact Report { }
