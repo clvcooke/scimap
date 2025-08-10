@@ -194,4 +194,4 @@ if __name__ == "__main__":
     main_playwright()
 
 
-# rclone copy report-cards/ r2:scimap-data/report-cards-v0/ --transfers 32
+# rclone copy report-cards/ r2:scimap-data/report-cards-v1/ --transfers 32
