@@ -6,8 +6,11 @@ import {
     Container,
     Grid,
     Group,
-    Box, Image,
+    Box,
+    Image,
+    ActionIcon,
 } from '@mantine/core';
+import {IconDownload} from '@tabler/icons-react';
 
 import {QRCodeSVG} from 'qrcode.react';
 
@@ -51,6 +54,27 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     // Get the current page URL for the QR code
     const currentUrl = window.location.href;
 
+    // Function to download the report card image
+    const downloadReportCardImage = async () => {
+        const imageUrl = `https://data.scienceimpacts.org/report-cards-v1/report-card-${stateCode}-${districtId}.png`;
+        const fileName = `report-card-${stateCode}-${districtId === "00" ? 'AL' : districtId}.png`;
+
+        try {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error downloading image:', error);
+        }
+    };
+
     const reportInfoCard = <ReportInfoCard
         state={state}
         districtId={districtId}
@@ -91,7 +115,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     return (
         <Container size="xl" py="xl">
             <Stack gap="md">
-                {/* Header with QR Code */}
+                {/* Header with QR Code and Download Button */}
 
                 <Group justify="space-between" align="flex-start">
                     <Image src={"/science.png"}
@@ -102,11 +126,21 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                     </Image>
                     <Stack gap={0} style={{flex: 1}}>
                         <Text size="xl" fw={700} c="dark">
-                            Science Research Impact Report
+                            Science Research Impact Report { }
+                            <ActionIcon
+                                variant="transparent"
+                                size="sm"
+                                onClick={downloadReportCardImage}
+                                title="Download Report Card Image"
+                            >
+                                <IconDownload size={20}/>
+                            </ActionIcon>
                         </Text>
                         <Text size="lg" c="dimmed" mt="xs">
                             Economic impact of federal health research cuts
+
                         </Text>
+
                     </Stack>
 
                     {/* QR Code in top right */}
