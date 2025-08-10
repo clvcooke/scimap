@@ -287,6 +287,21 @@ def generate_district_info(congression_geojson, state_geojson):
 
         district_bounds = district_geometry.bounds
         state_bounds = state_geometry.bounds
+        if state_code == "AK":
+            # For Alaska, clamp the max longitude to 180 to cut off the eastern Aleutians
+            district_bounds = (
+                -180,  # min_lng - keep as is
+                district_bounds[1],  # min_lat - keep as is
+                -130,  # max_lng - clamp to 180
+                district_bounds[3]   # max_lat - keep as is
+            )
+            state_bounds = (
+                -180,  # min_lng - keep as is
+                state_bounds[1],  # min_lat - keep as is
+                -130,  # max_lng - clamp to 180
+                state_bounds[3]   # max_lat - keep as is
+            )
+
 
         row_without_geometry = row.copy()
         del row_without_geometry['geometry']
