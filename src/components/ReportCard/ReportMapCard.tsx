@@ -139,7 +139,7 @@ export const ReportMapCard = ({
                     uniqueProperty: 'GEOID',
                     targetId: targetDistrict,
                 }),
-                generateDistrictOutlineLayer('GEOID', targetDistrict)
+                generateDistrictOutlineLayer('GEOID', targetDistrict, [255, 255, 255], 3),
             ]
         }
 

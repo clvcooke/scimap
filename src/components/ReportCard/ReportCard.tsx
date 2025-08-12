@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {
     Text,
@@ -8,15 +8,17 @@ import {
     Group,
     Box,
     Image,
-    ActionIcon, Anchor,
+    ActionIcon,
+    Anchor,
+    Modal,
 } from '@mantine/core';
-import {IconDownload} from '@tabler/icons-react';
+import { IconDownload, IconShare } from '@tabler/icons-react';
+import { QRCodeSVG } from 'qrcode.react';
 
-import {QRCodeSVG} from 'qrcode.react';
-
-import {ReportInfoCard} from "./ReportInfoCard.tsx";
-import {ReportMapCard} from "./ReportMapCard.tsx";
-import {getReportCardData} from "../../data/report-card-data.ts";
+import { ReportInfoCard } from "./ReportInfoCard.tsx";
+import { ReportMapCard } from "./ReportMapCard.tsx";
+import { getReportCardData } from "../../data/report-card-data.ts";
+import SharePage from '../SharePage.tsx';
 
 interface ReportCardProps {
     stateCode: string;
@@ -28,7 +30,9 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                                                           districtId,
                                                       }) => {
 
-    const reportCardData = getReportCardData({stateCode, districtId});
+    const reportCardData = getReportCardData({ stateCode, districtId });
+    // Local state to open the existing Share flow UI
+    const [shareOpen, setShareOpen] = useState(false);
     if (!reportCardData) {
         return null;
     }
@@ -54,6 +58,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     // Get the current page URL for the QR code
     const currentUrl = window.location.href;
 
+
+
     // Function to download the report card image
     const downloadReportCardImage = async () => {
         const imageUrl = `https://data.scienceimpacts.org/report-cards-v2/report-card-${stateCode}-${districtId}.png`;
@@ -74,6 +80,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
             console.error('Error downloading image:', error);
         }
     };
+
     const districtName = districtId == '00' ? 'At Large' : `District ${districtId}`;
     const reportInfoCard = <ReportInfoCard
         state={state}
@@ -111,58 +118,83 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         targetDistrict={GEOID}
     />
 
+    const districtTitle = `${state} ${districtName}`
 
     return (
         <Container size="xl" py="xl">
             <Stack gap="md">
-                {/* Header with QR Code and Download Button */}
-
+                {/* Header with QR Code and Download/Share Buttons */}
                 <Group justify="space-between" align="flex-start">
-                    <Anchor href="/" underline="never">
-                        <Image src={"/science.png"}
-                               h={76}
-                               w={76}
-                               p={8}
+                    <Stack gap={0} align="center">
+                        <Anchor href="/" underline="never">
+                            <Image src={"/science.png"}
+                                   h={76}
+                                   w={76}
+                                   p={8}
+                            >
+                            </Image>
+                        </Anchor>
+                        <Text
+                            size="xs"
+                            c="dimmed"
+                            fw={500}
+                            style={{
+                                letterSpacing: '0.5px',
+                                textTransform: 'lowercase'
+                            }}
                         >
-                        </Image>
-                    </Anchor>
+                            scienceimpacts.org
+                        </Text>
+                    </Stack>
 
-                    <Stack gap={0} style={{flex: 1}}>
-                        <Text size="xl" fw={700} c="dark">
-                            {state} {districtName} — FY2026 NIH Budget Impact  { }
+                    <Stack gap={0} style={{ flex: 1 }}>
+                        <Text size="xl" fw={700} c="dark">SCIMaP Scorecard: White House NIH FY26 Budget Proposal</Text>
+                        <Text size="lg" fw={500} c="dark">
+                            {districtTitle} — FY2026 NIH Budget Impact{' '}
                             <ActionIcon
                                 variant="transparent"
                                 size="sm"
                                 onClick={downloadReportCardImage}
                                 title="Download Report Card Image"
+                                aria-label="Download report card image"
                             >
-                                <IconDownload size={20}/>
+                                <IconDownload size={20} />
                             </ActionIcon>
                         </Text>
-                        <Text size="lg" c="dimmed" mt="xs">
-                            Projected district-level economic losses resulting from proposed cuts to the 2026 NIH budget
-
+                        <Text size="md" c="dimmed">
+                            Projected district-level economic losses from cuts proposed in the White House FY26 NIH budget
                         </Text>
-
                     </Stack>
 
-                    {/* QR Code in top right */}
-                    <Box
-                        style={{
-                            padding: '8px 8px 4px 8px',
-                            backgroundColor: 'white',
-                            borderRadius: '8px',
-                            border: '1px solid #e9ecef',
-                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                        }}
-                    >
-                        <QRCodeSVG
-                            value={currentUrl}
-                            size={60}
-                            level="M"
-                            marginSize={0}
-                        />
-                    </Box>
+                    {/* QR Code and Share button in top right */}
+                    <Group gap="xs" align="center">
+                        <Box
+                            style={{
+                                padding: '8px 8px 4px 8px',
+                                backgroundColor: 'white',
+                                borderRadius: '8px',
+                                border: '1px solid #e9ecef',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                            }}
+                        >
+                            <QRCodeSVG
+                                value={currentUrl}
+                                size={60}
+                                level="M"
+                                marginSize={0}
+                            />
+                        </Box>
+                        <ActionIcon
+                            variant="transparent"
+                            color="blue"
+                            size="lg"
+                            onClick={() => setShareOpen(true)}
+                            title="Share this scorecard"
+                            aria-label="Share this scorecard"
+                        >
+                            <IconShare size={20} />
+                        </ActionIcon>
+                    </Group>
                 </Group>
 
                 <Grid gutter={'sm'}>
@@ -178,12 +210,26 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                 </Grid>
 
                 {/* Footer */}
-                <div style={{textAlign: 'center'}}>
+                <div style={{ textAlign: 'center' }}>
                     <Text size="sm" c="dimmed">
                         Data sourced from federal grant databases and economic impact models
                     </Text>
                 </div>
             </Stack>
+
+            {/* Share modal using the existing Share flow */}
+            <Modal
+                opened={shareOpen}
+                onClose={() => setShareOpen(false)}
+                title="Share this scorecard"
+                size="md"
+                centered
+            >
+                <SharePage
+                    title={`SCIMaP Scorecard: ${districtTitle}`}
+                    summary="Projected district-level economic losses from cuts proposed in the White House FY26 NIH budget"
+                />
+            </Modal>
         </Container>
     );
 };

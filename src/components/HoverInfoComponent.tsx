@@ -425,20 +425,57 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
 
     const content = contentFn(contentProps);
 
-    const cardStyle = isPinned ? {
+    // Positioning logic to keep the hover close to the cursor and within viewport bounds
+    const viewportW = typeof window !== 'undefined' ? document.documentElement.clientWidth : 1920;
+    const viewportH = typeof window !== 'undefined' ? document.documentElement.clientHeight : 1080;
+
+    const cursorOffset = 6; // small offset to avoid covering the cursor
+    const maxCardWidth = 320; // clamp width to reduce overflow artifacts
+    const minCardWidth = 320; // ensure tooltip never looks too narrow
+    const estCardHeight = 220; // rough estimate; helps prevent going off-screen bottom
+
+    let desiredLeft = hoverInfo.x + cursorOffset;
+    let desiredTop = hoverInfo.y + cursorOffset;
+
+    // Flip horizontally if near right edge
+    if (desiredLeft + maxCardWidth > viewportW - 8) {
+        desiredLeft = Math.max(8, hoverInfo.x - maxCardWidth - cursorOffset);
+    }
+    // Clamp within viewport horizontally
+    desiredLeft = Math.max(8, Math.min(desiredLeft, viewportW - maxCardWidth - 8));
+
+    // Flip vertically if near bottom edge
+    if (desiredTop + estCardHeight > viewportH - 8) {
+        desiredTop = Math.max(8, hoverInfo.y - estCardHeight - cursorOffset);
+    }
+    // Clamp within viewport vertically
+    desiredTop = Math.max(8, Math.min(desiredTop, viewportH - estCardHeight - 8));
+
+    const baseCardStyle = {
         position: 'absolute' as const,
-        top: hoverInfo.y + 10,
-        left: hoverInfo.x + 10,
+        top: desiredTop,
+        left: desiredLeft,
         zIndex: 1000,
-        maxWidth: '300px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-    } : {
-        position: 'absolute' as const,
-        top: hoverInfo.y + 10,
-        left: hoverInfo.x + 10,
-        zIndex: 1000,
-        maxWidth: '300px',
+        maxWidth: `${maxCardWidth}px`,
+        minWidth: `${minCardWidth}px`,
+        overflow: 'hidden', // avoid ugly overflow edges
+        borderRadius: '10px',
+        backgroundColor: 'rgba(255,255,255,0.98)',
+        backdropFilter: 'saturate(120%) blur(0px)',
+        WebkitFontSmoothing: 'antialiased' as const,
     };
+
+    const cardStyle = isPinned
+        ? {
+            ...baseCardStyle,
+            pointerEvents: 'auto' as const,
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
+        }
+        : {
+            ...baseCardStyle,
+            pointerEvents: 'none' as const, // prevent gap-causing hover flicker and allow map interaction
+            boxShadow: '0 6px 18px rgba(0, 0, 0, 0.14)',
+        };
 
     return (
         <Card
