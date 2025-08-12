@@ -77,7 +77,10 @@ async def process_district(semaphore, district):
             # Run screenshot
             district_parts = district.split("-")
             expected_path = f"outputs/report-cards/report-card-{district}.png"
-            url = f"http://localhost:5173/report?stateCode={district_parts[0]}&districtId={district_parts[1]}"
+            if os.path.exists(expected_path):
+                print("Already exists")
+                return (district, expected_path, expected_path)
+            url = f"https://report-card.scimap.pages.dev/report?stateCode={district_parts[0]}&districtId={district_parts[1]}"
 
             screenshot_path = await take_screenshot_playwright(
                 url=url,

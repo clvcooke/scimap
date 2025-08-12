@@ -1,7 +1,7 @@
-import {Card, Text, Flex, Stack} from '@mantine/core';
-import {JSX} from "react";
+import {Card, Text, Flex, Stack, Button, ActionIcon} from '@mantine/core';
+import {IconX} from '@tabler/icons-react';
 import {generateEconLossString, generateJobLossString, processPoliticianName} from "../utils/info.ts";
-import {getHouseRep, getSenators} from "../data/legislature.ts";
+import {getSenatorsList} from "../data/legislature.ts";
 
 type BaseIDCTile = {
     state: string;
@@ -120,12 +120,12 @@ type CombinedTileProperties =
     | DistrictCombinedTileProperties
     | StateCombinedTileProperties;
 
-type CountyTile = CountyGrantTileProperties | CountyIDCTileProperties | CountyCombinedTileProperties;
-type DistrictTile =
-    DistrictCombinedTileProperties
-    | DistrictGrantTileProperties
-    | DistrictIDCTileProperties
-    | DistrictBudgetTileProperties;
+// type CountyTile = CountyGrantTileProperties | CountyIDCTileProperties | CountyCombinedTileProperties;
+// type DistrictTile =
+//     DistrictCombinedTileProperties
+//     | DistrictGrantTileProperties
+//     | DistrictIDCTileProperties
+//     | DistrictBudgetTileProperties;
 
 
 export type HoverInfo = {
@@ -147,6 +147,8 @@ type Props = {
     layer: "idc" | "grant" | "total" | 'budget';
     showJobs: boolean;
     displayMode?: HoverDisplayMode | null;
+    isPinned?: boolean;
+    onClose?: () => void;
 };
 
 type HoverContentProps = Props & {
@@ -167,8 +169,10 @@ function generateDefaultHover({
                                   county,
                                   repName,
                                   district,
-    senatorNames
-                              }: HoverContentProps) {
+                                  senatorNames,
+                                  mode,
+                                  isPinned
+                              }: HoverContentProps & { mode: string, isPinned?: boolean }) {
     let econ_loss: number;
     let jobs_loss: number;
     let aging_loss: string | undefined = undefined;
@@ -202,11 +206,21 @@ function generateDefaultHover({
     const jobLossString = generateJobLossString(jobs_loss)
     const showSubLosses = aging_loss !== undefined || cancer_loss !== undefined || infect_loss !== undefined;
 
+    // Generate report card link for districts in budget mode
+    const showKeyFactsLink = isPinned && mode === 'districts' && layer === 'budget';
+    let reportCardUrl = '';
+    if (showKeyFactsLink) {
+        const tileProperties = hoverInfo.properties as DistrictBudgetTileProperties;
+        const stateCode = tileProperties.state_code;
+        const districtId = tileProperties.CD119FP;
+        reportCardUrl = `${window.location.origin}/report?stateCode=${stateCode}&districtId=${districtId}`;
+    }
+
     return <Flex direction="column" gap="0.1rem">
         {state && <Text size="lg" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
-        {senatorNames.map(senatorName => <Text size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>)}
+        {senatorNames.map((senatorName, index) => <Text key={index} size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>)}
         {showJobs && <Text size="md" style={{color: 'black'}}><b>Total Jobs Lost:</b> {jobLossString}</Text>}
         {showSubLosses && <Stack gap={"0.05rem"}>
             <Text size="md" style={{color: 'black'}}><b>{econ_loss_string}:</b> {econLossString}</Text>
@@ -218,7 +232,18 @@ function generateDefaultHover({
                 <Text size="sm" style={{color: 'black'}}><b>&#8226; Infectious Disease:</b> {infect_loss}</Text>}
         </Stack>}
 
-
+        {showKeyFactsLink && (
+            <Button
+                size="sm"
+                variant="filled"
+                style={{marginTop: '0.5rem'}}
+                onClick={() => {
+                    window.open(reportCardUrl, '_blank');
+                }}
+            >
+                Open Fact Sheet
+            </Button>
+        )}
     </Flex>
 }
 
@@ -248,8 +273,8 @@ function generateGrantIDCGrantsHover({
         {state && <Text size="lg" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
-        {senatorNames.map(senatorName => (
-            <Text size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
+        {senatorNames.map((senatorName, index) => (
+            <Text key={index} size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
         ))}
         <Text size="md" style={{color: 'black'}}><b>Current
             Loss:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
@@ -263,7 +288,7 @@ function generateTotalHover({
                                 state,
                                 county,
                                 repName,
-    senatorNames
+                                senatorNames
                             }: HoverContentProps) {
 
     const tileProperties = hoverInfo.properties as CombinedTileProperties;
@@ -284,8 +309,7 @@ function generateTotalHover({
     const totalJobLossString = generateJobLossString(totalJobLoss);
 
     const currentEconLossString = generateEconLossString(currentEconLoss);
-    const futureEconLossString = generateEconLossString(futureEconLoss);
-
+    const futureEconLossString = generateEconLossString(futureEconLoss)
     const currentJobLossString = generateJobLossString(currentJobLoss);
     const futureJobLossString = generateJobLossString(futureJobLoss)
 
@@ -293,7 +317,10 @@ function generateTotalHover({
         {state && <Text size="lg" style={{color: 'black'}}><b>{state}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
-        {senatorNames.map(senatorName =><Text size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text> )}
+        {senatorNames.map((senatorName, index) => (
+            <Text key={index} size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
+        ))}
+
         <Text size="md" style={{color: 'black'}}><b>Total
             Loss:</b> {totalEconLossString} and {totalJobLossString} jobs</Text>
         <Text size="md" style={{color: 'black'}}><b>Current
@@ -308,104 +335,140 @@ function generateTermHover({
                                state,
                                county,
                                repName,
-    senatorNames,
+                               district,
+                               senatorNames
                            }: HoverContentProps) {
 
-    const tileProperties = hoverInfo.properties as CombinedTileProperties;
+    const tileProperties = hoverInfo.properties as GrantTileProperties;
 
-    // Current Loss (Cancelled Grants):
     const currentEconLoss: number = tileProperties.terminated_econ_loss;
     const currentJobLoss = tileProperties.terminated_job_loss;
 
-
     const currentEconLossString = generateEconLossString(currentEconLoss);
-
     const currentJobLossString = generateJobLossString(currentJobLoss);
 
     return <Flex direction="column" gap="xs">
-        {state && <Text size="lg" style={{color: 'black'}}><b>{state}</b></Text>}
+        {state && <Text size="lg" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
         {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
         {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
-        {senatorNames.map(senatorName => <Text size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>)}
-
-
+        {senatorNames.map((senatorName, index) => (
+            <Text key={index} size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
+        ))}
         <Text size="md" style={{color: 'black'}}><b>Current
             Loss:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
     </Flex>;
 }
 
-export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, showJobs, displayMode}) => {
+export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, showJobs, displayMode, isPinned = false, onClose}) => {
     if (!hoverInfo) {
         return null;
     }
-    const state = hoverInfo.properties.state;
+
     let county: string | null = null;
-    let repName: string | null = null;
-    let district: string | null = null;
-    const senatorNames: string[] = [];
-    if (mode === "county") {
-        county = (hoverInfo.properties as CountyTile).county;
-    } else if (mode === "state") {
-        const stateCode = hoverInfo.properties.state_code;
-        const senators = getSenators(stateCode);
-        if (senators.junior) {
-            senatorNames.push(processPoliticianName(senators.junior.name, senators.junior.party));
-        }
-        if (senators.senior) {
-            senatorNames.push(processPoliticianName(senators.senior.name, senators.senior.party));
-        }
-    } else if (mode === "districts") {
-        const districtTileProperties = (hoverInfo.properties as DistrictTile);
-        let raw_rep_name = districtTileProperties.rep_name;
-        let raw_pol_party = districtTileProperties.pol_party;
-        // 0 for at-large, otherwise number
-        const districtNumber = districtTileProperties.CD119FP;
-        district = `${districtTileProperties.state_code}-${districtNumber === "00" ? "AL" : districtNumber}`;
-        const rep = getHouseRep(district);
-        raw_rep_name = rep?.name ?? raw_rep_name;
-        raw_pol_party = rep?.party ?? raw_pol_party;
-        repName = processPoliticianName(raw_rep_name, raw_pol_party);
+    if ('county' in hoverInfo.properties) {
+        county = hoverInfo.properties.county;
     }
 
-    let hoverContent: JSX.Element;
+    let state = hoverInfo.properties.state;
+    if (state === 'US Virgin Islands') {
+        state = 'USVI';
+    }
 
-    const commonProps: HoverContentProps = {
+    let repName: string | null = null;
+    if ('rep_name' in hoverInfo.properties) {
+        repName = processPoliticianName(hoverInfo.properties.rep_name)
+    }
+
+    let district: string | null = null;
+    if ('GEOID' in hoverInfo.properties) {
+        const geoid = String(hoverInfo.properties.GEOID);
+        const districtNumber = geoid.slice(-2);
+        district = districtNumber === '00' ? 'At-Large' : `District ${parseInt(districtNumber, 10)}`;
+    }
+
+    let senators: { name: string, party: string }[] = []
+    if (mode === 'districts') {
+        senators = getSenatorsList(hoverInfo.properties.state_code);
+    } else if (mode === 'state') {
+        senators = getSenatorsList(hoverInfo.properties.state_code);
+    }
+
+    const senatorNames: string[] = senators.map(senator => {
+        return processPoliticianName(senator.name, senator.party);
+    }).filter(name => name !== null) as string[];
+
+    let contentFn;
+    if (displayMode === HoverDisplayMode.IDC_GRANTS) {
+        contentFn = generateGrantIDCGrantsHover;
+    } else if (displayMode === HoverDisplayMode.TOTAL) {
+        contentFn = generateTotalHover;
+    } else if (displayMode === HoverDisplayMode.TERM) {
+        contentFn = generateTermHover;
+    } else {
+        contentFn = generateDefaultHover;
+    }
+
+    const contentProps: HoverContentProps & { mode: string, isPinned?: boolean } = {
+        hoverInfo,
         mode,
         layer,
-        hoverInfo,
         showJobs,
+        displayMode,
         county,
         state,
         repName,
         district,
-        senatorNames
-    }
+        senatorNames,
+        isPinned,
+        onClose
+    };
 
-    if (displayMode === HoverDisplayMode.IDC_GRANTS) {
-        hoverContent = generateGrantIDCGrantsHover(commonProps);
-    } else if (displayMode === HoverDisplayMode.TOTAL) {
-        hoverContent = generateTotalHover(commonProps);
-    } else if (displayMode === HoverDisplayMode.TERM) {
-        hoverContent = generateTermHover(commonProps);
-    } else {
-        hoverContent = generateDefaultHover(commonProps)
-    }
+    const content = contentFn(contentProps);
 
+    const cardStyle = isPinned ? {
+        position: 'absolute' as const,
+        top: hoverInfo.y + 10,
+        left: hoverInfo.x + 10,
+        zIndex: 1000,
+        maxWidth: '300px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+    } : {
+        position: 'absolute' as const,
+        top: hoverInfo.y + 10,
+        left: hoverInfo.x + 10,
+        zIndex: 1000,
+        maxWidth: '300px',
+    };
 
     return (
-        <div
-            style={{
-                position: 'absolute',
-                left: hoverInfo.x,
-                top: hoverInfo.y,
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                zIndex: 100,
-                pointerEvents: 'none',
-            }}
+        <Card
+            withBorder
+            shadow="md"
+            style={cardStyle}
+            onMouseDown={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
+            onMouseMove={(e) => e.stopPropagation()}
+
         >
-            <Card shadow="sm" padding="md" radius="md" withBorder style={{color: 'black', textAlign: 'left'}}>
-                {hoverContent}
-            </Card>
-        </div>
+            {isPinned && onClose && (
+                <ActionIcon
+                    size="sm"
+                    variant="subtle"
+                    style={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                    }}
+                    onClick={() => {
+                        console.log("Closing")
+                        onClose()
+                    }}
+                >
+                    <IconX size={14} />
+                </ActionIcon>
+            )}
+            {content}
+        </Card>
     );
 };

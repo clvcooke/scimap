@@ -25,3 +25,13 @@ export function getSenators(stateCode: string): Senators {
     // @ts-expect-error: parsing dynamic JSON data
     return legislatureData["sens"][stateCode] as Senators;
 }
+
+export function getSenatorsList(stateCode: string): {
+    name: string,
+     party: string} [] {
+    const senators = getSenators(stateCode);
+    return [
+        senators.junior,
+        senators.senior,
+    ];
+}

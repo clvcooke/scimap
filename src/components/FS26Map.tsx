@@ -43,6 +43,7 @@ function generateMapLayer({
                               setHoverInfo,
                               colorScale,
                               colorProperties,
+                              pinnedHoverInfo,
                           }: {
     tileLink: string;
     hoveredFeatureId: number | string | null;
@@ -52,6 +53,7 @@ function generateMapLayer({
     setHoverInfo: (info: HoverInfo | null) => void;
     colorScale: ScaleLinear<number, number>;
     colorProperties: string[];
+    pinnedHoverInfo: HoverInfo | null;
 
 }) {
     return new MVTLayer({
@@ -91,7 +93,8 @@ function generateMapLayer({
             return [...rgbValues, ALPHA_COLOR]; // Add alpha channel
         },
         onHover: info => {
-            if (info.object) {
+            // Only update hover info if we don't have a pinned hover
+            if (!pinnedHoverInfo && info.object) {
                 if (mode === 'county') {
                     setHoveredFeatureId(info.object.properties.FIPS);
                 } else if (mode === "state") {
@@ -106,7 +109,7 @@ function generateMapLayer({
                         y: info.y,
                     }
                 )
-            } else {
+            } else if (!pinnedHoverInfo) {
                 setHoverInfo(null);
                 setHoveredFeatureId(null);
             }
@@ -122,6 +125,7 @@ function FY26Map() {
 
     const [hoveredFeatureId, setHoveredFeatureId] = useState<number | string | null>(null);
     const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
+    const [pinnedHoverInfo, setPinnedHoverInfo] = useState<HoverInfo | null>(null);
     const [viewState, setViewState] = useState<MapViewState>({
         longitude: -98.5795, // Approximate center longitude of the USA
         latitude: 39.8283,  // Approximate center latitude of the USA
@@ -275,12 +279,37 @@ function FY26Map() {
             setHoverInfo,
             colorScale,
             mode,
-            colorProperties
+            colorProperties,
+            pinnedHoverInfo
         }),
         stateLayer,
     ];
 
     const mapWidth = '100vw';
+
+    // Handle click events for pinning hover info in district mode
+    const handleMapClick = useCallback((event: any) => {
+        if (mode === 'districts' && event.object) {
+            const clickInfo: HoverInfo = {
+                properties: event.object.properties,
+                x: event.x,
+                y: event.y,
+            };
+            setPinnedHoverInfo(clickInfo);
+            setHoverInfo(null); // Clear regular hover when pinning
+        } else {
+            // Clear pinned hover if clicking elsewhere
+            setPinnedHoverInfo(null);
+        }
+    }, [mode]);
+
+    const handleClosePinnedHover = useCallback(() => {
+        setPinnedHoverInfo(null);
+    }, []);
+
+    useEffect(() => {
+        setPinnedHoverInfo(null);
+    }, [mode]);
 
     return (
         <Group h={"100%"} w={"100%"} preventGrowOverflow={true} gap={0}>
@@ -296,11 +325,11 @@ function FY26Map() {
                     onViewStateChange={({viewState: newViewState}) => {
                         setViewState(newViewState as MapViewState);
                     }}
-
-                    controller={true}
+                    onClick={handleMapClick}
+                    controller={!pinnedHoverInfo}
                     layers={[...lossLayers, userLocationLayer]}
                     style={{overflow: 'hidden'}}
-                    _pickable={true}
+                    _pickable={pinnedHoverInfo === null}
                 >
                     <div style={{
                         position: 'absolute',
@@ -329,8 +358,15 @@ function FY26Map() {
                         onClose={() => setShowReport(false)}
                     />
 
-                    {hoverInfo && <HoverInfoComponent layer={'budget'} mode={mode} hoverInfo={hoverInfo}
-                                                      showJobs={mode !== 'county'} displayMode={null}/>}
+                    {(hoverInfo || pinnedHoverInfo) && <HoverInfoComponent
+                        layer={'budget'}
+                        mode={mode}
+                        hoverInfo={pinnedHoverInfo || hoverInfo}
+                        showJobs={mode !== 'county'}
+                        displayMode={null}
+                        isPinned={!!pinnedHoverInfo}
+                        onClose={handleClosePinnedHover}
+                    />}
 
                     <div style={{
                         position: 'absolute',
