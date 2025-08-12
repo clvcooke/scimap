@@ -28,7 +28,7 @@ COUNTY_TOTAL_FILENAME = "NIH_impact_county.csv"
 STATE_TOTAL_FILENAME = "NIH_impact_state.csv"
 CONGRESSIONAL_TOTAL_FILENAME = "NIH_impact_cong.csv"
 
-TOP_FIVE_CONG_IMPACT = "inputs/cong_NIH_top5inst.csv"
+TOP_FIVE_CONG_IMPACT = "inputs/top5inst_budg_cong.csv"
 NIH_BUDGET_CONG = "inputs/NIH_budget_cong_119.csv"
 
 STATE_TOTAL_LOSSES_OUTPUT_PATH = os.path.join(REACT_DATA_DIR, "state_total_losses.json")
@@ -271,7 +271,7 @@ def generate_state_totals(state_dataframe):
 
 def generate_district_info(congression_geojson, state_geojson):
     all_info = {}
-    top_nih_cong = pd.read_csv(TOP_FIVE_CONG_IMPACT)
+    top_nih_cong = pd.read_csv(TOP_FIVE_CONG_IMPACT, encoding="latin-1")
     fy26_budg = pd.read_csv(NIH_BUDGET_CONG)
     fy26_budg["GEOID"] = fy26_budg["GEOID"].astype("int64")
     for row in congression_geojson.to_dict("records"):

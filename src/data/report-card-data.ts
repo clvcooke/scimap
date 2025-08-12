@@ -14,12 +14,18 @@ interface Bounds {
 
 export interface TopImpact {
     org_name: string;
-    terminated_loss: number;
-    terminated_econ_loss: number;
-    terminated_job_loss: number;
-    IDC_loss: number;
-    IDC_econ_loss: number;
-    IDC_job_loss: number;
+    budg_NIH_cuts_job_loss: number;
+    budg_NIA_cuts: number;
+    budg_NIAID_cuts: number;
+    budg_NCI_cuts: number;
+    budg_NIH_cuts: number;
+    budg_NIA_cuts_econ_loss: number;
+    budg_NIA_cuts_job_loss: number;
+    budg_NIAID_cuts_econ_loss: number;
+    budg_NIAID_cuts_job_loss: number;
+    budg_NCI_cuts_econ_loss: number;
+    budg_NCI_cuts_job_loss: number;
+    budg_NIH_cuts_econ_loss: number;
 }
 
 /**
@@ -126,6 +132,9 @@ export function getReportCardData({
     const rep = getHouseRep(key);
     const senators = getSenators(stateCode);
     const repName = processPoliticianName(rep?.name, rep?.party);
+    console.log({
+        districtData
+    })
 
     return {
         ...districtData,

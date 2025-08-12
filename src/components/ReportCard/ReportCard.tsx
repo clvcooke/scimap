@@ -74,7 +74,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
             console.error('Error downloading image:', error);
         }
     };
-
+    const districtName = districtId == '00' ? 'At Large' : `District ${districtId}`;
     const reportInfoCard = <ReportInfoCard
         state={state}
         districtId={districtId}
@@ -129,7 +129,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
 
                     <Stack gap={0} style={{flex: 1}}>
                         <Text size="xl" fw={700} c="dark">
-                            Science Research Impact Report { }
+                            {state} {districtName} — FY2026 NIH Budget Impact  { }
                             <ActionIcon
                                 variant="transparent"
                                 size="sm"
@@ -140,7 +140,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                             </ActionIcon>
                         </Text>
                         <Text size="lg" c="dimmed" mt="xs">
-                            Economic impact of federal health research cuts
+                            Projected district-level economic losses resulting from proposed cuts to the 2026 NIH budget
 
                         </Text>
 

@@ -12,7 +12,7 @@ from tqdm.asyncio import tqdm
 from playwright.async_api import async_playwright
 
 
-async def take_screenshot_playwright(url, output_path, wait_time=5000, full_page=True, viewport_size=(1920, 1080)):
+async def take_screenshot_playwright(url, output_path, wait_time=5000, full_page=True, viewport_size=(1500, 1000)):
     """
     Take a screenshot using Playwright.
 
