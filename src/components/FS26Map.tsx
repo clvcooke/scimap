@@ -311,6 +311,22 @@ function FY26Map() {
         setPinnedHoverInfo(null);
     }, [mode]);
 
+    // Unpin when clicking/touching anywhere outside the hover box
+    useEffect(() => {
+        if (!pinnedHoverInfo) return;
+        const handleGlobalDown = () => {
+            // If event originated within the hover card, HoverInfoComponent stops propagation for mouse/touch,
+            // so this handler won't run. Otherwise, clear the pin.
+            setPinnedHoverInfo(null);
+        };
+        document.addEventListener('mousedown', handleGlobalDown);
+        document.addEventListener('touchstart', handleGlobalDown, {passive: true});
+        return () => {
+            document.removeEventListener('mousedown', handleGlobalDown);
+            document.removeEventListener('touchstart', handleGlobalDown);
+        };
+    }, [pinnedHoverInfo]);
+
     return (
         <Group h={"100%"} w={"100%"} preventGrowOverflow={true} gap={0}>
             <Group grow style={{
@@ -319,7 +335,12 @@ function FY26Map() {
                 position: "relative",
             }}>
                 <DeckGL
-                    onDragStart={() => setHoverInfo(null)}
+                    onDragStart={() => {
+                        setHoverInfo(null);
+                        if (pinnedHoverInfo) {
+                            setPinnedHoverInfo(null);
+                        }
+                    }}
                     onDragEnd={() => setHoverInfo(null)}
                     viewState={viewState}
                     onViewStateChange={({viewState: newViewState}) => {

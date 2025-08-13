@@ -1,7 +1,7 @@
 import {Card, Text, Flex, Stack, Button, ActionIcon} from '@mantine/core';
 import {IconX} from '@tabler/icons-react';
 import {generateEconLossString, generateJobLossString, processPoliticianName} from "../utils/info.ts";
-import {getSenatorsList} from "../data/legislature.ts";
+import {getHouseRep, getSenatorsList} from "../data/legislature.ts";
 
 type BaseIDCTile = {
     state: string;
@@ -175,10 +175,13 @@ function generateDefaultHover({
                               }: HoverContentProps & { mode: string, isPinned?: boolean }) {
     let econ_loss: number;
     let jobs_loss: number;
-    let aging_loss: string | undefined = undefined;
-    let cancer_loss: string | undefined = undefined;
-    let infect_loss: string | undefined = undefined;
+    let aging_loss: string | null = null;
+    let cancer_loss: string | null = null;
+    let infect_loss: string | null = null;
     let econ_loss_string = "Economic Loss"
+
+    // Generate report card link for districts in budget mode
+    const showKeyFactsLink = isPinned && mode === 'districts' && layer === 'budget';
     if (layer === "idc") {
         const tileProperties = hoverInfo.properties as IDCTileProperties;
         econ_loss = tileProperties.econ_loss;
@@ -191,9 +194,13 @@ function generateDefaultHover({
         const tileProperties = hoverInfo.properties as BaseBudgetTile;
         econ_loss = tileProperties.budg_NIH_cuts_econ_loss;
         jobs_loss = tileProperties.budg_NIH_cuts_job_loss;
-        aging_loss = generateEconLossString(tileProperties.budg_NIA_cuts_econ_loss);
-        cancer_loss = generateEconLossString(tileProperties.budg_NCI_cuts_econ_loss);
-        infect_loss = generateEconLossString(tileProperties.budg_NIAID_cuts_econ_loss);
+        // Only show sub-losses when the fact sheet is NOT visible (i.e., in hover mode, not on the actual report card)
+        // Since this is the hover component and not the report card itself, we show them based on whether this is a standalone view
+        if (showKeyFactsLink) {
+            aging_loss = generateEconLossString(tileProperties.budg_NIA_cuts_econ_loss);
+            cancer_loss = generateEconLossString(tileProperties.budg_NCI_cuts_econ_loss);
+            infect_loss = generateEconLossString(tileProperties.budg_NIAID_cuts_econ_loss);
+        }
         econ_loss_string = "Total Economic Loss"
         showJobs = true;
     } else {
@@ -206,8 +213,6 @@ function generateDefaultHover({
     const jobLossString = generateJobLossString(jobs_loss)
     const showSubLosses = aging_loss !== undefined || cancer_loss !== undefined || infect_loss !== undefined;
 
-    // Generate report card link for districts in budget mode
-    const showKeyFactsLink = isPinned && mode === 'districts' && layer === 'budget';
     let reportCardUrl = '';
     if (showKeyFactsLink) {
         const tileProperties = hoverInfo.properties as DistrictBudgetTileProperties;
@@ -216,27 +221,52 @@ function generateDefaultHover({
         reportCardUrl = `${window.location.origin}/report?stateCode=${stateCode}&districtId=${districtId}`;
     }
 
-    return <Flex direction="column" gap="0.1rem">
-        {state && <Text size="lg" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
-        {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
-        {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
-        {senatorNames.map((senatorName, index) => <Text key={index} size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>)}
-        {showJobs && <Text size="md" style={{color: 'black'}}><b>Total Jobs Lost:</b> {jobLossString}</Text>}
+    // Show click prompt for district budget mode when not pinned
+    const showClickPrompt = !isPinned && mode === 'districts' && layer === 'budget';
+
+    return <Flex direction="column" gap="0.1rem" justify={'left'}>
+        {state &&
+            <Text size="lg" ta="center" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
+        {county && <Text size="md" ta="left" style={{color: 'black'}}><b>County:</b> {county}</Text>}
+        {repName && <Text size="md" ta="left" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
+        {senatorNames.map((senatorName, index) => <Text key={index} size="md" ta="left"
+                                                        style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>)}
+        {showJobs && <Text size="md" ta="left" style={{color: 'black'}}><b>Total Jobs Lost:</b> {jobLossString}</Text>}
         {showSubLosses && <Stack gap={"0.05rem"}>
-            <Text size="md" style={{color: 'black'}}><b>{econ_loss_string}:</b> {econLossString}</Text>
-            {aging_loss !== undefined &&
-                <Text size="sm" style={{color: 'black'}}><b>&#8226; Aging:</b> {aging_loss}</Text>}
-            {cancer_loss !== undefined &&
-                <Text size="sm" style={{color: 'black'}}><b>&#8226; Cancer:</b> {cancer_loss}</Text>}
-            {infect_loss !== undefined &&
-                <Text size="sm" style={{color: 'black'}}><b>&#8226; Infectious Disease:</b> {infect_loss}</Text>}
+            <Text size="md" ta="left" style={{color: 'black'}}><b>{econ_loss_string}:</b> {econLossString}</Text>
+            {aging_loss &&
+                <Text size="sm" ta="left" style={{color: 'black'}}><b>&#8226; Aging:</b> {aging_loss}</Text>}
+            {cancer_loss &&
+                <Text size="sm" ta="left" style={{color: 'black'}}><b>&#8226; Cancer:</b> {cancer_loss}</Text>}
+            {infect_loss &&
+                <Text size="sm" ta="left" style={{color: 'black'}}><b>&#8226; Infectious Disease:</b> {infect_loss}
+                </Text>}
         </Stack>}
+
+        {showClickPrompt && (
+            <Text
+                size="sm"
+                ta="center"
+                fw={450}
+                c={'black.9'}
+                style={{
+                    fontStyle: 'italic',
+                    marginTop: '0.5rem',
+                    padding: '0.25rem',
+                    backgroundColor: 'rgba(176,186,218,0.15)',
+                    borderRadius: '4px',
+                    border: '2px dashed #ced2d6'
+                }}
+            >
+                💡 Click the district to see more info
+            </Text>
+        )}
 
         {showKeyFactsLink && (
             <Button
                 size="sm"
                 variant="filled"
-                style={{marginTop: '0.5rem'}}
+                style={{marginTop: '0.5rem', alignSelf: 'center'}}
                 onClick={() => {
                     window.open(reportCardUrl, '_blank');
                 }}
@@ -244,8 +274,10 @@ function generateDefaultHover({
                 Open Fact Sheet
             </Button>
         )}
+
     </Flex>
 }
+
 
 function generateGrantIDCGrantsHover({
                                          hoverInfo,
@@ -269,16 +301,17 @@ function generateGrantIDCGrantsHover({
     const currentJobLossString = generateJobLossString(currentJobLoss);
     const futureJobLossString = generateJobLossString(futureJobLoss)
 
-    return <Flex direction="column" gap="xs">
-        {state && <Text size="lg" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
-        {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
-        {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
+    return <Flex direction="column" gap="xs" justify={'left'}>
+        {state &&
+            <Text size="lg" ta="center" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
+        {county && <Text size="md" ta="left" style={{color: 'black'}}><b>County:</b> {county}</Text>}
+        {repName && <Text size="md" ta="left" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
         {senatorNames.map((senatorName, index) => (
-            <Text key={index} size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
+            <Text key={index} size="md" ta="left" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
         ))}
-        <Text size="md" style={{color: 'black'}}><b>Current
+        <Text size="md" ta="left" style={{color: 'black'}}><b>Current
             Loss:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
-        <Text size="md" style={{color: 'black'}}><b>Annual Future Loss:</b>
+        <Text size="md" ta="left" style={{color: 'black'}}><b>Annual Future Loss:</b>
             {" "} {futureEconLossString} and {futureJobLossString} jobs</Text>
     </Flex>;
 }
@@ -313,19 +346,19 @@ function generateTotalHover({
     const currentJobLossString = generateJobLossString(currentJobLoss);
     const futureJobLossString = generateJobLossString(futureJobLoss)
 
-    return <Flex direction="column" gap="xs">
-        {state && <Text size="lg" style={{color: 'black'}}><b>{state}</b></Text>}
-        {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
-        {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
+    return <Flex direction="column" gap="xs" justify={'left'}>
+        {state && <Text size="lg" ta="center" style={{color: 'black'}}><b>{state}</b></Text>}
+        {county && <Text size="md" ta="left" style={{color: 'black'}}><b>County:</b> {county}</Text>}
+        {repName && <Text size="md" ta="left" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
         {senatorNames.map((senatorName, index) => (
-            <Text key={index} size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
+            <Text key={index} size="md" ta="left" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
         ))}
 
-        <Text size="md" style={{color: 'black'}}><b>Total
+        <Text size="md" ta="left" style={{color: 'black'}}><b>Total
             Loss:</b> {totalEconLossString} and {totalJobLossString} jobs</Text>
-        <Text size="md" style={{color: 'black'}}><b>Current
+        <Text size="md" ta="left" style={{color: 'black'}}><b>Current
             Loss:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
-        <Text size="md" style={{color: 'black'}}><b>Annual Future Loss:</b>
+        <Text size="md" ta="left" style={{color: 'black'}}><b>Annual Future Loss:</b>
             {" "} {futureEconLossString} and {futureJobLossString} jobs</Text>
     </Flex>;
 }
@@ -347,19 +380,28 @@ function generateTermHover({
     const currentEconLossString = generateEconLossString(currentEconLoss);
     const currentJobLossString = generateJobLossString(currentJobLoss);
 
-    return <Flex direction="column" gap="xs">
-        {state && <Text size="lg" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
-        {county && <Text size="md" style={{color: 'black'}}><b>County:</b> {county}</Text>}
-        {repName && <Text size="md" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
+    return <Flex direction="column" gap="xs" justify={'left'}>
+        {state &&
+            <Text size="lg" ta="center" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
+        {county && <Text size="md" ta="left" style={{color: 'black'}}><b>County:</b> {county}</Text>}
+        {repName && <Text size="md" ta="left" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
         {senatorNames.map((senatorName, index) => (
-            <Text key={index} size="md" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
+            <Text key={index} size="md" ta="left" style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>
         ))}
-        <Text size="md" style={{color: 'black'}}><b>Current
+        <Text size="md" ta="left" style={{color: 'black'}}><b>Current
             Loss:</b> {currentEconLossString} and {currentJobLossString} jobs</Text>
     </Flex>;
 }
 
-export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, showJobs, displayMode, isPinned = false, onClose}) => {
+export const HoverInfoComponent: React.FC<Props> = ({
+                                                        mode,
+                                                        layer,
+                                                        hoverInfo,
+                                                        showJobs,
+                                                        displayMode,
+                                                        isPinned = false,
+                                                        onClose
+                                                    }) => {
     if (!hoverInfo) {
         return null;
     }
@@ -376,7 +418,11 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
 
     let repName: string | null = null;
     if ('rep_name' in hoverInfo.properties) {
-        repName = processPoliticianName(hoverInfo.properties.rep_name)
+        const district = hoverInfo.properties.CD119FP;
+        const stateCode = hoverInfo.properties.state_code;
+        const key = `${stateCode}-${district}`;
+        const rep = getHouseRep(key)
+        repName = processPoliticianName(rep?.name, rep?.party);
     }
 
     let district: string | null = null;
@@ -430,7 +476,7 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
     const viewportH = typeof window !== 'undefined' ? document.documentElement.clientHeight : 1080;
 
     const cursorOffset = 6; // small offset to avoid covering the cursor
-    const maxCardWidth = 320; // clamp width to reduce overflow artifacts
+    const maxCardWidth = 360; // clamp width to reduce overflow artifacts
     const minCardWidth = 320; // ensure tooltip never looks too narrow
     const estCardHeight = 220; // rough estimate; helps prevent going off-screen bottom
 
@@ -445,7 +491,7 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
     desiredLeft = Math.max(8, Math.min(desiredLeft, viewportW - maxCardWidth - 8));
 
     // Flip vertically if near bottom edge
-    if (desiredTop + estCardHeight > viewportH - 8) {
+    if (desiredTop + estCardHeight > viewportH - 100) {
         desiredTop = Math.max(8, hoverInfo.y - estCardHeight - cursorOffset);
     }
     // Clamp within viewport vertically
@@ -459,7 +505,7 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
         maxWidth: `${maxCardWidth}px`,
         minWidth: `${minCardWidth}px`,
         overflow: 'hidden', // avoid ugly overflow edges
-        borderRadius: '10px',
+        borderRadius: '0px',
         backgroundColor: 'rgba(255,255,255,0.98)',
         backdropFilter: 'saturate(120%) blur(0px)',
         WebkitFontSmoothing: 'antialiased' as const,
@@ -486,7 +532,9 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
             onMouseUp={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
             onMouseMove={(e) => e.stopPropagation()}
-
+            onTouchStart={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
         >
             {isPinned && onClose && (
                 <ActionIcon
@@ -502,7 +550,7 @@ export const HoverInfoComponent: React.FC<Props> = ({mode, layer, hoverInfo, sho
                         onClose()
                     }}
                 >
-                    <IconX size={14} />
+                    <IconX size={14}/>
                 </ActionIcon>
             )}
             {content}

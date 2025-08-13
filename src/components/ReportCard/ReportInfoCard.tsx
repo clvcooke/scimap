@@ -4,6 +4,8 @@ import {generateEconLossString} from "../../utils/info.ts";
 import {TopImpact} from "../../data/report-card-data.ts";
 
 export const ReportInfoCard = ({
+    stateCode,
+                                   districtId,
                                    representativeName,
                                    juniorSenator,
                                    seniorSenator,
@@ -15,6 +17,7 @@ export const ReportInfoCard = ({
                                    topFiveImpact,
                                }: {
     state?: string,
+    stateCode?: string,
     districtId?: string,
     representativeName: string,
     juniorSenator: string;
@@ -29,6 +32,7 @@ export const ReportInfoCard = ({
     terminatedLoss: number,
     topFiveImpact: TopImpact[],
 }) => {
+    const districtCode = stateCode && districtId ? `${stateCode}-${districtId === "00" ? "AL" : districtId}` : '';
 
     return <Card shadow="sm" padding="sm" radius="md" withBorder>
         <Stack gap="lg">
@@ -51,7 +55,9 @@ export const ReportInfoCard = ({
 
             {/* Economic Impact - Compact */}
             <Stack gap={2}>
-                <Text size="md" fw={600} c="dark" mb='xs' tt="uppercase">Projected Losses from NIH Budget Cuts</Text>
+                <Text size="md" fw={600} c="dark" mb='xs' tt="uppercase">
+                    Projected Losses from NIH Budget Cuts{districtCode ? ` in ${districtCode}` : ''}
+                </Text>
                 <Group justify="space-between" gap="xs">
                     <Text size="sm" fw={500} c="dark">Job Loss:</Text>
                     <Text size="sm" fw={600} c="red.9">{generateJobLossString(jobLossFY26)}</Text>
@@ -81,7 +87,9 @@ export const ReportInfoCard = ({
             {/* Top 5 Institutions - Consistent alignment */}
             {topFiveImpact && topFiveImpact.length > 0 && (
                 <Stack gap={2}>
-                    <Text size="md" fw={600} c="dark" tt="uppercase" mb={'sm'}>Top 5 Institutions Driving regional Loss</Text>
+                    <Text size="md" fw={600} c="dark" tt="uppercase" mb={'sm'}>
+                        Top 5 Institutions Driving {districtCode ? `${districtCode} ` : ''}Economic Loss
+                    </Text>
                     <Stack gap={1}>
                         {topFiveImpact.slice(0, 5).map((institution, index) => (
                             <Group key={index} justify="space-between" align="flex-start" gap="xs" wrap="nowrap">

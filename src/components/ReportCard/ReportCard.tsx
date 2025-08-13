@@ -84,6 +84,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     const districtName = districtId == '00' ? 'At Large' : `District ${districtId}`;
     const reportInfoCard = <ReportInfoCard
         state={state}
+        stateCode={stateCode}
         districtId={districtId}
         econLossIDC={IDC_econ_loss}
         jobLossIDC={IDC_job_loss}
@@ -121,8 +122,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     const districtTitle = `${state} ${districtName}`
 
     return (
-        <Container size="xl" py="xl">
-            <Stack gap="md">
+        <Container size="xl">
+            <Stack gap="sm">
                 {/* Header with QR Code and Download/Share Buttons */}
                 <Group justify="space-between" align="flex-start">
                     <Stack gap={0} align="center">
@@ -197,22 +198,21 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                     </Group>
                 </Group>
 
-                <Grid gutter={'sm'}>
-                    <Grid.Col span={4}>
-                        <Stack gap={'sm'}>
+                <Grid gutter={'xs'}>
+                    <Grid.Col span={4.2}>
+                        <Stack gap={'xs'}>
                             {reportInfoCard}
                             {stateMapCard}
                         </Stack>
                     </Grid.Col>
-                    <Grid.Col span={8}>
+                    <Grid.Col span={7.5}>
                         {districtMapCard}
                     </Grid.Col>
                 </Grid>
-
                 {/* Footer */}
                 <div style={{ textAlign: 'center' }}>
                     <Text size="sm" c="dimmed">
-                        Data sourced from federal grant databases and economic impact models
+                        Losses are calculated by comparing the FY 2026 <a target={'_blank'} href={'https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf'}>proposed NIH budget</a> with average funding for a given district (using data from <a target={"_blank"} href={'https://reporter.nih.gov/'}>NIH RePORTER</a>) between FY2020-2024. Downstream economic losses and job losses are determined by an economic report by <a href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"}>United for Medical Research</a>. Losses are distributed among local communities to reflect commuting patterns, as determined by <a href={"https://lehd.ces.census.gov/data/"} target={"_blank"}>U.S. Census data</a>. In addition to total economic losses, we list losses specific to research funding for aging (NIA), cancer (NCI), and infectious diseases (NIAID).
                     </Text>
                 </div>
             </Stack>
