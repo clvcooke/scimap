@@ -265,7 +265,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
             >
                 <SharePage
                     title={`SCIMaP Scorecard: ${districtTitle}`}
-                    summary="Projected district-level economic losses from cuts proposed in the White House FY26 NIH budget"
+                    summary={`See the impact of the FY26 White House NIH Budget on ${districtTitle}`}
+                    text={`See the impact of the FY26 White House NIH Budget on ${districtTitle}`}
                 />
             </Modal>
         </Container>

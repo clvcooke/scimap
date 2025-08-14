@@ -79,9 +79,9 @@ function generateMapLayer({
                     parseInt(hex.slice(4, 6), 16)
                 ];
             }
-            let alpha = ALPHA_COLOR;
+            let alpha = 200;
             if (targetId && targetId !== feature.properties[uniqueProperty]) {
-                alpha = 100;
+                alpha = 160;
             }
             return [...rgbValues, alpha];
         }

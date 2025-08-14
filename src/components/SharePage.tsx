@@ -1,21 +1,18 @@
-import {isMobile} from "react-device-detect";
 import {ActionIcon, Card, Group, Text} from "@mantine/core";
 import {IconShare} from "@tabler/icons-react";
 import {ANALYTICS_ACTIONS, formattedCost, formattedJobs} from "../constants.ts";
-import { trackEvent } from "../utils/analytics.ts";
+import {trackEvent} from "../utils/analytics.ts";
 
 import {
     FacebookShareButton,
     TwitterShareButton,
-    EmailShareButton,
     FacebookIcon,
-    EmailIcon,
     BlueskyShareButton,
     BlueskyIcon, ThreadsShareButton, ThreadsIcon, WhatsappShareButton, WhatsappIcon, XIcon
 } from 'react-share';
 
 
-function SharePage({title, text, summary}: { title: string, text?: string, summary?: string}) {
+function SharePage({title, text, summary}: { title: string, text?: string, summary?: string }) {
     const pageUrl = window.location.href;
 
     const trackShare = (platform: string) => {
@@ -49,7 +46,8 @@ function SharePage({title, text, summary}: { title: string, text?: string, summa
             Share on your preferred platform
         </Text>
         <Group mt="md" gap="xs" align="center" style={{width: '100%'}}>
-            <FacebookShareButton url={pageUrl} title={shareTitle} hashtag="#SCIMaP" onClick={() => trackShare('Facebook')}
+            <FacebookShareButton url={pageUrl} title={shareTitle} hashtag="#SCIMaP"
+                                 onClick={() => trackShare('Facebook')}
             >
                 <FacebookIcon size={32} round/>
             </FacebookShareButton>
@@ -69,14 +67,10 @@ function SharePage({title, text, summary}: { title: string, text?: string, summa
             <WhatsappShareButton url={pageUrl} title={shareTitle} onClick={() => trackShare('WhatsApp')}>
                 <WhatsappIcon size={32} round/>
             </WhatsappShareButton>
-            <EmailShareButton url={pageUrl} subject={shareTitle} body={shareText} onClick={() => trackShare('Email')}>
-                <EmailIcon size={32} round/>
-            </EmailShareButton>
-            {isMobile && (
-                <ActionIcon onClick={handleShare} variant={'subtle'}>
-                    <IconShare size={32}/>
-                </ActionIcon>
-            )}
+
+            <ActionIcon onClick={handleShare} variant={'subtle'}>
+                <IconShare size={32}/>
+            </ActionIcon>
         </Group>
     </Card>
 

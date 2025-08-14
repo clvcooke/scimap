@@ -73,6 +73,7 @@ function ColorScale({width = 10, height = 200, domain, buckets = 6, logScale = t
                     let color;
                     if (useMagma) {
                         color = interpolateMagma(1 - colorScale(buckets - 1 - i));
+                        color = color + "C8"
                     } else {
                         color = interpolateOrRd(colorScale(buckets - 1 - i));
                     }
