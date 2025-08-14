@@ -51,6 +51,11 @@ const newsItems: {
         isOngoing: true
     },
     {
+        date: 'July 29th, 2025',
+        title: "SCIMaP Visualizes the True Cost of Science Funding Cuts",
+        url: "https://www.the-scientist.com/scimap-visualizes-the-true-cost-of-science-funding-cuts-73211",
+    },
+    {
         date: "July 23rd, 2025",
         title: "Center for American Progress",
         url: "https://www.americanprogress.org/article/mapping-federal-funding-cuts-to-us-colleges-and-universities/"
@@ -131,7 +136,6 @@ const newsItems: {
         url: "https://flowingdata.com/2025/03/28/economic-impact-of-federal-health-research-cuts/"
     }
 ];
-
 
 
 function About() {
@@ -215,8 +219,10 @@ function About() {
                             and when the change appears in the database.
                         </Text>
                         <Text ta={"left"} mt={'sm'}>
-                            For cancelled and frozen grants, we assume that losses are equivalent to the remaining grant funds
-                            that were not spent at the time of cancellation. Cancelled and frozen grants from adjacent divisions
+                            For cancelled and frozen grants, we assume that losses are equivalent to the remaining grant
+                            funds
+                            that were not spent at the time of cancellation. Cancelled and frozen grants from adjacent
+                            divisions
                             within the same institution (e.g., the main campus and medical school of the same
                             university) are combined under one broader institution label (e.g., “Columbia University”).
                         </Text>
@@ -264,7 +270,8 @@ function About() {
                     <Accordion.Panel>
                         <Text ta={"left"}>
                             For estimates of economic losses in communities, resulting from changes to funding for
-                            indirect costs as well as cancelled/frozen grants, we multiply direct loss values by 2.56. This
+                            indirect costs as well as cancelled/frozen grants, we multiply direct loss values by 2.56.
+                            This
                             multiplier is derived from <a target={"_blank"}
                                                           href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"}>a
                             recent report</a>, which found that every dollar invested in NIH
@@ -278,7 +285,8 @@ function About() {
                             counties.
                         </Text>
                         <Text ta={'left'} mt={'sm'}>
-                            Note that cancelled and frozen grants do not count toward the estimates of future losses that would
+                            Note that cancelled and frozen grants do not count toward the estimates of future losses
+                            that would
                             result from a 15% cap on indirect costs, to prevent double-counting. This means that
                             estimates of total loss are not necessarily the sum of future and current losses.
                         </Text>
@@ -293,7 +301,13 @@ function About() {
                             NIH-negotiated indirect cost rates on medical research. Our approach combines these methods
                             with US census data and interactive visualizations to engage with impacts at county levels
                             nationwide. Our data and code are <a href={"http://doi.org/10.17605/OSF.IO/H398E"}
-                                                                 target={"_blank"}>publicly available here</a>.
+                                                                 target={"_blank"}>publicly available here</a>. Detailed
+                            methodology is described in a preprint
+                            available via <a href={"https://www.medrxiv.org/content/10.1101/2025.07.24.25332092v1"}
+                                             target={"_blank"}>medrxiv</a>, entitled ‘Economic Loss due to Health
+                            Funding
+                            Cuts as Distributed Across Geospatial Units’, released on July 24,
+                            2025
                         </Text>
                         <Text ta={"left"} mt="sm">
                             View an illustrated summary of our method here.
