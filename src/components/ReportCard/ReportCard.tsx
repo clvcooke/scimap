@@ -20,6 +20,8 @@ import { ReportMapCard } from "./ReportMapCard.tsx";
 import { getReportCardData } from "../../data/report-card-data.ts";
 import SharePage from '../SharePage.tsx';
 
+import {isMobile} from "react-device-detect";
+
 interface ReportCardProps {
     stateCode: string;
     districtId: string;
@@ -40,6 +42,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         district_bounds,
         state_bounds,
         state,
+        state_code,
         IDC_econ_loss,
         IDC_job_loss,
         terminated_econ_loss,
@@ -56,13 +59,11 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     } = reportCardData;
 
     // Get the current page URL for the QR code
-    // Get the current page URL for the QR code
     const currentUrl = `https://scienceimpacts.org${window.location.pathname}${window.location.search}`;
-
 
     // Function to download the report card image
     const downloadReportCardImage = async () => {
-        const imageUrl = `https://data.scienceimpacts.org/report-cards-v2/report-card-${stateCode}-${districtId}.png`;
+        const imageUrl = `https://data.scienceimpacts.org/report-cards-v3/report-card-${stateCode}-${districtId}.png`;
         const fileName = `report-card-${stateCode}-${districtId === "00" ? 'AL' : districtId}.png`;
 
         try {
@@ -119,21 +120,46 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         targetDistrict={GEOID}
     />
 
-    const districtTitle = `${state} ${districtName}`
-
+    const districtTitle = isMobile ? `${state_code}-${districtId === '00' ? 'AL' : districtId}`: `${state} ${districtName}`
     return (
         <Container size={'100rem'}>
-            <Stack gap="sm" p={'md'}>
-                {/* Header with QR Code and Download/Share Buttons */}
-                <Group justify="space-between" align="flex-start">
+            <Stack gap="sm" p={{ base: 'xs', sm: 'md' }}>
+                {/* Mobile Header Layout */}
+                <Stack gap="xs" hiddenFrom="sm">
+                    <Text size="md" fw={700} c="dark" ta="center">
+                        SCIMaP Scorecard: White House NIH FY26 Budget Proposal
+                    </Text>
+                    <Group justify="center" align="center" gap={'md'}>
+                        <Text size="md" fw={500} c="dark" ta="center">
+                            {state} {districtName}
+                        </Text>
+                        <Group gap="xs">
+                            <ActionIcon
+                                variant="transparent"
+                                size="sm"
+                                onClick={downloadReportCardImage}
+                                title="Download Report Card Image"
+                            >
+                                <IconDownload size={18} />
+                            </ActionIcon>
+                            <ActionIcon
+                                variant="transparent"
+                                color="blue"
+                                size="sm"
+                                onClick={() => setShareOpen(true)}
+                                title="Share this scorecard"
+                            >
+                                <IconShare size={18} />
+                            </ActionIcon>
+                        </Group>
+                    </Group>
+                </Stack>
+
+                {/* Desktop Header Layout */}
+                <Group justify="space-between" align="flex-start" visibleFrom="sm">
                     <Stack gap={0} align="center">
                         <Anchor href="/" underline="never">
-                            <Image src={"/science.png"}
-                                   h={76}
-                                   w={76}
-                                   p={8}
-                            >
-                            </Image>
+                            <Image src={"/science.png"} h={76} w={76} p={8} />
                         </Anchor>
                         <Text
                             size="xs"
@@ -152,15 +178,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                         <Text size="xl" fw={700} c="dark">SCIMaP Scorecard: White House NIH FY26 Budget Proposal</Text>
                         <Text size="lg" fw={500} c="dark">
                             {districtTitle} — FY2026 NIH Budget Impact{' '}
-                            <ActionIcon
-                                variant="transparent"
-                                size="sm"
-                                onClick={downloadReportCardImage}
-                                title="Download Report Card Image"
-                                aria-label="Download report card image"
-                            >
-                                <IconDownload size={20} />
-                            </ActionIcon>
+
                         </Text>
                         <Text size="md" c="dimmed">
                             Projected district-level economic losses from cuts proposed in the White House FY26 NIH budget
@@ -185,20 +203,39 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                                 marginSize={0}
                             />
                         </Box>
-                        <ActionIcon
-                            variant="transparent"
-                            color="blue"
-                            size="lg"
-                            onClick={() => setShareOpen(true)}
-                            title="Share this scorecard"
-                            aria-label="Share this scorecard"
-                        >
-                            <IconShare size={20} />
-                        </ActionIcon>
+                        <Stack justify={'space-between'} align={'center'} gap={'lg'}>
+                            <ActionIcon
+                                variant="transparent"
+                                color="blue"
+                                size="lg"
+                                onClick={() => setShareOpen(true)}
+                                title="Share this scorecard"
+                                aria-label="Share this scorecard"
+                            >
+                                <IconShare size={20} />
+                            </ActionIcon>
+                            <ActionIcon
+                                variant="transparent"
+                                size="sm"
+                                onClick={downloadReportCardImage}
+                                title="Download Report Card Image"
+                                aria-label="Download report card image"
+                            >
+                                <IconDownload size={20} />
+                            </ActionIcon>
+                        </Stack>
+
                     </Group>
                 </Group>
 
-                <Grid gutter={'xs'}>
+                {/* Mobile Layout - Stack vertically, no state card */}
+                <Stack gap="md" hiddenFrom="sm">
+                    {reportInfoCard}
+                    {districtMapCard}
+                </Stack>
+
+                {/* Desktop Layout - Grid with state card */}
+                <Grid gutter={'xs'} visibleFrom="sm">
                     <Grid.Col span={4}>
                         <Stack gap={'xs'}>
                             {reportInfoCard}
@@ -209,9 +246,10 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                         {districtMapCard}
                     </Grid.Col>
                 </Grid>
+
                 {/* Footer */}
                 <div style={{ textAlign: 'center' }}>
-                    <Text size="sm" c="dimmed">
+                    <Text size="xs" c="dimmed">
                         Funding losses are calculated by comparing the FY 2026 <a target={'_blank'} href={'https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf'}>proposed NIH budget</a> with average funding for a given district (using data from <a target={"_blank"} href={'https://reporter.nih.gov/'}>NIH RePORTER</a>) between FY2020-2024. Corresponding economic and job losses are determined based on an <a href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"} target={"_blank"}>analysis of lost economic activity</a> and distributed among local communities based on <a href={"https://lehd.ces.census.gov/data/"} target={"_blank"}>U.S. Census data</a>. We also list losses specific to research funding for aging (NIA), cancer (NCI), and infectious diseases (NIAID).
                     </Text>
                 </div>

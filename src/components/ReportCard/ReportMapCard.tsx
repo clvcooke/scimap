@@ -10,6 +10,7 @@ import {Map} from 'react-map-gl/maplibre';
 import {generateDistrictOutlineLayer} from "../../layers/state-outline-layer.ts";
 import ColorScale from "../ColorScale.tsx";
 
+import {isMobile} from "react-device-detect";
 
 interface MapCardProps {
     title?: string;
@@ -166,6 +167,7 @@ export const ReportMapCard = ({
         }
     }, [paddingPx, minLat, maxLat, minLon, maxLon]);
 
+    const districtHeight = isMobile ? 400 : 765;
 
     return (
         <Card shadow="sm" padding={isState ? 0 : 0} radius="md" withBorder>
@@ -173,7 +175,7 @@ export const ReportMapCard = ({
                 {title && <Text size="lg" fw={600} c="dark">{title}</Text>}
                 <div
                     ref={mapContainerRef}
-                    style={{height: isState ? 300 : 755, position: 'relative'}}
+                    style={{height: isState ? 300 : districtHeight, position: 'relative'}}
                 >
                     <DeckGL
                         initialViewState={viewState}

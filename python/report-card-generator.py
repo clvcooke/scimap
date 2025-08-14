@@ -87,7 +87,7 @@ async def process_district(semaphore, district):
                 output_path=expected_path,
                 wait_time=1000,
                 full_page=False,
-                viewport_size=(1920, 1080)
+                viewport_size=(1600, 950)
             )
 
             return (district, screenshot_path, expected_path)
