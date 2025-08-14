@@ -2,6 +2,7 @@ import {Card, Text, Flex, Stack, Button, ActionIcon} from '@mantine/core';
 import {IconX} from '@tabler/icons-react';
 import {generateEconLossString, generateJobLossString, processPoliticianName} from "../utils/info.ts";
 import {getHouseRep, getSenatorsList} from "../data/legislature.ts";
+import {isMobile} from "react-device-detect";
 
 type BaseIDCTile = {
     state: string;
@@ -181,7 +182,7 @@ function generateDefaultHover({
     let econ_loss_string = "Economic Loss"
 
     // Generate report card link for districts in budget mode
-    const showKeyFactsLink = isPinned && mode === 'districts' && layer === 'budget';
+    const showKeyFactsLink = (isMobile || isPinned) && mode === 'districts' && layer === 'budget';
     if (layer === "idc") {
         const tileProperties = hoverInfo.properties as IDCTileProperties;
         econ_loss = tileProperties.econ_loss;
@@ -222,7 +223,7 @@ function generateDefaultHover({
     }
 
     // Show click prompt for district budget mode when not pinned
-    const showClickPrompt = !isPinned && mode === 'districts' && layer === 'budget';
+    const showClickPrompt = !isPinned && !isMobile && mode === 'districts' && layer === 'budget';
 
     return <Flex direction="column" gap="0.1rem" justify={'left'}>
         {state &&
@@ -519,7 +520,7 @@ export const HoverInfoComponent: React.FC<Props> = ({
         }
         : {
             ...baseCardStyle,
-            pointerEvents: 'none' as const, // prevent gap-causing hover flicker and allow map interaction
+            pointerEvents: (isMobile) ? 'auto' as const : 'none' as const, // Allow interaction on mobile when fact sheet button is shown
             boxShadow: '0 6px 18px rgba(0, 0, 0, 0.14)',
         };
 

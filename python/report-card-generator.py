@@ -1,6 +1,7 @@
+
 #!/usr/bin/env python3
 """
-Alternative webpage screenshot script using Playwright
+Alternative webpage screenshot script using Playwright with browser pooling
 """
 
 import asyncio
@@ -12,88 +13,127 @@ from tqdm.asyncio import tqdm
 from playwright.async_api import async_playwright
 
 
-async def take_screenshot_playwright(url, output_path, wait_time=5000, full_page=True, viewport_size=(1500, 1000)):
+class BrowserPool:
     """
-    Take a screenshot using Playwright.
+    A pool of browser instances that can be reused for taking screenshots.
+    """
+    def __init__(self, pool_size=4):
+        self.pool_size = pool_size
+        self.browsers = []
+        self.pages = []
+        self.semaphore = asyncio.Semaphore(pool_size)
+        self.page_queue = asyncio.Queue()
+
+    async def initialize(self, playwright):
+        """Initialize the browser pool with the specified number of browsers."""
+        print(f"Initializing browser pool with {self.pool_size} browsers...")
+
+        for i in range(self.pool_size):
+            browser = await playwright.chromium.launch(headless=True)
+            context = await browser.new_context(
+                viewport={'width': 1600, 'height': 950}
+            )
+            page = await context.new_page()
+
+            self.browsers.append(browser)
+            self.pages.append(page)
+            # Add page to queue for cycling
+            await self.page_queue.put(page)
+
+        print(f"✅ Browser pool initialized with {len(self.browsers)} browsers")
+
+    async def get_page(self):
+        """Get an available page from the pool."""
+        async with self.semaphore:
+            page = await self.page_queue.get()
+            return page
+
+    async def return_page(self, page):
+        """Return a page back to the pool."""
+        await self.page_queue.put(page)
+        self.semaphore.release()
+
+    async def close_all(self):
+        """Close all browsers in the pool."""
+        print("Closing browser pool...")
+        for browser in self.browsers:
+            await browser.close()
+        print("✅ Browser pool closed")
+
+
+async def take_screenshot_with_pool(pool, url, output_path, wait_time=5000, full_page=True):
+    """
+    Take a screenshot using a page from the browser pool.
 
     Args:
+        pool: BrowserPool instance
         url (str): URL of the webpage to screenshot
         output_path (str): Path to save the screenshot
         wait_time (int): Wait time in milliseconds
         full_page (bool): Whether to capture full page
-        viewport_size (tuple): Viewport size as (width, height)
     """
-    async with async_playwright() as p:
-        # Launch browser
-        browser = await p.chromium.launch(headless=True)
+    page = await pool.get_page()
 
-        # Create context with viewport size
-        context = await browser.new_context(
-            viewport={'width': viewport_size[0], 'height': viewport_size[1]}
-        )
+    try:
+        # Navigate to URL
+        print(f"Loading webpage: {url}")
+        await page.goto(url, wait_until='networkidle')
 
-        # Create page
-        page = await context.new_page()
+        # Wait for specified time
+        await page.wait_for_timeout(wait_time)
 
-        try:
-            # Navigate to URL
-            print(f"Loading webpage: {url}")
-            await page.goto(url, wait_until='networkidle')
+        # Ensure output directory exists
+        output_dir = os.path.dirname(output_path) if os.path.dirname(output_path) else "."
+        os.makedirs(output_dir, exist_ok=True)
 
-            # Wait for specified time
-            await page.wait_for_timeout(wait_time)
+        # Take screenshot
+        await page.screenshot(path=output_path, full_page=full_page)
+        return output_path
 
+    except Exception as e:
+        print(f"Error taking screenshot: {e}")
+        return None
 
-            # Ensure output directory exists
-            output_dir = os.path.dirname(output_path) if os.path.dirname(output_path) else "."
-            os.makedirs(output_dir, exist_ok=True)
-
-            # Take screenshot
-            await page.screenshot(path=output_path, full_page=full_page)
-            return output_path
-
-        except Exception as e:
-            print(f"Error taking screenshot: {e}")
-            return None
-
-        finally:
-            await browser.close()
+    finally:
+        # Always return the page to the pool
+        await pool.return_page(page)
 
 
-async def process_district(semaphore, district):
+async def process_district_with_pool(pool, district):
     """
-    Process a single district with semaphore to limit concurrent operations.
+    Process a single district using the browser pool.
 
     Args:
-        semaphore: Asyncio semaphore to limit concurrency
+        pool: BrowserPool instance
         district: District identifier string
 
     Returns:
         tuple: (district, screenshot_path, expected_path)
     """
     os.makedirs("outputs/report-cards", exist_ok=True)
-    async with semaphore:
-        try:
-            # Run screenshot
-            district_parts = district.split("-")
-            expected_path = f"outputs/report-cards/report-card-{district}.png"
-            if os.path.exists(expected_path):
-                print("Already exists")
-                return (district, expected_path, expected_path)
-            url = f"https://report-card.scimap.pages.dev/report?stateCode={district_parts[0]}&districtId={district_parts[1]}"
 
-            screenshot_path = await take_screenshot_playwright(
-                url=url,
-                output_path=expected_path,
-                wait_time=1000,
-                full_page=False,
-                viewport_size=(1600, 950)
-            )
+    try:
+        # Run screenshot
+        district_parts = district.split("-")
+        expected_path = f"outputs/report-cards/report-card-{district}.png"
+        if os.path.exists(expected_path):
+            print(f"Already exists: {district}")
+            return (district, expected_path, expected_path)
 
-            return (district, screenshot_path, expected_path)
-        except Exception as e:
-            print(f"Error processing district {district}: {e}")
-            return (district, None, expected_path)
+        url = f"https://report-card.scimap.pages.dev/report?stateCode={district_parts[0]}&districtId={district_parts[1]}"
+
+        screenshot_path = await take_screenshot_with_pool(
+            pool=pool,
+            url=url,
+            output_path=expected_path,
+            wait_time=1000,
+            full_page=False
+        )
+
+        return (district, screenshot_path, expected_path)
+    except Exception as e:
+        print(f"Error processing district {district}: {e}")
+        return (district, None, expected_path)
 
 
 def validate_screenshots(results):
@@ -149,28 +189,33 @@ def validate_screenshots(results):
 
 async def main_playwright_async():
     """
-    Main async function to process multiple districts concurrently.
+    Main async function to process multiple districts concurrently using a browser pool.
     """
     report_card_district_data = "/home/colin/code/scimap/src/data/report_card_info.json"
     with open(report_card_district_data) as fp:
         report_card_data = json.load(fp)
 
-    # Create a semaphore to limit concurrent operations to 10
-    semaphore = asyncio.Semaphore(10)
-
-    # Get list of districts to process (currently limited to first 3, but you can change this)
     districts = list(report_card_data.keys())
+    print(f"Starting to process {len(districts)} districts with 4 concurrent browsers...")
 
-    print(f"Starting to process {len(districts)} districts...")
+    async with async_playwright() as p:
+        # Initialize browser pool
+        pool = BrowserPool(pool_size=4)
+        await pool.initialize(p)
 
-    # Create tasks for all districts
-    tasks = [process_district(semaphore, district) for district in districts]
+        try:
+            # Create tasks for all districts
+            tasks = [process_district_with_pool(pool, district) for district in districts]
 
-    # Run all tasks concurrently with progress bar
-    results = []
-    for task in tqdm.as_completed(tasks, desc="Processing districts"):
-        result = await task
-        results.append(result)
+            # Run all tasks concurrently with progress bar
+            results = []
+            for task in tqdm.as_completed(tasks, desc="Processing districts"):
+                result = await task
+                results.append(result)
+
+        finally:
+            # Always close the browser pool
+            await pool.close_all()
 
     # Validate all screenshots
     successful_count, missing_files = validate_screenshots(results)
