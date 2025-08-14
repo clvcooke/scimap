@@ -56,8 +56,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     } = reportCardData;
 
     // Get the current page URL for the QR code
-    const currentUrl = window.location.href;
-
+    // Get the current page URL for the QR code
+    const currentUrl = `https://scienceimpacts.org${window.location.pathname}${window.location.search}`;
 
 
     // Function to download the report card image
@@ -122,8 +122,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     const districtTitle = `${state} ${districtName}`
 
     return (
-        <Container size="xl">
-            <Stack gap="sm">
+        <Container size={'100rem'}>
+            <Stack gap="sm" p={'md'}>
                 {/* Header with QR Code and Download/Share Buttons */}
                 <Group justify="space-between" align="flex-start">
                     <Stack gap={0} align="center">
@@ -199,20 +199,20 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                 </Group>
 
                 <Grid gutter={'xs'}>
-                    <Grid.Col span={4.2}>
+                    <Grid.Col span={4}>
                         <Stack gap={'xs'}>
                             {reportInfoCard}
                             {stateMapCard}
                         </Stack>
                     </Grid.Col>
-                    <Grid.Col span={7.5}>
+                    <Grid.Col span={8}>
                         {districtMapCard}
                     </Grid.Col>
                 </Grid>
                 {/* Footer */}
                 <div style={{ textAlign: 'center' }}>
                     <Text size="sm" c="dimmed">
-                        Losses are calculated by comparing the FY 2026 <a target={'_blank'} href={'https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf'}>proposed NIH budget</a> with average funding for a given district (using data from <a target={"_blank"} href={'https://reporter.nih.gov/'}>NIH RePORTER</a>) between FY2020-2024. Downstream economic losses and job losses are determined by an economic report by <a href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"}>United for Medical Research</a>. Losses are distributed among local communities to reflect commuting patterns, as determined by <a href={"https://lehd.ces.census.gov/data/"} target={"_blank"}>U.S. Census data</a>. In addition to total economic losses, we list losses specific to research funding for aging (NIA), cancer (NCI), and infectious diseases (NIAID).
+                        Funding losses are calculated by comparing the FY 2026 <a target={'_blank'} href={'https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf'}>proposed NIH budget</a> with average funding for a given district (using data from <a target={"_blank"} href={'https://reporter.nih.gov/'}>NIH RePORTER</a>) between FY2020-2024. Corresponding economic and job losses are determined based on an <a href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"} target={"_blank"}>analysis of lost economic activity</a> and distributed among local communities based on <a href={"https://lehd.ces.census.gov/data/"} target={"_blank"}>U.S. Census data</a>. We also list losses specific to research funding for aging (NIA), cancer (NCI), and infectious diseases (NIAID).
                     </Text>
                 </div>
             </Stack>
