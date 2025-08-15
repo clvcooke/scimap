@@ -426,6 +426,12 @@ function About() {
                             Following an update to Grant Watch, we now track frozen grants in addition to cancelled
                             grants under current losses.
                         </Text>
+                        <Text ta={"left"} mt="sm">
+                            <b>August 14, 2025</b>
+                        </Text>
+                        <Text ta={"left"}>
+                            We have revamped our FY26 map to improve the display of values, and added per-district fact sheet that can be viewed by clicking on a district. This change also updates the map to use the 119th Congressional Districts.
+                        </Text>
                     </Accordion.Panel>
                 </AccordionItem>
             </Accordion>
