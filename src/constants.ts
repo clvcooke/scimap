@@ -36,3 +36,4 @@ export type BaseLayer = "IDC" | "TERM" | "TOTAL" | "BLANK" | null;
 export type Overlay = "GRANTS" | "BLANK" | null;
 
 export const STATE_LAYER_LINK = "https://data.scienceimpacts.org/tiles_states_budget_v1/{z}/{x}/{y}.pbf"
+export const DISTRICT_LAYER_LINK = "https://data.scienceimpacts.org/tiles_districts_budget_119_v1/{z}/{x}/{y}.pbf"

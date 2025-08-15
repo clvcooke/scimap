@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xml:lang="en">
+	<Esri>
+		<CreaDate>20250721</CreaDate>
+		<CreaTime>14134700</CreaTime>
+		<ArcGISFormat>1.0</ArcGISFormat>
+		<SyncOnce>FALSE</SyncOnce>
+		<DataProperties>
+			<itemProps>
+				<itemName Sync="TRUE">cd_119_2025_07_20</itemName>
+			</itemProps>
+			<coordRef>
+				<type Sync="TRUE">Projected</type>
+				<geogcsn Sync="TRUE">GCS_WGS_1984</geogcsn>
+				<csUnits Sync="TRUE">Linear Unit: Meter (1.000000)</csUnits>
+				<projcsn Sync="TRUE">WGS_1984_Web_Mercator_Auxiliary_Sphere</projcsn>
+				<peXml Sync="TRUE">&lt;ProjectedCoordinateSystem xsi:type='typens:ProjectedCoordinateSystem' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/3.3.0'&gt;&lt;WKT&gt;PROJCS[&amp;quot;WGS_1984_Web_Mercator_Auxiliary_Sphere&amp;quot;,GEOGCS[&amp;quot;GCS_WGS_1984&amp;quot;,DATUM[&amp;quot;D_WGS_1984&amp;quot;,SPHEROID[&amp;quot;WGS_1984&amp;quot;,6378137.0,298.257223563]],PRIMEM[&amp;quot;Greenwich&amp;quot;,0.0],UNIT[&amp;quot;Degree&amp;quot;,0.0174532925199433]],PROJECTION[&amp;quot;Mercator_Auxiliary_Sphere&amp;quot;],PARAMETER[&amp;quot;False_Easting&amp;quot;,0.0],PARAMETER[&amp;quot;False_Northing&amp;quot;,0.0],PARAMETER[&amp;quot;Central_Meridian&amp;quot;,0.0],PARAMETER[&amp;quot;Standard_Parallel_1&amp;quot;,0.0],PARAMETER[&amp;quot;Auxiliary_Sphere_Type&amp;quot;,0.0],UNIT[&amp;quot;Meter&amp;quot;,1.0],AUTHORITY[&amp;quot;EPSG&amp;quot;,3857]]&lt;/WKT&gt;&lt;XOrigin&gt;-20037700&lt;/XOrigin&gt;&lt;YOrigin&gt;-30241100&lt;/YOrigin&gt;&lt;XYScale&gt;10000&lt;/XYScale&gt;&lt;ZOrigin&gt;-100000&lt;/ZOrigin&gt;&lt;ZScale&gt;10000&lt;/ZScale&gt;&lt;MOrigin&gt;-100000&lt;/MOrigin&gt;&lt;MScale&gt;10000&lt;/MScale&gt;&lt;XYTolerance&gt;0.001&lt;/XYTolerance&gt;&lt;ZTolerance&gt;0.001&lt;/ZTolerance&gt;&lt;MTolerance&gt;0.001&lt;/MTolerance&gt;&lt;HighPrecision&gt;true&lt;/HighPrecision&gt;&lt;WKID&gt;102100&lt;/WKID&gt;&lt;LatestWKID&gt;3857&lt;/LatestWKID&gt;&lt;/ProjectedCoordinateSystem&gt;</peXml>
+			</coordRef>
+		</DataProperties>
+		<SyncDate>20250720</SyncDate>
+		<SyncTime>07225900</SyncTime>
+		<ModDate>20250720</ModDate>
+		<ModTime>07225900</ModTime>
+	</Esri>
+	<mdChar>
+		<CharSetCd value="004">
+		</CharSetCd>
+	</mdChar>
+	<mdHrLv>
+		<ScopeCd value="005">
+		</ScopeCd>
+	</mdHrLv>
+	<mdContact>
+		<rpOrgName>United States Census Bureau (USCB)</rpOrgName>
+		<rpCntInfo>
+			<cntPhone>
+				<voiceNum>301-763-1099</voiceNum>
+			</cntPhone>
+			<cntAddress addressType="both">
+				<delPoint>4600 Silver Hill Rd</delPoint>
+				<city>Washington</city>
+				<adminArea>DC</adminArea>
+				<postCode>20233</postCode>
+				<country>United States</country>
+				<eMailAdd>geo.bas@census.gov /geo.geography@census.gov</eMailAdd>
+			</cntAddress>
+		</rpCntInfo>
+		<role>
+			<RoleCd value="007">
+			</RoleCd>
+		</role>
+	</mdContact>
+	<mdDateSt>2025-07-16</mdDateSt>
+	<distInfo>
+		<distributor>
+			<distorCont>
+				<rpOrgName>Bureau of Transportation Statistics</rpOrgName>
+				<rpPosName>NTAD Program Manager</rpPosName>
+				<rpCntInfo>
+					<cntPhone>
+						<voiceNum>none</voiceNum>
+					</cntPhone>
+					<cntAddress addressType="both">
+						<delPoint>1200 New Jersey Ave. SE</delPoint>
+						<city>Washington</city>
+						<adminArea>DC</adminArea>
+						<postCode>20590</postCode>
+						<country>US</country>
+						<eMailAdd>ntad@dot.gov</eMailAdd>
+					</cntAddress>
+				</rpCntInfo>
+				<role>
+					<RoleCd value="005">
+					</RoleCd>
+				</role>
+			</distorCont>
+			<distorOrdPrc>
+				<resFees>None. No fees are applicable for obtaining the dataset.</resFees>
+			</distorOrdPrc>
+			<distorFormat>
+				<formatName>Open Data Catalog</formatName>
+				<formatVer>1.0</formatVer>
+				<formatSpec>Hosted Downloads</formatSpec>
+				<formatInfo>An ESRI Geodatabase, ESRI shapefile, or spreadsheet.</formatInfo>
+				<fileDecmTech>ZIP</fileDecmTech>
+			</distorFormat>
+			<distorTran>
+				<onLineSrc>
+					<linkage>https://doi.org/10.21949/1522027</linkage>
+				</onLineSrc>
+			</distorTran>
+		</distributor>
+		<distributor>
+			<distorCont>
+				<rpOrgName>Bureau of Transportation Statistics</rpOrgName>
+				<rpPosName>NTAD Program Manager</rpPosName>
+				<rpCntInfo>
+					<cntPhone>
+						<voiceNum>none</voiceNum>
+					</cntPhone>
+					<cntAddress addressType="both">
+						<delPoint>1200 New Jersey Ave. SE</delPoint>
+						<city>Washington</city>
+						<adminArea>DC</adminArea>
+						<postCode>20590</postCode>
+						<country>US</country>
+						<eMailAdd>ntad@dot.gov</eMailAdd>
+					</cntAddress>
+				</rpCntInfo>
+				<role>
+					<RoleCd value="005">
+					</RoleCd>
+				</role>
+			</distorCont>
+			<distorOrdPrc>
+				<resFees>None. No fees are applicable for obtaining the dataset.</resFees>
+			</distorOrdPrc>
+			<distorFormat>
+				<formatName>ArcGIS REST Services Directory Feature Server (WFS)</formatName>
+				<formatVer>11.5</formatVer>
+				<formatSpec>https://ienccloud.us/arcgis/sdk/rest/index.html#/Feature_Service/02ss0000007v000000/</formatSpec>
+				<formatInfo>complies with OGC WFS Map Service for visualizing geospatial information</formatInfo>
+			</distorFormat>
+			<distorTran>
+				<onLineSrc>
+					<linkage>https://doi.org/10.21949/1522029</linkage>
+				</onLineSrc>
+			</distorTran>
+		</distributor>
+		<distributor>
+			<distorCont>
+				<rpOrgName>Bureau of Transportation Statistics</rpOrgName>
+				<rpPosName>NTAD Program Manager</rpPosName>
+				<rpCntInfo>
+					<cntPhone>
+						<voiceNum>none</voiceNum>
+					</cntPhone>
+					<cntAddress addressType="both">
+						<delPoint>1200 New Jersey Ave. SE</delPoint>
+						<city>Washington</city>
+						<adminArea>DC</adminArea>
+						<postCode>20590</postCode>
+						<country>US</country>
+						<eMailAdd>ntad@dot.gov</eMailAdd>
+					</cntAddress>
+				</rpCntInfo>
+				<role>
+					<RoleCd value="005">
+					</RoleCd>
+				</role>
+			</distorCont>
+			<distorOrdPrc>
+				<resFees>None. No fees are applicable for obtaining the dataset.</resFees>
+			</distorOrdPrc>
+			<distorFormat>
+				<formatName>ArcGIS Online Hosted Vector Tile Service</formatName>
+				<formatVer>June 2025</formatVer>
+				<formatSpec>https://developers.arcgis.com/documentation/portal-and-data-services/data-services/vector-tile-services/introduction/</formatSpec>
+				<formatInfo>ArcGIS Online Hosted Esri ArcGIS Vector Tile Service for visualizing geospatial information</formatInfo>
+			</distorFormat>
+			<distorTran>
+				<onLineSrc>
+					<linkage>https://doi.org/10.21949/1522030</linkage>
+				</onLineSrc>
+			</distorTran>
+		</distributor>
+	</distInfo>
+	<dataIdInfo>
+		<idCitation>
+			<resTitle>Congressional Districts</resTitle>
+			<date>
+				<createDate>1995-07-01</createDate>
+				<lastUpdateDate>2025-07-13</lastUpdateDate>
+			</date>
+			<citRespParty>
+				<rpOrgName>United States Census Bureau (USCB)</rpOrgName>
+				<role>
+					<RoleCd value="006">
+					</RoleCd>
+				</role>
+			</citRespParty>
+			<presForm>
+				<PresFormCd value="">
+				</PresFormCd>
+			</presForm>
+			<presForm>
+				<fgdcGeoform>vector digital data</fgdcGeoform>
+			</presForm>
+			<collTitle>National Transportation Atlas Database</collTitle>
+		</idCitation>
+		<idAbs>The 119th Congressional Districts dataset reflects boundaries from January 03, 2025 from the United States Census Bureau (USCB), and the attributes are updated every Sunday from the United States House of Representatives and is part of the U.S. Department of Transportation (USDOT)/Bureau of Transportation Statistics (BTS) National Transportation Atlas Database (NTAD). The TIGER/Line shapefiles and related database files (.dbf) are an extract of selected geographic and cartographic information from the U.S. Census Bureau's Master Address File / Topologically Integrated Geographic Encoding and Referencing (MAF/TIGER) Database (MTDB). The MTDB represents a seamless national file with no overlaps or gaps between parts, however, each TIGER/Line shapefile is designed to stand alone as an independent data set, or they can be combined to cover the entire nation. Information for each member of Congress is appended to the Census Congressional District shapefile using information from the Office of the Clerk, U.S. House of Representatives' website https://clerk.house.gov/xml/lists/MemberData.xml and its corresponding XML file. Congressional districts are the 435 areas from which people are elected to the U.S. House of Representatives. This dataset also includes 9 geographies for non-voting at large delegate districts, resident commissioner districts, and congressional districts that are not defined. After the apportionment of congressional seats among the states based on census population counts, each state is responsible for establishing congressional districts for the purpose of electing representatives. Each congressional district is to be as equal in population to all other congressional districts in a state as practicable. The 119th Congress is seated from January 3, 2025 through January 3, 2027. In Connecticut, Illinois, and New Hampshire, the Redistricting Data Program (RDP) participant did not define the CDs to cover all of the state or state equivalent area. In these areas with no CDs defined, the code "ZZ" has been assigned, which is treated as a single CD for purposes of data presentation. The TIGER/Line shapefiles for the District of Columbia, Puerto Rico, and the Island Areas (American Samoa, Guam, the Commonwealth of the Northern Mariana Islands, and the U.S. Virgin Islands) each contain a single record for the non-voting delegate district in these areas. The boundaries of all other congressional districts reflect information provided to the Census Bureau by the states by May 31, 2024. A data dictionary, or other source of attribute information, is accessible at https://doi.org/10.21949/1529006</idAbs>
+		<idPurp>In order for others to use the information in the Census MAF/TIGER database in a geographic information system (GIS) or for other geographic applications, the Census Bureau releases to the public extracts of the database in the form of TIGER/Line Shapefiles.</idPurp>
+		<idCredit>Acknowledgment of the U.S. Department of Commerce, U.S. Census Bureau, Geography Division; U.S. House of Representatives; and the Bureau of Transportation Statistics (BTS) [distributor].</idCredit>
+		<idStatus>
+			<ProgCd value="004">
+			</ProgCd>
+		</idStatus>
+		<idPoC>
+			<rpOrgName>United States Census Bureau (USCB)</rpOrgName>
+			<rpCntInfo>
+				<cntPhone>
+					<voiceNum>301-763-1099</voiceNum>
+				</cntPhone>
+				<cntAddress addressType="both">
+					<delPoint>4600 Silver Hill Rd</delPoint>
+					<city>Washington</city>
+					<adminArea>DC</adminArea>
+					<postCode>20233</postCode>
+					<country>United States</country>
+					<eMailAdd>geo.bas@census.gov /geo.geography@census.gov</eMailAdd>
+				</cntAddress>
+			</rpCntInfo>
+			<role>
+				<RoleCd value="007">
+				</RoleCd>
+			</role>
+		</idPoC>
+		<resMaint>
+			<maintFreq>
+				<MaintFreqCd value="003">
+				</MaintFreqCd>
+			</maintFreq>
+		</resMaint>
+		<placeKeys>
+			<keyword>USA</keyword>
+			<keyword>National</keyword>
+		</placeKeys>
+		<themeKeys>
+			<keyword>boundaries</keyword>
+			<thesaName>
+				<resTitle>ISO 19115 Topic Category</resTitle>
+			</thesaName>
+		</themeKeys>
+		<themeKeys>
+			<keyword>NTAD</keyword>
+			<keyword>National Transportation Atlas Database</keyword>
+			<keyword>Transportation</keyword>
+			<keyword>Atlas</keyword>
+			<keyword>Database</keyword>
+			<keyword>vector</keyword>
+			<keyword>polygon</keyword>
+			<keyword>Administrative</keyword>
+			<keyword>Boundary</keyword>
+			<keyword>Congress</keyword>
+			<keyword>Congressional</keyword>
+			<keyword>District</keyword>
+			<keyword>119</keyword>
+		</themeKeys>
+		<searchKeys>
+			<keyword>boundaries</keyword>
+			<keyword>USA</keyword>
+			<keyword>National</keyword>
+			<keyword>NTAD</keyword>
+			<keyword>National Transportation Atlas Database</keyword>
+			<keyword>Transportation</keyword>
+			<keyword>Atlas</keyword>
+			<keyword>Database</keyword>
+			<keyword>vector</keyword>
+			<keyword>polygon</keyword>
+			<keyword>Administrative</keyword>
+			<keyword>Boundary</keyword>
+			<keyword>Congress</keyword>
+			<keyword>Congressional</keyword>
+			<keyword>District</keyword>
+			<keyword>119</keyword>
+		</searchKeys>
+		<resConst>
+			<Consts>
+				<useLimit>This NTAD dataset is a work of the United States government as defined in 17 U.S.C. § 101 and as such are not protected by any U.S. copyrights. This work is available for unrestricted public use.</useLimit>
+			</Consts>
+		</resConst>
+		<resConst>
+			<Consts>
+				<useLimit>This NTAD dataset is a work of the United States government as defined in 17 U.S.C. § 101 and as such are not protected by any U.S. copyrights. This work is available for unrestricted public use.</useLimit>
+			</Consts>
+			<LegConsts>
+				<accessConsts>
+					<RestrictCd value="">
+					</RestrictCd>
+				</accessConsts>
+			</LegConsts>
+		</resConst>
+		<aggrInfo>
+			<aggrDSName>
+				<resTitle>National Transportation Atlas Database</resTitle>
+				<date>
+					<pubDate>2025-07-13</pubDate>
+				</date>
+				<citRespParty>
+					<rpOrgName>Bureau of Transportation Statistics</rpOrgName>
+					<role>
+						<RoleCd value="006">
+						</RoleCd>
+					</role>
+				</citRespParty>
+			</aggrDSName>
+			<assocType>
+				<AscTypeCd value="002">
+				</AscTypeCd>
+			</assocType>
+		</aggrInfo>
+		<tpCat>
+			<TopicCatCd value="003">
+			</TopicCatCd>
+		</tpCat>
+		<dataExt>
+			<geoEle>
+				<GeoBndBox>
+					<exTypeCode>true</exTypeCode>
+					<westBL>-179.231086</westBL>
+					<eastBL>179.85968099999999</eastBL>
+					<northBL>71.439785999999998</northBL>
+					<southBL>-14.601813</southBL>
+				</GeoBndBox>
+			</geoEle>
+			<tempEle>
+				<TempExtent>
+					<exTemp>
+						<TM_Instant>
+							<tmPosition>2025-01-03</tmPosition>
+						</TM_Instant>
+					</exTemp>
+				</TempExtent>
+			</tempEle>
+		</dataExt>
+		<envirDesc>Version 6.2 (Build 9200) ; Esri ArcGIS 10.8.1.14362</envirDesc>
+	</dataIdInfo>
+	<mdMaint>
+		<resMaint>
+			<maintFreq>
+				<MaintFreqCd value="003">
+				</MaintFreqCd>
+			</maintFreq>
+		</resMaint>
+	</mdMaint>
+	<dqInfo>
+		<dqScope>
+			<scpLvl>
+				<ScopeCd value="005">
+				</ScopeCd>
+			</scpLvl>
+		</dqScope>
+		<report type="DQCompOm">
+			<measDesc>Data set is considered complete for the information presented, as described in the abstract. Users are advised to read the rest of the metadata record carefully for additional details.</measDesc>
+		</report>
+		<dataLineage>
+			<prcStep>
+				<stepDesc>Congressional District TIGER/Line Shapefiles are extracted and downloaded from the Census MAF/TIGER database at a national scale from https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html. Information for each member of Congress is appended to the Census Congressional District shapefile using information from the Office of the Clerk, U.S. House of Representatives' website  https://clerk.house.gov/xml/lists/MemberData.xml and its corresponding XML file.</stepDesc>
+			</prcStep>
+		</dataLineage>
+	</dqInfo>
+	<spatRepInfo>
+		<VectSpatRep>
+			<geometObjs>
+				<geoObjTyp>
+					<GeoObjTypCd value="005">
+					</GeoObjTypCd>
+				</geoObjTyp>
+				<geoObjCnt>444</geoObjCnt>
+			</geometObjs>
+		</VectSpatRep>
+	</spatRepInfo>
+	<eainfo>
+		<overview>
+			<eaover>The TIGER/Line shapefiles and related database files (.dbf) are an extract of selected geographic and cartographic information from the U.S. Census Bureau's Master Address File / Topologically Integrated Geographic Encoding and Referencing (MAF/TIGER) Database (MTDB). The MTDB represents a seamless national file with no overlaps or gaps between parts, however, each TIGER/Line shapefile is designed to stand alone as an independent data set, or they can be combined to cover the entire nation. Information for each member of Congress is appended to the Census Congressional District shapefile using information from the Office of the Clerk, U.S. House of Representatives' website https://clerk.house.gov/xml/lists/MemberData.xml and its corresponding XML file. Congressional districts are the 435 areas from which people are elected to the U.S. House of Representatives. This dataset also includes 9 geographies for non-voting at large delegate districts, resident commissioner districts, and congressional districts that are not defined. After the apportionment of congressional seats among the states based on census population counts, each state is responsible for establishing congressional districts for the purpose of electing representatives. Each congressional district is to be as equal in population to all other congressional districts in a state as practicable. The 119th Congress is seated from January 3, 2025 through January 3, 2027. In Connecticut, Illinois, and New Hampshire, the Redistricting Data Program (RDP) participant did not define the CDs to cover all of the state or state equivalent area. In these areas with no CDs defined, the code "ZZ" has been assigned, which is treated as a single CD for purposes of data presentation. The TIGER/Line shapefiles for the District of Columbia, Puerto Rico, and the Island Areas (American Samoa, Guam, the Commonwealth of the Northern Mariana Islands, and the U.S. Virgin Islands) each contain a single record for the non-voting delegate district in these areas. The boundaries of all other congressional districts reflect information provided to the Census Bureau by the states by May 31, 2024.</eaover>
+			<eadetcit>https://doi.org/10.21949/1529006</eadetcit>
+		</overview>
+	</eainfo>
+</metadata>

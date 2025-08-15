@@ -27,6 +27,7 @@
     "d3-scale-chromatic": "^3.1.0",
     "maplibre-gl": "^5.2.0",
     "posthog-js": "^1.234.1",
+    "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "^19.0.0",

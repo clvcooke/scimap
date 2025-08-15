@@ -47,7 +47,7 @@ function MapControls({ mode, setMode, showGrants, setShowGrants, setShowShare }:
             padding: 10
         }} gap={"sm"}>
             <Select
-                label="Background"
+                label="Select Region Type"
                 ta={'left'}
                 size={'xs'}
                 inputSize={'xs'}

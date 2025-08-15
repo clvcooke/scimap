@@ -433,9 +433,6 @@ function LossMap({baseLayer, overlay}: LossMapProps) {
                             if (grants?.length) {
                                 setOverlayGrants(grants);
                                 setShowOverlay(true);
-                            } else {
-                                console.log({grants, event})
-                                console.log("No grants found");
                             }
                         }
                     }}
