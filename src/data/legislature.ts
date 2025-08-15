@@ -30,6 +30,7 @@ export function getSenatorsList(stateCode: string): {
     name: string,
      party: string} [] {
     const senators = getSenators(stateCode);
+    if (!senators) return [];
     return [
         senators.junior,
         senators.senior,

@@ -215,21 +215,26 @@ function generateDefaultHover({
     const showSubLosses = aging_loss !== undefined || cancer_loss !== undefined || infect_loss !== undefined;
 
     let reportCardUrl = '';
+    let isDc = false
+    const stateCode = hoverInfo.properties.state_code;
+    isDc = stateCode === 'DC'
+
     if (showKeyFactsLink) {
         const tileProperties = hoverInfo.properties as DistrictBudgetTileProperties;
-        const stateCode = tileProperties.state_code;
         const districtId = tileProperties.CD119FP;
         reportCardUrl = `${window.location.origin}/report?stateCode=${stateCode}&districtId=${districtId}`;
     }
+
+    console.log("IS DC: ", isDc)
 
     // Show click prompt for district budget mode when not pinned
     const showClickPrompt = !isPinned && !isMobile && mode === 'districts' && layer === 'budget';
 
     return <Flex direction="column" gap="0.1rem" justify={'left'}>
         {state &&
-            <Text size="lg" ta="center" style={{color: 'black'}}><b>{state}{district && ` (${district})`}</b></Text>}
+            <Text size="lg" ta="center" style={{color: 'black'}}><b>{state}{district && !isDc && ` (${district})`}</b></Text>}
         {county && <Text size="md" ta="left" style={{color: 'black'}}><b>County:</b> {county}</Text>}
-        {repName && <Text size="md" ta="left" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
+        {repName && !isDc && <Text size="md" ta="left" style={{color: 'black'}}><b>Representative:</b> {repName}</Text>}
         {senatorNames.map((senatorName, index) => <Text key={index} size="md" ta="left"
                                                         style={{color: 'black'}}><b>Senator:</b> {senatorName}</Text>)}
         {showJobs && <Text size="md" ta="left" style={{color: 'black'}}><b>Total Jobs Lost:</b> {jobLossString}</Text>}
@@ -263,7 +268,7 @@ function generateDefaultHover({
             </Text>
         )}
 
-        {showKeyFactsLink && (
+        {showKeyFactsLink && !isDc && (
             <Button
                 size="sm"
                 variant="filled"
