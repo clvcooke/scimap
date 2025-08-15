@@ -64,7 +64,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
     // Function to download the report card image
     const downloadReportCardImage = async () => {
         const imageUrl = `https://data.scienceimpacts.org/report-cards-v5/report-card-${stateCode}-${districtId}.png`;
-        const fileName = `report-card-${stateCode}-${districtId === "00" ? 'AL' : districtId}.png`;
+        const fileName = `fact-sheet-${stateCode}-${districtId === "00" ? 'AL' : districtId}.png`;
 
         try {
             const response = await fetch(imageUrl);
