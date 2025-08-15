@@ -24,7 +24,7 @@ function getReportCardPreview(url) {
         return {
             description: `FY26 Report Card for ${stateCode}-${districtId === "00" ? 'AL' : districtId}`,
             title: "SCIMaP - Report Card",
-            image: `https://data.scienceimpacts.org/report-cards-v4/report-card-${stateCode}-${districtId}.png`,
+            image: `https://data.scienceimpacts.org/report-cards-v5/report-card-${stateCode}-${districtId}.png`,
         };
     }
 

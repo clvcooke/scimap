@@ -35,7 +35,6 @@ function SharePage({title, text, summary}: { title: string, text?: string, summa
                 trackShare("Generic")
             } catch (error) {
                 console.error('Error sharing:', error);
-                alert("Error sharing. Please copy the link to your clipboard.");
             }
         }
     };

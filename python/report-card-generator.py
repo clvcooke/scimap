@@ -126,7 +126,7 @@ async def process_district_with_pool(pool, district):
             pool=pool,
             url=url,
             output_path=expected_path,
-            wait_time=1000,
+            wait_time=10000,
             full_page=False
         )
 
