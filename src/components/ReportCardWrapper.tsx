@@ -1,59 +1,57 @@
-import {useMemo, useState} from 'react';
+
+import {useEffect, useState} from 'react';
 import {ReportCard} from "./ReportCard/ReportCard.tsx";
 import StateDistrictSelector from "./ReportCard/ReportForm.tsx";
 import {StateReportCard} from "./ReportCard/StateReportCard.tsx";
 
-// Define parameter configuration with getters
-const PARAMS_CONFIG = {
-    stateCode: (params: URLSearchParams) => params.get('stateCode'),
-    districtId: (params: URLSearchParams) => params.get('districtId'),
-} as const;
+type ReportState = {
+    stateCode: string;
+    districtId?: string;
+} | null;
 
 export function ReportCardWrapper() {
-    const [formSubmittedData, setFormSubmittedData] = useState<{stateCode: string, districtId?: string} | null>(null);
+    const [reportState, setReportState] = useState<ReportState>(null);
 
-    const reportData = useMemo(() => {
+    // Initialize state from URL on component mount
+    useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const stateCode = PARAMS_CONFIG.stateCode(urlParams);
-        const districtId = PARAMS_CONFIG.districtId(urlParams);
+        const stateCode = urlParams.get('stateCode');
+        const districtId = urlParams.get('districtId');
 
-        if (stateCode && districtId) {
-            return { stateCode, districtId, view: 'district' };
-        } else if (stateCode) {
-            return { stateCode, view: 'state' };
-        } else {
-            return { missingParams: ['stateCode'] };
+        if (stateCode) {
+            setReportState({
+                stateCode,
+                districtId: districtId || undefined
+            });
         }
     }, []);
 
-    // Handle form submission for district report
-    const handleDistrictFormSubmit = (stateCode: string, districtId: string) => {
+    // Handle form submission
+    const handleFormSubmit = (stateCode: string, districtId: string) => {
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.set('stateCode', stateCode);
         newUrl.searchParams.set('districtId', districtId);
         window.history.pushState(null, '', newUrl.toString());
-        setFormSubmittedData({ stateCode, districtId });
+
+        setReportState({ stateCode, districtId });
     };
 
-    // Combine form data and URL data
-    const finalReportData = formSubmittedData || reportData;
-
-    // Based on the view, render the appropriate component
-    if ('view' in finalReportData) {
-        if (finalReportData.view === 'district' && finalReportData.districtId) {
-            return <ReportCard stateCode={finalReportData.stateCode} districtId={finalReportData.districtId} />;
-        } else if (finalReportData.view === 'state') {
-            return <StateReportCard stateCode={finalReportData.stateCode} />;
+    // Render based on current state
+    if (reportState) {
+        if (reportState.districtId) {
+            return <ReportCard stateCode={reportState.stateCode} districtId={reportState.districtId} />;
+        } else {
+            return <StateReportCard stateCode={reportState.stateCode} />;
         }
     }
 
-    // If no valid data, show the selection form
+    // No valid data - show the selection form
     return (
         <div style={{ padding: '40px', maxWidth: '500px', margin: '0 auto' }}>
             <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>
                 Select State and District for Report
             </h2>
-            <StateDistrictSelector onSubmit={handleDistrictFormSubmit} />
+            <StateDistrictSelector onSubmit={handleFormSubmit} />
         </div>
     );
 }

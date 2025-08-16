@@ -12,12 +12,12 @@ import {
     Anchor,
     Modal,
 } from '@mantine/core';
-import { IconDownload, IconShare } from '@tabler/icons-react';
-import { QRCodeSVG } from 'qrcode.react';
+import {IconDownload, IconShare} from '@tabler/icons-react';
+import {QRCodeSVG} from 'qrcode.react';
 
-import { ReportInfoCard } from "./ReportInfoCard.tsx";
-import { ReportMapCard } from "./ReportMapCard.tsx";
-import { getReportCardData } from "../../data/report-card-data.ts";
+import {ReportInfoCard} from "./ReportInfoCard.tsx";
+import {ReportMapCard} from "./ReportMapCard.tsx";
+import {getReportCardData} from "../../data/report-card-data.ts";
 import SharePage from '../SharePage.tsx';
 import {isMobile} from "react-device-detect";
 
@@ -29,7 +29,7 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                                                                     stateCode,
                                                                 }) => {
 
-    const reportCardData = getReportCardData({ stateCode });
+    const reportCardData = getReportCardData({stateCode});
     // Local state to open the existing Share flow UI
     const [shareOpen, setShareOpen] = useState(false);
     if (!reportCardData) {
@@ -50,6 +50,7 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
         budg_NIH_cuts_econ_loss,
         budg_NIH_cuts_job_loss,
         country_bounds,
+        top_five_impact
     } = reportCardData;
 
     // Get the current page URL for the QR code
@@ -89,6 +90,7 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
         terminatedLoss={terminated_econ_loss}
         juniorSenator={processedJuniorSenator}
         seniorSenator={processedSeniorSenator}
+        topFiveImpact={top_five_impact}
     />;
 
     const stateMapCard = <ReportMapCard
@@ -99,6 +101,8 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
         paddingPx={10}
         cardType={'state'}
         targetState={stateCode}
+        mainMap={true}
+        hideDistricts={true}
     />
     const countryMapCard = <ReportMapCard
         minLat={country_bounds.min_lat}
@@ -107,12 +111,14 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
         maxLon={country_bounds.max_lng}
         cardType={'country'}
         targetState={stateCode}
+        mainMap={false}
+        hideDistricts={true}
     />
 
-    const stateTitle = isMobile ? `${state_code}`: `${state}`
+    const stateTitle = isMobile ? `${state_code}` : `${state}`
     return (
         <Container size={'100rem'}>
-            <Stack gap="sm" p={{ base: 'xs', sm: 'md' }}>
+            <Stack gap="sm" p={{base: 'xs', sm: 'md'}}>
                 {/* Mobile Header Layout */}
                 <Stack gap="xs" hiddenFrom="sm">
                     <Text size="md" fw={700} c="dark" ta="center">
@@ -129,7 +135,7 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                                 onClick={downloadReportCardImage}
                                 title="Download Report Card Image"
                             >
-                                <IconDownload size={18} />
+                                <IconDownload size={18}/>
                             </ActionIcon>
                             <ActionIcon
                                 variant="transparent"
@@ -138,7 +144,7 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                                 onClick={() => setShareOpen(true)}
                                 title="Share this scorecard"
                             >
-                                <IconShare size={18} />
+                                <IconShare size={18}/>
                             </ActionIcon>
                         </Group>
                     </Group>
@@ -148,7 +154,7 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                 <Group justify="space-between" align="flex-start" visibleFrom="sm">
                     <Stack gap={0} align="center">
                         <Anchor href="/" underline="never">
-                            <Image src={"/science.png"} h={76} w={76} p={8} />
+                            <Image src={"/science.png"} h={76} w={76} p={8}/>
                         </Anchor>
                         <Text
                             size="xs"
@@ -163,7 +169,7 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                         </Text>
                     </Stack>
 
-                    <Stack gap={0} style={{ flex: 1 }}>
+                    <Stack gap={0} style={{flex: 1}}>
                         <Text size="xl" fw={700} c="dark">SCIMaP Scorecard: White House NIH FY26 Budget Proposal</Text>
                         <Text size="lg" fw={500} c="dark">
                             {stateTitle} — FY2026 NIH Budget Impact{' '}
@@ -201,7 +207,7 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                                 title="Share this scorecard"
                                 aria-label="Share this scorecard"
                             >
-                                <IconShare size={20} />
+                                <IconShare size={20}/>
                             </ActionIcon>
                             <ActionIcon
                                 variant="transparent"
@@ -210,7 +216,7 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                                 title="Download Report Card Image"
                                 aria-label="Download report card image"
                             >
-                                <IconDownload size={20} />
+                                <IconDownload size={20}/>
                             </ActionIcon>
                         </Stack>
 
@@ -228,18 +234,29 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                     <Grid.Col span={4}>
                         <Stack gap={'xs'}>
                             {reportInfoCard}
-                            {stateMapCard}
+                            {countryMapCard}
                         </Stack>
                     </Grid.Col>
                     <Grid.Col span={8}>
-                        {countryMapCard}
+                        {stateMapCard}
+
                     </Grid.Col>
                 </Grid>
 
                 {/* Footer */}
-                <div style={{ textAlign: 'center' }}>
+                <div style={{textAlign: 'center'}}>
                     <Text size="xs" c="dimmed">
-                        Funding losses are calculated by comparing the FY 2026 <a target={'_blank'} href={'https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf'}>proposed NIH budget</a> with average funding for a given state (using data from <a target={"_blank"} href={'https://reporter.nih.gov/'}>NIH RePORTER</a>) between FY2020-2024. Corresponding economic and job losses are determined based on an <a href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"} target={"_blank"}>analysis of lost economic activity</a> and distributed among local communities based on <a href={"https://lehd.ces.census.gov/data/"} target={"_blank"}>U.S. Census data</a>. We also list losses specific to research funding for aging (NIA), cancer (NCI), and infectious diseases (NIAID).
+                        Funding losses are calculated by comparing the FY 2026 <a target={'_blank'}
+                                                                                  href={'https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf'}>proposed
+                        NIH budget</a> with average funding for a given state (using data from <a target={"_blank"}
+                                                                                                  href={'https://reporter.nih.gov/'}>NIH
+                        RePORTER</a>) between FY2020-2024. Corresponding economic and job losses are determined based on
+                        an <a
+                        href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"}
+                        target={"_blank"}>analysis of lost economic activity</a> and distributed among local communities
+                        based on <a href={"https://lehd.ces.census.gov/data/"} target={"_blank"}>U.S. Census data</a>.
+                        We also list losses specific to research funding for aging (NIA), cancer (NCI), and infectious
+                        diseases (NIAID).
                     </Text>
                 </div>
             </Stack>

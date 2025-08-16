@@ -21,7 +21,7 @@ export const ReportInfoCard = ({
     state?: string,
     stateCode?: string,
     districtId?: string,
-    representativeName: string,
+    representativeName?: string,
     juniorSenator: string;
     seniorSenator: string;
     econLossIDC: number,
@@ -56,12 +56,12 @@ export const ReportInfoCard = ({
                     Congressional Representatives
                 </Text>
                 <Stack gap={4}>
-                    <Group justify="space-between" gap="xs" wrap="nowrap">
+                    {representativeName && <Group justify="space-between" gap="xs" wrap="nowrap">
                         <Text size={'sm'} c="dark" style={{ minWidth: 0 }}>{houseLabel}</Text>
                         <Text size={'sm'} fw={500} c="dark" ta="right" style={{ flex: 1, minWidth: 0 }}>
                             {representativeName}
                         </Text>
-                    </Group>
+                    </Group>}
                     <Group justify="space-between" gap="xs" wrap="nowrap">
                         <Text size={'sm'} c="dark" style={{ minWidth: 0 }}>{juniorLabel}</Text>
                         <Text size={'sm'} fw={500} c="dark" ta="right" style={{ flex: 1, minWidth: 0 }}>
