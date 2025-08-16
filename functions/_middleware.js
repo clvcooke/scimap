@@ -28,7 +28,7 @@ function getReportCardPreview(url) {
         };
     } else if (stateCode) {
         return {
-            description: `FY26 Fact Sheetfor ${stateCode}`,
+            description: `FY26 Fact Sheet for ${stateCode}`,
             title: "SCIMaP - Fact Sheet",
             image: `https://data.scienceimpacts.org/report-cards-v5/report-card-${stateCode}.png`,
         };
