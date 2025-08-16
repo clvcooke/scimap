@@ -27,13 +27,12 @@ function App() {
     const [baseLayer, setBaseLayer] = useState<BaseLayer>("IDC");
     const [overlayLayer, setOverlayLayer] = useState<Overlay>("GRANTS");
     const [disabledTabs, setDisabledTabs] = useState<TabOption[]>([]);
-    const urlParams = new URLSearchParams(window.location.search)
     const path = window.location.pathname.toLowerCase();
     const showReport = ["/report"].includes(path);
 
 
     useEffect(() => {
-        ;
+        const urlParams = new URLSearchParams(window.location.search)
         const conditionParam = urlParams.get('CONDITION') || urlParams.get('condition') || urlParams.get('Condition');
         const skipWelcome = urlParams.get('SKIP_WELCOME') || urlParams.get('skip_welcome') || urlParams.get('Skip_Welcome');
         const prolificPidParam = urlParams.get('PROLIFIC_PID') || urlParams.get('prolific_pid') || urlParams.get('Prolific_PID');
@@ -69,7 +68,7 @@ function App() {
             );
             setDisabledTabs(['quiz']);
         }
-    }, []);
+    }, [path]);
 
     const showMap = currentTab === "map";
     const showQuiz = currentTab === "quiz";

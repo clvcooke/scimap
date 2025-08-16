@@ -60,10 +60,10 @@ function generateMapLayer({
         uniqueIdProperty: uniqueProperty,
         maxZoom: 7,
         // @ts-expect-error Deck.gl typing issue
-        getFillColor: (feature: { properties: any }) => {
+        getFillColor: (feature: { properties: {[key:string]: string | number} }) => {
             const value = Math.log(
                 colorProperties.map((p) =>
-                    feature.properties[p] ?? 0).reduce((previous, current) => previous + current, 0)
+                    (feature.properties[p] as number) ?? 0).reduce((previous, current) => previous + current, 0)
             );
 
             const colorString = interpolateMagma(1 - colorScale(value));

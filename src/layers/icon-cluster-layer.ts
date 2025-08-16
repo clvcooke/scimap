@@ -29,8 +29,8 @@ function getIconSize(size: number): number {
 }
 
 export default class IconClusterLayer<
-    DataT extends { [key: string]: any } = any,
-    ExtraProps extends {} = {}
+    DataT extends { [key: string]: unknown } = Record<string, unknown>,
+    ExtraProps extends object = object
 > extends CompositeLayer<Required<IconLayerProps<DataT>> & ExtraProps> {
     // @ts-expect-error: sdf
     state: {

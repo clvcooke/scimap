@@ -10,7 +10,7 @@ import {interpolateMagma,} from 'd3-scale-chromatic';
 import {HoverInfo, HoverInfoComponent} from "./HoverInfoComponent.tsx";
 import {ActionIcon, Group, Modal, Stack, useMantineTheme, Text} from "@mantine/core";
 import {GeoJsonLayer} from '@deck.gl/layers';
-import {FlyToInterpolator, MapViewState} from '@deck.gl/core';
+import {FlyToInterpolator, MapViewState, PickingInfo} from '@deck.gl/core';
 import {FY26TitleHeader} from "./TitleHeader.tsx";
 import {trackPageView} from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
@@ -288,7 +288,7 @@ function FY26Map() {
     const mapWidth = '100vw';
 
     // Handle click events for pinning hover info in district mode
-    const handleMapClick = useCallback((event: any) => {
+    const handleMapClick = useCallback((event: PickingInfo) => {
         if (mode === 'districts' && event.object) {
             const clickInfo: HoverInfo = {
                 properties: event.object.properties,

@@ -6,7 +6,7 @@ export function generateStateOutlineLayer(targetProperty?: string, targetValue?:
         id: 'state-outline-mvt',
         data: [STATE_LAYER_LINK],
         binary: true,
-        getLineColor: (feature: {properties: any}) => {
+        getLineColor: (feature: { properties: {[key:string]: string | number} }) => {
             let alpha = 200;
             if (targetProperty && targetValue) {
                 if (feature.properties[targetProperty] !== targetValue) {
@@ -27,7 +27,7 @@ export function generateDistrictOutlineLayer(targetProperty?: string, targetValu
         id: 'district-outline-mvt',
         data: [DISTRICT_LAYER_LINK],
         binary: true,
-        getLineColor: (feature: {properties: any}) => {
+        getLineColor: (feature: { properties: {[key:string]: string | number} }) => {
             let alpha = 200;
             if (targetProperty && targetValue) {
                 if (feature.properties[targetProperty] !== targetValue) {

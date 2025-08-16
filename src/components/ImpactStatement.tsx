@@ -4,7 +4,9 @@ import {ANALYTICS_ACTIONS} from "../constants.ts";
 import {trackEvent} from "../utils/analytics.ts";
 
 
-const FY26ImpactStatement = ({active, ref}: { active: boolean, ref: any }) => {
+import {RefObject} from "react";
+
+const FY26ImpactStatement = ({active, ref}: { active: boolean, ref: RefObject<HTMLDivElement> }) => {
     return <Box
         ref={ref}
         style={{
@@ -24,7 +26,7 @@ const FY26ImpactStatement = ({active, ref}: { active: boolean, ref: any }) => {
     </Box>
 }
 
-const ImpactStatementPart1 = ({active, ref}: { active: boolean, ref: any }) => {
+const ImpactStatementPart1 = ({active, ref}: { active: boolean, ref: RefObject<HTMLDivElement> }) => {
     return <Box
         ref={ref}
         style={{
@@ -48,7 +50,7 @@ const ImpactStatementPart1 = ({active, ref}: { active: boolean, ref: any }) => {
     </Box>
 }
 
-const ImpactStatementPart2 = ({active, ref}: { active: boolean, ref: any }) => {
+const ImpactStatementPart2 = ({active, ref}: { active: boolean, ref: RefObject<HTMLDivElement> }) => {
     return <Box
         ref={ref}
         style={{

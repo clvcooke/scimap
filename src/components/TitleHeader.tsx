@@ -22,32 +22,24 @@ const basicTextStyle = {
 
 function idcOnly() {
     return <Flex justify="center" gap="md" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
-        <Text>
-            <div>
-                <Text span size={textSize} style={basicTextStyle}>
-                    <b>Future Economic Loss:</b> $16B and 68K jobs per year
-                </Text>
-            </div>
+        <Text span size={textSize} style={basicTextStyle}>
+            <b>Future Economic Loss:</b> $16B and 68K jobs per year
         </Text>
     </Flex>
 }
 
 function idcGrants() {
     return <Flex justify="center" gap="md" align="center" style={{marginTop: '5px', marginBottom: '5px'}}>
-        <Text>
-            <div>
-                <Text
-                    size={textSize}
-                    span
-                    style={basicTextStyle}
-                > <b>Current Economic Loss:</b> ${formattedTermCost} and {formattedTermJobs} jobs</Text>
-            </div>
-            <div>
-                <Text span size={textSize} style={basicTextStyle}>
-                    <b>Future Economic Loss:</b> ${formattedCost} and {formattedJobs} jobs per year
-                </Text>
-            </div>
-        </Text>
+        <Stack gap={'0.1rem'}>
+            <Text
+                size={textSize}
+                span
+                style={basicTextStyle}
+            > <b>Current Economic Loss:</b> ${formattedTermCost} and {formattedTermJobs} jobs</Text>
+            <Text span size={textSize} style={basicTextStyle}>
+                <b>Future Economic Loss:</b> ${formattedCost} and {formattedJobs} jobs per year
+            </Text>
+        </Stack>
     </Flex>
 }
 
