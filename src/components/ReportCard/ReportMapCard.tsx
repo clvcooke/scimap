@@ -10,7 +10,7 @@ import {Map} from 'react-map-gl/maplibre';
 import {generateDistrictOutlineLayer, generateStateOutlineLayer} from "../../layers/state-outline-layer.ts";
 import ColorScale from "../ColorScale.tsx";
 
-import {isMobile} from "react-device-detect";
+import {isMobile, isTablet} from "react-device-detect";
 
 interface MapCardProps {
     title?: string;
@@ -190,7 +190,7 @@ export const ReportMapCard = ({
         }
     }, [paddingPx, minLat, maxLat, minLon, maxLon, cardType]);
 
-    const mainMapHeight = isMobile ? 400 : "100%";
+    const mainMapHeight = (isMobile && !isTablet) ? 400 : "100%";
 
 
     return (
