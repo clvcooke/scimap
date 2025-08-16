@@ -232,7 +232,7 @@ function generateDefaultHover({
     console.log("IS DC: ", isDc)
 
     // Show click prompt for district budget mode when not pinned
-    const showClickPrompt = !isPinned && !isMobile && mode === 'districts' && layer === 'budget';
+    const showClickPrompt = !isPinned && !isMobile && (mode === 'districts' || mode === 'state') && layer === 'budget';
 
     return <Flex direction="column" gap="0.1rem" justify={'left'}>
         {state &&

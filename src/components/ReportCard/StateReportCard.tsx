@@ -226,7 +226,7 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                 {/* Mobile Layout - Stack vertically, no state card */}
                 <Stack gap="md" hiddenFrom="sm">
                     {reportInfoCard}
-                    {countryMapCard}
+                    {stateMapCard}
                 </Stack>
 
                 {/* Desktop Layout - Grid with state card */}

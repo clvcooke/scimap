@@ -2,6 +2,14 @@ import {processPoliticianName} from "../utils/info.ts";
 import {getHouseRep, getSenators} from "./legislature.ts";
 import reportCardData from "./report_card_info.json"
 
+
+const USA_BOUNDS = {
+    min_lat:  24.396308,
+    max_lat: 49.384358,
+    min_lng: -124.848974,
+    max_lng: -66.885444,
+}
+
 /**
  * Represents the geographical bounding box with minimum and maximum latitude and longitude.
  */
@@ -139,12 +147,7 @@ export function getReportCardData({
             processedRepName: repName,
             processedJuniorSenator: processPoliticianName(senators.junior.name, senators.junior.party),
             processedSeniorSenator: processPoliticianName(senators.senior.name, senators.senior.party),
-            country_bounds: {
-                min_lat: 24.396308,
-                max_lat: 49.384358,
-                min_lng: -125.0,
-                max_lng: -66.93457,
-            }
+            country_bounds: USA_BOUNDS
         };
     } else {
         // Aggregate data across all districts in the state
@@ -260,12 +263,7 @@ export function getReportCardData({
             CD119FP: '00', // State-level indicator
             processedJuniorSenator: processPoliticianName(senators.junior.name, senators.junior.party),
             processedSeniorSenator: processPoliticianName(senators.senior.name, senators.senior.party),
-            country_bounds: {
-                min_lat: 24.396308,
-                max_lat: 49.384358,
-                min_lng: -125.0,
-                max_lng: -66.93457,
-            },
+            country_bounds: USA_BOUNDS,
         };
     }
 }

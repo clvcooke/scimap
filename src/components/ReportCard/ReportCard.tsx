@@ -110,6 +110,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         cardType={'state'}
         targetDistrict={GEOID}
         targetState={stateCode}
+        mainMap={false}
     />
     const districtMapCard = <ReportMapCard
         minLat={district_bounds.min_lat}
@@ -118,6 +119,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         maxLon={district_bounds.max_lng}
         cardType={'district'}
         targetDistrict={GEOID}
+        mainMap={true}
     />
 
     const districtTitle = isMobile ? `${state_code}-${districtId === '00' ? 'AL' : districtId}`: `${state} ${districtName}`

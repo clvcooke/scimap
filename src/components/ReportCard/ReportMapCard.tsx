@@ -166,7 +166,7 @@ export const ReportMapCard = ({
             ]
         }
 
-    }, [colorScaleDistrict, colorScaleState, cardType, targetDistrict, targetState])
+    }, [cardType, colorScaleState, targetState, hideDistricts, targetDistrict, colorScaleDistrict])
 
     const [viewState, setViewState] = useState<MapViewState>({
         longitude: (minLon + maxLon) / 2,
@@ -179,21 +179,23 @@ export const ReportMapCard = ({
     useEffect(() => {
         if (mapContainerRef.current) {
             const {width, height} = mapContainerRef.current.getBoundingClientRect();
+            const padding = cardType === "country" ? 10 : 50;
             if (width > 0 && height > 0) {
                 const newViewState = getViewStateFromBounds(
                     minLat, maxLat, minLon, maxLon,
-                    width, height, paddingPx
+                    width, height, padding
                 );
                 setViewState(newViewState);
             }
         }
-    }, [paddingPx, minLat, maxLat, minLon, maxLon]);
+    }, [paddingPx, minLat, maxLat, minLon, maxLon, cardType]);
 
-    const mainMapHeight = isMobile ? 400 : 765;
+    const mainMapHeight = isMobile ? 400 : "100%";
+
 
     return (
-        <Card shadow="sm" padding={0} radius="md" withBorder>
-            <Stack gap="sm">
+        <Card shadow="sm" padding={0} radius="md" withBorder h={"100%"}>
+            <Stack gap="sm" h={mainMapHeight}>
                 {title && <Text size="lg" fw={600} c="dark">{title}</Text>}
                 <div
                     ref={mapContainerRef}
