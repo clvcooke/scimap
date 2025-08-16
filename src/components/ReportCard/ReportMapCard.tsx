@@ -199,7 +199,7 @@ export const ReportMapCard = ({
                 {title && <Text size="lg" fw={600} c="dark">{title}</Text>}
                 <div
                     ref={mapContainerRef}
-                    style={{height: !mainMap ? 300 : mainMapHeight, position: 'relative'}}
+                    style={{height: !mainMap ? 300 : mainMapHeight, position: 'relative', pointerEvents: 'none'}}
                 >
                     <DeckGL
                         initialViewState={viewState}
