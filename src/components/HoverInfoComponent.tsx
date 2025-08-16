@@ -182,7 +182,7 @@ function generateDefaultHover({
     let econ_loss_string = "Economic Loss"
 
     // Generate report card link for districts in budget mode
-    const showKeyFactsLink = (isMobile || isPinned) && mode === 'districts' && layer === 'budget';
+    const showKeyFactsLink = (isMobile || isPinned) && (mode === 'districts' || mode === 'state') && layer === 'budget';
     if (layer === "idc") {
         const tileProperties = hoverInfo.properties as IDCTileProperties;
         econ_loss = tileProperties.econ_loss;
@@ -220,9 +220,13 @@ function generateDefaultHover({
     isDc = stateCode === 'DC'
 
     if (showKeyFactsLink) {
-        const tileProperties = hoverInfo.properties as DistrictBudgetTileProperties;
-        const districtId = tileProperties.CD119FP;
-        reportCardUrl = `${window.location.origin}/report?stateCode=${stateCode}&districtId=${districtId}`;
+        if (mode === 'districts') {
+            const tileProperties = hoverInfo.properties as DistrictBudgetTileProperties;
+            const districtId = tileProperties.CD119FP;
+            reportCardUrl = `${window.location.origin}/report?stateCode=${stateCode}&districtId=${districtId}`;
+        } else if (mode === 'state') {
+            reportCardUrl = `${window.location.origin}/report?stateCode=${stateCode}`;
+        }
     }
 
     console.log("IS DC: ", isDc)

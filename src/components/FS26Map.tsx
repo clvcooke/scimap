@@ -289,7 +289,7 @@ function FY26Map() {
 
     // Handle click events for pinning hover info in district mode
     const handleMapClick = useCallback((event: any) => {
-        if (mode === 'districts' && event.object) {
+        if ((mode === 'districts' || mode === 'state') && event.object) {
             const clickInfo: HoverInfo = {
                 properties: event.object.properties,
                 x: event.x,

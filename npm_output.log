@@ -1,0 +1,10 @@
+
+> scimap@0.0.0 dev
+> vite --host=0.0.0.0
+
+[sentry-vite-plugin] Info: Sending telemetry data on issues and performance to Sentry. To disable telemetry, set `options.telemetry` to `false`.
+
+  VITE v6.2.2  ready in 2553 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.0.2:5173/
