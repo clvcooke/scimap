@@ -1,78 +1,59 @@
 import {useMemo, useState} from 'react';
 import {ReportCard} from "./ReportCard/ReportCard.tsx";
 import StateDistrictSelector from "./ReportCard/ReportForm.tsx";
+import {StateReportCard} from "./ReportCard/StateReportCard.tsx";
 
 // Define parameter configuration with getters
-const REQUIRED_PARAMS = {
+const PARAMS_CONFIG = {
     stateCode: (params: URLSearchParams) => params.get('stateCode'),
     districtId: (params: URLSearchParams) => params.get('districtId'),
 } as const;
 
 export function ReportCardWrapper() {
-    const [formSubmittedData, setFormSubmittedData] = useState<{stateCode: string, districtId: string} | null>(null);
+    const [formSubmittedData, setFormSubmittedData] = useState<{stateCode: string, districtId?: string} | null>(null);
 
     const reportData = useMemo(() => {
         const urlParams = new URLSearchParams(window.location.search);
+        const stateCode = PARAMS_CONFIG.stateCode(urlParams);
+        const districtId = PARAMS_CONFIG.districtId(urlParams);
 
-        // Check for missing parameters and extract values
-        const extractedParams: Record<string, string> = {};
-        const missingParams: string[] = [];
-
-        for (const [paramName, getter] of Object.entries(REQUIRED_PARAMS)) {
-            const value = getter(urlParams);
-            if (!value) {
-                missingParams.push(paramName);
-            } else {
-                extractedParams[paramName] = value;
-            }
+        if (stateCode && districtId) {
+            return { stateCode, districtId, view: 'district' };
+        } else if (stateCode) {
+            return { stateCode, view: 'state' };
+        } else {
+            return { missingParams: ['stateCode'] };
         }
-
-        if (missingParams.length > 0) {
-            return { missingParams };
-        }
-
-        return {
-            stateCode: extractedParams.stateCode,
-            districtId: extractedParams.districtId,
-        };
     }, []);
 
-    // Handle form submission
-    const handleFormSubmit = (stateCode: string, districtId: string) => {
-        // Update URL parameters
+    // Handle form submission for district report
+    const handleDistrictFormSubmit = (stateCode: string, districtId: string) => {
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.set('stateCode', stateCode);
         newUrl.searchParams.set('districtId', districtId);
-
-        // Update the browser URL without refreshing the page
         window.history.pushState(null, '', newUrl.toString());
-
-        // Set the form data to trigger re-render with the report
-        setFormSubmittedData({
-            stateCode,
-            districtId
-        });
+        setFormSubmittedData({ stateCode, districtId });
     };
 
-    // If we have form submitted data, use that instead of URL params
-    const finalReportData = formSubmittedData || ('stateCode' in reportData ? reportData : null);
+    // Combine form data and URL data
+    const finalReportData = formSubmittedData || reportData;
 
-    // Show form if parameters are missing and no form data has been submitted
-    if (!finalReportData?.districtId || !finalReportData?.stateCode) {
-        return (
-            <div style={{ padding: '40px', maxWidth: '500px', margin: '0 auto' }}>
-                <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>
-                    Select State and District for Report
-                </h2>
-                <StateDistrictSelector onSubmit={handleFormSubmit} />
-            </div>
-        );
+    // Based on the view, render the appropriate component
+    if ('view' in finalReportData) {
+        if (finalReportData.view === 'district' && finalReportData.districtId) {
+            return <ReportCard stateCode={finalReportData.stateCode} districtId={finalReportData.districtId} />;
+        } else if (finalReportData.view === 'state') {
+            return <StateReportCard stateCode={finalReportData.stateCode} />;
+        }
     }
 
+    // If no valid data, show the selection form
     return (
-        <ReportCard
-            stateCode={finalReportData.stateCode}
-            districtId={finalReportData.districtId}
-        />
+        <div style={{ padding: '40px', maxWidth: '500px', margin: '0 auto' }}>
+            <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>
+                Select State and District for Report
+            </h2>
+            <StateDistrictSelector onSubmit={handleDistrictFormSubmit} />
+        </div>
     );
 }

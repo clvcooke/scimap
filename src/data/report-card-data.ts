@@ -115,31 +115,52 @@ export function getReportCardData({
                                       stateCode,
                                       districtId
                                   }: {
-                                      stateCode: string;
-                                      districtId: string;
-                                  }
-): DistrictData & {
+    stateCode: string;
+    districtId?: string;
+}): (DistrictData & {
     processedRepName: string;
     processedJuniorSenator: string;
     processedSeniorSenator: string;
-} | null {
-    const key = `${stateCode}-${districtId}`;
-    // @ts-expect-error: district data is dynamically generated
-    const districtData = reportCardData[key] as DistrictData || null;
-    if (!districtData) {
-        return null;
-    }
-    const rep = getHouseRep(key);
-    const senators = getSenators(stateCode);
-    const repName = processPoliticianName(rep?.name, rep?.party);
-    console.log({
-        districtData
-    })
+    country_bounds?: Bounds;
+}) | null {
+    if (districtId) {
+        const key = `${stateCode}-${districtId}`;
+        // @ts-expect-error: district data is dynamically generated
+        const districtData = reportCardData[key] as DistrictData || null;
+        if (!districtData) {
+            return null;
+        }
+        const rep = getHouseRep(key);
+        const senators = getSenators(stateCode);
+        const repName = processPoliticianName(rep?.name, rep?.party);
 
-    return {
-        ...districtData,
-        processedRepName: repName,
-        processedJuniorSenator: processPoliticianName(senators.junior.name, senators.junior.party),
-        processedSeniorSenator: processPoliticianName(senators.senior.name, senators.senior.party),
-    };
+        return {
+            ...districtData,
+            processedRepName: repName,
+            processedJuniorSenator: processPoliticianName(senators.junior.name, senators.junior.party),
+            processedSeniorSenator: processPoliticianName(senators.senior.name, senators.senior.party),
+        };
+    } else {
+        // Find a representative district for the state (e.g., '00' or '01')
+        const key = `${stateCode}-00` in reportCardData ? `${stateCode}-00` : `${stateCode}-01`;
+        // @ts-expect-error: district data is dynamically generated
+        const districtData = reportCardData[key] as DistrictData || null;
+        if (!districtData) {
+            return null;
+        }
+        const senators = getSenators(stateCode);
+
+        return {
+            ...districtData,
+            processedRepName: '', // No representative for a state-level view
+            processedJuniorSenator: processPoliticianName(senators.junior.name, senators.junior.party),
+            processedSeniorSenator: processPoliticianName(senators.senior.name, senators.senior.party),
+            country_bounds: {
+                min_lat: 24.396308,
+                max_lat: 49.384358,
+                min_lng: -125.0,
+                max_lng: -66.93457,
+            },
+        };
+    }
 }
