@@ -93,28 +93,6 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
         topFiveImpact={top_five_impact}
     />;
 
-    const stateMapCard = <ReportMapCard
-        minLat={state_bounds.min_lat}
-        maxLat={state_bounds.max_lat}
-        minLon={state_bounds.min_lng}
-        maxLon={state_bounds.max_lng}
-        paddingPx={10}
-        cardType={'state'}
-        targetState={stateCode}
-        mainMap={true}
-        hideDistricts={true}
-    />
-    const countryMapCard = <ReportMapCard
-        minLat={country_bounds.min_lat}
-        maxLat={country_bounds.max_lat}
-        minLon={country_bounds.min_lng}
-        maxLon={country_bounds.max_lng}
-        cardType={'country'}
-        targetState={stateCode}
-        mainMap={false}
-        hideDistricts={true}
-    />
-
     const stateTitle = isMobile ? `${state_code}` : `${state}`
     return (
         <Container size={'100rem'}>
@@ -226,7 +204,20 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                 {/* Mobile Layout - Stack vertically, no state card */}
                 <Stack gap="md" hiddenFrom="sm">
                     {reportInfoCard}
-                    {stateMapCard}
+                    <Box h={{base: "18rem", md: '18rem', sm: "12rem"}}>
+                        <ReportMapCard
+                            minLat={state_bounds.min_lat}
+                            maxLat={state_bounds.max_lat}
+                            minLon={state_bounds.min_lng}
+                            maxLon={state_bounds.max_lng}
+                            paddingPx={10}
+                            cardType={'state'}
+                            targetState={stateCode}
+                            showColorbar={true}
+                            hideDistricts={true}
+                            height={400}
+                        />
+                    </Box>
                 </Stack>
 
                 {/* Desktop Layout - Grid with state card */}
@@ -234,11 +225,34 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                     <Grid.Col span={4}>
                         <Stack gap={'xs'}>
                             {reportInfoCard}
-                            {countryMapCard}
+                            <Box h={{base: "18rem", xl: '20rem', md: '18rem', sm: "12rem"}}>
+                            <ReportMapCard
+                                minLat={country_bounds.min_lat}
+                                maxLat={country_bounds.max_lat}
+                                minLon={country_bounds.min_lng}
+                                maxLon={country_bounds.max_lng}
+                                cardType={'country'}
+                                targetState={stateCode}
+                                showColorbar={false}
+                                hideDistricts={true}
+                                height={"100%"}
+                            />
+                            </Box>
                         </Stack>
                     </Grid.Col>
                     <Grid.Col span={8}>
-                        {stateMapCard}
+                        <ReportMapCard
+                            minLat={state_bounds.min_lat}
+                            maxLat={state_bounds.max_lat}
+                            minLon={state_bounds.min_lng}
+                            maxLon={state_bounds.max_lng}
+                            paddingPx={10}
+                            cardType={'state'}
+                            targetState={stateCode}
+                            showColorbar={true}
+                            hideDistricts={true}
+                            height={'100%'}
+                        />
 
                     </Grid.Col>
                 </Grid>

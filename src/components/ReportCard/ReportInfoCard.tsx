@@ -1,4 +1,4 @@
-import {Card, Group, Stack, Text} from "@mantine/core";
+import {Card, Group, Stack, Text, useMatches} from "@mantine/core";
 import {generateJobLossString} from "../../utils/info.ts";
 import {generateEconLossString} from "../../utils/info.ts";
 import {TopImpact} from "../../data/report-card-data.ts";
@@ -37,7 +37,11 @@ export const ReportInfoCard = ({
     const districtCode = stateCode && districtId ? `${stateCode}-${districtId === "00" ? "AL" : districtId}` : '';
 
     // Responsive title size and shortened labels for mobile
-    const titleSize = isMobile ? 'sm' : 'md';
+    const titleSize = useMatches({
+        base: 'md',
+        md: 'md',
+        sm: 'sm',
+    });
     const houseLabel = isMobile ? 'House Rep:' : 'House Representative:';
     const juniorLabel = isMobile ? 'Jr. Senator:' : 'Junior Senator:';
     const seniorLabel = isMobile ? 'Sr. Senator:' : 'Senior Senator:';
@@ -45,6 +49,10 @@ export const ReportInfoCard = ({
     const agingLabel = isMobile ? '• Aging:' : '• Aging Research:';
     const cancerLabel = isMobile ? '• Cancer:' : '• Cancer Research:';
     const infectLabel = isMobile ? '• Infectious Disease:' : '• Infectious Disease Research:';
+    console.log("TITLE SIZE", {
+        isMobile,
+        titleSize
+    })
 
     const projectedLossText = isMobile ? `Projected Losses from NIH Budget Cuts` : `Projected Losses from NIH Budget Cuts in ${districtCode}`;
     const top5Text = isMobile ? `Top Institutions Driving Economic Loss` :`Top 5 Institutions Driving ${districtCode} Economic Loss`

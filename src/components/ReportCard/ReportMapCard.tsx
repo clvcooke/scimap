@@ -10,8 +10,6 @@ import {Map} from 'react-map-gl/maplibre';
 import {generateDistrictOutlineLayer, generateStateOutlineLayer} from "../../layers/state-outline-layer.ts";
 import ColorScale from "../ColorScale.tsx";
 
-import {isMobile, isTablet} from "react-device-detect";
-
 interface MapCardProps {
     title?: string;
     paddingPx?: number;
@@ -23,7 +21,8 @@ interface MapCardProps {
     targetState?: string;
     targetDistrict?: number;
     hideDistricts?: boolean;
-    mainMap: boolean;
+    showColorbar?: boolean;
+    height: string | number;
 }
 
 
@@ -100,8 +99,9 @@ export const ReportMapCard = ({
                                   cardType,
                                   targetDistrict,
                                   targetState,
-                                  mainMap,
-                                  hideDistricts
+                                  showColorbar,
+                                  hideDistricts,
+                                  height
                               }: MapCardProps) => {
 
     const colorScaleDistrict = useMemo(() => {
@@ -190,16 +190,13 @@ export const ReportMapCard = ({
         }
     }, [paddingPx, minLat, maxLat, minLon, maxLon, cardType]);
 
-    const mainMapHeight = (isMobile && !isTablet) ? 400 : "100%";
-
-
     return (
-        <Card shadow="sm" padding={0} radius="md" withBorder h={"100%"}>
-            <Stack gap="sm" h={mainMapHeight}>
+        <Card shadow="sm" padding={0} radius="md" withBorder h={'100%'}>
+            <Stack gap="sm" h={height}>
                 {title && <Text size="lg" fw={600} c="dark">{title}</Text>}
                 <div
                     ref={mapContainerRef}
-                    style={{height: !mainMap ? 300 : mainMapHeight, position: 'relative', pointerEvents: 'none'}}
+                    style={{height: height, position: 'relative', pointerEvents: 'none'}}
                 >
                     <DeckGL
                         initialViewState={viewState}
@@ -213,7 +210,7 @@ export const ReportMapCard = ({
                         />
                     </DeckGL>
 
-                    {mainMap && (
+                    {showColorbar && (
                         <div style={{
                             position: 'absolute',
                             right: 10,
