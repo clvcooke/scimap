@@ -3,13 +3,14 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import {
     Text,
     Stack,
+    Container,
     Grid,
     Group,
     Box,
     Image,
     ActionIcon,
     Anchor,
-    Modal, Container,
+    Modal,
 } from '@mantine/core';
 import {IconDownload, IconShare} from '@tabler/icons-react';
 import {QRCodeSVG} from 'qrcode.react';
@@ -18,43 +19,38 @@ import {ReportInfoCard} from "./ReportInfoCard.tsx";
 import {ReportMapCard} from "./ReportMapCard.tsx";
 import {getReportCardData} from "../../data/report-card-data.ts";
 import SharePage from '../SharePage.tsx';
-
 import {isMobile} from "react-device-detect";
 
-interface ReportCardProps {
+interface StateReportCardProps {
     stateCode: string;
-    districtId: string;
 }
 
-export const ReportCard: React.FC<ReportCardProps> = ({
-                                                          stateCode,
-                                                          districtId,
-                                                      }) => {
+export const StateReportCard: React.FC<StateReportCardProps> = ({
+                                                                    stateCode,
+                                                                }) => {
 
-    const reportCardData = getReportCardData({stateCode, districtId});
+    const reportCardData = getReportCardData({stateCode});
     // Local state to open the existing Share flow UI
     const [shareOpen, setShareOpen] = useState(false);
     if (!reportCardData) {
         return null;
     }
     const {
-        district_bounds,
         state_bounds,
         state,
         state_code,
         IDC_econ_loss,
         IDC_job_loss,
         terminated_econ_loss,
-        GEOID,
-        processedRepName,
         processedJuniorSenator,
         processedSeniorSenator,
-        top_five_impact,
         budg_NCI_cuts_econ_loss,
         budg_NIA_cuts_econ_loss,
         budg_NIAID_cuts_econ_loss,
         budg_NIH_cuts_econ_loss,
         budg_NIH_cuts_job_loss,
+        country_bounds,
+        top_five_impact
     } = reportCardData;
 
     // Get the current page URL for the QR code
@@ -62,8 +58,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
 
     // Function to download the report card image
     const downloadReportCardImage = async () => {
-        const imageUrl = `https://data.scienceimpacts.org/report-cards-v5/report-card-${stateCode}-${districtId}.png`;
-        const fileName = `fact-sheet-${stateCode}-${districtId === "00" ? 'AL' : districtId}.png`;
+        const imageUrl = `https://data.scienceimpacts.org/report-cards-v5/report-card-${stateCode}.png`;
+        const fileName = `fact-sheet-${stateCode}-state.png`;
 
         try {
             const response = await fetch(imageUrl);
@@ -81,11 +77,9 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         }
     };
 
-    const districtName = districtId == '00' ? 'At Large' : `District ${districtId}`;
     const reportInfoCard = <ReportInfoCard
         state={state}
         stateCode={stateCode}
-        districtId={districtId}
         econLossIDC={IDC_econ_loss}
         jobLossIDC={IDC_job_loss}
         econLossFY26={budg_NIH_cuts_econ_loss}
@@ -96,16 +90,12 @@ export const ReportCard: React.FC<ReportCardProps> = ({
         terminatedLoss={terminated_econ_loss}
         juniorSenator={processedJuniorSenator}
         seniorSenator={processedSeniorSenator}
-        representativeName={processedRepName}
         topFiveImpact={top_five_impact}
     />;
 
-    const districtTitle = isMobile ? `${state_code}-${districtId === '00' ? 'AL' : districtId}` : `${state} ${districtName}`
-
+    const stateTitle = isMobile ? `${state_code}` : `${state}`
     return (
-
         <Container size={'100rem'}>
-
             <Stack gap="sm" p={{base: 'xs', sm: 'md'}}>
                 {/* Mobile Header Layout */}
                 <Stack gap="xs" hiddenFrom="sm">
@@ -114,7 +104,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                     </Text>
                     <Group justify="center" align="center" gap={'md'}>
                         <Text size="md" fw={500} c="dark" ta="center">
-                            {state} {districtName}
+                            {state}
                         </Text>
                         <Group gap="xs">
                             <ActionIcon
@@ -160,12 +150,11 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                     <Stack gap={0} style={{flex: 1}}>
                         <Text size="xl" fw={700} c="dark">SCIMaP Scorecard: White House NIH FY26 Budget Proposal</Text>
                         <Text size="lg" fw={500} c="dark">
-                            {districtTitle} — FY2026 NIH Budget Impact{' '}
+                            {stateTitle} — FY2026 NIH Budget Impact{' '}
 
                         </Text>
                         <Text size="md" c="dimmed">
-                            Projected district-level economic losses from cuts proposed in the White House FY26 NIH
-                            budget
+                            Projected state-level economic losses from cuts proposed in the White House FY26 NIH budget
                         </Text>
                     </Stack>
 
@@ -215,50 +204,56 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                 {/* Mobile Layout - Stack vertically, no state card */}
                 <Stack gap="md" hiddenFrom="sm">
                     {reportInfoCard}
-                    <ReportMapCard
-                        minLat={district_bounds.min_lat}
-                        maxLat={district_bounds.max_lat}
-                        minLon={district_bounds.min_lng}
-                        maxLon={district_bounds.max_lng}
-                        cardType={'district'}
-                        targetDistrict={GEOID}
-                        showColorbar={true}
-                        height={400}
-                    />
+                    <Box h={{base: "18rem", md: '18rem', sm: "12rem"}}>
+                        <ReportMapCard
+                            minLat={state_bounds.min_lat}
+                            maxLat={state_bounds.max_lat}
+                            minLon={state_bounds.min_lng}
+                            maxLon={state_bounds.max_lng}
+                            paddingPx={10}
+                            cardType={'state'}
+                            targetState={stateCode}
+                            showColorbar={true}
+                            hideDistricts={true}
+                            height={400}
+                        />
+                    </Box>
                 </Stack>
 
-
                 {/* Desktop Layout - Grid with state card */}
-                <Grid gutter={'xs'} visibleFrom="sm" h={'100%'}>
-                    <Grid.Col span={4} h={'100%'}>
+                <Grid gutter={'xs'} visibleFrom="sm">
+                    <Grid.Col span={4}>
                         <Stack gap={'xs'}>
                             {reportInfoCard}
                             <Box h={{base: "18rem", xl: '20rem', md: '18rem', sm: "12rem"}}>
-                                <ReportMapCard
-                                    minLat={state_bounds.min_lat}
-                                    maxLat={state_bounds.max_lat}
-                                    minLon={state_bounds.min_lng}
-                                    maxLon={state_bounds.max_lng}
-                                    paddingPx={10}
-                                    cardType={'state'}
-                                    targetDistrict={GEOID}
-                                    targetState={stateCode}
-                                    height={"100%"}
-                                />
+                            <ReportMapCard
+                                minLat={country_bounds.min_lat}
+                                maxLat={country_bounds.max_lat}
+                                minLon={country_bounds.min_lng}
+                                maxLon={country_bounds.max_lng}
+                                cardType={'country'}
+                                targetState={stateCode}
+                                showColorbar={false}
+                                hideDistricts={true}
+                                height={"100%"}
+                            />
                             </Box>
                         </Stack>
                     </Grid.Col>
                     <Grid.Col span={8}>
                         <ReportMapCard
-                            minLat={district_bounds.min_lat}
-                            maxLat={district_bounds.max_lat}
-                            minLon={district_bounds.min_lng}
-                            maxLon={district_bounds.max_lng}
-                            cardType={'district'}
-                            targetDistrict={GEOID}
+                            minLat={state_bounds.min_lat}
+                            maxLat={state_bounds.max_lat}
+                            minLon={state_bounds.min_lng}
+                            maxLon={state_bounds.max_lng}
+                            paddingPx={10}
+                            cardType={'state'}
+                            targetState={stateCode}
                             showColorbar={true}
+                            hideDistricts={true}
                             height={'100%'}
                         />
+
                     </Grid.Col>
                 </Grid>
 
@@ -267,8 +262,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                     <Text size="xs" c="dimmed">
                         Funding losses are calculated by comparing the FY 2026 <a target={'_blank'}
                                                                                   href={'https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf'}>proposed
-                        NIH budget</a> with average funding for a given district (using data from <a target={"_blank"}
-                                                                                                     href={'https://reporter.nih.gov/'}>NIH
+                        NIH budget</a> with average funding for a given state (using data from <a target={"_blank"}
+                                                                                                  href={'https://reporter.nih.gov/'}>NIH
                         RePORTER</a>) between FY2020-2024. Corresponding economic and job losses are determined based on
                         an <a
                         href={"https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf"}
@@ -289,9 +284,9 @@ export const ReportCard: React.FC<ReportCardProps> = ({
                 centered
             >
                 <SharePage
-                    title={`SCIMaP Scorecard: ${districtTitle}`}
-                    summary={`See the impact of the FY26 White House NIH Budget on ${districtTitle}`}
-                    text={`See the impact of the FY26 White House NIH Budget on ${districtTitle}`}
+                    title={`SCIMaP Scorecard: ${stateTitle}`}
+                    summary={`See the impact of the FY26 White House NIH Budget on ${stateTitle}`}
+                    text={`See the impact of the FY26 White House NIH Budget on ${stateTitle}`}
                 />
             </Modal>
         </Container>

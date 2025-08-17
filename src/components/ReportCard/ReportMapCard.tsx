@@ -7,10 +7,8 @@ import DeckGL from "@deck.gl/react";
 import {getViewStateFromBounds} from "../../utils/map-utils";
 import {MapViewState} from "@deck.gl/core";
 import {Map} from 'react-map-gl/maplibre';
-import {generateDistrictOutlineLayer} from "../../layers/state-outline-layer.ts";
+import {generateDistrictOutlineLayer, generateStateOutlineLayer} from "../../layers/state-outline-layer.ts";
 import ColorScale from "../ColorScale.tsx";
-
-import {isMobile} from "react-device-detect";
 
 interface MapCardProps {
     title?: string;
@@ -19,9 +17,12 @@ interface MapCardProps {
     maxLat: number;
     minLon: number;
     maxLon: number;
-    cardType: 'state' | 'district';
+    cardType: 'state' | 'district' | 'country';
     targetState?: string;
-    targetDistrict: number;
+    targetDistrict?: number;
+    hideDistricts?: boolean;
+    showColorbar?: boolean;
+    height: string | number;
 }
 
 
@@ -41,14 +42,14 @@ function generateMapLayer({
                               colorProperties = ["budg_NIH_cuts_econ_loss"],
                               id,
                               targetId,
-                              uniqueProperty
+                              uniqueProperty,
                           }: {
     tileLink: string;
     colorScale: ScaleLinear<number, number>;
     colorProperties?: string[];
     id?: string;
     targetId?: string | number;
-    uniqueProperty: string
+    uniqueProperty: string;
 }) {
     return new MVTLayer({
         id,
@@ -98,6 +99,9 @@ export const ReportMapCard = ({
                                   cardType,
                                   targetDistrict,
                                   targetState,
+                                  showColorbar,
+                                  hideDistricts,
+                                  height
                               }: MapCardProps) => {
 
     const colorScaleDistrict = useMemo(() => {
@@ -117,20 +121,38 @@ export const ReportMapCard = ({
             .clamp(true);
     }, []);
 
-    const isState = cardType === 'state';
 
     const mapLayers = useMemo(() => {
-        if (isState) {
-            return [
-                generateMapLayer({
-                    tileLink: stateTiles,
-                    colorScale: colorScaleState,
-                    id: 'state-map-layer',
-                    uniqueProperty: 'state_code',
-                    targetId: targetState
-                }),
-                generateDistrictOutlineLayer('GEOID', targetDistrict, [255, 255, 255], 2)
-            ]
+        if (cardType === 'state' || cardType === 'country') {
+            const mapLayer = generateMapLayer({
+                tileLink: stateTiles,
+                colorScale: colorScaleState,
+                id: 'state-map-layer',
+                uniqueProperty: 'state_code',
+                targetId: targetState
+            });
+            if (cardType === 'state') {
+
+                if (hideDistricts) {
+                    return [
+                        mapLayer,
+                        generateStateOutlineLayer('state_code', targetState, [255, 255, 255], 3)
+
+                    ]
+                } else {
+                    return [
+                        mapLayer,
+                        generateDistrictOutlineLayer('GEOID', targetDistrict, [255, 255, 255], 2),
+
+                    ]
+                }
+
+            } else {
+                return [
+                    mapLayer,
+                    generateStateOutlineLayer('state_code', targetState, [255, 255, 255], 3)
+                ]
+            }
         } else {
             return [
                 generateMapLayer({
@@ -144,7 +166,7 @@ export const ReportMapCard = ({
             ]
         }
 
-    }, [colorScaleDistrict, colorScaleState, isState, targetDistrict, targetState])
+    }, [cardType, colorScaleState, targetState, hideDistricts, targetDistrict, colorScaleDistrict])
 
     const [viewState, setViewState] = useState<MapViewState>({
         longitude: (minLon + maxLon) / 2,
@@ -157,25 +179,24 @@ export const ReportMapCard = ({
     useEffect(() => {
         if (mapContainerRef.current) {
             const {width, height} = mapContainerRef.current.getBoundingClientRect();
+            const padding = cardType === "country" ? 10 : 50;
             if (width > 0 && height > 0) {
                 const newViewState = getViewStateFromBounds(
                     minLat, maxLat, minLon, maxLon,
-                    width, height, paddingPx
+                    width, height, padding
                 );
                 setViewState(newViewState);
             }
         }
-    }, [paddingPx, minLat, maxLat, minLon, maxLon]);
-
-    const districtHeight = isMobile ? 400 : 765;
+    }, [paddingPx, minLat, maxLat, minLon, maxLon, cardType]);
 
     return (
-        <Card shadow="sm" padding={isState ? 0 : 0} radius="md" withBorder>
-            <Stack gap="sm">
+        <Card shadow="sm" padding={0} radius="md" withBorder h={'100%'}>
+            <Stack gap="sm" h={height}>
                 {title && <Text size="lg" fw={600} c="dark">{title}</Text>}
                 <div
                     ref={mapContainerRef}
-                    style={{height: isState ? 300 : districtHeight, position: 'relative'}}
+                    style={{height: height, position: 'relative', pointerEvents: 'none'}}
                 >
                     <DeckGL
                         initialViewState={viewState}
@@ -189,7 +210,7 @@ export const ReportMapCard = ({
                         />
                     </DeckGL>
 
-                    {!isState && (
+                    {showColorbar && (
                         <div style={{
                             position: 'absolute',
                             right: 10,
