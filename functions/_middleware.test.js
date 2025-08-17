@@ -62,7 +62,7 @@ describe('Middleware', () => {
 
         expect(html).toContain('<title>SCIMaP - Report Card</title>');
         expect(html).toContain('<meta name="description" content="FY26 Report Card for CA-01">');
-        expect(html).toContain('<meta property="og:image" content="https://data.scienceimpacts.org/report-cards-v5/report-card-CA-01.png">');
+        expect(html).toContain('<meta property="og:image" content="https://data.scienceimpacts.org/report-cards-v6/report-card-CA-01.png">');
     });
 
     it('should handle at-large districts correctly', async () => {
@@ -72,7 +72,7 @@ describe('Middleware', () => {
 
         expect(html).toContain('<title>SCIMaP - Report Card</title>');
         expect(html).toContain('<meta name="description" content="FY26 Report Card for AL-AL">');
-        expect(html).toContain('<meta property="og:image" content="https://data.scienceimpacts.org/report-cards-v5/report-card-AL-00.png">');
+        expect(html).toContain('<meta property="og:image" content="https://data.scienceimpacts.org/report-cards-v6/report-card-AL-00.png">');
     });
 
     it('should fall back to default meta tags for report card path without query params', async () => {

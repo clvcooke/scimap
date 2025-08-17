@@ -24,13 +24,13 @@ function getReportCardPreview(url) {
         return {
             description: `FY26 Fact Sheet for ${stateCode}-${districtId === "00" ? 'AL' : districtId}`,
             title: "SCIMaP - Fact Sheet",
-            image: `https://data.scienceimpacts.org/report-cards-v5/report-card-${stateCode}-${districtId}.png`,
+            image: `https://data.scienceimpacts.org/report-cards-v6/report-card-${stateCode}-${districtId}.png`,
         };
     } else if (stateCode) {
         return {
             description: `FY26 Fact Sheet for ${stateCode}`,
             title: "SCIMaP - Fact Sheet",
-            image: `https://data.scienceimpacts.org/report-cards-v5/report-card-${stateCode}.png`,
+            image: `https://data.scienceimpacts.org/report-cards-v6/report-card-${stateCode}.png`,
         };
     }
 
