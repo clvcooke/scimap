@@ -4,19 +4,25 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), tailwindcss(), sentryVitePlugin({
-    org: "scimap",
-    project: "javascript-react"
-  })],
+export default defineConfig(({ command }) => {
+  const plugins = [react(), tailwindcss()];
 
-  server: {
-    host: true,
-    port: 5173,
-    allowedHosts: ["robco.mammoth-atlas.ts.net"]
-  },
-
-  build: {
-    sourcemap: true
+  if (command === 'build' && process.env.SENTRY_ENABLED === 'true') {
+    plugins.push(sentryVitePlugin({
+      org: "scimap",
+      project: "javascript-react"
+    }));
   }
-})
+
+  return {
+    plugins,
+    server: {
+      host: true,
+      port: 5173,
+      allowedHosts: ["robco.mammoth-atlas.ts.net"]
+    },
+    build: {
+      sourcemap: true
+    }
+  };
+});
