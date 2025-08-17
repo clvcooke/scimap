@@ -60,8 +60,8 @@ describe('Middleware', () => {
         const response = await onRequest(context);
         const html = await response.text();
 
-        expect(html).toContain('<title>SCIMaP - Report Card</title>');
-        expect(html).toContain('<meta name="description" content="FY26 Report Card for CA-01">');
+        expect(html).toContain('<title>SCIMaP - Fact Sheet</title>');
+        expect(html).toContain('<meta name="description" content="FY26 Fact Sheet for CA-01">');
         expect(html).toContain('<meta property="og:image" content="https://data.scienceimpacts.org/report-cards-v6/report-card-CA-01.png">');
     });
 
@@ -70,8 +70,8 @@ describe('Middleware', () => {
         const response = await onRequest(context);
         const html = await response.text();
 
-        expect(html).toContain('<title>SCIMaP - Report Card</title>');
-        expect(html).toContain('<meta name="description" content="FY26 Report Card for AL-AL">');
+        expect(html).toContain('<title>SCIMaP - Fact Sheet</title>');
+        expect(html).toContain('<meta name="description" content="FY26 Fact Sheet for AL-AL">');
         expect(html).toContain('<meta property="og:image" content="https://data.scienceimpacts.org/report-cards-v6/report-card-AL-00.png">');
     });
 
