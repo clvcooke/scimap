@@ -22,9 +22,15 @@ function getReportCardPreview(url) {
 
     if (stateCode && districtId) {
         return {
-            description: `FY26 Report Card for ${stateCode}-${districtId === "00" ? 'AL' : districtId}`,
-            title: "SCIMaP - Report Card",
-            image: `https://data.scienceimpacts.org/report-cards-v5/report-card-${stateCode}-${districtId}.png`,
+            description: `FY26 Fact Sheet for ${stateCode}-${districtId === "00" ? 'AL' : districtId}`,
+            title: "SCIMaP - Fact Sheet",
+            image: `https://data.scienceimpacts.org/report-cards-v6/report-card-${stateCode}-${districtId}.png`,
+        };
+    } else if (stateCode) {
+        return {
+            description: `FY26 Fact Sheet for ${stateCode}`,
+            title: "SCIMaP - Fact Sheet",
+            image: `https://data.scienceimpacts.org/report-cards-v6/report-card-${stateCode}.png`,
         };
     }
 

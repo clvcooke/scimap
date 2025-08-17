@@ -1,5 +1,4 @@
-
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Alternative webpage screenshot script using Playwright with browser pooling
 """
@@ -13,10 +12,13 @@ from tqdm.asyncio import tqdm
 from playwright.async_api import async_playwright
 
 
+BASE_URL= "https://feature-state-report-card-1.scimap.pages.dev/"
+
 class BrowserPool:
     """
     A pool of browser instances that can be reused for taking screenshots.
     """
+
     def __init__(self, pool_size=4):
         self.pool_size = pool_size
         self.browsers = []
@@ -99,6 +101,31 @@ async def take_screenshot_with_pool(pool, url, output_path, wait_time=5000, full
         await pool.return_page(page)
 
 
+async def process_state_with_pool(pool, state):
+    os.makedirs("outputs/report-cards", exist_ok=True)
+    expected_path = f"outputs/report-cards/report-card-{state}.png"
+    try:
+        if os.path.exists(expected_path):
+            print(f"Already exists: {state}")
+            return state, expected_path, expected_path
+
+        # Run screenshot
+        url = f"{BASE_URL}report?stateCode={state}"
+
+        screenshot_path = await take_screenshot_with_pool(
+            pool=pool,
+            url=url,
+            output_path=expected_path,
+            wait_time=10000,
+            full_page=False
+        )
+
+        return state, screenshot_path, expected_path
+    except Exception as e:
+        print(f"Error processing state {state}: {e}")
+        return state, None, expected_path
+
+
 async def process_district_with_pool(pool, district):
     """
     Process a single district using the browser pool.
@@ -111,16 +138,15 @@ async def process_district_with_pool(pool, district):
         tuple: (district, screenshot_path, expected_path)
     """
     os.makedirs("outputs/report-cards", exist_ok=True)
-
+    # Run screenshot
+    district_parts = district.split("-")
+    expected_path = f"outputs/report-cards/report-card-{district}.png"
     try:
-        # Run screenshot
-        district_parts = district.split("-")
-        expected_path = f"outputs/report-cards/report-card-{district}.png"
         if os.path.exists(expected_path):
             print(f"Already exists: {district}")
             return (district, expected_path, expected_path)
 
-        url = f"https://report-card.scimap.pages.dev/report?stateCode={district_parts[0]}&districtId={district_parts[1]}"
+        url = f"{BASE_URL}report?stateCode={district_parts[0]}&districtId={district_parts[1]}"
 
         screenshot_path = await take_screenshot_with_pool(
             pool=pool,
@@ -130,10 +156,10 @@ async def process_district_with_pool(pool, district):
             full_page=False
         )
 
-        return (district, screenshot_path, expected_path)
+        return district, screenshot_path, expected_path
     except Exception as e:
         print(f"Error processing district {district}: {e}")
-        return (district, None, expected_path)
+        return district, None, expected_path
 
 
 def validate_screenshots(results):
@@ -146,9 +172,9 @@ def validate_screenshots(results):
     Returns:
         tuple: (successful_count, missing_files)
     """
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("VALIDATION RESULTS")
-    print("="*60)
+    print("=" * 60)
 
     successful = []
     missing = []
@@ -167,7 +193,7 @@ def validate_screenshots(results):
             missing.append((district, expected_path, "File not found"))
             print(f"❌ {district}: {expected_path} (File not found)")
 
-    print("\n" + "-"*60)
+    print("\n" + "-" * 60)
     print(f"SUMMARY:")
     print(f"✅ Successfully generated: {len(successful)} screenshots")
     print(f"❌ Failed/Missing: {len(missing)} screenshots")
@@ -182,7 +208,7 @@ def validate_screenshots(results):
         print(f"\nTotal size of generated screenshots: {total_size:,} bytes")
         print(f"Average file size: {total_size // len(successful):,} bytes")
 
-    print("="*60)
+    print("=" * 60)
 
     return len(successful), missing
 
@@ -196,6 +222,7 @@ async def main_playwright_async():
         report_card_data = json.load(fp)
 
     districts = list(report_card_data.keys())
+    state_codes = set([d.split("-")[0] for d in districts])
     print(f"Starting to process {len(districts)} districts with 4 concurrent browsers...")
 
     async with async_playwright() as p:
@@ -206,10 +233,11 @@ async def main_playwright_async():
         try:
             # Create tasks for all districts
             tasks = [process_district_with_pool(pool, district) for district in districts]
+            tasks += [process_state_with_pool(pool, state) for state in state_codes]
 
             # Run all tasks concurrently with progress bar
             results = []
-            for task in tqdm.as_completed(tasks, desc="Processing districts"):
+            for task in tqdm.as_completed(tasks, desc="Processing districts & states"):
                 result = await task
                 results.append(result)
 
@@ -240,6 +268,5 @@ def main_playwright():
 
 if __name__ == "__main__":
     main_playwright()
-
 
 # rclone copy report-cards/ r2:scimap-data/report-cards-v1/ --transfers 32

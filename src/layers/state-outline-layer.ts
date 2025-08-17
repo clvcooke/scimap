@@ -1,7 +1,7 @@
 import {DISTRICT_LAYER_LINK, STATE_LAYER_LINK} from "../constants.ts";
 import {MVTLayer} from "@deck.gl/geo-layers";
 
-export function generateStateOutlineLayer(targetProperty?: string, targetValue?: string | number) {
+export function generateStateOutlineLayer(targetProperty?: string, targetValue?: string | number, targetColor?: [number, number, number], lineWidth?: number) {
     return new MVTLayer({
         id: 'state-outline-mvt',
         data: [STATE_LAYER_LINK],
@@ -13,9 +13,12 @@ export function generateStateOutlineLayer(targetProperty?: string, targetValue?:
                     alpha = 10;
                 }
             }
+            if (targetColor) {
+                return [...targetColor, alpha]
+            }
             return [255, 255, 255, alpha]
         },
-        lineWidthMinPixels: 2,
+        lineWidthMinPixels: lineWidth ?? 2,
         pickable: false,
         maxZoom: 7,
         getFillColor: [0, 0, 0, 0],

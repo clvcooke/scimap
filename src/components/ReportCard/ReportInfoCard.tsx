@@ -1,4 +1,4 @@
-import {Card, Group, Stack, Text} from "@mantine/core";
+import {Card, Group, Stack, Text, useMatches} from "@mantine/core";
 import {generateJobLossString} from "../../utils/info.ts";
 import {generateEconLossString} from "../../utils/info.ts";
 import {TopImpact} from "../../data/report-card-data.ts";
@@ -21,7 +21,7 @@ export const ReportInfoCard = ({
     state?: string,
     stateCode?: string,
     districtId?: string,
-    representativeName: string,
+    representativeName?: string,
     juniorSenator: string;
     seniorSenator: string;
     econLossIDC: number,
@@ -34,10 +34,14 @@ export const ReportInfoCard = ({
     terminatedLoss: number,
     topFiveImpact: TopImpact[],
 }) => {
-    const districtCode = stateCode && districtId ? `${stateCode}-${districtId === "00" ? "AL" : districtId}` : '';
+    const districtCode = stateCode && districtId ? `${stateCode}-${districtId === "00" ? "AL" : districtId}` : stateCode;
 
     // Responsive title size and shortened labels for mobile
-    const titleSize = isMobile ? 'sm' : 'md';
+    const titleSize = useMatches({
+        base: 'md',
+        md: 'md',
+        sm: 'sm',
+    });
     const houseLabel = isMobile ? 'House Rep:' : 'House Representative:';
     const juniorLabel = isMobile ? 'Jr. Senator:' : 'Junior Senator:';
     const seniorLabel = isMobile ? 'Sr. Senator:' : 'Senior Senator:';
@@ -45,6 +49,10 @@ export const ReportInfoCard = ({
     const agingLabel = isMobile ? '• Aging:' : '• Aging Research:';
     const cancerLabel = isMobile ? '• Cancer:' : '• Cancer Research:';
     const infectLabel = isMobile ? '• Infectious Disease:' : '• Infectious Disease Research:';
+    console.log("TITLE SIZE", {
+        isMobile,
+        titleSize
+    })
 
     const projectedLossText = isMobile ? `Projected Losses from NIH Budget Cuts` : `Projected Losses from NIH Budget Cuts in ${districtCode}`;
     const top5Text = isMobile ? `Top Institutions Driving Economic Loss` :`Top 5 Institutions Driving ${districtCode} Economic Loss`
@@ -56,12 +64,12 @@ export const ReportInfoCard = ({
                     Congressional Representatives
                 </Text>
                 <Stack gap={4}>
-                    <Group justify="space-between" gap="xs" wrap="nowrap">
+                    {representativeName && <Group justify="space-between" gap="xs" wrap="nowrap">
                         <Text size={'sm'} c="dark" style={{ minWidth: 0 }}>{houseLabel}</Text>
                         <Text size={'sm'} fw={500} c="dark" ta="right" style={{ flex: 1, minWidth: 0 }}>
                             {representativeName}
                         </Text>
-                    </Group>
+                    </Group>}
                     <Group justify="space-between" gap="xs" wrap="nowrap">
                         <Text size={'sm'} c="dark" style={{ minWidth: 0 }}>{juniorLabel}</Text>
                         <Text size={'sm'} fw={500} c="dark" ta="right" style={{ flex: 1, minWidth: 0 }}>
