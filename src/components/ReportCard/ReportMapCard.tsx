@@ -221,7 +221,7 @@ export const ReportMapCard = ({
                             <ColorScale
                                 width={8}
                                 height={120}
-                                domain={DISTRICTS_DOMAIN}
+                                domain={cardType === "district" ? DISTRICTS_DOMAIN : STATE_DOMAIN}
                                 logScale={true}
                                 useMagma={true}
                             />

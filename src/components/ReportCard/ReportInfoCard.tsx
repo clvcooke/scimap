@@ -34,7 +34,7 @@ export const ReportInfoCard = ({
     terminatedLoss: number,
     topFiveImpact: TopImpact[],
 }) => {
-    const districtCode = stateCode && districtId ? `${stateCode}-${districtId === "00" ? "AL" : districtId}` : '';
+    const districtCode = stateCode && districtId ? `${stateCode}-${districtId === "00" ? "AL" : districtId}` : stateCode;
 
     // Responsive title size and shortened labels for mobile
     const titleSize = useMatches({
