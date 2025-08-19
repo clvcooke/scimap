@@ -204,20 +204,18 @@ export const StateReportCard: React.FC<StateReportCardProps> = ({
                 {/* Mobile Layout - Stack vertically, no state card */}
                 <Stack gap="md" hiddenFrom="sm">
                     {reportInfoCard}
-                    <Box h={{base: "18rem", md: '18rem', sm: "12rem"}}>
-                        <ReportMapCard
-                            minLat={state_bounds.min_lat}
-                            maxLat={state_bounds.max_lat}
-                            minLon={state_bounds.min_lng}
-                            maxLon={state_bounds.max_lng}
-                            paddingPx={10}
-                            cardType={'state'}
-                            targetState={stateCode}
-                            showColorbar={true}
-                            hideDistricts={true}
-                            height={400}
-                        />
-                    </Box>
+                    <ReportMapCard
+                        minLat={state_bounds.min_lat}
+                        maxLat={state_bounds.max_lat}
+                        minLon={state_bounds.min_lng}
+                        maxLon={state_bounds.max_lng}
+                        paddingPx={10}
+                        cardType={'state'}
+                        targetState={stateCode}
+                        showColorbar={true}
+                        hideDistricts={true}
+                        height={400}
+                    />
                 </Stack>
 
                 {/* Desktop Layout - Grid with state card */}
