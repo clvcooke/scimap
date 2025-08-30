@@ -350,7 +350,7 @@ function About() {
                 <AccordionItem value="code-and-data">
                     <Accordion.Control>
                         <Title order={textOrder}>
-                            Code and Data
+                            Source Code
                         </Title>
                     </Accordion.Control>
                     <Accordion.Panel>
