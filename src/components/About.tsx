@@ -347,6 +347,22 @@ function About() {
                     </Accordion.Panel>
                 </AccordionItem>
 
+                <AccordionItem value="code-and-data">
+                    <Accordion.Control>
+                        <Title order={textOrder}>
+                            Code and Data
+                        </Title>
+                    </Accordion.Control>
+                    <Accordion.Panel>
+                        <Text ta={"left"}>
+                            The code for this website is publicly available on <a
+                            href="https://github.com/clvcooke/scimap" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                            This repository contains the frontend React application, Python scripts for data processing,
+                            and Cloudflare serverless functions.
+                        </Text>
+                    </Accordion.Panel>
+                </AccordionItem>
+
                 <AccordionItem value="contact-us">
                     <Accordion.Control>
                         <Title order={textOrder}>
