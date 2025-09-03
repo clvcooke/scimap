@@ -425,11 +425,23 @@ export const HoverInfoComponent: React.FC<Props> = ({
 
     let repName: string | null = null;
     if ('rep_name' in hoverInfo.properties) {
+        console.log("Getting house rep")
         const district = hoverInfo.properties.CD119FP;
-        const stateCode = hoverInfo.properties.state_code;
-        const key = `${stateCode}-${district}`;
-        const rep = getHouseRep(key)
-        repName = processPoliticianName(rep?.name, rep?.party);
+        let rawName: string | undefined
+        let rawParty: string | undefined
+        if (!district) {
+            rawName = hoverInfo.properties.rep_name;
+            rawParty = hoverInfo.properties.pol_party;
+        } else {
+            const stateCode = hoverInfo.properties.state_code;
+            const key = `${stateCode}-${district}`;
+            const houseRep = getHouseRep(key)
+            rawName = houseRep?.name;
+            rawParty = houseRep?.party
+        }
+        repName = processPoliticianName(rawName, rawParty);
+
+
     }
 
     let district: string | null = null;
