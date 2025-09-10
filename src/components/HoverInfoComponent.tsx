@@ -425,7 +425,6 @@ export const HoverInfoComponent: React.FC<Props> = ({
 
     let repName: string | null = null;
     if ('rep_name' in hoverInfo.properties) {
-        console.log("Getting house rep")
         const district = hoverInfo.properties.CD119FP;
         let rawName: string | undefined
         let rawParty: string | undefined
