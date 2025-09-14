@@ -302,5 +302,5 @@ if __name__ == "__main__":
     tile_and_upload(date_version, "states")
     tile_and_upload(date_version, "congs")
     generate_tile_version_file(date_version)
-
+    print(temp_data_dir)
     shutil.rmtree(temp_data_dir)
