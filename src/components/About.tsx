@@ -51,6 +51,11 @@ const newsItems: {
         isOngoing: true
     },
     {
+        date: 'September 15th, 2025',
+        title: "Open Philanthropy Awards $336K to Map the Impact of Scientific Funding Cuts",
+        url: "https://cmns.umd.edu/news-events/news/open-philanthropy-award-joshua-weitz-scimap"
+    },
+    {
         date: 'July 29th, 2025',
         title: "SCIMaP Visualizes the True Cost of Science Funding Cuts",
         url: "https://www.the-scientist.com/scimap-visualizes-the-true-cost-of-science-funding-cuts-73211",
@@ -356,7 +361,8 @@ function About() {
                     <Accordion.Panel>
                         <Text ta={"left"}>
                             The code for this website is publicly available on <a
-                            href="https://github.com/clvcooke/scimap" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                            href="https://github.com/clvcooke/scimap" target="_blank"
+                            rel="noopener noreferrer">GitHub</a>.
                             This repository contains the frontend React application, Python scripts for data processing,
                             and Cloudflare serverless functions.
                         </Text>
@@ -446,7 +452,20 @@ function About() {
                             <b>August 14, 2025</b>
                         </Text>
                         <Text ta={"left"}>
-                            We have revamped our FY26 map to improve the display of values, and added per-district fact sheet that can be viewed by clicking on a district. This change also updates the map to use the 119th Congressional Districts.
+                            We have revamped our FY26 map to improve the display of values, and added per-district fact
+                            sheet that can be viewed by clicking on a district. This change also updates the map to use
+                            the 119th Congressional Districts.
+                        </Text>
+                        <Text ta={"left"} mt="sm">
+                            <b>September 15, 2025</b>
+                        </Text>
+                        <Text ta={"left"}>
+                            The Congressional District-level analysis has been updated to use boundaries from the 119th
+                            Congress (2025-2026) instead of the 118th Congress (2023-2024). This may lead to small
+                            changes in states that redistricted: North Carolina, Louisiana, Georgia, Alabama, and New
+                            York. We also now correct coordinates for a small number of organizations that we were
+                            previously unable to geolocate. This correction causes a small increase in estimated future
+                            losses.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
