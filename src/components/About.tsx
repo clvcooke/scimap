@@ -152,7 +152,29 @@ function About() {
             </Title>
             <CopyrightHeader/>
 
-            <Accordion variant="contained" radius="md">
+            <Accordion variant="contained" radius="md" defaultValue="visualization-video">
+                <AccordionItem value="visualization-video">
+                    <Accordion.Control>
+                        <Title order={textOrder}>
+                            Overview Video
+                        </Title>
+                    </Accordion.Control>
+                    <Accordion.Panel>
+                        <video
+                            controls
+                            style={{
+                                width: '100%',
+                                maxWidth: '100%',
+                                borderRadius: '8px',
+                                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                                border: '1px solid #e0e0e0'
+                            }}
+                            src="https://data.scienceimpacts.org/SCIMaP_NIH_cuts.mp4"
+                        >
+                            Your browser does not support the video tag.
+                        </video>
+                    </Accordion.Panel>
+                </AccordionItem>
                 <AccordionItem value="goal">
                     <Accordion.Control>
                         <Title order={textOrder}>Goal</Title>
