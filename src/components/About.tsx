@@ -176,9 +176,9 @@ function About() {
                         </video>
                     </Accordion.Panel>
                 </AccordionItem>
-                <AccordionItem value="goal">
+                <AccordionItem value="mission">
                     <Accordion.Control>
-                        <Title order={textOrder}>Goal</Title>
+                        <Title order={textOrder}>Mission</Title>
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Text ta={"left"}>
@@ -186,6 +186,17 @@ function About() {
                             scientific research are often hidden from view. Through interactive, data-driven
                             visualizations, we aim to help Americans explore how science and health research fuels the
                             economy, supports jobs, and improves health outcomes.
+                        </Text>
+                        <Text ta={"left"}>
+                            The White House has ordered large cuts to federal funding for scientific research. These
+                            changes include a proposal to reduce support for all health-related research nationwide, and
+                            cancellations of many grants for specific research projects. We aim to share how these
+                            proposed changes impact science, the economy, and healthcare.
+                        </Text>
+                        <Text ta={"left"} mt={'sm'}>
+                            Our <a href='https://www.nature.com/articles/s41562-025-02238-x' target='_blank'>recent
+                            correspondence piece</a> published in Nature Human Behaviour describes our approach to
+                            communicating the impact of these funding cuts nationwide.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
@@ -205,27 +216,6 @@ function About() {
                             Institute of Technology (Dr. Clio Andris), and University of Oregon (Dr. Ellen Peters). We
                             have expertise in different areas—biology, psychology, neuroscience, communication, and
                             geographic information science— united by our common goal.
-                        </Text>
-                    </Accordion.Panel>
-                </AccordionItem>
-
-                <AccordionItem value="mission">
-                    <Accordion.Control>
-                        <Title order={textOrder}>
-                            Mission
-                        </Title>
-                    </Accordion.Control>
-                    <Accordion.Panel>
-                        <Text ta={"left"}>
-                            The White House has ordered large cuts to federal funding for scientific research. These
-                            changes include a proposal to reduce support for all health-related research nationwide, and
-                            cancellations of many grants for specific research projects. We aim to share how these
-                            proposed changes impact science, the economy, and healthcare.
-                        </Text>
-                        <Text ta={"left"} mt={'sm'}>
-                            Our <a href='https://www.nature.com/articles/s41562-025-02238-x' target='_blank'>recent
-                            correspondence piece</a> published in Nature Human Behaviour describes our approach to
-                            communicating the impact of these funding cuts nationwide.
                         </Text>
                     </Accordion.Panel>
                 </AccordionItem>
