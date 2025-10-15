@@ -187,7 +187,7 @@ function About() {
                             visualizations, we aim to help Americans explore how science and health research fuels the
                             economy, supports jobs, and improves health outcomes.
                         </Text>
-                        <Text ta={"left"}>
+                        <Text ta={"left"} mt={'sm'}>
                             The White House has ordered large cuts to federal funding for scientific research. These
                             changes include a proposal to reduce support for all health-related research nationwide, and
                             cancellations of many grants for specific research projects. We aim to share how these
