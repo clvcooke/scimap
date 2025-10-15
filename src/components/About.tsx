@@ -162,6 +162,7 @@ function About() {
                     <Accordion.Panel>
                         <video
                             controls
+                            poster="https://data.scienceimpacts.org/00_Thumbnails_00001.png"
                             style={{
                                 width: '100%',
                                 maxWidth: '100%',
