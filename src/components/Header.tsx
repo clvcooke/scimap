@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Button, Text, TextInput } from '@mantine/core';
+import { Box, Flex, Button, Text } from '@mantine/core';
 
 const Header: React.FC = () => {
     return (
@@ -7,17 +7,8 @@ const Header: React.FC = () => {
             <Flex justify="space-between" align="center">
                 <Text size="xl" weight={700}>SCIMAP</Text>
                 <Flex align="center">
-                    <Button variant="subtle" style={{ marginRight: '1rem' }}>About us</Button>
-                    <Button variant="subtle" style={{ marginRight: '1rem' }}>Our work</Button>
-                    <Button variant="subtle" style={{ marginRight: '1rem' }}>Tools</Button>
-                    <Button variant="subtle" style={{ marginRight: '1rem' }}>Impact</Button>
-                    <Button variant="subtle" style={{ marginRight: '1rem' }}>Donate</Button>
-                    <Button variant="subtle" style={{ marginRight: '1rem' }}>Resources</Button>
+                    <Button component="a" href="#take-action" variant="subtle" style={{ marginRight: '1rem' }}>Take Action</Button>
                 </Flex>
-                <TextInput
-                    placeholder="Search"
-                    style={{ width: '200px' }}
-                />
             </Flex>
         </Box>
     );

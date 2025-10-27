@@ -5,9 +5,6 @@ import ActionMenu, {TabOption} from "./components/ActionMenu.tsx";
 import {Flex, Modal, ScrollArea} from '@mantine/core';
 import {useEffect, useState} from "react";
 import ImpactStatement from "./components/ImpactStatement.tsx";
-import LearnMore from "./components/LearnMore.tsx";
-import About from "./components/About.tsx";
-import Advocacy from "./components/Advocacy.tsx";
 import Home from './components/Home.tsx';
 
 import Quiz from "./components/Quiz.tsx";
@@ -118,9 +115,6 @@ function App() {
                 // style={{flex: 1}}
                 style={{height: "calc(100svh - 3rem)"}}
             >
-                {showLearn && <LearnMore/>}
-                {showAbout && <About/>}
-                {takeAction && <Advocacy/>}
                 {showQuiz && <Quiz setActiveTab={setCurrentTab}/>}
                 {showMore && <More setTab={setCurrentTab}/>}
             </ScrollArea>}
