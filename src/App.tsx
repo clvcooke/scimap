@@ -8,6 +8,7 @@ import ImpactStatement from "./components/ImpactStatement.tsx";
 import LearnMore from "./components/LearnMore.tsx";
 import About from "./components/About.tsx";
 import Advocacy from "./components/Advocacy.tsx";
+import Home from './components/Home.tsx';
 
 import Quiz from "./components/Quiz.tsx";
 import {ANALYTICS_ACTIONS, BaseLayer, Overlay} from "./constants.ts";
@@ -30,6 +31,7 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search)
     const path = window.location.pathname.toLowerCase();
     const showReport = ["/report"].includes(path);
+    const showHome = ["/"].includes(path);
 
 
     useEffect(() => {
@@ -49,7 +51,7 @@ function App() {
         setOverlayLayer((overlayLayer?.toUpperCase() ?? "GRANTS") as Overlay);
         if (skipWelcome?.toLocaleLowerCase() === "true") {
             setImpactOpen(false);
-        } else {
+        } else if (!showHome) {
             setImpactOpen(true);
         }
 
@@ -84,13 +86,17 @@ function App() {
             return;
         } else if (currentTab === "budget") {
             window.history.replaceState(null, "FY2026 NIH Budget Proposal Economic Impact", "/fy26")
-        } else {
+        } else if (!showHome) {
             window.history.replaceState(null, "SCIMaP - Impacts of Federal Cuts to Science and Medical Research", "/")
         }
-    }, [currentTab, showReport]);
+    }, [currentTab, showReport, showHome]);
 
     if (showReport) {
         return <ReportCardWrapper />;
+    }
+
+    if (showHome) {
+        return <Home />;
     }
 
     return <>
