@@ -43,8 +43,8 @@ jobs:
       - name: Commit and push if changes
         if: steps.git-check.outputs.changes == 'true'
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add src/data/newsItems.json
           git commit -m "Update news items from Google Sheets"
           git push
