@@ -289,4 +289,90 @@ describe('update-news.js', () => {
       expect(parsed[1].isOngoing).toBe(true);
     });
   });
+
+  describe('Sorting', () => {
+    test('should sort with ongoing items first', () => {
+      const sortNewsItems = (newsItems) => {
+        return newsItems.sort((a, b) => {
+          if (a.isOngoing && !b.isOngoing) return -1;
+          if (!a.isOngoing && b.isOngoing) return 1;
+
+          if (!a.isOngoing && !b.isOngoing) {
+            return b.rawDate.localeCompare(a.rawDate);
+          }
+
+          return 0;
+        });
+      };
+
+      const newsItems = [
+        { date: 'January 1st, 2025', title: 'Test 1', url: 'https://example.com/1', isOngoing: undefined, rawDate: '2025-01-01' },
+        { date: 'Ongoing', title: 'Test 2', url: 'https://example.com/2', isOngoing: true, rawDate: null },
+        { date: 'March 15th, 2025', title: 'Test 3', url: 'https://example.com/3', isOngoing: undefined, rawDate: '2025-03-15' }
+      ];
+
+      const sorted = sortNewsItems([...newsItems]);
+
+      expect(sorted[0].isOngoing).toBe(true);
+      expect(sorted[0].title).toBe('Test 2');
+      expect(sorted[1].date).toBe('March 15th, 2025'); // More recent
+      expect(sorted[2].date).toBe('January 1st, 2025'); // Older
+    });
+
+    test('should sort by most recent date first', () => {
+      const sortNewsItems = (newsItems) => {
+        return newsItems.sort((a, b) => {
+          if (a.isOngoing && !b.isOngoing) return -1;
+          if (!a.isOngoing && b.isOngoing) return 1;
+
+          if (!a.isOngoing && !b.isOngoing) {
+            return b.rawDate.localeCompare(a.rawDate);
+          }
+
+          return 0;
+        });
+      };
+
+      const newsItems = [
+        { date: 'January 5th, 2025', title: 'Test 1', url: 'https://example.com/1', isOngoing: undefined, rawDate: '2025-01-05' },
+        { date: 'December 31st, 2025', title: 'Test 2', url: 'https://example.com/2', isOngoing: undefined, rawDate: '2025-12-31' },
+        { date: 'June 15th, 2025', title: 'Test 3', url: 'https://example.com/3', isOngoing: undefined, rawDate: '2025-06-15' }
+      ];
+
+      const sorted = sortNewsItems([...newsItems]);
+
+      expect(sorted[0].date).toBe('December 31st, 2025');
+      expect(sorted[1].date).toBe('June 15th, 2025');
+      expect(sorted[2].date).toBe('January 5th, 2025');
+    });
+
+    test('should handle multiple ongoing items', () => {
+      const sortNewsItems = (newsItems) => {
+        return newsItems.sort((a, b) => {
+          if (a.isOngoing && !b.isOngoing) return -1;
+          if (!a.isOngoing && b.isOngoing) return 1;
+
+          if (!a.isOngoing && !b.isOngoing) {
+            return b.rawDate.localeCompare(a.rawDate);
+          }
+
+          return 0;
+        });
+      };
+
+      const newsItems = [
+        { date: 'January 1st, 2025', title: 'Test 1', url: 'https://example.com/1', isOngoing: undefined, rawDate: '2025-01-01' },
+        { date: 'Ongoing', title: 'Test 2', url: 'https://example.com/2', isOngoing: true, rawDate: null },
+        { date: 'Ongoing', title: 'Test 3', url: 'https://example.com/3', isOngoing: true, rawDate: null },
+        { date: 'March 15th, 2025', title: 'Test 4', url: 'https://example.com/4', isOngoing: undefined, rawDate: '2025-03-15' }
+      ];
+
+      const sorted = sortNewsItems([...newsItems]);
+
+      expect(sorted[0].isOngoing).toBe(true);
+      expect(sorted[1].isOngoing).toBe(true);
+      expect(sorted[2].date).toBe('March 15th, 2025');
+      expect(sorted[3].date).toBe('January 1st, 2025');
+    });
+  });
 });

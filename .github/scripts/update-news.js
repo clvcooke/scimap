@@ -199,6 +199,7 @@ function processSheetData(rows) {
             title: title.trim(),
             url: link.trim(),
             isOngoing: isOngoing || undefined,
+            rawDate: isOngoing ? null : dateStr.trim(), // Keep raw date for sorting
         });
     });
 
@@ -206,11 +207,33 @@ function processSheetData(rows) {
 }
 
 /**
+ * Sorts news items: ongoing items first, then by most recent date
+ */
+function sortNewsItems(newsItems) {
+    return newsItems.sort((a, b) => {
+        // Ongoing items always come first
+        if (a.isOngoing && !b.isOngoing) return -1;
+        if (!a.isOngoing && b.isOngoing) return 1;
+
+        // If both are regular dated items, sort by raw date (YYYY-MM-DD format)
+        // This format can be compared lexicographically
+        if (!a.isOngoing && !b.isOngoing) {
+            return b.rawDate.localeCompare(a.rawDate); // Most recent first (descending order)
+        }
+
+        return 0;
+    });
+}
+
+/**
  * Updates the newsItems.json file with new news items
  */
 function updateNewsItemsJson(newsItems) {
-    // Clean up the newsItems - remove undefined values
-    const cleanedItems = newsItems.map(item => {
+    // Sort items: ongoing first, then by most recent date
+    const sortedItems = sortNewsItems(newsItems);
+
+    // Clean up the newsItems - remove undefined values and rawDate (internal only)
+    const cleanedItems = sortedItems.map(item => {
         const cleaned = {
             date: item.date,
             title: item.title,
