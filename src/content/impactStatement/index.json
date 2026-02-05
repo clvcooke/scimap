@@ -1,0 +1,108 @@
+{
+  "modalTitle": "Medical Research is at Risk",
+  "part1": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "The "
+        },
+        {
+          "text": "National Institutes of Health",
+          "bold": true
+        },
+        {
+          "text": " (NIH) funds crucial health research to address cancer, diabetes, dementia, and more."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "NIH funding also boosts the economy, returning &gt;250% of the value invested."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "The White House has ordered major cuts to NIH funding nationwide, which would "
+        },
+        {
+          "text": "take back funds",
+          "bold": true
+        },
+        {
+          "text": " promised to the states."
+        }
+      ]
+    }
+  ],
+  "part2": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "Many NIH grants for health research have been cancelled or frozen, interrupting ongoing studies and clinical trials "
+        },
+        {
+          "text": "(current losses)",
+          "bold": true
+        },
+        {
+          "text": ". The administration also ordered across-the-board cuts to NIH funding for \"indirect costs\" of research, which covers essential facilities, equipment, staff, and safety checks"
+        },
+        {
+          "text": " (future losses)",
+          "bold": true
+        },
+        {
+          "text": "."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "This website shows the current and future "
+        },
+        {
+          "text": "economic impact of funding cuts",
+          "bold": true
+        },
+        {
+          "text": "."
+        }
+      ]
+    }
+  ],
+  "fy26Content": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "The White House "
+        },
+        {
+          "text": "FY 2026 budget proposal",
+          "bold": true
+        },
+        {
+          "text": " substantially cuts NIH research funding. Budget cuts are projected to lead to &gt;$46B in lost economic activity in the upcoming year."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "This website shows the economic impact of NIH budget cuts, cancelled grants, and reduced funding for research infrastructure."
+        }
+      ]
+    }
+  ],
+  "consentLabel": "We collect anonymous data from users for research purposes. Please check this box if you are 18+ years of age and agree to share anonymous data. (Not required to use the website)"
+}

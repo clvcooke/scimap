@@ -18,6 +18,8 @@ import {STATE_ARRAY, STATE_LOSSES} from "../data/state-losses.ts";
 import {trackEvent} from "../utils/analytics.ts";
 import SharePage from "./SharePage.tsx";
 import {NUMBER_FORMATTER_LONG} from "../constants.ts";
+import {useQuizContent} from "../hooks/useContent.ts";
+import { DocumentRenderer } from '@keystatic/core/renderer';
 
 
 function ApprovalSlider({value, onChange}: { value?: number; onChange: (newValue: number) => void; }) {
@@ -45,29 +47,21 @@ interface LossGuessProps {
     stateValue: string;
     lossGuess?: number;
     setLossGuess: (value: number | undefined) => void;
+    content: any;
 }
 
-function LossGuessCancelled({stateValue, lossGuess, setLossGuess}: LossGuessProps) {
+function LossGuessCancelled({stateValue, lossGuess, setLossGuess, content}: LossGuessProps) {
     return (
         <Card shadow="sm" padding="xl" radius="md" withBorder>
             <Stack gap="md">
                 <Text ta='left' size="md">
-                    The White House has ordered <b>major changes to NIH funding</b>, which would <b>take back
-                    funds</b> that were
-                    already promised to the states. States have sued to challenge the orders, arguing that the changes
-                    are <b>unlawful</b>. Universities, hospitals, and other institutions that receive NIH grants
-                    would <b>lose
-                    money that is crucial</b> for operating and conducting research.
+                    <DocumentRenderer document={content.cancelledGrantsText1} />
                 </Text>
-
                 <Text ta='left' size="md">
-                    Many NIH grants for health research have been cancelled or frozen, interrupting ongoing studies and clinical
-                    trials. These cancelled grants will cause economic losses in your state.
+                    <DocumentRenderer document={content.cancelledGrantsText2} />
                 </Text>
-
                 <Text ta='left' size="md">
-                    Can you guess how many <b>millions of dollars</b> will be lost due to cancelled and frozen grants
-                    in <b>{stateValue}</b>?
+                    {content.cancelledGrantsQuestion.replace('{stateValue}', stateValue)}
                 </Text>
 
                 <NumberInput
@@ -89,25 +83,18 @@ function LossGuessCancelled({stateValue, lossGuess, setLossGuess}: LossGuessProp
     );
 }
 
-function LossGuessIndirect({stateValue, lossGuess, setLossGuess}: LossGuessProps) {
+function LossGuessIndirect({stateValue, lossGuess, setLossGuess, content}: LossGuessProps) {
     return (
         <Card shadow="sm" padding="xl" radius="md" withBorder>
             <Stack gap="md">
                 <Text ta='left' size="md">
-                    Another change would greatly reduce NIH funding that covers <b>"indirect costs"</b> of research.
-                    These
-                    funds help pay for essential facilities, special equipment, skilled staff, and safety checks that
-                    are shared across many research projects.
+                    <DocumentRenderer document={content.indirectCostsText1} />
                 </Text>
-
                 <Text ta='left' size="md">
-                    Cutting funding for indirect costs of research would cause ongoing economic losses in your state
-                    every year.
+                    <DocumentRenderer document={content.indirectCostsText2} />
                 </Text>
-
                 <Text ta='left' size="md">
-                    Can you guess how many <b>millions of dollars</b> would be lost every year in <b>{stateValue}</b> if
-                    funding for indirect costs is cut?
+                    {content.indirectCostsQuestion.replace('{stateValue}', stateValue)}
                 </Text>
 
                 <NumberInput
@@ -139,6 +126,7 @@ interface ResultsDisplayProps {
     actualIndirectLoss: number;
     approvalRating: number | undefined;
     setApprovalRating: (value: number | undefined) => void;
+    content: any;
 }
 
 function ResultsDisplay({
@@ -151,6 +139,7 @@ function ResultsDisplay({
                             actualIndirectLoss,
                             approvalRating,
                             setApprovalRating,
+                            content,
                         }: ResultsDisplayProps) {
     return (
         <Card shadow="sm" padding="xl" radius="md" withBorder>
@@ -183,8 +172,7 @@ function ResultsDisplay({
                     </Text>
                 </Stack>
                 <Text ta="left">
-                    After learning about impact for your state, how much do you <b>approve or disapprove</b> of proposed
-                    changes to federal funding for scientific research?
+                    <DocumentRenderer document={content.resultsText} />
                 </Text>
                 <ApprovalSlider value={approvalRating} onChange={setApprovalRating}/>
             </Stack>
@@ -198,6 +186,7 @@ function Quiz({setActiveTab}) {
     const [active, setActive] = useState(0);
     const nextStep = () => setActive((current) => (current < 3 ? current + 1 : current));
     const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+    const content = useQuizContent();
 
     const [initialApprovalRating, setInitialApprovalRating] = useState<number>();
     const [finalApprovalRating, setFinalApprovalRating] = useState<number>();
@@ -255,8 +244,7 @@ function Quiz({setActiveTab}) {
                     {active === 0 && (
                         <Card shadow="sm" padding="xl" radius="md" withBorder>
                             <Text size="md" mb={"sm"} ta="left">
-                                How would <b>your state be impacted</b> by changes to NIH funding? <b>Take the
-                                quiz</b> to find out!
+                                <DocumentRenderer document={content.overviewTitle} />
                             </Text>
                             <Combobox
                                 onOptionSubmit={(optionValue) => {
@@ -287,8 +275,7 @@ function Quiz({setActiveTab}) {
                                 </Combobox.Dropdown>
                             </Combobox>
                             <Text mt={"lg"}>
-                                How much do you <b>approve</b> or <b>disapprove</b> of the <b>decreases</b> to federal
-                                funding for scientific research?
+                                <DocumentRenderer document={content.overviewQuestion} />
                             </Text>
                             <ApprovalSlider value={initialApprovalRating}
                                             onChange={(value) => setInitialApprovalRating(value)}/>
@@ -300,7 +287,7 @@ function Quiz({setActiveTab}) {
                     {active === 1 && (
                         <div>
                             <LossGuessCancelled lossGuess={lossGuessCancelled} setLossGuess={setLossGuessCancelled}
-                                                stateValue={stateValue}/>
+                                                stateValue={stateValue} content={content}/>
                         </div>
                     )}
                 </Stepper.Step>
@@ -308,7 +295,7 @@ function Quiz({setActiveTab}) {
                     {active === 2 && (
                         <div>
                             <LossGuessIndirect lossGuess={lossGuessIndirect} setLossGuess={setLossGuessIndirect}
-                                               stateValue={stateValue}/>
+                                               stateValue={stateValue} content={content}/>
                         </div>
                     )}
                 </Stepper.Step>
@@ -325,6 +312,7 @@ function Quiz({setActiveTab}) {
                                 jobLossIndirect={STATE_LOSSES[stateValue].idc_job_loss}
                                 approvalRating={finalApprovalRating}
                                 setApprovalRating={setFinalApprovalRating}
+                                content={content}
                             />
                         </div>
                     )}

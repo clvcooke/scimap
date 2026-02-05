@@ -1,0 +1,151 @@
+{
+  "overviewTitle": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "How would "
+        },
+        {
+          "text": "your state be impacted",
+          "bold": true
+        },
+        {
+          "text": " by changes to NIH funding? "
+        },
+        {
+          "text": "Take the quiz",
+          "bold": true
+        },
+        {
+          "text": " to find out!"
+        }
+      ]
+    }
+  ],
+  "overviewQuestion": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "How much do you "
+        },
+        {
+          "text": "approve",
+          "bold": true
+        },
+        {
+          "text": " or "
+        },
+        {
+          "text": "disapprove",
+          "bold": true
+        },
+        {
+          "text": " of the "
+        },
+        {
+          "text": "decreases",
+          "bold": true
+        },
+        {
+          "text": " to federal funding for scientific research?"
+        }
+      ]
+    }
+  ],
+  "cancelledGrantsText1": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "The White House has ordered "
+        },
+        {
+          "text": "major changes to NIH funding",
+          "bold": true
+        },
+        {
+          "text": ", which would "
+        },
+        {
+          "text": "take back funds",
+          "bold": true
+        },
+        {
+          "text": " that were already promised to the states. States have sued to challenge the orders, arguing that the changes are "
+        },
+        {
+          "text": "unlawful",
+          "bold": true
+        },
+        {
+          "text": ". Universities, hospitals, and other institutions that receive NIH grants would "
+        },
+        {
+          "text": "lose money that is crucial",
+          "bold": true
+        },
+        {
+          "text": " for operating and conducting research."
+        }
+      ]
+    }
+  ],
+  "cancelledGrantsText2": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "Many NIH grants for health research have been cancelled or frozen, interrupting ongoing studies and clinical trials. These cancelled grants will cause economic losses in your state."
+        }
+      ]
+    }
+  ],
+  "cancelledGrantsQuestion": "Can you guess how many <b>millions of dollars</b> will be lost due to cancelled and frozen grants in <b>{stateValue}</b>?",
+  "indirectCostsText1": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "Another change would greatly reduce NIH funding that covers "
+        },
+        {
+          "text": "\"indirect costs\"",
+          "bold": true
+        },
+        {
+          "text": " of research. These funds help pay for essential facilities, special equipment, skilled staff, and safety checks that are shared across many research projects."
+        }
+      ]
+    }
+  ],
+  "indirectCostsText2": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "Cutting funding for indirect costs of research would cause ongoing economic losses in your state every year."
+        }
+      ]
+    }
+  ],
+  "indirectCostsQuestion": "Can you guess how many <b>millions of dollars</b> would be lost every year in <b>{stateValue}</b> if funding for indirect costs is cut?",
+  "resultsText": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "After learning about impact for your state, how much do you "
+        },
+        {
+          "text": "approve or disapprove",
+          "bold": true
+        },
+        {
+          "text": " of proposed changes to federal funding for scientific research?"
+        }
+      ]
+    }
+  ]
+}

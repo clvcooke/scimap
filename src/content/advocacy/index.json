@@ -1,0 +1,136 @@
+{
+  "title": "Take Action",
+  "headerText": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "You can "
+        },
+        {
+          "text": "take action",
+          "bold": true
+        },
+        {
+          "text": " to support federal funding for scientific research. Courts across the country and Congress have the power to stop these cuts."
+        }
+      ]
+    }
+  ],
+  "contactCardTitle": "Contact Your Representatives",
+  "contactCardText": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "We encourage you to "
+        },
+        {
+          "text": "contact your local elected officials and representatives",
+          "bold": true
+        },
+        {
+          "text": " in Congress to share your opinion and call attention to these funding cuts. "
+        },
+        {
+          "type": "link",
+          "href": "https://www.usa.gov/elected-officials",
+          "children": [
+            {
+              "text": "Click here to find contact information for your representatives"
+            }
+          ]
+        },
+        {
+          "text": ". Here are some facts to keep in mind:"
+        }
+      ]
+    }
+  ],
+  "contactCardList": [
+    [
+      {
+        "type": "paragraph",
+        "children": [
+          {
+            "text": "Less than 1% of the federal budget goes to NIH, but this investment has a big impact."
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "type": "paragraph",
+        "children": [
+          {
+            "text": "Federally funded scientific and medical research improves health, drives innovation, creates jobs, and grows the economy."
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "type": "paragraph",
+        "children": [
+          {
+            "text": "Every dollar invested in scientific research through NIH produces, on average, $2.56 of economic activity in return \u2013 "
+          },
+          {
+            "text": "over a 250% gain.",
+            "bold": true
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "type": "paragraph",
+        "children": [
+          {
+            "text": "NIH research supports over 400,000 jobs across the U.S."
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "type": "paragraph",
+        "children": [
+          {
+            "text": "Reducing indirect cost rates to 15% would undermine the ability of universities, hospitals, and research institutes to conduct life saving, medical research."
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "type": "paragraph",
+        "children": [
+          {
+            "text": "Cancelling or freezing grants wastes funds by interrupting ongoing research projects, including active clinical trials, at institutions across the country."
+          }
+        ]
+      }
+    ]
+  ],
+  "shareCardTitle": "Share the SCIMaP website with friends, family, and followers!",
+  "shareCardText": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "We also encourage you to share the SCIMaP website with friends, family, and followers. You can learn more about NIH impacts in your state via resources from "
+        },
+        {
+          "type": "link",
+          "href": "https://www.unitedformedicalresearch.org/nih-in-your-state/",
+          "children": [
+            {
+              "text": "United for Medical Research."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

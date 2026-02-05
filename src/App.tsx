@@ -15,6 +15,8 @@ import {initializeGA, initializePostHog, trackEvent} from "./utils/analytics.ts"
 import FS26Map from "./components/FS26Map.tsx";
 import {More} from "./components/More.tsx";
 import {ReportCardWrapper} from "./components/ReportCardWrapper.tsx";
+import { Keystatic } from '@keystatic/core/ui';
+import keystaticConfig from '../keystatic.config';
 
 
 function App() {
@@ -30,10 +32,11 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search)
     const path = window.location.pathname.toLowerCase();
     const showReport = ["/report"].includes(path);
+    const isKeystatic = path === '/keystatic' || path.startsWith('/keystatic/');
 
 
     useEffect(() => {
-        ;
+        if (isKeystatic) return;
         const conditionParam = urlParams.get('CONDITION') || urlParams.get('condition') || urlParams.get('Condition');
         const skipWelcome = urlParams.get('SKIP_WELCOME') || urlParams.get('skip_welcome') || urlParams.get('Skip_Welcome');
         const prolificPidParam = urlParams.get('PROLIFIC_PID') || urlParams.get('prolific_pid') || urlParams.get('Prolific_PID');
@@ -80,14 +83,18 @@ function App() {
     const showMore = currentTab === "more";
 
     useEffect(() => {
-        if (showReport) {
+        if (showReport || isKeystatic) {
             return;
         } else if (currentTab === "budget") {
             window.history.replaceState(null, "FY2026 NIH Budget Proposal Economic Impact", "/fy26")
         } else {
             window.history.replaceState(null, "SCIMaP - Impacts of Federal Cuts to Science and Medical Research", "/")
         }
-    }, [currentTab, showReport]);
+    }, [currentTab, showReport, isKeystatic]);
+
+    if (isKeystatic) {
+        return <Keystatic config={keystaticConfig as any} />;
+    }
 
     if (showReport) {
         return <ReportCardWrapper />;
