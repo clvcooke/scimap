@@ -325,6 +325,9 @@ function About() {
                             publicly available data at the Open Science
                             Framework link</a>.
                         </Text>
+                        <Text ta={"left"} mt={'sm'}>
+                            We have updated the map displaying terminated and frozen NIH grants to account for ongoing restoration or unfreezing of some grants. Loss estimates no longer include grants that were frozen but are likely no longer frozen. The estimated economic losses from terminated and frozen grants has therefore decreased.
+                        </Text>
                         <Text ta={'left'} mt={'sm'}>
                             <b>To receive email updates about major website releases, reports, and publications, <a
                                 href={"https://upenn.co1.qualtrics.com/jfe/form/SV_5vDEXlLWG9IyWmW"}>please sign up
