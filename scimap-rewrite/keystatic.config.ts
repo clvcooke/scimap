@@ -5,7 +5,7 @@ export default config({
     kind: 'cloud',
   },
   cloud: {
-    project: 'my-project/my-repo',
+    project: 'scimap/scimap',
   },
   collections: {
     posts: collection({
