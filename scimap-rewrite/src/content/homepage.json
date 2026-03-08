@@ -1,0 +1,10 @@
+{
+  "title": "Funding Impacts by Congressional District",
+  "description": "Explore how proposed funding cuts impact specific regions and communities.",
+  "cancelledTabTitle": "Cancelled and Frozen Grants",
+  "cancelledTabDescription": "Tracking NIH grants that have been cancelled or frozen based on the Grant Watch database.",
+  "indirectTabTitle": "15% Indirect Cost Cap Impact",
+  "indirectTabDescription": "Estimating the future impact of proposed changes capping indirect funding costs.",
+  "fy2026TabTitle": "Proposed FY2026 Budget",
+  "fy2026TabDescription": "Comparing the proposed NIH FY 2026 budget to FY2024 to estimate proportion of funding lost."
+}

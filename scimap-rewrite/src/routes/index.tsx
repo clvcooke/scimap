@@ -4,6 +4,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import SCIMap from '@/components/Map'
 
+import homepageContent from '@/content/homepage.json'
+
 export const Route = createFileRoute('/')({
   component: Index,
 })
@@ -16,9 +18,9 @@ function Index() {
       {/* Left Sidebar */}
       <div className="w-full md:w-96 lg:w-[400px] bg-white border-r border-gray-200 flex flex-col h-full shadow-lg z-10 overflow-hidden relative">
         <div className="p-4 border-b border-gray-100 flex-none bg-white">
-          <h1 className="text-xl font-bold text-gray-900 mb-2">Funding Impacts by Congressional District</h1>
+          <h1 className="text-xl font-bold text-gray-900 mb-2">{homepageContent.title}</h1>
           <p className="text-sm text-gray-600">
-            Explore how proposed funding cuts impact specific regions and communities.
+            {homepageContent.description}
           </p>
         </div>
 
@@ -48,9 +50,9 @@ function Index() {
           {/* Content Area */}
           <div className="flex-1 overflow-y-auto p-4 bg-white relative">
             <TabsContent value="cancelled" className="mt-0 outline-none space-y-4 animate-in fade-in duration-300">
-                <h2 className="text-lg font-semibold text-gray-800">Cancelled and Frozen Grants</h2>
+                <h2 className="text-lg font-semibold text-gray-800">{homepageContent.cancelledTabTitle}</h2>
                 <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800 shadow-sm">
-                  Tracking NIH grants that have been cancelled or frozen based on the Grant Watch database.
+                  {homepageContent.cancelledTabDescription}
                 </div>
                 <div className="h-40 bg-gray-100 rounded-lg border border-gray-200 animate-pulse flex items-center justify-center">
                   <span className="text-gray-400 font-medium text-sm">Data visualization placeholder</span>
@@ -58,9 +60,9 @@ function Index() {
             </TabsContent>
 
             <TabsContent value="indirect" className="mt-0 outline-none space-y-4 animate-in fade-in duration-300">
-                <h2 className="text-lg font-semibold text-gray-800">15% Indirect Cost Cap Impact</h2>
+                <h2 className="text-lg font-semibold text-gray-800">{homepageContent.indirectTabTitle}</h2>
                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800 shadow-sm">
-                  Estimating the future impact of proposed changes capping indirect funding costs.
+                  {homepageContent.indirectTabDescription}
                 </div>
                 <div className="h-40 bg-gray-100 rounded-lg border border-gray-200 animate-pulse flex items-center justify-center">
                   <span className="text-gray-400 font-medium text-sm">Data visualization placeholder</span>
@@ -68,9 +70,9 @@ function Index() {
             </TabsContent>
 
             <TabsContent value="fy2026" className="mt-0 outline-none space-y-4 animate-in fade-in duration-300">
-                <h2 className="text-lg font-semibold text-gray-800">Proposed FY2026 Budget</h2>
+                <h2 className="text-lg font-semibold text-gray-800">{homepageContent.fy2026TabTitle}</h2>
                 <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg text-sm text-purple-800 shadow-sm">
-                  Comparing the proposed NIH FY 2026 budget to FY2024 to estimate proportion of funding lost.
+                  {homepageContent.fy2026TabDescription}
                 </div>
                 <div className="h-40 bg-gray-100 rounded-lg border border-gray-200 animate-pulse flex items-center justify-center">
                   <span className="text-gray-400 font-medium text-sm">Data visualization placeholder</span>

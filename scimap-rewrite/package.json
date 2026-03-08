@@ -40,6 +40,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@keystatic/core": "^0.5.48",
+    "@playwright/test": "^1.58.2",
     "@tanstack/eslint-plugin-query": "^5.91.4",
     "@tanstack/eslint-plugin-router": "^1.161.4",
     "@tanstack/router-cli": "^1.166.2",
