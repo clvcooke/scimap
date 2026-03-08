@@ -84,6 +84,147 @@ function Index() {
         </div>
       </section>
 
+      {/* Data Metrics Strip */}
+      <section className="bg-[#4AB3E6] w-full py-16 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col items-center space-y-12">
+          <h2 className="text-3xl font-bold text-white text-center">
+            Current Nationwide Impact of NIH Grant Terminations
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full text-center divide-y sm:divide-y-0 sm:divide-x divide-white/20">
+            <div className="flex flex-col items-center justify-center space-y-2 pt-6 sm:pt-0">
+              <span className="text-5xl font-bold text-white">$11B</span>
+              <span className="text-lg text-white font-medium">Economic Loss</span>
+            </div>
+            <div className="flex flex-col items-center justify-center space-y-2 pt-6 sm:pt-0">
+              <span className="text-5xl font-bold text-white">49K</span>
+              <span className="text-lg text-white font-medium">Jobs at Risk</span>
+            </div>
+            <div className="flex flex-col items-center justify-center space-y-2 pt-6 sm:pt-0">
+              <span className="text-5xl font-bold text-white">2.5K</span>
+              <span className="text-lg text-white font-medium">Grants Cancelled</span>
+            </div>
+            <div className="flex flex-col items-center justify-center space-y-2 pt-6 sm:pt-0">
+              <span className="text-5xl font-bold text-white">50</span>
+              <span className="text-lg text-white font-medium">States Affected</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Map & ZIP Entry Section */}
+      <section className="bg-[#003366] w-full py-20 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+          {/* Left Column (Input) - 40% */}
+          <div className="w-full md:w-2/5 space-y-6">
+            <h3 className="text-3xl font-bold text-white">See Impacts in Your Local Area</h3>
+            <p className="text-lg text-gray-200 leading-relaxed">
+              Enter your ZIP code to explore how specific funding cuts will affect jobs, research
+              projects, and institutional resources in your community.
+            </p>
+            <div className="pt-4 flex w-full max-w-sm">
+              <input
+                type="text"
+                placeholder="ZIP Code"
+                className="w-full rounded-l-md border-0 px-4 py-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#FFB81C] text-lg font-medium"
+              />
+              <button className="bg-[#FFB81C] hover:bg-[#e6a619] text-[#003366] font-bold text-lg px-6 py-4 rounded-r-md transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
+                Search <span aria-hidden="true">&rarr;</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column (Visual) - 60% */}
+          <div className="w-full md:w-3/5 flex justify-center md:justify-end">
+            <div className="w-full max-w-2xl bg-[#002244] rounded-2xl overflow-hidden shadow-2xl border border-[#004080] aspect-video flex flex-col items-center justify-center relative group cursor-pointer">
+              <svg
+                className="w-32 h-32 text-blue-400/30 group-hover:text-blue-400/50 transition-colors"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+              </svg>
+              <div className="absolute inset-0 bg-gradient-to-tr from-red-500/10 via-transparent to-blue-500/10 mix-blend-overlay"></div>
+              <span className="mt-6 text-blue-200/70 font-medium text-lg tracking-wide uppercase">
+                Interactive Map Preview
+              </span>
+              <span className="text-blue-300/50 text-sm mt-2">(Choropleth Heatmap Style)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* "Why This Matters" & "Who We Serve" (Dual Card Layout) */}
+      <section className="bg-white w-full py-24 px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          {/* Left Side (Context) */}
+          <div className="space-y-8 pr-0 lg:pr-8">
+            <h3 className="text-3xl font-bold text-[#003366]">Why This Matters</h3>
+            <div className="text-gray-700 text-lg leading-relaxed space-y-6">
+              <p>
+                The United States relies on a continuous pipeline of federally funded scientific
+                research to remain competitive globally. Cuts to basic research delay critical
+                medical discoveries, technological advancements, and public health initiatives.
+              </p>
+              <p>
+                When grants are terminated or indirect costs are capped abruptly, research
+                institutions must absorb the financial shock. This often results in the immediate
+                halting of ongoing experiments, the firing of highly skilled lab personnel, and the
+                cancellation of planned infrastructure upgrades.
+              </p>
+              <p>
+                By mapping these impacts locally, we provide a transparent, data-driven view of how
+                national policy decisions directly affect community economies and the broader
+                scientific enterprise.
+              </p>
+            </div>
+            <div className="pt-4">
+              <Button className="bg-[#003366] hover:bg-[#002244] text-white font-bold text-lg px-8 py-6 rounded-md w-full sm:w-auto flex items-center gap-2">
+                Read our Research Insights <span>&rarr;</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Right Side (The Card) */}
+          <div className="bg-[#F8F9FA] rounded-xl p-8 md:p-10 shadow-lg border border-gray-100 h-full">
+            <h3 className="text-2xl font-bold text-[#003366] mb-8">Who We Serve</h3>
+            <ul className="space-y-6">
+              <li className="flex items-start">
+                <span className="text-[#FFB81C] text-2xl mr-4 leading-none">&bull;</span>
+                <p className="text-gray-800 text-lg">
+                  <strong className="text-[#003366]">Policy Makers:</strong> Data-driven insights to
+                  understand the localized economic and scientific fallout of proposed federal
+                  budgets.
+                </p>
+              </li>
+              <li className="flex items-start">
+                <span className="text-[#FFB81C] text-2xl mr-4 leading-none">&bull;</span>
+                <p className="text-gray-800 text-lg">
+                  <strong className="text-[#003366]">Research Institutions:</strong> Clear
+                  visualizations of how indirect cost caps and grant freezes impact operational
+                  sustainability.
+                </p>
+              </li>
+              <li className="flex items-start">
+                <span className="text-[#FFB81C] text-2xl mr-4 leading-none">&bull;</span>
+                <p className="text-gray-800 text-lg">
+                  <strong className="text-[#003366]">Media & Journalists:</strong> Access to
+                  verifiable, granular data on funding cuts down to the congressional district and
+                  ZIP code level.
+                </p>
+              </li>
+              <li className="flex items-start">
+                <span className="text-[#FFB81C] text-2xl mr-4 leading-none">&bull;</span>
+                <p className="text-gray-800 text-lg">
+                  <strong className="text-[#003366]">The Public:</strong> Transparent tracking of
+                  how taxpayer-funded science initiatives in local communities are being altered.
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* Map Section (Commented out for now) */}
       {/*
       <section className="w-full h-[600px] bg-gray-100 relative">
