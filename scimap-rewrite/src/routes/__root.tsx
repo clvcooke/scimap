@@ -3,7 +3,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router'
 export const Route = createRootRoute({
   component: () => (
     <div className="min-h-screen flex flex-col w-full bg-white">
-      <header className="bg-[#003366] px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+      <header className="bg-brand-blue px-6 py-4 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-baseline gap-3">
           {/* Logo Placeholder */}
           <div className="font-bold text-2xl text-white tracking-tight">SCIMaP</div>
@@ -22,35 +22,34 @@ export const Route = createRootRoute({
         <Outlet />
       </main>
 
-      <footer className="bg-[#002147] text-white pt-16 pb-8 px-6">
+      <footer className="bg-brand-blue-dark text-white pt-16 pb-8 px-6 border-t border-brand-blue-light/30">
         <div className="max-w-7xl mx-auto flex flex-col space-y-12">
           {/* Top 4-column structure */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             {/* Project Info */}
             <div className="space-y-4">
-              <div className="font-bold text-2xl tracking-tight">SCIMaP</div>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Mapping the nationwide impacts of proposed federal funding cuts to science,
-                research, and local communities.
+              <div className="font-bold text-lg tracking-tight">SCIMaP</div>
+              <p className="text-sm text-gray-300 leading-relaxed pr-8">
+                Tracking federal cuts to science and their impact on communities.
               </p>
             </div>
 
             {/* Navigation */}
             <div className="space-y-4">
               <h4 className="font-semibold text-lg text-white">Navigation</h4>
-              <ul className="space-y-2 flex flex-col text-sm text-gray-300">
+              <ul className="space-y-3 flex flex-col text-sm text-gray-300">
                 <li>
-                  <a href="/" className="hover:text-[#FFB81C] transition-colors">
-                    About
+                  <a href="/" className="hover:text-brand-yellow transition-colors">
+                    About the Project
                   </a>
                 </li>
                 <li>
-                  <a href="/" className="hover:text-[#FFB81C] transition-colors">
+                  <a href="/" className="hover:text-brand-yellow transition-colors">
                     News
                   </a>
                 </li>
                 <li>
-                  <a href="/" className="hover:text-[#FFB81C] transition-colors">
+                  <a href="/" className="hover:text-brand-yellow transition-colors">
                     Insights
                   </a>
                 </li>
@@ -60,20 +59,20 @@ export const Route = createRootRoute({
             {/* Resources */}
             <div className="space-y-4">
               <h4 className="font-semibold text-lg text-white">Resources</h4>
-              <ul className="space-y-2 flex flex-col text-sm text-gray-300">
+              <ul className="space-y-3 flex flex-col text-sm text-gray-300">
                 <li>
-                  <a href="/" className="hover:text-[#FFB81C] transition-colors">
+                  <a href="/" className="hover:text-brand-yellow transition-colors">
                     Impact Map
                   </a>
                 </li>
                 <li>
-                  <a href="/" className="hover:text-[#FFB81C] transition-colors">
-                    Data Methodology
+                  <a href="/" className="hover:text-brand-yellow transition-colors">
+                    Insights
                   </a>
                 </li>
                 <li>
-                  <a href="/" className="hover:text-[#FFB81C] transition-colors">
-                    Contact
+                  <a href="/" className="hover:text-brand-yellow transition-colors">
+                    Contact Us
                   </a>
                 </li>
               </ul>
@@ -81,58 +80,46 @@ export const Route = createRootRoute({
 
             {/* Get In Touch */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg text-white">Get In Touch</h4>
-              <ul className="space-y-2 flex flex-col text-sm text-gray-300">
+              <h4 className="font-semibold text-lg text-white">Get in Touch</h4>
+              <ul className="space-y-1 flex flex-col text-sm text-gray-300">
                 <li>
-                  <a
-                    href="mailto:press@scienceimpacts.org"
-                    className="hover:text-[#FFB81C] transition-colors flex items-center gap-2"
-                  >
-                    Press Inquiries
-                  </a>
+                  Press Inquiries: press@scienceimpacts.org
                 </li>
                 <li>
-                  <a
-                    href="mailto:info@scienceimpacts.org"
-                    className="hover:text-[#FFB81C] transition-colors flex items-center gap-2"
-                  >
-                    General Contact
-                  </a>
+                  Other: contact@scienceimpacts.org
                 </li>
               </ul>
-              <div className="flex gap-4 pt-2">
+              <div className="flex gap-4 pt-4">
                 {/* Social Placeholder 1 */}
                 <a
                   href="/"
-                  className="text-gray-400 hover:text-white transition-colors"
-                  aria-label="Twitter"
+                  className="text-gray-300 hover:text-white transition-colors"
+                  aria-label="Bluesky"
                 >
-                  <svg
-                    className="h-6 w-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.905C2.566 1.127 1.816 1.494 1.196 1.889c-.58.37-1.196 1.258-1.196 2.502 0 1.253.284 3.778.682 4.965.732 2.186 3.12 3.292 5.565 3.33-2.738.163-5.263 1.09-5.112 3.565.176 2.872 3.843 5.378 7.37 5.378 2.375 0 3.5-1.298 3.5-1.298s1.125 1.298 3.5 1.298c3.527 0 7.194-2.506 7.37-5.378.15-2.475-2.374-3.402-5.112-3.565 2.445-.038 4.833-1.144 5.565-3.33.398-1.187.682-3.712.682-4.965 0-1.244-.616-2.132-1.196-2.502-.62-.395-1.37-.762-4.006 1.006-2.752 1.852-5.711 5.791-6.798 7.905z"/>
                   </svg>
                 </a>
                 {/* Social Placeholder 2 */}
                 <a
                   href="/"
-                  className="text-gray-400 hover:text-white transition-colors"
-                  aria-label="LinkedIn"
+                  className="text-gray-300 hover:text-white transition-colors"
+                  aria-label="Instagram"
                 >
-                  <svg
-                    className="h-6 w-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
-                      clipRule="evenodd"
-                    />
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                  </svg>
+                </a>
+                {/* Social Placeholder 3 */}
+                <a
+                  href="/"
+                  className="text-gray-300 hover:text-white transition-colors"
+                  aria-label="Map/Book"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
                   </svg>
                 </a>
               </div>
@@ -140,12 +127,8 @@ export const Route = createRootRoute({
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-gray-700/50 pt-8 mt-12 text-center text-xs text-gray-400 flex flex-col gap-2">
-            <p>
-              &copy; {new Date().getFullYear()} SCIMaP - Science & Community Impacts Mapping
-              Project. All rights reserved.
-            </p>
-            <p>University of Maryland</p>
+          <div className="border-t border-brand-blue-light/50 pt-8 mt-12 text-center text-sm text-gray-300">
+            Science & Community Impact Mapping Project (SCIMaP), University of Maryland, College of Math & Natural Sciences, College Park Maryland
           </div>
         </div>
       </footer>

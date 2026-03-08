@@ -9,7 +9,7 @@ function Index() {
   return (
     <div className="flex flex-col w-full min-h-screen">
       {/* Hero Section */}
-      <section className="bg-[#003366] w-full relative">
+      <section className="bg-brand-blue w-full relative">
         <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
           {/* Left: Content (60%) */}
           <div className="w-full md:w-3/5 text-white space-y-8">
@@ -23,7 +23,7 @@ function Index() {
               affect local communities, universities, and economic development across the nation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button className="bg-[#FFB81C] hover:bg-[#e6a619] text-[#003366] font-bold text-lg px-8 py-6 rounded-md">
+              <Button className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-lg px-8 py-6 rounded-md">
                 View the Map
               </Button>
               <Button
@@ -62,7 +62,7 @@ function Index() {
       {/* Informational Section */}
       <section className="bg-white w-full py-20 px-6">
         <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-10">
-          <h2 className="text-3xl font-bold text-[#003366]">What&apos;s At Stake</h2>
+          <h2 className="text-3xl font-bold text-brand-blue">What&apos;s At Stake</h2>
 
           <div className="text-xl text-gray-700 leading-relaxed space-y-6">
             <p>
@@ -70,12 +70,12 @@ function Index() {
               supports critical infrastructure in communities across the United States.
             </p>
             <p>
-              The proposed <strong className="text-[#003366]">FY2026 Budget</strong> cuts would
+              The proposed <strong className="text-brand-blue">FY2026 Budget</strong> cuts would
               reduce funding to the National Institutes of Health (NIH) and other key agencies by up
-              to <strong className="text-[#003366]">22%</strong>.
+              to <strong className="text-brand-blue">22%</strong>.
             </p>
             <p>
-              Additionally, caps on <strong className="text-[#003366]">Indirect Costs (15%)</strong>{' '}
+              Additionally, caps on <strong className="text-brand-blue">Indirect Costs (15%)</strong>{' '}
               will severely restrict the ability of universities and research institutions to
               maintain facilities and support staff, leading to cancelled projects and hiring
               freezes.
@@ -85,7 +85,7 @@ function Index() {
       </section>
 
       {/* Data Metrics Strip */}
-      <section className="bg-[#4AB3E6] w-full py-16 px-6">
+      <section className="bg-brand-sky w-full py-16 px-6">
         <div className="max-w-7xl mx-auto flex flex-col items-center space-y-12">
           <h2 className="text-3xl font-bold text-white text-center">
             Current Nationwide Impact of NIH Grant Terminations
@@ -112,7 +112,7 @@ function Index() {
       </section>
 
       {/* Interactive Map & ZIP Entry Section */}
-      <section className="bg-[#003366] w-full py-20 px-6">
+      <section className="bg-brand-blue w-full py-20 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
           {/* Left Column (Input) - 40% */}
           <div className="w-full md:w-2/5 space-y-6">
@@ -125,9 +125,9 @@ function Index() {
               <input
                 type="text"
                 placeholder="ZIP Code"
-                className="w-full rounded-l-md border-0 px-4 py-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#FFB81C] text-lg font-medium"
+                className="w-full rounded-l-md border-0 px-4 py-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-yellow text-lg font-medium"
               />
-              <button className="bg-[#FFB81C] hover:bg-[#e6a619] text-[#003366] font-bold text-lg px-6 py-4 rounded-r-md transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
+              <button className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-lg px-6 py-4 rounded-r-md transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
                 Search <span aria-hidden="true">&rarr;</span>
               </button>
             </div>
@@ -135,7 +135,7 @@ function Index() {
 
           {/* Right Column (Visual) - 60% */}
           <div className="w-full md:w-3/5 flex justify-center md:justify-end">
-            <div className="w-full max-w-2xl bg-[#002244] rounded-2xl overflow-hidden shadow-2xl border border-[#004080] aspect-video flex flex-col items-center justify-center relative group cursor-pointer">
+            <div className="w-full max-w-2xl bg-brand-blue-dark rounded-2xl overflow-hidden shadow-2xl border border-brand-blue-light aspect-video flex flex-col items-center justify-center relative group cursor-pointer">
               <svg
                 className="w-32 h-32 text-blue-400/30 group-hover:text-blue-400/50 transition-colors"
                 fill="currentColor"
@@ -159,65 +159,56 @@ function Index() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Left Side (Context) */}
           <div className="space-y-8 pr-0 lg:pr-8">
-            <h3 className="text-3xl font-bold text-[#003366]">Why This Matters</h3>
+            <h3 className="text-3xl font-bold text-brand-blue">Why This Matters</h3>
             <div className="text-gray-700 text-lg leading-relaxed space-y-6">
               <p>
-                The United States relies on a continuous pipeline of federally funded scientific
-                research to remain competitive globally. Cuts to basic research delay critical
-                medical discoveries, technological advancements, and public health initiatives.
+                Federal investment in science drives innovation, creates jobs, saves lives, and improves
+                quality of life for people across the country. Funding cuts harm research institutions,
+                local economies, and people in red and blue states alike.
               </p>
               <p>
-                When grants are terminated or indirect costs are capped abruptly, research
-                institutions must absorb the financial shock. This often results in the immediate
-                halting of ongoing experiments, the firing of highly skilled lab personnel, and the
-                cancellation of planned infrastructure upgrades.
-              </p>
-              <p>
-                By mapping these impacts locally, we provide a transparent, data-driven view of how
-                national policy decisions directly affect community economies and the broader
-                scientific enterprise.
+                SCIMaP transforms abstract policy decisions into visible community impacts that
+                everyone can understand, so we can take action and make informed decisions to protect
+                our communities.
               </p>
             </div>
             <div className="pt-4">
-              <Button className="bg-[#003366] hover:bg-[#002244] text-white font-bold text-lg px-8 py-6 rounded-md w-full sm:w-auto flex items-center gap-2">
+              <Button className="bg-brand-blue hover:bg-brand-blue-dark text-white font-bold text-lg px-8 py-6 rounded-md w-full sm:w-auto flex items-center gap-2">
                 Read our Research Insights <span>&rarr;</span>
               </Button>
             </div>
           </div>
 
           {/* Right Side (The Card) */}
-          <div className="bg-[#F8F9FA] rounded-xl p-8 md:p-10 shadow-lg border border-gray-100 h-full">
-            <h3 className="text-2xl font-bold text-[#003366] mb-8">Who We Serve</h3>
+          <div className="bg-neutral-100 rounded-xl p-8 md:p-10 shadow-sm border border-gray-200 h-full">
+            <h3 className="text-2xl font-bold text-brand-blue mb-8">Who We Serve</h3>
             <ul className="space-y-6">
               <li className="flex items-start">
-                <span className="text-[#FFB81C] text-2xl mr-4 leading-none">&bull;</span>
+                <span className="text-brand-yellow text-2xl mr-4 leading-none">&bull;</span>
                 <p className="text-gray-800 text-lg">
-                  <strong className="text-[#003366]">Policy Makers:</strong> Data-driven insights to
-                  understand the localized economic and scientific fallout of proposed federal
-                  budgets.
+                  <strong className="text-brand-blue">Policy Makers:</strong> Data-driven insights for
+                  informed decision making
                 </p>
               </li>
               <li className="flex items-start">
-                <span className="text-[#FFB81C] text-2xl mr-4 leading-none">&bull;</span>
+                <span className="text-brand-yellow text-2xl mr-4 leading-none">&bull;</span>
                 <p className="text-gray-800 text-lg">
-                  <strong className="text-[#003366]">Research Institutions:</strong> Clear
-                  visualizations of how indirect cost caps and grant freezes impact operational
-                  sustainability.
+                  <strong className="text-brand-blue">Journalists:</strong> Unbiased data and
+                  visualizations for reporting
                 </p>
               </li>
               <li className="flex items-start">
-                <span className="text-[#FFB81C] text-2xl mr-4 leading-none">&bull;</span>
+                <span className="text-brand-yellow text-2xl mr-4 leading-none">&bull;</span>
                 <p className="text-gray-800 text-lg">
-                  <strong className="text-[#003366]">Media & Journalists:</strong> Access to
-                  verifiable, granular data on funding cuts down to the congressional district and
-                  ZIP code level.
+                  <strong className="text-brand-blue">Advocacy Groups:</strong> Evidence-based
+                  resources for campaigns
                 </p>
               </li>
               <li className="flex items-start">
-                <span className="text-[#FFB81C] text-2xl mr-4 leading-none">&bull;</span>
+                <span className="text-brand-yellow text-2xl mr-4 leading-none">&bull;</span>
                 <p className="text-gray-800 text-lg">
-                  <strong className="text-[#003366]">The Public:</strong> Transparent tracking of
-                  how taxpayer-funded science initiatives in local communities are being altered.
+                  <strong className="text-brand-blue">The Public:</strong> Clear understanding of
+                  science funding&apos;s local impact
                 </p>
               </li>
             </ul>
