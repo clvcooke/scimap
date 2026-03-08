@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import { RouterProvider, createMemoryHistory, createRouter } from '@tanstack/react-router'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { routeTree } from './routeTree.gen'
 
 describe('App routing', () => {
@@ -16,7 +17,19 @@ describe('App routing', () => {
       history: memoryHistory,
     })
 
-    render(<RouterProvider router={router} />)
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+    })
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    )
 
     // Verify header
     await waitFor(() => {

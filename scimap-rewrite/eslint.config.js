@@ -47,7 +47,7 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true },
+        { allowConstantExport: true, allowExportNames: ['buttonVariants', 'tabsListVariants'] },
       ],
       // TypeScript specific strict rules can be added here
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
