@@ -7,7 +7,7 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   return (
-    <div className="flex flex-col w-full min-h-screen">
+    <div className="flex flex-col w-full">
       {/* Hero Section */}
       <section className="bg-brand-blue w-full relative">
         <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
@@ -23,12 +23,12 @@ function Index() {
               affect local communities, universities, and economic development across the nation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-lg px-8 py-6 rounded-md">
+              <Button className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-lg px-8 py-6 h-auto rounded-md">
                 View the Map
               </Button>
               <Button
                 variant="outline"
-                className="border-2 border-white text-white hover:bg-white/10 hover:text-white font-bold text-lg px-8 py-6 rounded-md bg-transparent"
+                className="border-2 border-white text-white hover:bg-white/10 hover:text-white font-bold text-lg px-8 py-6 h-auto rounded-md bg-transparent"
               >
                 Read the Report
               </Button>
@@ -173,7 +173,7 @@ function Index() {
               </p>
             </div>
             <div className="pt-4">
-              <Button className="bg-brand-blue hover:bg-brand-blue-dark text-white font-bold text-lg px-8 py-6 rounded-md w-full sm:w-auto flex items-center gap-2">
+              <Button className="bg-brand-blue hover:bg-brand-blue-dark text-white font-bold text-lg px-8 py-6 h-auto rounded-md w-full sm:w-auto flex items-center gap-2">
                 Read our Research Insights <span>&rarr;</span>
               </Button>
             </div>
