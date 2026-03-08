@@ -12,9 +12,9 @@ export const Route = createRootRoute({
           </div>
         </div>
         <nav className="flex items-center gap-4 text-sm font-medium">
-          <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">Methods</a>
-          <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">About</a>
-          <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">Report Issues</a>
+          <button className="text-gray-600 hover:text-gray-900 transition-colors">Methods</button>
+          <button className="text-gray-600 hover:text-gray-900 transition-colors">About</button>
+          <button className="text-gray-600 hover:text-gray-900 transition-colors">Report Issues</button>
         </nav>
       </header>
 

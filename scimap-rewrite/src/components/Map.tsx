@@ -4,7 +4,7 @@ import DeckGL from '@deck.gl/react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 // In deck.gl 9, MapViewState type might not be directly exported or needed like this
-type ViewState = {
+interface ViewState {
     longitude: number;
     latitude: number;
     zoom: number;
