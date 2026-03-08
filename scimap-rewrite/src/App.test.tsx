@@ -28,7 +28,7 @@ describe('App routing', () => {
     render(
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-      </QueryClientProvider>
+      </QueryClientProvider>,
     )
 
     // Verify header
@@ -36,7 +36,7 @@ describe('App routing', () => {
       expect(screen.getByText('Science & Community Impacts Mapping Project')).toBeInTheDocument()
     })
 
-    // Verify initial tab content
-    expect(screen.getByText('Cancelled and Frozen Grants')).toBeInTheDocument()
+    // Verify hero section
+    expect(screen.getByText('Read the Report')).toBeInTheDocument()
   })
 })

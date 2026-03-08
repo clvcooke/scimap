@@ -22,8 +22,8 @@ const queryClient = new QueryClient()
 createRoot(document.getElementById('root')!).render(
   // Remove StrictMode to see if it's double rendering an issue with DeckGL
   // <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>,
   // </StrictMode>,
 )
