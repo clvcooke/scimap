@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/')({
@@ -23,9 +23,12 @@ function Index() {
               affect local communities, universities, and economic development across the nation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-lg px-8 py-6 h-auto rounded-md">
+              <Link
+                to="/map"
+                className="inline-flex shrink-0 items-center justify-center bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-base px-6 py-3 h-auto rounded-md transition-all"
+              >
                 View the Map
-              </Button>
+              </Link>
               <Button
                 variant="outline"
                 className="border-2 border-white text-white hover:bg-white/10 hover:text-white font-bold text-lg px-8 py-6 h-auto rounded-md bg-transparent"
@@ -75,10 +78,10 @@ function Index() {
               to <strong className="text-brand-blue">22%</strong>.
             </p>
             <p>
-              Additionally, caps on <strong className="text-brand-blue">Indirect Costs (15%)</strong>{' '}
-              will severely restrict the ability of universities and research institutions to
-              maintain facilities and support staff, leading to cancelled projects and hiring
-              freezes.
+              Additionally, caps on{' '}
+              <strong className="text-brand-blue">Indirect Costs (15%)</strong> will severely
+              restrict the ability of universities and research institutions to maintain facilities
+              and support staff, leading to cancelled projects and hiring freezes.
             </p>
           </div>
         </div>
@@ -162,14 +165,14 @@ function Index() {
             <h3 className="text-3xl font-bold text-brand-blue">Why This Matters</h3>
             <div className="text-gray-700 text-lg leading-relaxed space-y-6">
               <p>
-                Federal investment in science drives innovation, creates jobs, saves lives, and improves
-                quality of life for people across the country. Funding cuts harm research institutions,
-                local economies, and people in red and blue states alike.
+                Federal investment in science drives innovation, creates jobs, saves lives, and
+                improves quality of life for people across the country. Funding cuts harm research
+                institutions, local economies, and people in red and blue states alike.
               </p>
               <p>
                 SCIMaP transforms abstract policy decisions into visible community impacts that
-                everyone can understand, so we can take action and make informed decisions to protect
-                our communities.
+                everyone can understand, so we can take action and make informed decisions to
+                protect our communities.
               </p>
             </div>
             <div className="pt-4">
@@ -186,8 +189,8 @@ function Index() {
               <li className="flex items-start">
                 <span className="text-brand-yellow text-2xl mr-4 leading-none">&bull;</span>
                 <p className="text-gray-800 text-lg">
-                  <strong className="text-brand-blue">Policy Makers:</strong> Data-driven insights for
-                  informed decision making
+                  <strong className="text-brand-blue">Policy Makers:</strong> Data-driven insights
+                  for informed decision making
                 </p>
               </li>
               <li className="flex items-start">
