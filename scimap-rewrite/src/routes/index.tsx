@@ -23,12 +23,12 @@ function Index() {
               affect local communities, universities, and economic development across the nation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button
-                asChild
-                className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-base px-6 py-3 h-auto rounded-md"
+              <Link
+                to="/map"
+                className="inline-flex shrink-0 items-center justify-center bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-base px-6 py-3 h-auto rounded-md transition-all"
               >
-                <Link to="/map">View the Map</Link>
-              </Button>
+                View the Map
+              </Link>
               <Button
                 variant="outline"
                 className="border-2 border-white text-white hover:bg-white/10 hover:text-white font-bold text-lg px-8 py-6 h-auto rounded-md bg-transparent"

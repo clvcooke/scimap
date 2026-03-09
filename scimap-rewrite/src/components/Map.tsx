@@ -7,7 +7,7 @@ import { interpolateOrRd } from 'd3-scale-chromatic'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 const domain = 'https://data.scienceimpacts.org'
-const TILE_VERSION_NUMBER = '2025-06-12'
+const TILE_VERSION_NUMBER = "2026-03-08";
 const totalTilesCounties = `${domain}/tiles_counties_total_v${TILE_VERSION_NUMBER}-v2/{z}/{x}/{y}.pbf`
 
 const ALPHA_COLOR = 200
