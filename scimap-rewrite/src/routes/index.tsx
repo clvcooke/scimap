@@ -25,7 +25,7 @@ function Index() {
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button
                 asChild
-                className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-lg px-8 py-6 h-auto w-full rounded-md block text-center"
+                className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-base px-6 py-3 h-auto rounded-md"
               >
                 <Link to="/map">View the Map</Link>
               </Button>
