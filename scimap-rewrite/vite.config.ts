@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import path from "path"
+import path from 'path'
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
@@ -10,16 +10,16 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
-    react()
+    react(),
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   test: {
     environment: 'jsdom',
     setupFiles: ['./setupTests.ts'],
     globals: true,
-  }
+  },
 })
