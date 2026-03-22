@@ -18,6 +18,7 @@ export default function MobileInfoCard({
   const props = feature.properties as Record<string, number | string>
   const impact = (props.NIH_tot_econ_impact as number) ?? 0
   const pop = (props.pop_2024 as number) ?? 0
+
   const pc = pop > 0 ? impact / pop : 0
 
   return (
