@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Outlet, Link } from '@tanstack/react-router'
 import { Menu, X } from 'lucide-react'
 
 function Header() {
@@ -17,7 +17,7 @@ function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-[15px] font-semibold text-white md:flex">
-          <button className="transition-colors hover:text-gray-300">Methods</button>
+          <Link to="/methodology" className="transition-colors hover:text-gray-300">Methods</Link>
           <button className="transition-colors hover:text-gray-300">About</button>
           <button className="transition-colors hover:text-gray-300">Report Issues</button>
         </nav>
@@ -35,7 +35,7 @@ function Header() {
       {/* Mobile dropdown */}
       {menuOpen && (
         <nav className="mt-3 flex flex-col gap-3 border-t border-white/20 pt-3 text-[15px] font-semibold text-white md:hidden">
-          <button className="text-left transition-colors hover:text-gray-300">Methods</button>
+          <Link to="/methodology" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>Methods</Link>
           <button className="text-left transition-colors hover:text-gray-300">About</button>
           <button className="text-left transition-colors hover:text-gray-300">Report Issues</button>
         </nav>
