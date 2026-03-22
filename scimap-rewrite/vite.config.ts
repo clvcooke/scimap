@@ -18,6 +18,11 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    fs: {
+      allow: ['..'],
+    },
+  },
   build: {
     outDir: '../dist/scimap-rewrite',
   },

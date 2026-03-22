@@ -61,7 +61,7 @@ function DrawerBody({
             <div key={m.key} className="rounded-lg bg-gray-50 px-3 py-2">
               <div className="text-xs font-medium text-gray-500">{m.label}</div>
               <div className="mt-0.5 text-sm font-semibold text-gray-900">
-                {formatMetricValue(val, m.key as Metric)}
+                {formatMetricValue(val, m.key)}
               </div>
             </div>
           )
@@ -88,7 +88,7 @@ function DrawerBody({
             Institute Breakdown
           </span>
           <span className="text-xs text-gray-400">
-            Total: {formatMetricValue(nihTotal as number, metric)}
+            Total: {formatMetricValue(nihTotal, metric)}
             {perCapita ? ' per capita' : ''}
           </span>
         </div>

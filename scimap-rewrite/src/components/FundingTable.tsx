@@ -20,28 +20,28 @@ const GEO_TABLE: Record<GeoLevel, GeoTableConfig> = {
     idColumn: 'state',
     nameColumn: null,
     stateColumn: null,
-    load: () => import('../../data/baseline/baseline_state.csv?raw'),
+    load: () => import('../../../data/baseline/baseline_state.csv?raw'),
   },
   counties: {
     label: 'Counties',
     idColumn: 'FIPS',
     nameColumn: 'name',
     stateColumn: 'state',
-    load: () => import('../../data/baseline/baseline_county.csv?raw'),
+    load: () => import('../../../data/baseline/baseline_county.csv?raw'),
   },
   districts: {
     label: 'Districts',
     idColumn: 'GEOID',
     nameColumn: null,
     stateColumn: 'state',
-    load: () => import('../../data/baseline/baseline_district.csv?raw'),
+    load: () => import('../../../data/baseline/baseline_district.csv?raw'),
   },
   cities: {
     label: 'Cities',
     idColumn: 'CBSA_FIPS',
     nameColumn: 'CBSA_NAME',
     stateColumn: null,
-    load: () => import('../../data/baseline/baseline_city.csv?raw'),
+    load: () => import('../../../data/baseline/baseline_city.csv?raw'),
   },
 }
 
