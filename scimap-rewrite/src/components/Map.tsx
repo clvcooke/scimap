@@ -13,15 +13,19 @@ import {
   createColorScale,
 } from '@/lib/map-config'
 import type { TileProperties, SelectedFeature } from '@/lib/map-config'
+import { useIsMobile } from '@/hooks/use-mobile'
 import MapControls from './MapControls'
 import DetailDrawer from './DetailDrawer'
+import MobileInfoCard from './MobileInfoCard'
 
 export default function SCIMap() {
   const [geoLevel, setGeoLevel] = useState<GeoLevel>('states')
   const [perCapita, setPerCapita] = useState(false)
   const [selectedFeature, setSelectedFeature] = useState<SelectedFeature | null>(null)
+  const [previewFeature, setPreviewFeature] = useState<SelectedFeature | null>(null)
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE)
   const tooltipRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile()
 
   const config = GEO_LEVELS[geoLevel]
   const colorScale = useMemo(() => createColorScale(config, perCapita), [config, perCapita])
@@ -32,6 +36,8 @@ export default function SCIMap() {
 
   const onHover = useCallback(
     (info: { x: number; y: number; object?: { properties?: TileProperties } }) => {
+      if (isMobile) return
+
       const el = tooltipRef.current
       if (!el) return
 
@@ -53,7 +59,6 @@ export default function SCIMap() {
         (perCapita ? `<div>Per Capita: ${formatCurrency(pc)}</div>` : '')
       el.style.display = 'block'
 
-      // Flip tooltip when near viewport edges
       const gap = 12
       const rect = el.getBoundingClientRect()
       const left =
@@ -67,30 +72,37 @@ export default function SCIMap() {
       el.style.left = `${left}px`
       el.style.top = `${top}px`
     },
-    [config.uniqueIdProperty, config.label, perCapita],
+    [config.uniqueIdProperty, config.label, perCapita, isMobile],
   )
 
   const onClick = useCallback(
     (info: { object?: { properties?: TileProperties } }) => {
       if (!info.object?.properties) {
         setSelectedFeature(null)
+        setPreviewFeature(null)
         return
       }
       const props = info.object.properties
       const id = String(props[config.uniqueIdProperty] ?? '')
-      requestAnimationFrame(() => setSelectedFeature({ id, properties: props }))
+      const feature = { id, properties: props }
+
+      if (isMobile) {
+        requestAnimationFrame(() => setPreviewFeature(feature))
+      } else {
+        requestAnimationFrame(() => setSelectedFeature(feature))
+      }
     },
-    [config.uniqueIdProperty],
+    [config.uniqueIdProperty, isMobile],
   )
 
   return (
-    <div className="absolute inset-4 overflow-hidden rounded-xl shadow-lg">
+    <div className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-4">
       {/* Control panel */}
-      <div className="absolute top-4 left-4 z-10 flex flex-col gap-3 rounded-lg bg-white/90 p-3 shadow-md backdrop-blur-sm">
+      <div className="absolute left-2 top-2 z-10 flex flex-col gap-2 rounded-lg bg-white/90 p-2 shadow-md backdrop-blur-sm md:left-4 md:top-4 md:gap-3 md:p-3">
         <Tabs value={geoLevel} onValueChange={(v) => setGeoLevel(v as GeoLevel)}>
           <TabsList>
             {(Object.keys(GEO_LEVELS) as GeoLevel[]).map((key) => (
-              <TabsTrigger key={key} value={key}>
+              <TabsTrigger key={key} value={key} className="text-xs md:text-sm">
                 {GEO_LEVELS[key].label}
               </TabsTrigger>
             ))}
@@ -100,6 +112,7 @@ export default function SCIMap() {
           <Button
             variant={perCapita ? 'ghost' : 'secondary'}
             size="sm"
+            className="text-xs md:text-sm"
             onClick={() => setPerCapita(false)}
           >
             Total
@@ -107,6 +120,7 @@ export default function SCIMap() {
           <Button
             variant={perCapita ? 'secondary' : 'ghost'}
             size="sm"
+            className="text-xs md:text-sm"
             onClick={() => setPerCapita(true)}
           >
             Per Capita
@@ -129,12 +143,28 @@ export default function SCIMap() {
 
       <MapControls setViewState={setViewState} />
 
-      {/* Hover tooltip (ref-driven, no re-renders) */}
-      <div
-        ref={tooltipRef}
-        className="pointer-events-none absolute z-20 rounded bg-black/80 px-3 py-2 text-sm text-white shadow-lg"
-        style={{ display: 'none', left: 0, top: 0 }}
-      />
+      {/* Hover tooltip (desktop only, ref-driven) */}
+      {!isMobile && (
+        <div
+          ref={tooltipRef}
+          className="pointer-events-none absolute z-20 rounded bg-black/80 px-3 py-2 text-sm text-white shadow-lg"
+          style={{ display: 'none', left: 0, top: 0 }}
+        />
+      )}
+
+      {/* Mobile preview card */}
+      {isMobile && previewFeature && (
+        <MobileInfoCard
+          feature={previewFeature}
+          geoLabel={config.label.replace(/s$/, '')}
+          perCapita={perCapita}
+          onSeeMore={() => {
+            setSelectedFeature(previewFeature)
+            setPreviewFeature(null)
+          }}
+          onClose={() => setPreviewFeature(null)}
+        />
+      )}
 
       <DetailDrawer
         feature={selectedFeature}

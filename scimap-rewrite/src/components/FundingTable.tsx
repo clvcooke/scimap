@@ -176,10 +176,10 @@ function aggregate(
 
 const popFormatter = new Intl.NumberFormat('en-US')
 
-const SORT_COLUMNS: { key: SortKey; label: string }[] = [
+const SORT_COLUMNS: { key: SortKey; label: string; hideOnMobile?: boolean }[] = [
   { key: 'econ_impact', label: 'Economic Impact' },
-  { key: 'raw_funding', label: 'Funding' },
-  { key: 'jobs', label: 'Jobs' },
+  { key: 'raw_funding', label: 'Funding', hideOnMobile: true },
+  { key: 'jobs', label: 'Jobs', hideOnMobile: true },
   { key: 'pop_2024', label: 'Population' },
 ]
 
@@ -216,7 +216,7 @@ export default function FundingTable() {
     setLoading(true)
     setRows(null)
 
-    config.load().then((mod) => {
+    void config.load().then((mod) => {
       if (cancelled) return
       const parsed = parseCSV(mod.default)
       const aggregated = aggregate(parsed, config)
@@ -251,7 +251,7 @@ export default function FundingTable() {
   }
 
   return (
-    <section className="w-full bg-white px-6 py-8">
+    <section className="w-full bg-white px-3 py-6 md:px-6 md:py-8">
       <div className="mx-auto max-w-7xl">
         <h2 className="mb-4 text-xl font-bold text-gray-900">
           Funding by Region
@@ -275,20 +275,20 @@ export default function FundingTable() {
             Loading data...
           </div>
         ) : (
-          <div className="overflow-auto rounded-lg border border-gray-200 max-h-[600px]">
+          <div className="overflow-auto rounded-lg border border-gray-200 max-h-150">
             <table className="w-full text-left text-sm">
               <thead className="sticky top-0 z-10 bg-gray-50">
                 <tr className="border-b border-gray-200">
-                  <th className="px-4 py-3 font-semibold text-gray-600 w-12">
+                  <th className="w-10 px-2 py-3 font-semibold text-gray-600 md:w-12 md:px-4">
                     #
                   </th>
-                  <th className="px-4 py-3 font-semibold text-gray-600">
+                  <th className="px-2 py-3 font-semibold text-gray-600 md:px-4">
                     {config.label.replace(/s$/, '')}
                   </th>
                   {SORT_COLUMNS.map((col) => (
                     <th
                       key={col.key}
-                      className="cursor-pointer select-none px-4 py-3 text-right font-semibold text-gray-600 hover:text-gray-900"
+                      className={`cursor-pointer select-none px-2 py-3 text-right font-semibold text-gray-600 hover:text-gray-900 md:px-4 ${col.hideOnMobile ? 'hidden md:table-cell' : ''}`}
                       onClick={() => handleSort(col.key)}
                     >
                       <span className="inline-flex items-center gap-1">
@@ -310,16 +310,16 @@ export default function FundingTable() {
                     key={row.id}
                     className="border-b border-gray-100 transition-colors hover:bg-gray-50"
                   >
-                    <td className="px-4 py-2.5 text-gray-400 tabular-nums">
+                    <td className="px-2 py-2 tabular-nums text-gray-400 md:px-4 md:py-2.5">
                       {i + 1}
                     </td>
-                    <td className="px-4 py-2.5 font-medium text-gray-900">
+                    <td className="max-w-30 truncate px-2 py-2 font-medium text-gray-900 md:max-w-none md:px-4 md:py-2.5">
                       {row.name}
                     </td>
                     {SORT_COLUMNS.map((col) => (
                       <td
                         key={col.key}
-                        className="px-4 py-2.5 text-right tabular-nums text-gray-700"
+                        className={`px-2 py-2 text-right tabular-nums text-gray-700 md:px-4 md:py-2.5 ${col.hideOnMobile ? 'hidden md:table-cell' : ''}`}
                       >
                         {formatValue(row[col.key], col.key)}
                       </td>

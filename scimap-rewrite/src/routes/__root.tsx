@@ -1,105 +1,129 @@
+import { useState } from 'react'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { Menu, X } from 'lucide-react'
 
-export const Route = createRootRoute({
-  component: () => (
-    <div className="min-h-screen flex flex-col w-full bg-white">
-      <header className="bg-brand-blue px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+function Header() {
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  return (
+    <header className="sticky top-0 z-50 bg-brand-blue px-4 py-3 md:px-6 md:py-4">
+      <div className="flex items-center justify-between">
         <div className="flex items-baseline gap-3">
-          {/* Logo Placeholder */}
-          <div className="font-bold text-2xl text-white tracking-tight">SCIMaP</div>
-          <div className="hidden md:block text-[15px] text-gray-200 font-medium">
+          <div className="text-xl font-bold tracking-tight text-white md:text-2xl">SCIMaP</div>
+          <div className="hidden text-[15px] font-medium text-gray-200 md:block">
             Science & Community Impacts Mapping Project
           </div>
         </div>
-        <nav className="flex items-center gap-6 text-[15px] font-semibold text-white">
-          <button className="hover:text-gray-300 transition-colors">Methods</button>
-          <button className="hover:text-gray-300 transition-colors">About</button>
-          <button className="hover:text-gray-300 transition-colors">Report Issues</button>
-        </nav>
-      </header>
 
-      <main className="flex-1 flex flex-col w-full relative overflow-auto">
+        {/* Desktop nav */}
+        <nav className="hidden items-center gap-6 text-[15px] font-semibold text-white md:flex">
+          <button className="transition-colors hover:text-gray-300">Methods</button>
+          <button className="transition-colors hover:text-gray-300">About</button>
+          <button className="transition-colors hover:text-gray-300">Report Issues</button>
+        </nav>
+
+        {/* Mobile hamburger */}
+        <button
+          className="p-1 text-white md:hidden"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+        >
+          {menuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+        </button>
+      </div>
+
+      {/* Mobile dropdown */}
+      {menuOpen && (
+        <nav className="mt-3 flex flex-col gap-3 border-t border-white/20 pt-3 text-[15px] font-semibold text-white md:hidden">
+          <button className="text-left transition-colors hover:text-gray-300">Methods</button>
+          <button className="text-left transition-colors hover:text-gray-300">About</button>
+          <button className="text-left transition-colors hover:text-gray-300">Report Issues</button>
+        </nav>
+      )}
+    </header>
+  )
+}
+
+export const Route = createRootRoute({
+  component: () => (
+    <div className="flex min-h-screen w-full flex-col bg-white">
+      <Header />
+
+      <main className="relative flex w-full flex-1 flex-col overflow-auto">
         <Outlet />
       </main>
 
-      <footer className="bg-brand-blue-dark text-white pt-16 pb-8 px-6 border-t border-brand-blue-light/30">
-        <div className="max-w-7xl mx-auto flex flex-col space-y-12">
-          {/* Top 4-column structure */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-            {/* Project Info */}
+      <footer className="border-t border-brand-blue-light/30 bg-brand-blue-dark px-4 pb-8 pt-12 text-white md:px-6 md:pt-16">
+        <div className="mx-auto flex max-w-7xl flex-col space-y-12">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-4">
-              <div className="font-bold text-lg tracking-tight">SCIMaP</div>
-              <p className="text-sm text-gray-300 leading-relaxed pr-8">
+              <div className="text-lg font-bold tracking-tight">SCIMaP</div>
+              <p className="pr-8 text-sm leading-relaxed text-gray-300">
                 Tracking federal cuts to science and their impact on communities.
               </p>
             </div>
 
-            {/* Navigation */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg text-white">Navigation</h4>
-              <ul className="space-y-3 flex flex-col text-sm text-gray-300">
+              <h4 className="text-lg font-semibold text-white">Navigation</h4>
+              <ul className="flex flex-col space-y-3 text-sm text-gray-300">
                 <li>
-                  <a href="/" className="hover:text-brand-yellow transition-colors">
+                  <a href="/" className="transition-colors hover:text-brand-yellow">
                     About the Project
                   </a>
                 </li>
                 <li>
-                  <a href="/" className="hover:text-brand-yellow transition-colors">
+                  <a href="/" className="transition-colors hover:text-brand-yellow">
                     News
                   </a>
                 </li>
                 <li>
-                  <a href="/" className="hover:text-brand-yellow transition-colors">
+                  <a href="/" className="transition-colors hover:text-brand-yellow">
                     Insights
                   </a>
                 </li>
               </ul>
             </div>
 
-            {/* Resources */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg text-white">Resources</h4>
-              <ul className="space-y-3 flex flex-col text-sm text-gray-300">
+              <h4 className="text-lg font-semibold text-white">Resources</h4>
+              <ul className="flex flex-col space-y-3 text-sm text-gray-300">
                 <li>
-                  <a href="/" className="hover:text-brand-yellow transition-colors">
+                  <a href="/" className="transition-colors hover:text-brand-yellow">
                     Impact Map
                   </a>
                 </li>
                 <li>
-                  <a href="/" className="hover:text-brand-yellow transition-colors">
+                  <a href="/" className="transition-colors hover:text-brand-yellow">
                     Insights
                   </a>
                 </li>
                 <li>
-                  <a href="/" className="hover:text-brand-yellow transition-colors">
+                  <a href="/" className="transition-colors hover:text-brand-yellow">
                     Contact Us
                   </a>
                 </li>
               </ul>
             </div>
 
-            {/* Get In Touch */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg text-white">Get in Touch</h4>
-              <ul className="space-y-1 flex flex-col text-sm text-gray-300">
+              <h4 className="text-lg font-semibold text-white">Get in Touch</h4>
+              <ul className="flex flex-col space-y-1 text-sm text-gray-300">
                 <li>Press Inquiries: press@scienceimpacts.org</li>
                 <li>Other: contact@scienceimpacts.org</li>
               </ul>
               <div className="flex gap-4 pt-4">
-                {/* Social Placeholder 1 */}
                 <a
                   href="/"
-                  className="text-gray-300 hover:text-white transition-colors"
+                  className="text-gray-300 transition-colors hover:text-white"
                   aria-label="Bluesky"
                 >
                   <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.905C2.566 1.127 1.816 1.494 1.196 1.889c-.58.37-1.196 1.258-1.196 2.502 0 1.253.284 3.778.682 4.965.732 2.186 3.12 3.292 5.565 3.33-2.738.163-5.263 1.09-5.112 3.565.176 2.872 3.843 5.378 7.37 5.378 2.375 0 3.5-1.298 3.5-1.298s1.125 1.298 3.5 1.298c3.527 0 7.194-2.506 7.37-5.378.15-2.475-2.374-3.402-5.112-3.565 2.445-.038 4.833-1.144 5.565-3.33.398-1.187.682-3.712.682-4.965 0-1.244-.616-2.132-1.196-2.502-.62-.395-1.37-.762-4.006 1.006-2.752 1.852-5.711 5.791-6.798 7.905z" />
                   </svg>
                 </a>
-                {/* Social Placeholder 2 */}
                 <a
                   href="/"
-                  className="text-gray-300 hover:text-white transition-colors"
+                  className="text-gray-300 transition-colors hover:text-white"
                   aria-label="Instagram"
                 >
                   <svg
@@ -116,10 +140,9 @@ export const Route = createRootRoute({
                     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
                   </svg>
                 </a>
-                {/* Social Placeholder 3 */}
                 <a
                   href="/"
-                  className="text-gray-300 hover:text-white transition-colors"
+                  className="text-gray-300 transition-colors hover:text-white"
                   aria-label="Map/Book"
                 >
                   <svg
@@ -138,8 +161,7 @@ export const Route = createRootRoute({
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="border-t border-brand-blue-light/50 pt-8 mt-12 text-center text-sm text-gray-300">
+          <div className="mt-12 border-t border-brand-blue-light/50 pt-8 text-center text-sm text-gray-300">
             Science & Community Impact Mapping Project (SCIMaP), University of Maryland, College of
             Math & Natural Sciences, College Park Maryland
           </div>

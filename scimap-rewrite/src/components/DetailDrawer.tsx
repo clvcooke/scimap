@@ -47,13 +47,13 @@ function DrawerBody({
             Population: {population.toLocaleString()}
           </p>
         </div>
-        <Drawer.Close className="rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600">
+        <Drawer.Close className="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 active:bg-gray-200">
           <X className="size-5" />
         </Drawer.Close>
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-3 gap-3 border-b px-5 py-4">
+      <div className="grid grid-cols-2 gap-2 border-b px-4 py-3 sm:grid-cols-3 sm:gap-3 sm:px-5 sm:py-4">
         {METRICS.map((m) => {
           let val = props[`NIH_tot_${m.key}`] ?? 0
           if (perCapita && population > 0) val = val / population
@@ -149,9 +149,9 @@ export default function DetailDrawer({
       swipeDirection="right"
     >
       <Drawer.Portal>
-        <Drawer.Backdrop className="fixed inset-0 z-30 bg-black/25 backdrop-blur-[2px] transition-opacity duration-300 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
-        <Drawer.Viewport className="fixed inset-0 z-40">
-          <Drawer.Popup className="fixed inset-y-0 right-0 w-105 max-w-[calc(100vw-48px)] transition-transform duration-300 ease-out data-[ending-style]:translate-x-full data-[starting-style]:translate-x-full">
+        <Drawer.Backdrop className="fixed inset-0 z-60 bg-black/25 backdrop-blur-[2px] transition-opacity duration-300 data-ending-style:opacity-0 data-starting-style:opacity-0" />
+        <Drawer.Viewport className="fixed inset-0 z-70">
+          <Drawer.Popup className="fixed inset-y-0 right-0 w-full transition-transform duration-300 ease-out data-ending-style:translate-x-full data-starting-style:translate-x-full sm:w-105 sm:max-w-[calc(100vw-48px)]">
             <Drawer.Content className="flex h-full w-full flex-col overflow-hidden rounded-l-xl bg-white shadow-2xl">
               {feature && (
                 <DrawerBody feature={feature} geoLabel={geoLabel} perCapita={perCapita} />

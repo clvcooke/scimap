@@ -118,7 +118,6 @@ export function createBaselineLayer(
     lineWidthMinPixels: 1,
     lineWidthUnits: 'pixels' as const,
     updateTriggers: { getFillColor: [colorScale, perCapita] },
-    // @ts-expect-error deck.gl types don't express accessor generics well
     getFillColor: (f: { properties: TileProperties }) => {
       let v = f.properties.NIH_tot_econ_impact ?? 0
       if (perCapita) {
