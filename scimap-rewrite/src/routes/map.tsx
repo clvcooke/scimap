@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import SCIMap from '../components/Map'
+import FundingTable from '../components/FundingTable'
 
 export const Route = createFileRoute('/map')({
   component: MapRoute,
@@ -7,8 +8,11 @@ export const Route = createFileRoute('/map')({
 
 function MapRoute() {
   return (
-    <div className="flex-1 relative w-full h-full min-h-[calc(100vh-140px)]">
-      <SCIMap />
-    </div>
+    <>
+      <div className="relative w-full min-h-[calc(100vh-140px)]">
+        <SCIMap />
+      </div>
+      <FundingTable />
+    </>
   )
 }

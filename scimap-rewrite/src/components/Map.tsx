@@ -1,21 +1,21 @@
 import {useState, useRef, useMemo, useCallback} from 'react'
-import {Map} from 'react-map-gl/maplibre'
+import { Map } from 'react-map-gl/maplibre'
 import DeckGL from '@deck.gl/react'
 import {MVTLayer} from '@deck.gl/geo-layers'
 import {scaleLinear, type ScaleLinear} from 'd3-scale'
 import {interpolateOrRd} from 'd3-scale-chromatic'
 import {DrawerPreview as Drawer} from '@base-ui/react/drawer'
-import {X} from 'lucide-react'
+import {X, Plus, Minus, LocateFixed} from 'lucide-react'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import {Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs.tsx'
 import {Button} from '@/components/ui/button.tsx'
+import {METRICS, formatCurrency, formatMetricValue} from '@/lib/constants'
+import type {GeoLevel, Metric} from '@/lib/constants'
 
 const DOMAIN = 'https://data.scienceimpacts.org'
 const TILE_VERSION = 'baseline-v1'
 const ALPHA_COLOR = 200
 const COLOR_LUT_SIZE = 256
-
-type GeoLevel = 'states' | 'counties' | 'districts' | 'cities'
 
 interface GeoConfig {
     tileUrl: string
@@ -63,14 +63,6 @@ const GEO_LEVELS: Record<GeoLevel, GeoConfig> = {
 
 type TileProperties = Record<string, number>
 
-type Metric = 'econ_impact' | 'raw_funding' | 'jobs'
-
-const METRICS: { key: Metric; label: string }[] = [
-    {key: 'econ_impact', label: 'Economic Impact'},
-    {key: 'raw_funding', label: 'Funding'},
-    {key: 'jobs', label: 'Jobs'},
-]
-
 const INSTITUTES = [
     {key: 'NCI', name: 'National Cancer Institute'},
     {key: 'NIAID', name: 'Allergy and Infectious Diseases'},
@@ -104,22 +96,6 @@ interface SelectedFeature {
     properties: TileProperties
 }
 
-function formatCurrency(value: number): string {
-    if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(1)}B`
-    if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`
-    if (value >= 1_000) return `$${(value / 1_000).toFixed(1)}K`
-    return `$${value.toFixed(2)}`
-}
-
-function formatNumber(value: number): string {
-    if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`
-    if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`
-    return value.toFixed(0)
-}
-
-function formatMetricValue(value: number, metric: Metric): string {
-    return metric === 'jobs' ? formatNumber(value) : formatCurrency(value)
-}
 
 // Pre-compute a 256-entry color lookup table from the OrRd ramp.
 // Avoids per-feature string creation (interpolateOrRd returns "rgb(…)")
@@ -312,10 +288,66 @@ function DrawerContent({
     )
 }
 
+function MapControls({
+    setViewState,
+}: {
+    setViewState: React.Dispatch<React.SetStateAction<typeof INITIAL_VIEW_STATE>>
+}) {
+    function handleZoomIn() {
+        setViewState((vs) => ({ ...vs, zoom: vs.zoom + 1 }))
+    }
+
+    function handleZoomOut() {
+        setViewState((vs) => ({ ...vs, zoom: Math.max(vs.zoom - 1, 1) }))
+    }
+
+    function handleLocate() {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                setViewState({
+                    longitude: pos.coords.longitude,
+                    latitude: pos.coords.latitude,
+                    zoom: 10,
+                })
+            },
+            () => {
+                // Silently ignore if user denies location
+            },
+        )
+    }
+
+    return (
+        <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1">
+            <button
+                onClick={handleZoomIn}
+                className="flex size-8 items-center justify-center rounded-t-lg bg-white shadow-md hover:bg-gray-100 active:bg-gray-200 transition-colors"
+                aria-label="Zoom in"
+            >
+                <Plus className="size-4" />
+            </button>
+            <button
+                onClick={handleZoomOut}
+                className="flex size-8 items-center justify-center bg-white shadow-md hover:bg-gray-100 active:bg-gray-200 transition-colors"
+                aria-label="Zoom out"
+            >
+                <Minus className="size-4" />
+            </button>
+            <button
+                onClick={handleLocate}
+                className="flex size-8 items-center justify-center rounded-b-lg bg-white shadow-md hover:bg-gray-100 active:bg-gray-200 transition-colors"
+                aria-label="Zoom to my location"
+            >
+                <LocateFixed className="size-4" />
+            </button>
+        </div>
+    )
+}
+
 export default function SCIMap() {
     const [geoLevel, setGeoLevel] = useState<GeoLevel>('states')
     const [perCapita, setPerCapita] = useState(false)
     const [selectedFeature, setSelectedFeature] = useState<SelectedFeature | null>(null)
+    const [viewState, setViewState] = useState(INITIAL_VIEW_STATE)
     const tooltipRef = useRef<HTMLDivElement>(null)
     const config = GEO_LEVELS[geoLevel]
 
@@ -366,7 +398,7 @@ export default function SCIMap() {
     )
 
     return (
-      <div className="absolute inset-0 w-full h-full overflow-hidden">
+      <div className="absolute inset-4 overflow-hidden rounded-xl shadow-lg">
         {/* Control panel */}
         <div className="absolute top-4 left-4 z-10 flex flex-col gap-3 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-md">
           <Tabs value={geoLevel} onValueChange={(val) => setGeoLevel(val as GeoLevel)}>
@@ -397,7 +429,8 @@ export default function SCIMap() {
         </div>
 
         <DeckGL
-          initialViewState={INITIAL_VIEW_STATE}
+          viewState={viewState}
+          onViewStateChange={({ viewState: vs }) => setViewState(vs as typeof INITIAL_VIEW_STATE)}
           controller={true}
           layers={[mapLayer]}
           useDevicePixels={false}
@@ -415,8 +448,11 @@ export default function SCIMap() {
             })
           }}
         >
-          <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json" />
+          <Map id="scimap" mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json" />
         </DeckGL>
+
+        {/* Map controls */}
+        <MapControls setViewState={setViewState} />
 
         {/* Hover tooltip — updated via ref, not state, to avoid re-renders */}
         <div
