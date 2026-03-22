@@ -4,12 +4,12 @@ MVT (Mapbox Vector Tiles) containing baseline NIH funding data across four geogr
 
 ## Tile Layers
 
-| Layer | Tile path | Max zoom | Features | Unique ID property |
-|-------|-----------|----------|----------|--------------------|
-| States | `tiles_states_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 7 | 51 | `state` |
-| Counties | `tiles_counties_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 9 | 3,143 | `FIPS` |
-| Congressional Districts | `tiles_districts_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 9 | 436 | `GEOID` |
-| Cities (CBSA) | `tiles_cities_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 9 | 925 | `CBSA_FIPS` |
+| Layer                   | Tile path                                              | Max zoom | Features | Unique ID property |
+| ----------------------- | ------------------------------------------------------ | -------- | -------- | ------------------ |
+| States                  | `tiles_states_baseline_baseline-v1/{z}/{x}/{y}.pbf`    | 7        | 51       | `state`            |
+| Counties                | `tiles_counties_baseline_baseline-v1/{z}/{x}/{y}.pbf`  | 9        | 3,143    | `FIPS`             |
+| Congressional Districts | `tiles_districts_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 9        | 436      | `GEOID`            |
+| Cities (CBSA)           | `tiles_cities_baseline_baseline-v1/{z}/{x}/{y}.pbf`    | 9        | 925      | `CBSA_FIPS`        |
 
 Tiles are served from `https://data.scienceimpacts.org/` (Cloudflare R2). Full URL example:
 
@@ -29,47 +29,47 @@ Every feature across all layers has **80 properties**: one geographic ID, `pop_2
 
 ### Institutes (26)
 
-| Code | Institute |
-|------|-----------|
-| `FIC` | Fogarty International Center |
-| `NCATS` | National Center for Advancing Translational Sciences |
-| `NCCIH` | National Center for Complementary and Integrative Health |
-| `NCI` | National Cancer Institute |
-| `NEI` | National Eye Institute |
-| `NHGRI` | National Human Genome Research Institute |
-| `NHLBI` | National Heart, Lung, and Blood Institute |
-| `NIA` | National Institute on Aging |
-| `NIAAA` | National Institute on Alcohol Abuse and Alcoholism |
-| `NIAID` | National Institute of Allergy and Infectious Diseases |
-| `NIAMS` | National Institute of Arthritis and Musculoskeletal and Skin Diseases |
-| `NIBIB` | National Institute of Biomedical Imaging and Bioengineering |
-| `NICHD` | Eunice Kennedy Shriver National Institute of Child Health and Human Development |
-| `NIDA` | National Institute on Drug Abuse |
-| `NIDCD` | National Institute on Deafness and Other Communication Disorders |
-| `NIDCR` | National Institute of Dental and Craniofacial Research |
-| `NIDDK` | National Institute of Diabetes and Digestive and Kidney Diseases |
-| `NIEHS` | National Institute of Environmental Health Sciences |
-| `NIGMS` | National Institute of General Medical Sciences |
-| `NIH_tot` | **NIH Total** (aggregate across all institutes) |
-| `NIMH` | National Institute of Mental Health |
-| `NIMHD` | National Institute on Minority Health and Health Disparities |
-| `NINDS` | National Institute of Neurological Disorders and Stroke |
-| `NINR` | National Institute of Nursing Research |
-| `NLM` | National Library of Medicine |
-| `OD` | Office of the Director |
+| Code      | Institute                                                                       |
+| --------- | ------------------------------------------------------------------------------- |
+| `FIC`     | Fogarty International Center                                                    |
+| `NCATS`   | National Center for Advancing Translational Sciences                            |
+| `NCCIH`   | National Center for Complementary and Integrative Health                        |
+| `NCI`     | National Cancer Institute                                                       |
+| `NEI`     | National Eye Institute                                                          |
+| `NHGRI`   | National Human Genome Research Institute                                        |
+| `NHLBI`   | National Heart, Lung, and Blood Institute                                       |
+| `NIA`     | National Institute on Aging                                                     |
+| `NIAAA`   | National Institute on Alcohol Abuse and Alcoholism                              |
+| `NIAID`   | National Institute of Allergy and Infectious Diseases                           |
+| `NIAMS`   | National Institute of Arthritis and Musculoskeletal and Skin Diseases           |
+| `NIBIB`   | National Institute of Biomedical Imaging and Bioengineering                     |
+| `NICHD`   | Eunice Kennedy Shriver National Institute of Child Health and Human Development |
+| `NIDA`    | National Institute on Drug Abuse                                                |
+| `NIDCD`   | National Institute on Deafness and Other Communication Disorders                |
+| `NIDCR`   | National Institute of Dental and Craniofacial Research                          |
+| `NIDDK`   | National Institute of Diabetes and Digestive and Kidney Diseases                |
+| `NIEHS`   | National Institute of Environmental Health Sciences                             |
+| `NIGMS`   | National Institute of General Medical Sciences                                  |
+| `NIH_tot` | **NIH Total** (aggregate across all institutes)                                 |
+| `NIMH`    | National Institute of Mental Health                                             |
+| `NIMHD`   | National Institute on Minority Health and Health Disparities                    |
+| `NINDS`   | National Institute of Neurological Disorders and Stroke                         |
+| `NINR`    | National Institute of Nursing Research                                          |
+| `NLM`     | National Library of Medicine                                                    |
+| `OD`      | Office of the Director                                                          |
 
 ### Metrics (3)
 
-| Metric | Description | Unit |
-|--------|-------------|------|
-| `raw_funding` | Baseline grant funding | USD |
-| `econ_impact` | Economic impact of funding | USD |
-| `jobs` | Job impact of funding | Jobs (float) |
+| Metric        | Description                | Unit         |
+| ------------- | -------------------------- | ------------ |
+| `raw_funding` | Baseline grant funding     | USD          |
+| `econ_impact` | Economic impact of funding | USD          |
+| `jobs`        | Job impact of funding      | Jobs (float) |
 
 ### Other properties
 
-| Property | Description |
-|----------|-------------|
+| Property   | Description                            |
+| ---------- | -------------------------------------- |
 | `pop_2024` | 2024 population of the geographic area |
 
 ### Example property names
@@ -139,7 +139,7 @@ const metric = 'raw_funding'
 
 getFillColor: (feature) => {
   const total = institutes
-    .map(ic => feature.properties[`${ic}_${metric}`] ?? 0)
+    .map((ic) => feature.properties[`${ic}_${metric}`] ?? 0)
     .reduce((sum, v) => sum + v, 0)
   return colorize(total)
 }
@@ -167,16 +167,16 @@ python scripts/baseline.py
 
 ### Input files
 
-| File | Location |
-|------|----------|
-| State CSV | `data/baseline/baseline_state.csv` |
-| County CSV | `data/baseline/baseline_county.csv` |
-| District CSV | `data/baseline/baseline_district.csv` |
-| City CSV | `data/baseline/baseline_city.csv` |
-| State boundaries | `data/geo_ref/merged_data_states_CLIP.geojson` |
-| County boundaries | `data/geo_ref/merged_data_counties_CLIP_Compress.geojson` |
+| File                | Location                                                    |
+| ------------------- | ----------------------------------------------------------- |
+| State CSV           | `data/baseline/baseline_state.csv`                          |
+| County CSV          | `data/baseline/baseline_county.csv`                         |
+| District CSV        | `data/baseline/baseline_district.csv`                       |
+| City CSV            | `data/baseline/baseline_city.csv`                           |
+| State boundaries    | `data/geo_ref/merged_data_states_CLIP.geojson`              |
+| County boundaries   | `data/geo_ref/merged_data_counties_CLIP_Compress.geojson`   |
 | District boundaries | `data/geo_ref/CongDist_shp_119/Congressional_Districts.shp` |
-| CBSA boundaries | `data/geo_ref/tl_2024_us_cbsa.shp` |
+| CBSA boundaries     | `data/geo_ref/tl_2024_us_cbsa.shp`                          |
 
 ### Output files
 

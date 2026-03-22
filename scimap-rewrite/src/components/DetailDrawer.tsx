@@ -43,9 +43,7 @@ function DrawerBody({
           <Drawer.Title className="text-lg font-semibold text-gray-900">
             {geoLabel}: {feature.id}
           </Drawer.Title>
-          <p className="mt-0.5 text-sm text-gray-500">
-            Population: {population.toLocaleString()}
-          </p>
+          <p className="mt-0.5 text-sm text-gray-500">Population: {population.toLocaleString()}</p>
         </div>
         <Drawer.Close className="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 active:bg-gray-200">
           <X className="size-5" />

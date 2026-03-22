@@ -19,7 +19,8 @@ function MapRoute() {
           <h3 className="text-lg font-semibold text-gray-900">About This Data</h3>
           <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
             This map displays the baseline distribution of federal research funding before recent
-            cuts, providing context for understanding the magnitude and geographic spread of impacts.
+            cuts, providing context for understanding the magnitude and geographic spread of
+            impacts.
           </p>
           <div className="mt-4 flex flex-wrap items-baseline gap-2 text-sm">
             <span className="font-medium text-gray-500">Data Sources</span>

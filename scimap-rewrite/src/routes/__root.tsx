@@ -1,30 +1,78 @@
 import { useState } from 'react'
-import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { Menu, X } from 'lucide-react'
+import { createRootRoute, Outlet, Link } from '@tanstack/react-router'
+import { Menu, X, ChevronDown } from 'lucide-react'
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [mobileImpactMapsOpen, setMobileImpactMapsOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 bg-brand-blue px-4 py-3 md:px-6 md:py-4">
+    <header className="sticky top-0 z-50 bg-brand-blue px-4 py-3 lg:px-6 lg:py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-baseline gap-3">
-          <div className="text-xl font-bold tracking-tight text-white md:text-2xl">SCIMaP</div>
-          <div className="hidden text-[15px] font-medium text-gray-200 md:block">
+          <Link
+            to="/"
+            className="text-xl font-bold tracking-tight text-white lg:text-2xl hover:text-gray-200 transition-colors"
+          >
+            SCIMaP
+          </Link>
+          <div className="hidden text-[15px] font-medium text-gray-200 lg:block">
             Science & Community Impacts Mapping Project
           </div>
         </div>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 text-[15px] font-semibold text-white md:flex">
-          <button className="transition-colors hover:text-gray-300">Methods</button>
-          <button className="transition-colors hover:text-gray-300">About</button>
-          <button className="transition-colors hover:text-gray-300">Report Issues</button>
+        <nav className="hidden items-center gap-6 text-[15px] font-semibold text-white lg:flex">
+          <Link to="/" className="transition-colors hover:text-brand-yellow">
+            Home
+          </Link>
+
+          <div className="group relative">
+            <button className="flex items-center gap-1 transition-colors hover:text-brand-yellow group-hover:text-brand-yellow pb-4 -mb-4 pt-4 -mt-4">
+              Impact Maps <ChevronDown className="h-4 w-4" />
+            </button>
+            <div className="absolute left-0 top-full mt-2 hidden w-56 rounded-md bg-white p-2 shadow-lg ring-1 ring-black/5 group-hover:block">
+              <Link
+                to="/map"
+                className="block rounded-sm px-4 py-2 text-sm text-brand-blue hover:bg-gray-100 hover:text-brand-blue-dark"
+              >
+                Baseline Funding
+              </Link>
+              <Link
+                to="/map"
+                className="block rounded-sm px-4 py-2 text-sm text-brand-blue hover:bg-gray-100 hover:text-brand-blue-dark"
+              >
+                Grant Disruptions
+              </Link>
+              <Link
+                to="/map"
+                className="block rounded-sm px-4 py-2 text-sm text-brand-blue hover:bg-gray-100 hover:text-brand-blue-dark"
+              >
+                Award Funding Changes
+              </Link>
+            </div>
+          </div>
+
+          <Link to="/" className="transition-colors hover:text-brand-yellow">
+            Methodology
+          </Link>
+          <Link to="/" className="transition-colors hover:text-brand-yellow">
+            Insights
+          </Link>
+          <Link to="/" className="transition-colors hover:text-brand-yellow">
+            News
+          </Link>
+          <Link to="/" className="transition-colors hover:text-brand-yellow">
+            About Us
+          </Link>
+          <Link to="/" className="transition-colors hover:text-brand-yellow">
+            Contact
+          </Link>
         </nav>
 
         {/* Mobile hamburger */}
         <button
-          className="p-1 text-white md:hidden"
+          className="p-1 text-white lg:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
         >
@@ -34,10 +82,51 @@ function Header() {
 
       {/* Mobile dropdown */}
       {menuOpen && (
-        <nav className="mt-3 flex flex-col gap-3 border-t border-white/20 pt-3 text-[15px] font-semibold text-white md:hidden">
-          <button className="text-left transition-colors hover:text-gray-300">Methods</button>
-          <button className="text-left transition-colors hover:text-gray-300">About</button>
-          <button className="text-left transition-colors hover:text-gray-300">Report Issues</button>
+        <nav className="mt-3 flex flex-col gap-3 border-t border-white/20 pt-3 text-[15px] font-semibold text-white lg:hidden">
+          <Link to="/" className="text-left transition-colors hover:text-brand-yellow">
+            Home
+          </Link>
+
+          <div className="flex flex-col">
+            <button
+              className="flex items-center justify-between text-left transition-colors hover:text-brand-yellow"
+              onClick={() => setMobileImpactMapsOpen(!mobileImpactMapsOpen)}
+            >
+              Impact Maps{' '}
+              <ChevronDown
+                className={`h-4 w-4 transition-transform ${mobileImpactMapsOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+            {mobileImpactMapsOpen && (
+              <div className="mt-2 flex flex-col gap-2 pl-4 text-sm text-gray-200">
+                <Link to="/map" className="transition-colors hover:text-brand-yellow">
+                  Baseline Funding
+                </Link>
+                <Link to="/map" className="transition-colors hover:text-brand-yellow">
+                  Grant Disruptions
+                </Link>
+                <Link to="/map" className="transition-colors hover:text-brand-yellow">
+                  Award Funding Changes
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <Link to="/" className="text-left transition-colors hover:text-brand-yellow">
+            Methodology
+          </Link>
+          <Link to="/" className="text-left transition-colors hover:text-brand-yellow">
+            Insights
+          </Link>
+          <Link to="/" className="text-left transition-colors hover:text-brand-yellow">
+            News
+          </Link>
+          <Link to="/" className="text-left transition-colors hover:text-brand-yellow">
+            About Us
+          </Link>
+          <Link to="/" className="text-left transition-colors hover:text-brand-yellow">
+            Contact
+          </Link>
         </nav>
       )}
     </header>

@@ -62,13 +62,9 @@ export default function SCIMap() {
       const gap = 12
       const rect = el.getBoundingClientRect()
       const left =
-        info.x + gap + rect.width > window.innerWidth
-          ? info.x - gap - rect.width
-          : info.x + gap
+        info.x + gap + rect.width > window.innerWidth ? info.x - gap - rect.width : info.x + gap
       const top =
-        info.y + gap + rect.height > window.innerHeight
-          ? info.y - gap - rect.height
-          : info.y + gap
+        info.y + gap + rect.height > window.innerHeight ? info.y - gap - rect.height : info.y + gap
       el.style.left = `${left}px`
       el.style.top = `${top}px`
     },

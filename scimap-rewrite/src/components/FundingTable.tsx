@@ -133,10 +133,7 @@ interface RegionRow {
 
 type SortKey = 'econ_impact' | 'raw_funding' | 'jobs' | 'pop_2024'
 
-function aggregate(
-  rows: Record<string, string>[],
-  config: GeoTableConfig,
-): RegionRow[] {
+function aggregate(rows: Record<string, string>[], config: GeoTableConfig): RegionRow[] {
   const map = new Map<string, RegionRow>()
 
   for (const row of rows) {
@@ -253,14 +250,9 @@ export default function FundingTable() {
   return (
     <section className="w-full bg-white px-3 py-6 md:px-6 md:py-8">
       <div className="mx-auto max-w-7xl">
-        <h2 className="mb-4 text-xl font-bold text-gray-900">
-          Funding by Region
-        </h2>
+        <h2 className="mb-4 text-xl font-bold text-gray-900">Funding by Region</h2>
 
-        <Tabs
-          value={geoLevel}
-          onValueChange={(v) => setGeoLevel(v as GeoLevel)}
-        >
+        <Tabs value={geoLevel} onValueChange={(v) => setGeoLevel(v as GeoLevel)}>
           <TabsList className="mb-4">
             {(Object.keys(GEO_TABLE) as GeoLevel[]).map((key) => (
               <TabsTrigger key={key} value={key}>
@@ -271,17 +263,13 @@ export default function FundingTable() {
         </Tabs>
 
         {loading ? (
-          <div className="py-12 text-center text-sm text-gray-500">
-            Loading data...
-          </div>
+          <div className="py-12 text-center text-sm text-gray-500">Loading data...</div>
         ) : (
           <div className="overflow-auto rounded-lg border border-gray-200 max-h-150">
             <table className="w-full text-left text-sm">
               <thead className="sticky top-0 z-10 bg-gray-50">
                 <tr className="border-b border-gray-200">
-                  <th className="w-10 px-2 py-3 font-semibold text-gray-600 md:w-12 md:px-4">
-                    #
-                  </th>
+                  <th className="w-10 px-2 py-3 font-semibold text-gray-600 md:w-12 md:px-4">#</th>
                   <th className="px-2 py-3 font-semibold text-gray-600 md:px-4">
                     {config.label.replace(/s$/, '')}
                   </th>
