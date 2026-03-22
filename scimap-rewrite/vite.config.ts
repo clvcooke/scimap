@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/scimap-rewrite/',
   plugins: [
     tailwindcss(),
     TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
@@ -16,6 +17,14 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  server: {
+    fs: {
+      allow: ['..'],
+    },
+  },
+  build: {
+    outDir: '../dist/scimap-rewrite',
   },
   test: {
     environment: 'jsdom',
