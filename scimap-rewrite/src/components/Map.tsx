@@ -46,10 +46,10 @@ export default function SCIMap() {
         return
       }
 
-      const props = info.object.properties
-      const impact = props.NIH_tot_econ_impact ?? 0
-      const pop = props.pop_2024 ?? 0
-      const id = props[config.uniqueIdProperty] ?? ''
+      const tile = info.object.properties
+      const impact = tile.NIH_tot_econ_impact ?? 0
+      const pop = tile.pop_2024 ?? 0
+      const id = tile[config.uniqueIdProperty] ?? ''
       const pc = pop > 0 ? impact / pop : 0
 
       el.innerHTML =
@@ -82,9 +82,9 @@ export default function SCIMap() {
         setPreviewFeature(null)
         return
       }
-      const props = info.object.properties
-      const id = String(props[config.uniqueIdProperty] ?? '')
-      const feature = { id, properties: props }
+      const tile = info.object.properties
+      const id = String(tile[config.uniqueIdProperty] ?? '')
+      const feature = { id, properties: tile }
 
       if (isMobile) {
         requestAnimationFrame(() => setPreviewFeature(feature))
