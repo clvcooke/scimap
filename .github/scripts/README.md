@@ -7,11 +7,13 @@ This GitHub Action automatically fetches news items from a Google Sheet and upda
 ### 1. Create a Google Sheet
 
 Create a Google Sheet with three columns:
+
 - **Column A (Date)**: Date in `dd/mm/YYYY` format (e.g., `15/09/2025`) or the text `Ongoing`
 - **Column B (Link)**: Full URL to the news article
 - **Column C (Title)**: Title of the news article
 
 Example:
+
 ```
 Date          | Link                                      | Title
 15/09/2025    | https://example.com/article1             | Example Article Title
@@ -39,6 +41,7 @@ Ongoing       | https://example.com/ongoing              | Ongoing Project
 ### 3. Get Google Sheet ID
 
 The Sheet ID is found in the URL of your Google Sheet:
+
 ```
 https://docs.google.com/spreadsheets/d/SHEET_ID_HERE/edit
 ```
@@ -64,6 +67,7 @@ Add the following secrets to your GitHub repository:
 ### 6. Run the Action
 
 The action will run automatically every night at 2 AM UTC. You can also:
+
 - Trigger it manually from the Actions tab in GitHub
 - Modify the schedule in `.github/workflows/update-news.yml`
 
@@ -81,12 +85,14 @@ The action will run automatically every night at 2 AM UTC. You can also:
 ## Data Format
 
 ### Input (Google Sheet)
+
 ```
 Date          | Link                      | Title
 15/09/2025    | https://example.com       | Example Title
 ```
 
 ### Output (About.tsx)
+
 ```typescript
 {
     date: "September 15th, 2025",
@@ -98,15 +104,18 @@ Date          | Link                      | Title
 ## Troubleshooting
 
 ### Action fails with "Failed to fetch Google Sheet data"
+
 - Verify your Google Sheets API key is correct
 - Ensure the Google Sheets API is enabled in Google Cloud Console
 - Confirm the Google Sheet is publicly readable
 
 ### No Slack notifications
+
 - Verify the `SLACK_WEBHOOK_URL` secret is set correctly
 - Check that the webhook is active in your Slack workspace
 
 ### Changes not committed
+
 - Ensure the `GITHUB_TOKEN` has write permissions
 - Check the Actions logs for git-related errors
 

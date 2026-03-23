@@ -1,28 +1,33 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { defineConfig } from 'vite'
+/// <reference types="vitest" />
+import path from 'path'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
-export default defineConfig(({ command }) => {
-  const plugins = [react(), tailwindcss()];
-
-  if (command === 'build' && process.env.SENTRY_ENABLED === 'true') {
-    plugins.push(sentryVitePlugin({
-      org: "scimap",
-      project: "javascript-react"
-    }));
-  }
-
-  return {
-    plugins,
-    server: {
-      host: true,
-      port: 5173,
-      allowedHosts: ["robco.mammoth-atlas.ts.net"]
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+    TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
+    react(),
+  ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
     },
-    build: {
-      sourcemap: true
-    }
-  };
-});
+  },
+  server: {
+    fs: {
+      allow: ['..'],
+    },
+  },
+  build: {
+    outDir: 'dist',
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./setupTests.ts'],
+    globals: true,
+  },
+})

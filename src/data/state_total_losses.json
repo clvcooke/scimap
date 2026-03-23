@@ -1,1 +1,361 @@
-{"STATE_LOSSES": {"Alabama": {"state_code": "AL", "idc_loss": 137576150.831804, "term_loss": 22676712.4774094, "idc_job_loss": 594.211885507579, "term_job_loss": 97.9440985726405}, "Alaska": {"state_code": "AK", "idc_loss": 3443567.84873293, "term_loss": 751385.617383242, "idc_job_loss": 14.8732824104848, "term_job_loss": 3.24534638997443}, "Arizona": {"state_code": "AZ", "idc_loss": 134571196.628638, "term_loss": 3788095.19122725, "idc_job_loss": 581.233040757732, "term_job_loss": 16.3613473153007}, "Arkansas": {"state_code": "AR", "idc_loss": 77857083.9824438, "term_loss": 7588415.46882359, "idc_job_loss": 336.276341456087, "term_job_loss": 32.775496599387}, "California": {"state_code": "CA", "idc_loss": 2699877437.50703, "term_loss": 66768196.6121195, "idc_job_loss": 11661.1727619985, "term_job_loss": 288.381785367239}, "Colorado": {"state_code": "CO", "idc_loss": 224012601.740625, "term_loss": 3416624.0565592, "idc_job_loss": 967.54379049674, "term_job_loss": 14.7569081591812}, "Connecticut": {"state_code": "CT", "idc_loss": 441407598.113789, "term_loss": 33829681.6878275, "idc_job_loss": 1906.50515781062, "term_job_loss": 146.115433672957}, "Delaware": {"state_code": "DE", "idc_loss": 34704253.5272216, "term_loss": 777750.179470275, "idc_job_loss": 149.892839702681, "term_job_loss": 3.35921886026523}, "District of Columbia": {"state_code": "DC", "idc_loss": 38728168.9760323, "term_loss": 4486301.00004311, "idc_job_loss": 167.27272983265, "term_job_loss": 19.3770021916756}, "Florida": {"state_code": "FL", "idc_loss": 363691788.655391, "term_loss": 25575059.2277852, "idc_job_loss": 1570.83900206478, "term_job_loss": 110.462489856179}, "Georgia": {"state_code": "GA", "idc_loss": 327842607.172646, "term_loss": 46724718.5066803, "idc_job_loss": 1416.001048001, "term_job_loss": 201.811018230981}, "Hawaii": {"state_code": "HI", "idc_loss": 30166709.7762961, "term_loss": 16513.2032927078, "idc_job_loss": 130.294512438045, "term_job_loss": 0.0713229844344612}, "Idaho": {"state_code": "ID", "idc_loss": 11203212.6595835, "term_loss": 43287.2961353965, "idc_job_loss": 48.3883440403288, "term_job_loss": 0.186964279052883}, "Illinois": {"state_code": "IL", "idc_loss": 621087059.262243, "term_loss": 58448047.3800971, "idc_job_loss": 2682.5675112816, "term_job_loss": 252.445821662973}, "Indiana": {"state_code": "IN", "idc_loss": 204172767.644909, "term_loss": 12429635.108927, "idc_job_loss": 881.852592168435, "term_job_loss": 53.6854452577059}, "Iowa": {"state_code": "IA", "idc_loss": 187207049.780947, "term_loss": 4992432.7677232, "idc_job_loss": 808.575129904942, "term_job_loss": 21.563060677613}, "Kansas": {"state_code": "KS", "idc_loss": 52961491.5871071, "term_loss": 1583610.84947798, "idc_job_loss": 228.748570046441, "term_job_loss": 6.83985111583044}, "Kentucky": {"state_code": "KY", "idc_loss": 125579273.825606, "term_loss": 15307062.3502635, "idc_job_loss": 542.395586948894, "term_job_loss": 66.1134820660317}, "Louisiana": {"state_code": "LA", "idc_loss": 79520327.4443224, "term_loss": 15927699.1003346, "idc_job_loss": 343.460137685052, "term_job_loss": 68.7941046248492}, "Maine": {"state_code": "ME", "idc_loss": 73312128.4688659, "term_loss": 1001370.34155054, "idc_job_loss": 316.646001684676, "term_job_loss": 4.32506764542041}, "Maryland": {"state_code": "MD", "idc_loss": 584810094.221442, "term_loss": 33768222.5263399, "idc_job_loss": 2525.88189631814, "term_job_loss": 145.849982401}, "Massachusetts": {"state_code": "MA", "idc_loss": 1505552622.67774, "term_loss": 79885348.2749876, "idc_job_loss": 6502.70600858685, "term_job_loss": 345.0367170175}, "Michigan": {"state_code": "MI", "idc_loss": 481977451.886646, "term_loss": 45889958.5972677, "idc_job_loss": 2081.73239857424, "term_job_loss": 198.205565856284}, "Minnesota": {"state_code": "MN", "idc_loss": 326979789.261656, "term_loss": 11577775.4255936, "idc_job_loss": 1412.27440893864, "term_job_loss": 50.0061364126703}, "Mississippi": {"state_code": "MS", "idc_loss": 37652772.9911534, "term_loss": 2542837.93995311, "idc_job_loss": 162.627934408599, "term_job_loss": 10.9828957832017}, "Missouri": {"state_code": "MO", "idc_loss": 343069372.515568, "term_loss": 44250851.5207806, "idc_job_loss": 1481.7677153332, "term_job_loss": 191.126018270606}, "Montana": {"state_code": "MT", "idc_loss": 12781252.706505, "term_loss": 659612.076039348, "idc_job_loss": 55.2041340302235, "term_job_loss": 2.84896279651038}, "Nebraska": {"state_code": "NE", "idc_loss": 64344264.1828397, "term_loss": 3128366.06760878, "idc_job_loss": 277.912460193967, "term_job_loss": 13.5118789728635}, "Nevada": {"state_code": "NV", "idc_loss": 14565499.1052845, "term_loss": 110101.706735687, "idc_job_loss": 62.9105599653779, "term_job_loss": 0.475545669517968}, "New Hampshire": {"state_code": "NH", "idc_loss": 138482717.829982, "term_loss": 1617498.78455221, "idc_job_loss": 598.127483393327, "term_job_loss": 6.9862181545553}, "New Jersey": {"state_code": "NJ", "idc_loss": 389811304.937603, "term_loss": 14811596.3114808, "idc_job_loss": 1683.65308302837, "term_job_loss": 63.9734904517148}, "New Mexico": {"state_code": "NM", "idc_loss": 50798375.930867, "term_loss": 393308.362159604, "idc_job_loss": 219.405751360979, "term_job_loss": 1.6987573940085}, "New York": {"state_code": "NY", "idc_loss": 1721653170.08709, "term_loss": 90424990.858482, "idc_job_loss": 7436.07645803574, "term_job_loss": 390.559003069614}, "North Carolina": {"state_code": "NC", "idc_loss": 709662481.196345, "term_loss": 139742122.038266, "idc_job_loss": 3065.13795069911, "term_job_loss": 603.567037739743}, "North Dakota": {"state_code": "ND", "idc_loss": 8163118.41451483, "term_loss": 160469.515791458, "idc_job_loss": 35.2577242158832, "term_job_loss": 0.693091738418426}, "Ohio": {"state_code": "OH", "idc_loss": 479524090.666844, "term_loss": 31377742.3105741, "idc_job_loss": 2071.13596607169, "term_job_loss": 135.525142320139}, "Oklahoma": {"state_code": "OK", "idc_loss": 68270633.9420391, "term_loss": 5187541.89398234, "idc_job_loss": 294.871035962424, "term_job_loss": 22.4057660527322}, "Oregon": {"state_code": "OR", "idc_loss": 149542173.968255, "term_loss": 1167779.76839348, "idc_job_loss": 645.894921607567, "term_job_loss": 5.04381474433779}, "Pennsylvania": {"state_code": "PA", "idc_loss": 977995990.028651, "term_loss": 88206069.6224926, "idc_job_loss": 4224.11033991098, "term_job_loss": 380.975151773744}, "Rhode Island": {"state_code": "RI", "idc_loss": 108195766.817105, "term_loss": 8501801.17672625, "idc_job_loss": 467.31363114622, "term_job_loss": 36.7205455079878}, "South Carolina": {"state_code": "SC", "idc_loss": 105334626.9332, "term_loss": 25156648.3772202, "idc_job_loss": 454.955941860417, "term_job_loss": 108.655311076079}, "South Dakota": {"state_code": "SD", "idc_loss": 17728743.3826944, "term_loss": 171748.970326588, "idc_job_loss": 76.5730831209993, "term_job_loss": 0.741809382474412}, "Tennessee": {"state_code": "TN", "idc_loss": 363246833.51391, "term_loss": 16877227.1779836, "idc_job_loss": 1568.9171745388, "term_job_loss": 72.8952578112907}, "Texas": {"state_code": "TX", "idc_loss": 861319195.561585, "term_loss": 197726640.064404, "idc_job_loss": 3720.1658872128, "term_job_loss": 854.01080708668}, "Utah": {"state_code": "UT", "idc_loss": 126685726.911559, "term_loss": 53302.1260035799, "idc_job_loss": 547.174522618012, "term_job_loss": 0.230219820823973}, "Vermont": {"state_code": "VT", "idc_loss": 29358970.5947734, "term_loss": 112248.276536977, "idc_job_loss": 126.805766611468, "term_job_loss": 0.484817024191623}, "Virginia": {"state_code": "VA", "idc_loss": 243543219.528152, "term_loss": 39236641.7903621, "idc_job_loss": 1051.89943753649, "term_job_loss": 169.468899647734}, "Washington": {"state_code": "WA", "idc_loss": 538448744.140535, "term_loss": 10811448.4576846, "idc_job_loss": 2325.64032043678, "term_job_loss": 46.6962561044677}, "West Virginia": {"state_code": "WV", "idc_loss": 22591323.9678159, "term_loss": 793258.279483912, "idc_job_loss": 97.5752928822686, "term_job_loss": 3.42620065394115}, "Wisconsin": {"state_code": "WI", "idc_loss": 254608390.739166, "term_loss": 4829420.64588305, "idc_job_loss": 1099.69156000108, "term_job_loss": 20.8589870449842}, "Wyoming": {"state_code": "WY", "idc_loss": 5555998.37223469, "term_loss": 9756.58107288442, "idc_job_loss": 23.9971844588009, "term_job_loss": 0.0421401267616072}}}
+{
+  "STATE_LOSSES": {
+    "Alabama": {
+      "state_code": "AL",
+      "idc_loss": 137576150.831804,
+      "term_loss": 22676712.4774094,
+      "idc_job_loss": 594.211885507579,
+      "term_job_loss": 97.9440985726405
+    },
+    "Alaska": {
+      "state_code": "AK",
+      "idc_loss": 3443567.84873293,
+      "term_loss": 751385.617383242,
+      "idc_job_loss": 14.8732824104848,
+      "term_job_loss": 3.24534638997443
+    },
+    "Arizona": {
+      "state_code": "AZ",
+      "idc_loss": 134571196.628638,
+      "term_loss": 3788095.19122725,
+      "idc_job_loss": 581.233040757732,
+      "term_job_loss": 16.3613473153007
+    },
+    "Arkansas": {
+      "state_code": "AR",
+      "idc_loss": 77857083.9824438,
+      "term_loss": 7588415.46882359,
+      "idc_job_loss": 336.276341456087,
+      "term_job_loss": 32.775496599387
+    },
+    "California": {
+      "state_code": "CA",
+      "idc_loss": 2699877437.50703,
+      "term_loss": 66768196.6121195,
+      "idc_job_loss": 11661.1727619985,
+      "term_job_loss": 288.381785367239
+    },
+    "Colorado": {
+      "state_code": "CO",
+      "idc_loss": 224012601.740625,
+      "term_loss": 3416624.0565592,
+      "idc_job_loss": 967.54379049674,
+      "term_job_loss": 14.7569081591812
+    },
+    "Connecticut": {
+      "state_code": "CT",
+      "idc_loss": 441407598.113789,
+      "term_loss": 33829681.6878275,
+      "idc_job_loss": 1906.50515781062,
+      "term_job_loss": 146.115433672957
+    },
+    "Delaware": {
+      "state_code": "DE",
+      "idc_loss": 34704253.5272216,
+      "term_loss": 777750.179470275,
+      "idc_job_loss": 149.892839702681,
+      "term_job_loss": 3.35921886026523
+    },
+    "District of Columbia": {
+      "state_code": "DC",
+      "idc_loss": 38728168.9760323,
+      "term_loss": 4486301.00004311,
+      "idc_job_loss": 167.27272983265,
+      "term_job_loss": 19.3770021916756
+    },
+    "Florida": {
+      "state_code": "FL",
+      "idc_loss": 363691788.655391,
+      "term_loss": 25575059.2277852,
+      "idc_job_loss": 1570.83900206478,
+      "term_job_loss": 110.462489856179
+    },
+    "Georgia": {
+      "state_code": "GA",
+      "idc_loss": 327842607.172646,
+      "term_loss": 46724718.5066803,
+      "idc_job_loss": 1416.001048001,
+      "term_job_loss": 201.811018230981
+    },
+    "Hawaii": {
+      "state_code": "HI",
+      "idc_loss": 30166709.7762961,
+      "term_loss": 16513.2032927078,
+      "idc_job_loss": 130.294512438045,
+      "term_job_loss": 0.0713229844344612
+    },
+    "Idaho": {
+      "state_code": "ID",
+      "idc_loss": 11203212.6595835,
+      "term_loss": 43287.2961353965,
+      "idc_job_loss": 48.3883440403288,
+      "term_job_loss": 0.186964279052883
+    },
+    "Illinois": {
+      "state_code": "IL",
+      "idc_loss": 621087059.262243,
+      "term_loss": 58448047.3800971,
+      "idc_job_loss": 2682.5675112816,
+      "term_job_loss": 252.445821662973
+    },
+    "Indiana": {
+      "state_code": "IN",
+      "idc_loss": 204172767.644909,
+      "term_loss": 12429635.108927,
+      "idc_job_loss": 881.852592168435,
+      "term_job_loss": 53.6854452577059
+    },
+    "Iowa": {
+      "state_code": "IA",
+      "idc_loss": 187207049.780947,
+      "term_loss": 4992432.7677232,
+      "idc_job_loss": 808.575129904942,
+      "term_job_loss": 21.563060677613
+    },
+    "Kansas": {
+      "state_code": "KS",
+      "idc_loss": 52961491.5871071,
+      "term_loss": 1583610.84947798,
+      "idc_job_loss": 228.748570046441,
+      "term_job_loss": 6.83985111583044
+    },
+    "Kentucky": {
+      "state_code": "KY",
+      "idc_loss": 125579273.825606,
+      "term_loss": 15307062.3502635,
+      "idc_job_loss": 542.395586948894,
+      "term_job_loss": 66.1134820660317
+    },
+    "Louisiana": {
+      "state_code": "LA",
+      "idc_loss": 79520327.4443224,
+      "term_loss": 15927699.1003346,
+      "idc_job_loss": 343.460137685052,
+      "term_job_loss": 68.7941046248492
+    },
+    "Maine": {
+      "state_code": "ME",
+      "idc_loss": 73312128.4688659,
+      "term_loss": 1001370.34155054,
+      "idc_job_loss": 316.646001684676,
+      "term_job_loss": 4.32506764542041
+    },
+    "Maryland": {
+      "state_code": "MD",
+      "idc_loss": 584810094.221442,
+      "term_loss": 33768222.5263399,
+      "idc_job_loss": 2525.88189631814,
+      "term_job_loss": 145.849982401
+    },
+    "Massachusetts": {
+      "state_code": "MA",
+      "idc_loss": 1505552622.67774,
+      "term_loss": 79885348.2749876,
+      "idc_job_loss": 6502.70600858685,
+      "term_job_loss": 345.0367170175
+    },
+    "Michigan": {
+      "state_code": "MI",
+      "idc_loss": 481977451.886646,
+      "term_loss": 45889958.5972677,
+      "idc_job_loss": 2081.73239857424,
+      "term_job_loss": 198.205565856284
+    },
+    "Minnesota": {
+      "state_code": "MN",
+      "idc_loss": 326979789.261656,
+      "term_loss": 11577775.4255936,
+      "idc_job_loss": 1412.27440893864,
+      "term_job_loss": 50.0061364126703
+    },
+    "Mississippi": {
+      "state_code": "MS",
+      "idc_loss": 37652772.9911534,
+      "term_loss": 2542837.93995311,
+      "idc_job_loss": 162.627934408599,
+      "term_job_loss": 10.9828957832017
+    },
+    "Missouri": {
+      "state_code": "MO",
+      "idc_loss": 343069372.515568,
+      "term_loss": 44250851.5207806,
+      "idc_job_loss": 1481.7677153332,
+      "term_job_loss": 191.126018270606
+    },
+    "Montana": {
+      "state_code": "MT",
+      "idc_loss": 12781252.706505,
+      "term_loss": 659612.076039348,
+      "idc_job_loss": 55.2041340302235,
+      "term_job_loss": 2.84896279651038
+    },
+    "Nebraska": {
+      "state_code": "NE",
+      "idc_loss": 64344264.1828397,
+      "term_loss": 3128366.06760878,
+      "idc_job_loss": 277.912460193967,
+      "term_job_loss": 13.5118789728635
+    },
+    "Nevada": {
+      "state_code": "NV",
+      "idc_loss": 14565499.1052845,
+      "term_loss": 110101.706735687,
+      "idc_job_loss": 62.9105599653779,
+      "term_job_loss": 0.475545669517968
+    },
+    "New Hampshire": {
+      "state_code": "NH",
+      "idc_loss": 138482717.829982,
+      "term_loss": 1617498.78455221,
+      "idc_job_loss": 598.127483393327,
+      "term_job_loss": 6.9862181545553
+    },
+    "New Jersey": {
+      "state_code": "NJ",
+      "idc_loss": 389811304.937603,
+      "term_loss": 14811596.3114808,
+      "idc_job_loss": 1683.65308302837,
+      "term_job_loss": 63.9734904517148
+    },
+    "New Mexico": {
+      "state_code": "NM",
+      "idc_loss": 50798375.930867,
+      "term_loss": 393308.362159604,
+      "idc_job_loss": 219.405751360979,
+      "term_job_loss": 1.6987573940085
+    },
+    "New York": {
+      "state_code": "NY",
+      "idc_loss": 1721653170.08709,
+      "term_loss": 90424990.858482,
+      "idc_job_loss": 7436.07645803574,
+      "term_job_loss": 390.559003069614
+    },
+    "North Carolina": {
+      "state_code": "NC",
+      "idc_loss": 709662481.196345,
+      "term_loss": 139742122.038266,
+      "idc_job_loss": 3065.13795069911,
+      "term_job_loss": 603.567037739743
+    },
+    "North Dakota": {
+      "state_code": "ND",
+      "idc_loss": 8163118.41451483,
+      "term_loss": 160469.515791458,
+      "idc_job_loss": 35.2577242158832,
+      "term_job_loss": 0.693091738418426
+    },
+    "Ohio": {
+      "state_code": "OH",
+      "idc_loss": 479524090.666844,
+      "term_loss": 31377742.3105741,
+      "idc_job_loss": 2071.13596607169,
+      "term_job_loss": 135.525142320139
+    },
+    "Oklahoma": {
+      "state_code": "OK",
+      "idc_loss": 68270633.9420391,
+      "term_loss": 5187541.89398234,
+      "idc_job_loss": 294.871035962424,
+      "term_job_loss": 22.4057660527322
+    },
+    "Oregon": {
+      "state_code": "OR",
+      "idc_loss": 149542173.968255,
+      "term_loss": 1167779.76839348,
+      "idc_job_loss": 645.894921607567,
+      "term_job_loss": 5.04381474433779
+    },
+    "Pennsylvania": {
+      "state_code": "PA",
+      "idc_loss": 977995990.028651,
+      "term_loss": 88206069.6224926,
+      "idc_job_loss": 4224.11033991098,
+      "term_job_loss": 380.975151773744
+    },
+    "Rhode Island": {
+      "state_code": "RI",
+      "idc_loss": 108195766.817105,
+      "term_loss": 8501801.17672625,
+      "idc_job_loss": 467.31363114622,
+      "term_job_loss": 36.7205455079878
+    },
+    "South Carolina": {
+      "state_code": "SC",
+      "idc_loss": 105334626.9332,
+      "term_loss": 25156648.3772202,
+      "idc_job_loss": 454.955941860417,
+      "term_job_loss": 108.655311076079
+    },
+    "South Dakota": {
+      "state_code": "SD",
+      "idc_loss": 17728743.3826944,
+      "term_loss": 171748.970326588,
+      "idc_job_loss": 76.5730831209993,
+      "term_job_loss": 0.741809382474412
+    },
+    "Tennessee": {
+      "state_code": "TN",
+      "idc_loss": 363246833.51391,
+      "term_loss": 16877227.1779836,
+      "idc_job_loss": 1568.9171745388,
+      "term_job_loss": 72.8952578112907
+    },
+    "Texas": {
+      "state_code": "TX",
+      "idc_loss": 861319195.561585,
+      "term_loss": 197726640.064404,
+      "idc_job_loss": 3720.1658872128,
+      "term_job_loss": 854.01080708668
+    },
+    "Utah": {
+      "state_code": "UT",
+      "idc_loss": 126685726.911559,
+      "term_loss": 53302.1260035799,
+      "idc_job_loss": 547.174522618012,
+      "term_job_loss": 0.230219820823973
+    },
+    "Vermont": {
+      "state_code": "VT",
+      "idc_loss": 29358970.5947734,
+      "term_loss": 112248.276536977,
+      "idc_job_loss": 126.805766611468,
+      "term_job_loss": 0.484817024191623
+    },
+    "Virginia": {
+      "state_code": "VA",
+      "idc_loss": 243543219.528152,
+      "term_loss": 39236641.7903621,
+      "idc_job_loss": 1051.89943753649,
+      "term_job_loss": 169.468899647734
+    },
+    "Washington": {
+      "state_code": "WA",
+      "idc_loss": 538448744.140535,
+      "term_loss": 10811448.4576846,
+      "idc_job_loss": 2325.64032043678,
+      "term_job_loss": 46.6962561044677
+    },
+    "West Virginia": {
+      "state_code": "WV",
+      "idc_loss": 22591323.9678159,
+      "term_loss": 793258.279483912,
+      "idc_job_loss": 97.5752928822686,
+      "term_job_loss": 3.42620065394115
+    },
+    "Wisconsin": {
+      "state_code": "WI",
+      "idc_loss": 254608390.739166,
+      "term_loss": 4829420.64588305,
+      "idc_job_loss": 1099.69156000108,
+      "term_job_loss": 20.8589870449842
+    },
+    "Wyoming": {
+      "state_code": "WY",
+      "idc_loss": 5555998.37223469,
+      "term_loss": 9756.58107288442,
+      "idc_job_loss": 23.9971844588009,
+      "term_job_loss": 0.0421401267616072
+    }
+  }
+}

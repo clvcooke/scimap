@@ -1,24 +1,29 @@
-import {StrictMode} from 'react'
-import {createRoot} from 'react-dom/client'
-// import './index.css'
-import App from './App.tsx'
-import {MantineProvider} from "@mantine/core";
-import '@mantine/core/styles.css';
-import * as Sentry from "@sentry/react";
-import {SocialMetaTags} from "./components/SocialMetaTags.tsx";
+import { createRoot } from 'react-dom/client'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-if (window.location.hostname === 'scienceimpacts.org') {
-    Sentry.init({
-        dsn: "https://5cc6625eac8a4075e42341deefc42135@o4509086741889024.ingest.us.sentry.io/4509086742872064",
-    });
+// Import the generated route tree
+import { routeTree } from './routeTree.gen'
+import './index.css'
+
+// Create a new router instance
+const router = createRouter({ routeTree })
+
+// Register the router instance for type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
 }
 
+// Create a client
+const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <MantineProvider>
-            <SocialMetaTags/>
-            <App/>
-        </MantineProvider>
-    </StrictMode>,
+  // Remove StrictMode to see if it's double rendering an issue with DeckGL
+  // <StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>,
+  // </StrictMode>,
 )

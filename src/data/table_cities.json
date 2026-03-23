@@ -1,0 +1,7482 @@
+[
+  {
+    "id": "10100",
+    "name": "Aberdeen, SD",
+    "econ_impact": 2305200.09,
+    "raw_funding": 738484.57,
+    "jobs": 6.1294,
+    "pop_2024": 41522
+  },
+  {
+    "id": "10140",
+    "name": "Aberdeen, WA",
+    "econ_impact": 20365552.29,
+    "raw_funding": 8425447.56,
+    "jobs": 65.7185,
+    "pop_2024": 77893
+  },
+  {
+    "id": "10180",
+    "name": "Abilene, TX",
+    "econ_impact": 6811509.72,
+    "raw_funding": 2091027.61,
+    "jobs": 24.6741,
+    "pop_2024": 184278
+  },
+  {
+    "id": "10220",
+    "name": "Ada, OK",
+    "econ_impact": 457572.64,
+    "raw_funding": 162484.98,
+    "jobs": 1.7061,
+    "pop_2024": 38310
+  },
+  {
+    "id": "10300",
+    "name": "Adrian, MI",
+    "econ_impact": 52818480.13,
+    "raw_funding": 20732294.0,
+    "jobs": 201.1033,
+    "pop_2024": 97746
+  },
+  {
+    "id": "10380",
+    "name": "Aguadilla, PR",
+    "econ_impact": 0.0,
+    "raw_funding": 0.0,
+    "jobs": 0.0,
+    "pop_2024": 0
+  },
+  {
+    "id": "10420",
+    "name": "Akron, OH",
+    "econ_impact": 209060695.59,
+    "raw_funding": 80161944.16,
+    "jobs": 793.6032,
+    "pop_2024": 702209
+  },
+  {
+    "id": "10460",
+    "name": "Alamogordo, NM",
+    "econ_impact": 4070180.38,
+    "raw_funding": 1748494.8,
+    "jobs": 13.6383,
+    "pop_2024": 69711
+  },
+  {
+    "id": "10480",
+    "name": "Alamosa, CO",
+    "econ_impact": 926157.43,
+    "raw_funding": 330668.62,
+    "jobs": 3.1744,
+    "pop_2024": 27924
+  },
+  {
+    "id": "10500",
+    "name": "Albany, GA",
+    "econ_impact": 5320793.47,
+    "raw_funding": 1811578.33,
+    "jobs": 21.3766,
+    "pop_2024": 145451
+  },
+  {
+    "id": "10540",
+    "name": "Albany, OR",
+    "econ_impact": 24135242.73,
+    "raw_funding": 9945685.98,
+    "jobs": 87.522,
+    "pop_2024": 132474
+  },
+  {
+    "id": "10580",
+    "name": "Albany-Schenectady-Troy, NY",
+    "econ_impact": 308087492.58,
+    "raw_funding": 130696091.39,
+    "jobs": 927.9422,
+    "pop_2024": 913485
+  },
+  {
+    "id": "10620",
+    "name": "Albemarle, NC",
+    "econ_impact": 8407027.78,
+    "raw_funding": 3360535.71,
+    "jobs": 32.5972,
+    "pop_2024": 67326
+  },
+  {
+    "id": "10660",
+    "name": "Albert Lea, MN",
+    "econ_impact": 16016549.72,
+    "raw_funding": 6480633.19,
+    "jobs": 58.9738,
+    "pop_2024": 30314
+  },
+  {
+    "id": "10700",
+    "name": "Albertville, AL",
+    "econ_impact": 10072761.51,
+    "raw_funding": 4090532.4,
+    "jobs": 37.6329,
+    "pop_2024": 102156
+  },
+  {
+    "id": "10740",
+    "name": "Albuquerque, NM",
+    "econ_impact": 476197008.27,
+    "raw_funding": 204567836.24,
+    "jobs": 1595.6291,
+    "pop_2024": 926303
+  },
+  {
+    "id": "10760",
+    "name": "Alexander City, AL",
+    "econ_impact": 8511402.59,
+    "raw_funding": 3456467.03,
+    "jobs": 31.7995,
+    "pop_2024": 40699
+  },
+  {
+    "id": "10780",
+    "name": "Alexandria, LA",
+    "econ_impact": 4303786.86,
+    "raw_funding": 1555482.69,
+    "jobs": 15.2437,
+    "pop_2024": 148008
+  },
+  {
+    "id": "10820",
+    "name": "Alexandria, MN",
+    "econ_impact": 1330975.53,
+    "raw_funding": 538540.72,
+    "jobs": 4.9007,
+    "pop_2024": 39933
+  },
+  {
+    "id": "10860",
+    "name": "Alice, TX",
+    "econ_impact": 1403463.59,
+    "raw_funding": 430841.51,
+    "jobs": 5.0839,
+    "pop_2024": 45626
+  },
+  {
+    "id": "10900",
+    "name": "Allentown-Bethlehem-Easton, PA-NJ",
+    "econ_impact": 144153831.31,
+    "raw_funding": 57742790.44,
+    "jobs": 492.6919,
+    "pop_2024": 886418
+  },
+  {
+    "id": "10940",
+    "name": "Alma, MI",
+    "econ_impact": 3185181.41,
+    "raw_funding": 1250246.45,
+    "jobs": 12.1274,
+    "pop_2024": 41372
+  },
+  {
+    "id": "10980",
+    "name": "Alpena, MI",
+    "econ_impact": 854645.5,
+    "raw_funding": 335465.19,
+    "jobs": 3.254,
+    "pop_2024": 28903
+  },
+  {
+    "id": "11020",
+    "name": "Altoona, PA",
+    "econ_impact": 29363729.33,
+    "raw_funding": 12211469.88,
+    "jobs": 103.7975,
+    "pop_2024": 120269
+  },
+  {
+    "id": "11060",
+    "name": "Altus, OK",
+    "econ_impact": 443041.95,
+    "raw_funding": 157325.1,
+    "jobs": 1.6519,
+    "pop_2024": 24541
+  },
+  {
+    "id": "11100",
+    "name": "Amarillo, TX",
+    "econ_impact": 9705740.17,
+    "raw_funding": 2979511.38,
+    "jobs": 35.1582,
+    "pop_2024": 274650
+  },
+  {
+    "id": "11140",
+    "name": "Americus, GA",
+    "econ_impact": 1109129.96,
+    "raw_funding": 377627.1,
+    "jobs": 4.456,
+    "pop_2024": 33475
+  },
+  {
+    "id": "11180",
+    "name": "Ames, IA",
+    "econ_impact": 55703717.84,
+    "raw_funding": 22681340.56,
+    "jobs": 179.1826,
+    "pop_2024": 129227
+  },
+  {
+    "id": "11200",
+    "name": "Amherst Town-Northampton, MA",
+    "econ_impact": 127196562.41,
+    "raw_funding": 56784506.69,
+    "jobs": 448.5976,
+    "pop_2024": 165399
+  },
+  {
+    "id": "11220",
+    "name": "Amsterdam, NY",
+    "econ_impact": 5903446.09,
+    "raw_funding": 2504344.86,
+    "jobs": 17.7808,
+    "pop_2024": 49648
+  },
+  {
+    "id": "11260",
+    "name": "Anchorage, AK",
+    "econ_impact": 58060359.46,
+    "raw_funding": 14604689.18,
+    "jobs": 113.9166,
+    "pop_2024": 407213
+  },
+  {
+    "id": "11360",
+    "name": "Anderson Creek, NC",
+    "econ_impact": 72342479.58,
+    "raw_funding": 28917411.98,
+    "jobs": 280.4989,
+    "pop_2024": 146096
+  },
+  {
+    "id": "11380",
+    "name": "Andrews, TX",
+    "econ_impact": 378133.95,
+    "raw_funding": 116081.25,
+    "jobs": 1.3698,
+    "pop_2024": 18923
+  },
+  {
+    "id": "11420",
+    "name": "Angola, IN",
+    "econ_impact": 1064354.13,
+    "raw_funding": 395616.05,
+    "jobs": 3.4814,
+    "pop_2024": 34862
+  },
+  {
+    "id": "11460",
+    "name": "Ann Arbor, MI",
+    "econ_impact": 2057538131.6,
+    "raw_funding": 807624251.13,
+    "jobs": 7833.9552,
+    "pop_2024": 373875
+  },
+  {
+    "id": "11500",
+    "name": "Anniston-Oxford, AL",
+    "econ_impact": 11980626.43,
+    "raw_funding": 4865313.3,
+    "jobs": 44.7609,
+    "pop_2024": 116427
+  },
+  {
+    "id": "11540",
+    "name": "Appleton, WI",
+    "econ_impact": 25443993.26,
+    "raw_funding": 10746415.55,
+    "jobs": 101.0163,
+    "pop_2024": 248992
+  },
+  {
+    "id": "11580",
+    "name": "Arcadia, FL",
+    "econ_impact": 900480.06,
+    "raw_funding": 280339.27,
+    "jobs": 3.1398,
+    "pop_2024": 36744
+  },
+  {
+    "id": "11620",
+    "name": "Ardmore, OK",
+    "econ_impact": 601143.8,
+    "raw_funding": 213467.39,
+    "jobs": 2.2414,
+    "pop_2024": 49135
+  },
+  {
+    "id": "11640",
+    "name": "Arecibo, PR",
+    "econ_impact": 0.0,
+    "raw_funding": 0.0,
+    "jobs": 0.0,
+    "pop_2024": 0
+  },
+  {
+    "id": "11660",
+    "name": "Arkadelphia, AR",
+    "econ_impact": 1676799.1,
+    "raw_funding": 597379.27,
+    "jobs": 5.2569,
+    "pop_2024": 20920
+  },
+  {
+    "id": "11680",
+    "name": "Arkansas City-Winfield, KS",
+    "econ_impact": 1535524.97,
+    "raw_funding": 555832.09,
+    "jobs": 4.5022,
+    "pop_2024": 34186
+  },
+  {
+    "id": "11700",
+    "name": "Asheville, NC",
+    "econ_impact": 46681716.76,
+    "raw_funding": 18660052.07,
+    "jobs": 181.0025,
+    "pop_2024": 422333
+  },
+  {
+    "id": "11740",
+    "name": "Ashland, OH",
+    "econ_impact": 4120908.41,
+    "raw_funding": 1580115.43,
+    "jobs": 15.6431,
+    "pop_2024": 52420
+  },
+  {
+    "id": "11820",
+    "name": "Astoria, OR",
+    "econ_impact": 4220267.87,
+    "raw_funding": 1739094.13,
+    "jobs": 15.304,
+    "pop_2024": 41043
+  },
+  {
+    "id": "11860",
+    "name": "Atchison, KS",
+    "econ_impact": 2589951.47,
+    "raw_funding": 937515.29,
+    "jobs": 7.5939,
+    "pop_2024": 16249
+  },
+  {
+    "id": "11900",
+    "name": "Athens, OH",
+    "econ_impact": 26571359.12,
+    "raw_funding": 10188485.21,
+    "jobs": 100.866,
+    "pop_2024": 63218
+  },
+  {
+    "id": "11940",
+    "name": "Athens, TN",
+    "econ_impact": 2814787.58,
+    "raw_funding": 1045611.84,
+    "jobs": 10.4561,
+    "pop_2024": 70691
+  },
+  {
+    "id": "11980",
+    "name": "Athens, TX",
+    "econ_impact": 6775653.52,
+    "raw_funding": 2080020.32,
+    "jobs": 24.5442,
+    "pop_2024": 87467
+  },
+  {
+    "id": "12020",
+    "name": "Athens-Clarke County, GA",
+    "econ_impact": 293592358.3,
+    "raw_funding": 99959819.42,
+    "jobs": 1179.5259,
+    "pop_2024": 223689
+  },
+  {
+    "id": "12060",
+    "name": "Atlanta-Sandy Springs-Roswell, GA",
+    "econ_impact": 7628300397.49,
+    "raw_funding": 2597218587.97,
+    "jobs": 30647.1793,
+    "pop_2024": 6411149
+  },
+  {
+    "id": "12100",
+    "name": "Atlantic City-Hammonton, NJ",
+    "econ_impact": 72065677.67,
+    "raw_funding": 22160136.36,
+    "jobs": 195.0092,
+    "pop_2024": 372989
+  },
+  {
+    "id": "12140",
+    "name": "Auburn, IN",
+    "econ_impact": 1195117.59,
+    "raw_funding": 444220.29,
+    "jobs": 3.9091,
+    "pop_2024": 44330
+  },
+  {
+    "id": "12180",
+    "name": "Auburn, NY",
+    "econ_impact": 25995603.48,
+    "raw_funding": 11027788.69,
+    "jobs": 78.2973,
+    "pop_2024": 74567
+  },
+  {
+    "id": "12220",
+    "name": "Auburn-Opelika, AL",
+    "econ_impact": 56992154.59,
+    "raw_funding": 23144423.14,
+    "jobs": 212.9287,
+    "pop_2024": 206006
+  },
+  {
+    "id": "12260",
+    "name": "Augusta-Richmond County, GA-SC",
+    "econ_impact": 356655534.02,
+    "raw_funding": 121794749.76,
+    "jobs": 1401.971,
+    "pop_2024": 636760
+  },
+  {
+    "id": "12300",
+    "name": "Augusta-Waterville, ME",
+    "econ_impact": 11253782.85,
+    "raw_funding": 4828209.97,
+    "jobs": 44.9024,
+    "pop_2024": 128461
+  },
+  {
+    "id": "12380",
+    "name": "Austin, MN",
+    "econ_impact": 44930605.42,
+    "raw_funding": 18179868.81,
+    "jobs": 165.4368,
+    "pop_2024": 40900
+  },
+  {
+    "id": "12420",
+    "name": "Austin-Round Rock-San Marcos, TX",
+    "econ_impact": 688282357.33,
+    "raw_funding": 211291985.94,
+    "jobs": 2493.2454,
+    "pop_2024": 2550637
+  },
+  {
+    "id": "12460",
+    "name": "Bainbridge, GA",
+    "econ_impact": 1835032.66,
+    "raw_funding": 624776.25,
+    "jobs": 7.3724,
+    "pop_2024": 29391
+  },
+  {
+    "id": "12520",
+    "name": "Baker City, OR",
+    "econ_impact": 679994.54,
+    "raw_funding": 280213.14,
+    "jobs": 2.4659,
+    "pop_2024": 16750
+  },
+  {
+    "id": "12540",
+    "name": "Bakersfield-Delano, CA",
+    "econ_impact": 44939165.44,
+    "raw_funding": 16747790.8,
+    "jobs": 147.3806,
+    "pop_2024": 922529
+  },
+  {
+    "id": "12580",
+    "name": "Baltimore-Columbia-Towson, MD",
+    "econ_impact": 4915230652.99,
+    "raw_funding": 2244489648.1,
+    "jobs": 18853.713,
+    "pop_2024": 2859024
+  },
+  {
+    "id": "12620",
+    "name": "Bangor, ME",
+    "econ_impact": 50934306.84,
+    "raw_funding": 21852343.48,
+    "jobs": 203.2268,
+    "pop_2024": 156840
+  },
+  {
+    "id": "12660",
+    "name": "Baraboo, WI",
+    "econ_impact": 45807295.13,
+    "raw_funding": 19346972.14,
+    "jobs": 181.8615,
+    "pop_2024": 66486
+  },
+  {
+    "id": "12700",
+    "name": "Barnstable Town, MA",
+    "econ_impact": 127502979.5,
+    "raw_funding": 56921300.82,
+    "jobs": 449.6783,
+    "pop_2024": 232570
+  },
+  {
+    "id": "12740",
+    "name": "Barre, VT",
+    "econ_impact": 21352754.0,
+    "raw_funding": 9285346.97,
+    "jobs": 69.6401,
+    "pop_2024": 59844
+  },
+  {
+    "id": "12780",
+    "name": "Bartlesville, OK",
+    "econ_impact": 1478444.51,
+    "raw_funding": 524998.66,
+    "jobs": 5.5125,
+    "pop_2024": 54060
+  },
+  {
+    "id": "12860",
+    "name": "Batavia, NY",
+    "econ_impact": 22576416.41,
+    "raw_funding": 9577309.87,
+    "jobs": 67.9989,
+    "pop_2024": 57604
+  },
+  {
+    "id": "12900",
+    "name": "Batesville, AR",
+    "econ_impact": 1163248.75,
+    "raw_funding": 414420.96,
+    "jobs": 3.6469,
+    "pop_2024": 38345
+  },
+  {
+    "id": "12940",
+    "name": "Baton Rouge, LA",
+    "econ_impact": 251114009.8,
+    "raw_funding": 90758094.85,
+    "jobs": 889.4293,
+    "pop_2024": 882652
+  },
+  {
+    "id": "12980",
+    "name": "Battle Creek, MI",
+    "econ_impact": 9766462.43,
+    "raw_funding": 3833528.91,
+    "jobs": 37.1852,
+    "pop_2024": 133785
+  },
+  {
+    "id": "13020",
+    "name": "Bay City, MI",
+    "econ_impact": 5069082.68,
+    "raw_funding": 1989714.81,
+    "jobs": 19.3002,
+    "pop_2024": 102651
+  },
+  {
+    "id": "13060",
+    "name": "Bay City, TX",
+    "econ_impact": 6570631.21,
+    "raw_funding": 2017081.66,
+    "jobs": 23.8016,
+    "pop_2024": 36391
+  },
+  {
+    "id": "13100",
+    "name": "Beatrice, NE",
+    "econ_impact": 1013371.01,
+    "raw_funding": 391618.14,
+    "jobs": 3.6029,
+    "pop_2024": 21687
+  },
+  {
+    "id": "13140",
+    "name": "Beaumont-Port Arthur, TX",
+    "econ_impact": 47802600.62,
+    "raw_funding": 14674655.41,
+    "jobs": 173.1609,
+    "pop_2024": 398733
+  },
+  {
+    "id": "13180",
+    "name": "Beaver Dam, WI",
+    "econ_impact": 19507246.03,
+    "raw_funding": 8238996.53,
+    "jobs": 77.4466,
+    "pop_2024": 88635
+  },
+  {
+    "id": "13220",
+    "name": "Beckley, WV",
+    "econ_impact": 5884915.26,
+    "raw_funding": 2106841.55,
+    "jobs": 16.2227,
+    "pop_2024": 110979
+  },
+  {
+    "id": "13260",
+    "name": "Bedford, IN",
+    "econ_impact": 13737822.77,
+    "raw_funding": 5106292.2,
+    "jobs": 44.9354,
+    "pop_2024": 45192
+  },
+  {
+    "id": "13300",
+    "name": "Beeville, TX",
+    "econ_impact": 1600033.41,
+    "raw_funding": 491185.39,
+    "jobs": 5.796,
+    "pop_2024": 31226
+  },
+  {
+    "id": "13340",
+    "name": "Bellefontaine, OH",
+    "econ_impact": 2953974.29,
+    "raw_funding": 1132667.82,
+    "jobs": 11.2134,
+    "pop_2024": 46085
+  },
+  {
+    "id": "13380",
+    "name": "Bellingham, WA",
+    "econ_impact": 38826771.36,
+    "raw_funding": 16063052.04,
+    "jobs": 125.2918,
+    "pop_2024": 234954
+  },
+  {
+    "id": "13420",
+    "name": "Bemidji, MN",
+    "econ_impact": 1604903.69,
+    "raw_funding": 649377.82,
+    "jobs": 5.9093,
+    "pop_2024": 46762
+  },
+  {
+    "id": "13460",
+    "name": "Bend, OR",
+    "econ_impact": 15167973.56,
+    "raw_funding": 6250440.64,
+    "jobs": 55.0039,
+    "pop_2024": 264407
+  },
+  {
+    "id": "13540",
+    "name": "Bennington, VT",
+    "econ_impact": 2899554.71,
+    "raw_funding": 1260885.2,
+    "jobs": 9.4566,
+    "pop_2024": 37039
+  },
+  {
+    "id": "13660",
+    "name": "Big Rapids, MI",
+    "econ_impact": 3298156.03,
+    "raw_funding": 1294591.22,
+    "jobs": 12.5575,
+    "pop_2024": 41947
+  },
+  {
+    "id": "13700",
+    "name": "Big Spring, TX",
+    "econ_impact": 1216226.11,
+    "raw_funding": 373362.51,
+    "jobs": 4.4057,
+    "pop_2024": 30833
+  },
+  {
+    "id": "13740",
+    "name": "Billings, MT",
+    "econ_impact": 10132420.79,
+    "raw_funding": 3837806.97,
+    "jobs": 35.3078,
+    "pop_2024": 192531
+  },
+  {
+    "id": "13780",
+    "name": "Binghamton, NY",
+    "econ_impact": 106683620.36,
+    "raw_funding": 45257053.7,
+    "jobs": 321.3251,
+    "pop_2024": 243971
+  },
+  {
+    "id": "13820",
+    "name": "Birmingham, AL",
+    "econ_impact": 1536399013.19,
+    "raw_funding": 623929190.39,
+    "jobs": 5740.1486,
+    "pop_2024": 1192583
+  },
+  {
+    "id": "13860",
+    "name": "Bishop, CA",
+    "econ_impact": 3734052.81,
+    "raw_funding": 1391595.39,
+    "jobs": 12.246,
+    "pop_2024": 18485
+  },
+  {
+    "id": "13900",
+    "name": "Bismarck, ND",
+    "econ_impact": 4257294.26,
+    "raw_funding": 1152557.64,
+    "jobs": 8.5289,
+    "pop_2024": 139183
+  },
+  {
+    "id": "13940",
+    "name": "Blackfoot, ID",
+    "econ_impact": 1216217.37,
+    "raw_funding": 291930.96,
+    "jobs": 2.6858,
+    "pop_2024": 50889
+  },
+  {
+    "id": "13980",
+    "name": "Blacksburg-Christiansburg-Radford, VA",
+    "econ_impact": 200727027.11,
+    "raw_funding": 72638100.32,
+    "jobs": 617.4239,
+    "pop_2024": 182041
+  },
+  {
+    "id": "14010",
+    "name": "Bloomington, IL",
+    "econ_impact": 32545884.34,
+    "raw_funding": 11377107.66,
+    "jobs": 112.6334,
+    "pop_2024": 172069
+  },
+  {
+    "id": "14020",
+    "name": "Bloomington, IN",
+    "econ_impact": 189309121.97,
+    "raw_funding": 70365421.66,
+    "jobs": 619.2157,
+    "pop_2024": 162553
+  },
+  {
+    "id": "14100",
+    "name": "Bloomsburg-Berwick, PA",
+    "econ_impact": 13538122.92,
+    "raw_funding": 5630088.01,
+    "jobs": 47.8557,
+    "pop_2024": 66012
+  },
+  {
+    "id": "14140",
+    "name": "Bluefield, WV-VA",
+    "econ_impact": 9788239.07,
+    "raw_funding": 3523322.74,
+    "jobs": 28.5564,
+    "pop_2024": 96399
+  },
+  {
+    "id": "14180",
+    "name": "Blytheville, AR",
+    "econ_impact": 1765087.87,
+    "raw_funding": 628833.17,
+    "jobs": 5.5337,
+    "pop_2024": 38095
+  },
+  {
+    "id": "14220",
+    "name": "Bogalusa, LA",
+    "econ_impact": 11272869.32,
+    "raw_funding": 4074261.5,
+    "jobs": 39.9278,
+    "pop_2024": 45090
+  },
+  {
+    "id": "14260",
+    "name": "Boise City, ID",
+    "econ_impact": 86295326.86,
+    "raw_funding": 20713631.09,
+    "jobs": 190.5654,
+    "pop_2024": 845877
+  },
+  {
+    "id": "14300",
+    "name": "Bonham, TX",
+    "econ_impact": 2807974.61,
+    "raw_funding": 862004.56,
+    "jobs": 10.1717,
+    "pop_2024": 38650
+  },
+  {
+    "id": "14380",
+    "name": "Boone, NC",
+    "econ_impact": 5532127.3,
+    "raw_funding": 2211353.62,
+    "jobs": 21.4501,
+    "pop_2024": 54997
+  },
+  {
+    "id": "14420",
+    "name": "Borger, TX",
+    "econ_impact": 385710.51,
+    "raw_funding": 118407.13,
+    "jobs": 1.3972,
+    "pop_2024": 19721
+  },
+  {
+    "id": "14460",
+    "name": "Boston-Cambridge-Newton, MA-NH",
+    "econ_impact": 13768360079.95,
+    "raw_funding": 6140715392.45,
+    "jobs": 48443.3335,
+    "pop_2024": 5025517
+  },
+  {
+    "id": "14500",
+    "name": "Boulder, CO",
+    "econ_impact": 263386797.91,
+    "raw_funding": 94037736.05,
+    "jobs": 902.7623,
+    "pop_2024": 330262
+  },
+  {
+    "id": "14540",
+    "name": "Bowling Green, KY",
+    "econ_impact": 14604949.46,
+    "raw_funding": 5587014.89,
+    "jobs": 48.0483,
+    "pop_2024": 195159
+  },
+  {
+    "id": "14580",
+    "name": "Bozeman, MT",
+    "econ_impact": 81335234.04,
+    "raw_funding": 30806944.82,
+    "jobs": 283.4239,
+    "pop_2024": 126984
+  },
+  {
+    "id": "14620",
+    "name": "Bradford, PA",
+    "econ_impact": 4038325.26,
+    "raw_funding": 1679414.99,
+    "jobs": 14.275,
+    "pop_2024": 39478
+  },
+  {
+    "id": "14660",
+    "name": "Brainerd, MN",
+    "econ_impact": 3762929.4,
+    "raw_funding": 1522560.45,
+    "jobs": 13.8553,
+    "pop_2024": 100084
+  },
+  {
+    "id": "14700",
+    "name": "Branson, MO",
+    "econ_impact": 5998226.19,
+    "raw_funding": 2551126.0,
+    "jobs": 21.9397,
+    "pop_2024": 56744
+  },
+  {
+    "id": "14710",
+    "name": "Brattleboro, VT",
+    "econ_impact": 5145677.12,
+    "raw_funding": 2237622.25,
+    "jobs": 16.7822,
+    "pop_2024": 45627
+  },
+  {
+    "id": "14720",
+    "name": "Breckenridge, CO",
+    "econ_impact": 4547997.88,
+    "raw_funding": 1623784.59,
+    "jobs": 15.5883,
+    "pop_2024": 38251
+  },
+  {
+    "id": "14740",
+    "name": "Bremerton-Silverdale-Port Orchard, WA",
+    "econ_impact": 162435618.37,
+    "raw_funding": 67201358.74,
+    "jobs": 524.1706,
+    "pop_2024": 281420
+  },
+  {
+    "id": "14780",
+    "name": "Brenham, TX",
+    "econ_impact": 10032553.17,
+    "raw_funding": 3079837.89,
+    "jobs": 36.3421,
+    "pop_2024": 37810
+  },
+  {
+    "id": "14820",
+    "name": "Brevard, NC",
+    "econ_impact": 3178367.72,
+    "raw_funding": 1270486.85,
+    "jobs": 12.3237,
+    "pop_2024": 34103
+  },
+  {
+    "id": "14860",
+    "name": "Bridgeport-Stamford-Danbury, CT",
+    "econ_impact": 493859549.53,
+    "raw_funding": 217123598.34,
+    "jobs": 1650.1393,
+    "pop_2024": 972679
+  },
+  {
+    "id": "14940",
+    "name": "Brigham City, UT-ID",
+    "econ_impact": 9678739.26,
+    "raw_funding": 3517765.88,
+    "jobs": 40.4273,
+    "pop_2024": 69096
+  },
+  {
+    "id": "15020",
+    "name": "Brookhaven, MS",
+    "econ_impact": 2357844.72,
+    "raw_funding": 732226.27,
+    "jobs": 6.5168,
+    "pop_2024": 34956
+  },
+  {
+    "id": "15060",
+    "name": "Brookings, OR",
+    "econ_impact": 751628.3,
+    "raw_funding": 309732.08,
+    "jobs": 2.7256,
+    "pop_2024": 22774
+  },
+  {
+    "id": "15100",
+    "name": "Brookings, SD",
+    "econ_impact": 12889436.85,
+    "raw_funding": 4129207.8,
+    "jobs": 34.2724,
+    "pop_2024": 36359
+  },
+  {
+    "id": "15180",
+    "name": "Brownsville-Harlingen, TX",
+    "econ_impact": 11726377.1,
+    "raw_funding": 3599815.51,
+    "jobs": 42.4778,
+    "pop_2024": 431874
+  },
+  {
+    "id": "15220",
+    "name": "Brownwood, TX",
+    "econ_impact": 2925213.54,
+    "raw_funding": 897995.09,
+    "jobs": 10.5963,
+    "pop_2024": 38631
+  },
+  {
+    "id": "15260",
+    "name": "Brunswick-St. Simons, GA",
+    "econ_impact": 6646868.39,
+    "raw_funding": 2263069.0,
+    "jobs": 26.7042,
+    "pop_2024": 117135
+  },
+  {
+    "id": "15340",
+    "name": "Bucyrus, OH",
+    "econ_impact": 4653961.06,
+    "raw_funding": 1784508.39,
+    "jobs": 17.6666,
+    "pop_2024": 41626
+  },
+  {
+    "id": "15380",
+    "name": "Buffalo-Cheektowaga, NY",
+    "econ_impact": 530822834.76,
+    "raw_funding": 225184310.93,
+    "jobs": 1598.8086,
+    "pop_2024": 1160172
+  },
+  {
+    "id": "15420",
+    "name": "Burley, ID",
+    "econ_impact": 1033066.81,
+    "raw_funding": 247968.99,
+    "jobs": 2.2813,
+    "pop_2024": 48667
+  },
+  {
+    "id": "15460",
+    "name": "Burlington, IA-IL",
+    "econ_impact": 4453801.3,
+    "raw_funding": 1810952.5,
+    "jobs": 14.3373,
+    "pop_2024": 44459
+  },
+  {
+    "id": "15500",
+    "name": "Burlington, NC",
+    "econ_impact": 325217293.11,
+    "raw_funding": 129998895.58,
+    "jobs": 1260.9893,
+    "pop_2024": 183040
+  },
+  {
+    "id": "15540",
+    "name": "Burlington-South Burlington, VT",
+    "econ_impact": 265367683.36,
+    "raw_funding": 115396403.39,
+    "jobs": 865.473,
+    "pop_2024": 229445
+  },
+  {
+    "id": "15580",
+    "name": "Butte-Silver Bow, MT",
+    "econ_impact": 5535972.74,
+    "raw_funding": 2096833.05,
+    "jobs": 19.2909,
+    "pop_2024": 36134
+  },
+  {
+    "id": "15620",
+    "name": "Cadillac, MI",
+    "econ_impact": 1743673.92,
+    "raw_funding": 684426.36,
+    "jobs": 6.6389,
+    "pop_2024": 49699
+  },
+  {
+    "id": "15660",
+    "name": "Calhoun, GA",
+    "econ_impact": 2739020.19,
+    "raw_funding": 932558.21,
+    "jobs": 11.0042,
+    "pop_2024": 60765
+  },
+  {
+    "id": "15700",
+    "name": "Cambridge, MD",
+    "econ_impact": 22923652.51,
+    "raw_funding": 10467850.72,
+    "jobs": 87.9299,
+    "pop_2024": 33138
+  },
+  {
+    "id": "15740",
+    "name": "Cambridge, OH",
+    "econ_impact": 1056867.39,
+    "raw_funding": 405243.77,
+    "jobs": 4.0119,
+    "pop_2024": 38219
+  },
+  {
+    "id": "15780",
+    "name": "Camden, AR",
+    "econ_impact": 1136335.94,
+    "raw_funding": 404832.95,
+    "jobs": 3.5625,
+    "pop_2024": 26374
+  },
+  {
+    "id": "15820",
+    "name": "Campbellsville, KY",
+    "econ_impact": 2106710.31,
+    "raw_funding": 805906.37,
+    "jobs": 6.9308,
+    "pop_2024": 38361
+  },
+  {
+    "id": "15860",
+    "name": "Ca\u00f1on City, CO",
+    "econ_impact": 5283313.08,
+    "raw_funding": 1886316.26,
+    "jobs": 18.1086,
+    "pop_2024": 50093
+  },
+  {
+    "id": "15900",
+    "name": "Canton, IL",
+    "econ_impact": 1440157.75,
+    "raw_funding": 503437.84,
+    "jobs": 4.984,
+    "pop_2024": 32510
+  },
+  {
+    "id": "15940",
+    "name": "Canton-Massillon, OH",
+    "econ_impact": 27018805.65,
+    "raw_funding": 10360053.49,
+    "jobs": 102.5645,
+    "pop_2024": 400551
+  },
+  {
+    "id": "15980",
+    "name": "Cape Coral-Fort Myers, FL",
+    "econ_impact": 27252440.86,
+    "raw_funding": 8484284.94,
+    "jobs": 95.024,
+    "pop_2024": 860959
+  },
+  {
+    "id": "16020",
+    "name": "Cape Girardeau, MO-IL",
+    "econ_impact": 1895662.68,
+    "raw_funding": 793788.73,
+    "jobs": 6.9014,
+    "pop_2024": 98862
+  },
+  {
+    "id": "16060",
+    "name": "Carbondale, IL",
+    "econ_impact": 6428479.79,
+    "raw_funding": 2247212.15,
+    "jobs": 22.2474,
+    "pop_2024": 53199
+  },
+  {
+    "id": "16100",
+    "name": "Carlsbad-Artesia, NM",
+    "econ_impact": 1041609.56,
+    "raw_funding": 447461.47,
+    "jobs": 3.4902,
+    "pop_2024": 61436
+  },
+  {
+    "id": "16140",
+    "name": "Carroll, IA",
+    "econ_impact": 1011353.13,
+    "raw_funding": 411800.97,
+    "jobs": 3.2532,
+    "pop_2024": 20407
+  },
+  {
+    "id": "16180",
+    "name": "Carson City, NV",
+    "econ_impact": 8637944.18,
+    "raw_funding": 1631049.4,
+    "jobs": 14.1901,
+    "pop_2024": 58148
+  },
+  {
+    "id": "16220",
+    "name": "Casper, WY",
+    "econ_impact": 5225205.45,
+    "raw_funding": 1338021.71,
+    "jobs": 10.4366,
+    "pop_2024": 80410
+  },
+  {
+    "id": "16260",
+    "name": "Cedar City, UT",
+    "econ_impact": 2719057.19,
+    "raw_funding": 989951.22,
+    "jobs": 11.3844,
+    "pop_2024": 65936
+  },
+  {
+    "id": "16300",
+    "name": "Cedar Rapids, IA",
+    "econ_impact": 99361925.17,
+    "raw_funding": 40458011.61,
+    "jobs": 319.6183,
+    "pop_2024": 278677
+  },
+  {
+    "id": "16340",
+    "name": "Cedartown, GA",
+    "econ_impact": 3279284.83,
+    "raw_funding": 1116502.9,
+    "jobs": 13.1747,
+    "pop_2024": 44610
+  },
+  {
+    "id": "16380",
+    "name": "Celina, OH",
+    "econ_impact": 764582.17,
+    "raw_funding": 293170.33,
+    "jobs": 2.9024,
+    "pop_2024": 42648
+  },
+  {
+    "id": "16460",
+    "name": "Centralia, IL",
+    "econ_impact": 1146632.52,
+    "raw_funding": 400829.84,
+    "jobs": 3.9682,
+    "pop_2024": 36437
+  },
+  {
+    "id": "16500",
+    "name": "Centralia, WA",
+    "econ_impact": 18440050.65,
+    "raw_funding": 7628846.87,
+    "jobs": 59.505,
+    "pop_2024": 87049
+  },
+  {
+    "id": "16540",
+    "name": "Chambersburg, PA",
+    "econ_impact": 19615227.9,
+    "raw_funding": 8157368.64,
+    "jobs": 69.3376,
+    "pop_2024": 159285
+  },
+  {
+    "id": "16580",
+    "name": "Champaign-Urbana, IL",
+    "econ_impact": 402096229.14,
+    "raw_funding": 140561308.47,
+    "jobs": 1391.557,
+    "pop_2024": 242453
+  },
+  {
+    "id": "16620",
+    "name": "Charleston, WV",
+    "econ_impact": 9120348.67,
+    "raw_funding": 3265149.74,
+    "jobs": 25.1417,
+    "pop_2024": 202091
+  },
+  {
+    "id": "16660",
+    "name": "Charleston-Mattoon, IL",
+    "econ_impact": 11178983.13,
+    "raw_funding": 3907851.86,
+    "jobs": 38.6877,
+    "pop_2024": 46423
+  },
+  {
+    "id": "16700",
+    "name": "Charleston-North Charleston, SC",
+    "econ_impact": 831098702.84,
+    "raw_funding": 287419324.58,
+    "jobs": 2960.419,
+    "pop_2024": 869940
+  },
+  {
+    "id": "16740",
+    "name": "Charlotte-Concord-Gastonia, NC-SC",
+    "econ_impact": 485643893.12,
+    "raw_funding": 192906039.73,
+    "jobs": 1875.8856,
+    "pop_2024": 2883370
+  },
+  {
+    "id": "16820",
+    "name": "Charlottesville, VA",
+    "econ_impact": 749108141.25,
+    "raw_funding": 271083536.19,
+    "jobs": 2304.2101,
+    "pop_2024": 227336
+  },
+  {
+    "id": "16860",
+    "name": "Chattanooga, TN-GA",
+    "econ_impact": 26595119.55,
+    "raw_funding": 9732756.27,
+    "jobs": 100.225,
+    "pop_2024": 588050
+  },
+  {
+    "id": "16940",
+    "name": "Cheyenne, WY",
+    "econ_impact": 14224932.32,
+    "raw_funding": 3642587.53,
+    "jobs": 28.4122,
+    "pop_2024": 101783
+  },
+  {
+    "id": "16980",
+    "name": "Chicago-Naperville-Elgin, IL-IN",
+    "econ_impact": 6542052539.2,
+    "raw_funding": 2290651283.67,
+    "jobs": 22608.3807,
+    "pop_2024": 9408576
+  },
+  {
+    "id": "17020",
+    "name": "Chico, CA",
+    "econ_impact": 16045665.87,
+    "raw_funding": 5979849.71,
+    "jobs": 52.6227,
+    "pop_2024": 208334
+  },
+  {
+    "id": "17060",
+    "name": "Chillicothe, OH",
+    "econ_impact": 6418167.19,
+    "raw_funding": 2460973.16,
+    "jobs": 24.3636,
+    "pop_2024": 76046
+  },
+  {
+    "id": "17140",
+    "name": "Cincinnati, OH-KY-IN",
+    "econ_impact": 1517176710.47,
+    "raw_funding": 581162452.47,
+    "jobs": 5629.1427,
+    "pop_2024": 2302815
+  },
+  {
+    "id": "17220",
+    "name": "Clarksburg, WV",
+    "econ_impact": 24405620.01,
+    "raw_funding": 8737385.67,
+    "jobs": 67.2779,
+    "pop_2024": 88525
+  },
+  {
+    "id": "17260",
+    "name": "Clarksdale, MS",
+    "econ_impact": 1362780.3,
+    "raw_funding": 423210.03,
+    "jobs": 3.7666,
+    "pop_2024": 20105
+  },
+  {
+    "id": "17300",
+    "name": "Clarksville, TN-KY",
+    "econ_impact": 61672216.45,
+    "raw_funding": 22985006.79,
+    "jobs": 226.1946,
+    "pop_2024": 345955
+  },
+  {
+    "id": "17340",
+    "name": "Clearlake, CA",
+    "econ_impact": 3416815.95,
+    "raw_funding": 1273368.52,
+    "jobs": 11.2056,
+    "pop_2024": 67764
+  },
+  {
+    "id": "17380",
+    "name": "Cleveland, MS",
+    "econ_impact": 1582530.3,
+    "raw_funding": 491453.16,
+    "jobs": 4.3739,
+    "pop_2024": 28395
+  },
+  {
+    "id": "17410",
+    "name": "Cleveland, OH",
+    "econ_impact": 1761298967.2,
+    "raw_funding": 675350041.61,
+    "jobs": 6685.9654,
+    "pop_2024": 2171877
+  },
+  {
+    "id": "17420",
+    "name": "Cleveland, TN",
+    "econ_impact": 4742346.02,
+    "raw_funding": 1761643.82,
+    "jobs": 17.6164,
+    "pop_2024": 132120
+  },
+  {
+    "id": "17500",
+    "name": "Clewiston, FL",
+    "econ_impact": 1384465.06,
+    "raw_funding": 431014.46,
+    "jobs": 4.8274,
+    "pop_2024": 59262
+  },
+  {
+    "id": "17540",
+    "name": "Clinton, IA",
+    "econ_impact": 4625058.36,
+    "raw_funding": 1883223.02,
+    "jobs": 14.8775,
+    "pop_2024": 46015
+  },
+  {
+    "id": "17580",
+    "name": "Clovis, NM",
+    "econ_impact": 1344810.06,
+    "raw_funding": 577712.33,
+    "jobs": 4.5062,
+    "pop_2024": 65869
+  },
+  {
+    "id": "17620",
+    "name": "Coamo, PR",
+    "econ_impact": 0.0,
+    "raw_funding": 0.0,
+    "jobs": 0.0,
+    "pop_2024": 0
+  },
+  {
+    "id": "17640",
+    "name": "Coco, PR",
+    "econ_impact": 0.0,
+    "raw_funding": 0.0,
+    "jobs": 0.0,
+    "pop_2024": 0
+  },
+  {
+    "id": "17650",
+    "name": "Cody, WY",
+    "econ_impact": 373594.59,
+    "raw_funding": 95666.61,
+    "jobs": 0.7462,
+    "pop_2024": 31082
+  },
+  {
+    "id": "17660",
+    "name": "Coeur d'Alene, ID",
+    "econ_impact": 37246021.47,
+    "raw_funding": 8940233.22,
+    "jobs": 82.2501,
+    "pop_2024": 188323
+  },
+  {
+    "id": "17740",
+    "name": "Coldwater, MI",
+    "econ_impact": 2774817.92,
+    "raw_funding": 1089170.7,
+    "jobs": 10.565,
+    "pop_2024": 46187
+  },
+  {
+    "id": "17780",
+    "name": "College Station-Bryan, TX",
+    "econ_impact": 419289076.5,
+    "raw_funding": 128715229.61,
+    "jobs": 1518.8397,
+    "pop_2024": 287462
+  },
+  {
+    "id": "17820",
+    "name": "Colorado Springs, CO",
+    "econ_impact": 140113425.0,
+    "raw_funding": 50025093.83,
+    "jobs": 480.2409,
+    "pop_2024": 777634
+  },
+  {
+    "id": "17860",
+    "name": "Columbia, MO",
+    "econ_impact": 255612483.1,
+    "raw_funding": 108715415.31,
+    "jobs": 934.9526,
+    "pop_2024": 219426
+  },
+  {
+    "id": "17900",
+    "name": "Columbia, SC",
+    "econ_impact": 316852323.25,
+    "raw_funding": 109577214.39,
+    "jobs": 1128.6453,
+    "pop_2024": 870193
+  },
+  {
+    "id": "17980",
+    "name": "Columbus, GA-AL",
+    "econ_impact": 16150132.57,
+    "raw_funding": 5751087.1,
+    "jobs": 63.8016,
+    "pop_2024": 324343
+  },
+  {
+    "id": "18020",
+    "name": "Columbus, IN",
+    "econ_impact": 15278165.46,
+    "raw_funding": 5678831.24,
+    "jobs": 49.9737,
+    "pop_2024": 84741
+  },
+  {
+    "id": "18060",
+    "name": "Columbus, MS",
+    "econ_impact": 3960789.33,
+    "raw_funding": 1230019.08,
+    "jobs": 10.9472,
+    "pop_2024": 67035
+  },
+  {
+    "id": "18100",
+    "name": "Columbus, NE",
+    "econ_impact": 3927213.65,
+    "raw_funding": 1517675.27,
+    "jobs": 13.9626,
+    "pop_2024": 46325
+  },
+  {
+    "id": "18140",
+    "name": "Columbus, OH",
+    "econ_impact": 1600669664.82,
+    "raw_funding": 613758563.92,
+    "jobs": 6076.2098,
+    "pop_2024": 2225377
+  },
+  {
+    "id": "18180",
+    "name": "Concord, NH",
+    "econ_impact": 44837507.56,
+    "raw_funding": 18571141.58,
+    "jobs": 129.998,
+    "pop_2024": 157869
+  },
+  {
+    "id": "18220",
+    "name": "Connersville, IN",
+    "econ_impact": 2430013.21,
+    "raw_funding": 903225.91,
+    "jobs": 7.9484,
+    "pop_2024": 23335
+  },
+  {
+    "id": "18260",
+    "name": "Cookeville, TN",
+    "econ_impact": 10769584.74,
+    "raw_funding": 4000587.97,
+    "jobs": 40.0059,
+    "pop_2024": 149929
+  },
+  {
+    "id": "18300",
+    "name": "Coos Bay-North Bend, OR",
+    "econ_impact": 2221652.55,
+    "raw_funding": 915501.82,
+    "jobs": 8.0564,
+    "pop_2024": 64326
+  },
+  {
+    "id": "18340",
+    "name": "Corbin, KY",
+    "econ_impact": 13479511.7,
+    "raw_funding": 5156487.03,
+    "jobs": 44.3458,
+    "pop_2024": 149835
+  },
+  {
+    "id": "18380",
+    "name": "Cordele, GA",
+    "econ_impact": 762859.31,
+    "raw_funding": 259731.82,
+    "jobs": 3.0648,
+    "pop_2024": 19468
+  },
+  {
+    "id": "18420",
+    "name": "Corinth, MS",
+    "econ_impact": 953680.49,
+    "raw_funding": 296164.5,
+    "jobs": 2.6359,
+    "pop_2024": 34228
+  },
+  {
+    "id": "18460",
+    "name": "Cornelia, GA",
+    "econ_impact": 2518303.26,
+    "raw_funding": 857410.39,
+    "jobs": 10.1174,
+    "pop_2024": 49665
+  },
+  {
+    "id": "18500",
+    "name": "Corning, NY",
+    "econ_impact": 18138756.28,
+    "raw_funding": 7694776.99,
+    "jobs": 54.6329,
+    "pop_2024": 92015
+  },
+  {
+    "id": "18580",
+    "name": "Corpus Christi, TX",
+    "econ_impact": 17913004.65,
+    "raw_funding": 5499014.01,
+    "jobs": 64.8884,
+    "pop_2024": 450187
+  },
+  {
+    "id": "18620",
+    "name": "Corsicana, TX",
+    "econ_impact": 7356000.07,
+    "raw_funding": 2258177.69,
+    "jobs": 26.6465,
+    "pop_2024": 56533
+  },
+  {
+    "id": "18660",
+    "name": "Cortland, NY",
+    "econ_impact": 32473657.82,
+    "raw_funding": 13775892.41,
+    "jobs": 97.8088,
+    "pop_2024": 45945
+  },
+  {
+    "id": "18700",
+    "name": "Corvallis, OR",
+    "econ_impact": 84986259.74,
+    "raw_funding": 35021261.72,
+    "jobs": 308.1871,
+    "pop_2024": 98899
+  },
+  {
+    "id": "18740",
+    "name": "Coshocton, OH",
+    "econ_impact": 3103746.65,
+    "raw_funding": 1190096.33,
+    "jobs": 11.782,
+    "pop_2024": 37003
+  },
+  {
+    "id": "18820",
+    "name": "Crawfordsville, IN",
+    "econ_impact": 7129985.75,
+    "raw_funding": 2650186.37,
+    "jobs": 23.3216,
+    "pop_2024": 38633
+  },
+  {
+    "id": "18860",
+    "name": "Crescent City, CA",
+    "econ_impact": 784740.09,
+    "raw_funding": 292454.54,
+    "jobs": 2.5736,
+    "pop_2024": 27009
+  },
+  {
+    "id": "18880",
+    "name": "Crestview-Fort Walton Beach-Destin, FL",
+    "econ_impact": 9097123.53,
+    "raw_funding": 2832134.88,
+    "jobs": 31.7199,
+    "pop_2024": 310149
+  },
+  {
+    "id": "18900",
+    "name": "Crossville, TN",
+    "econ_impact": 3489075.37,
+    "raw_funding": 1296090.17,
+    "jobs": 12.9609,
+    "pop_2024": 65618
+  },
+  {
+    "id": "18980",
+    "name": "Cullman, AL",
+    "econ_impact": 22825125.75,
+    "raw_funding": 9269247.19,
+    "jobs": 85.2771,
+    "pop_2024": 92604
+  },
+  {
+    "id": "19060",
+    "name": "Cumberland, MD-WV",
+    "econ_impact": 7307429.84,
+    "raw_funding": 3104014.39,
+    "jobs": 25.4821,
+    "pop_2024": 93875
+  },
+  {
+    "id": "19100",
+    "name": "Dallas-Fort Worth-Arlington, TX",
+    "econ_impact": 2744022540.74,
+    "raw_funding": 842372270.51,
+    "jobs": 9939.9928,
+    "pop_2024": 8344032
+  },
+  {
+    "id": "19140",
+    "name": "Dalton, GA",
+    "econ_impact": 8378978.52,
+    "raw_funding": 2852803.07,
+    "jobs": 33.6631,
+    "pop_2024": 146386
+  },
+  {
+    "id": "19180",
+    "name": "Danville, IL",
+    "econ_impact": 40613583.1,
+    "raw_funding": 14197343.74,
+    "jobs": 140.5537,
+    "pop_2024": 71106
+  },
+  {
+    "id": "19220",
+    "name": "Danville, KY",
+    "econ_impact": 12490104.22,
+    "raw_funding": 4777996.55,
+    "jobs": 41.0908,
+    "pop_2024": 56304
+  },
+  {
+    "id": "19260",
+    "name": "Danville, VA",
+    "econ_impact": 15238872.25,
+    "raw_funding": 5514567.46,
+    "jobs": 46.8738,
+    "pop_2024": 101403
+  },
+  {
+    "id": "19300",
+    "name": "Daphne-Fairhope-Foley, AL",
+    "econ_impact": 12345314.54,
+    "raw_funding": 5013412.56,
+    "jobs": 46.1234,
+    "pop_2024": 261608
+  },
+  {
+    "id": "19340",
+    "name": "Davenport-Moline-Rock Island, IA-IL",
+    "econ_impact": 39504438.69,
+    "raw_funding": 15065860.28,
+    "jobs": 131.3932,
+    "pop_2024": 381801
+  },
+  {
+    "id": "19430",
+    "name": "Dayton-Kettering-Beavercreek, OH",
+    "econ_impact": 79143850.24,
+    "raw_funding": 30346808.55,
+    "jobs": 300.4334,
+    "pop_2024": 821740
+  },
+  {
+    "id": "19460",
+    "name": "Decatur, AL",
+    "econ_impact": 13748175.49,
+    "raw_funding": 5583112.15,
+    "jobs": 51.3646,
+    "pop_2024": 159651
+  },
+  {
+    "id": "19500",
+    "name": "Decatur, IL",
+    "econ_impact": 23717268.76,
+    "raw_funding": 8290876.88,
+    "jobs": 82.0797,
+    "pop_2024": 100737
+  },
+  {
+    "id": "19540",
+    "name": "Decatur, IN",
+    "econ_impact": 2802106.71,
+    "raw_funding": 1041531.53,
+    "jobs": 9.1655,
+    "pop_2024": 36584
+  },
+  {
+    "id": "19580",
+    "name": "Defiance, OH",
+    "econ_impact": 1277952.31,
+    "raw_funding": 490016.27,
+    "jobs": 4.8512,
+    "pop_2024": 38644
+  },
+  {
+    "id": "19620",
+    "name": "Del Rio, TX",
+    "econ_impact": 3298510.96,
+    "raw_funding": 1012591.6,
+    "jobs": 11.9486,
+    "pop_2024": 47999
+  },
+  {
+    "id": "19660",
+    "name": "Deltona-Daytona Beach-Ormond Beach, FL",
+    "econ_impact": 41546649.23,
+    "raw_funding": 12934386.77,
+    "jobs": 144.8651,
+    "pop_2024": 739516
+  },
+  {
+    "id": "19700",
+    "name": "Deming, NM",
+    "econ_impact": 602423.36,
+    "raw_funding": 258792.98,
+    "jobs": 2.0186,
+    "pop_2024": 25878
+  },
+  {
+    "id": "19740",
+    "name": "Denver-Aurora-Centennial, CO",
+    "econ_impact": 2150962519.84,
+    "raw_funding": 767964253.74,
+    "jobs": 7372.4568,
+    "pop_2024": 3052498
+  },
+  {
+    "id": "19760",
+    "name": "DeRidder, LA",
+    "econ_impact": 639390.15,
+    "raw_funding": 231089.58,
+    "jobs": 2.2647,
+    "pop_2024": 36695
+  },
+  {
+    "id": "19780",
+    "name": "Des Moines-West Des Moines, IA",
+    "econ_impact": 49356732.37,
+    "raw_funding": 20096986.32,
+    "jobs": 158.7662,
+    "pop_2024": 753913
+  },
+  {
+    "id": "19810",
+    "name": "Detroit Lakes, MN",
+    "econ_impact": 1836280.4,
+    "raw_funding": 742997.71,
+    "jobs": 6.7613,
+    "pop_2024": 35444
+  },
+  {
+    "id": "19820",
+    "name": "Detroit-Warren-Dearborn, MI",
+    "econ_impact": 1806015904.02,
+    "raw_funding": 708896821.7,
+    "jobs": 6876.2992,
+    "pop_2024": 4400578
+  },
+  {
+    "id": "19860",
+    "name": "Dickinson, ND",
+    "econ_impact": 456448.52,
+    "raw_funding": 123572.2,
+    "jobs": 0.9144,
+    "pop_2024": 38861
+  },
+  {
+    "id": "19940",
+    "name": "Dixon, IL",
+    "econ_impact": 1982127.82,
+    "raw_funding": 692895.03,
+    "jobs": 6.8597,
+    "pop_2024": 33544
+  },
+  {
+    "id": "19980",
+    "name": "Dodge City, KS",
+    "econ_impact": 1218255.84,
+    "raw_funding": 440986.44,
+    "jobs": 3.572,
+    "pop_2024": 34072
+  },
+  {
+    "id": "20020",
+    "name": "Dothan, AL",
+    "econ_impact": 6099356.71,
+    "raw_funding": 2476939.04,
+    "jobs": 22.7878,
+    "pop_2024": 154766
+  },
+  {
+    "id": "20060",
+    "name": "Douglas, GA",
+    "econ_impact": 679740.06,
+    "raw_funding": 231432.09,
+    "jobs": 2.7309,
+    "pop_2024": 52286
+  },
+  {
+    "id": "20100",
+    "name": "Dover, DE",
+    "econ_impact": 52196960.4,
+    "raw_funding": 22185470.79,
+    "jobs": 122.0201,
+    "pop_2024": 192690
+  },
+  {
+    "id": "20140",
+    "name": "Dublin, GA",
+    "econ_impact": 3956470.13,
+    "raw_funding": 1347065.17,
+    "jobs": 15.8954,
+    "pop_2024": 59465
+  },
+  {
+    "id": "20180",
+    "name": "DuBois, PA",
+    "econ_impact": 48423606.02,
+    "raw_funding": 20137885.07,
+    "jobs": 171.172,
+    "pop_2024": 78132
+  },
+  {
+    "id": "20220",
+    "name": "Dubuque, IA",
+    "econ_impact": 9782417.73,
+    "raw_funding": 3983187.42,
+    "jobs": 31.4672,
+    "pop_2024": 99242
+  },
+  {
+    "id": "20260",
+    "name": "Duluth, MN-WI",
+    "econ_impact": 23450077.32,
+    "raw_funding": 9541093.29,
+    "jobs": 87.2005,
+    "pop_2024": 281815
+  },
+  {
+    "id": "20300",
+    "name": "Dumas, TX",
+    "econ_impact": 310177.32,
+    "raw_funding": 95219.62,
+    "jobs": 1.1236,
+    "pop_2024": 21872
+  },
+  {
+    "id": "20340",
+    "name": "Duncan, OK",
+    "econ_impact": 1407693.48,
+    "raw_funding": 499874.83,
+    "jobs": 5.2487,
+    "pop_2024": 44075
+  },
+  {
+    "id": "20420",
+    "name": "Durango, CO",
+    "econ_impact": 4207538.7,
+    "raw_funding": 1502229.48,
+    "jobs": 14.4214,
+    "pop_2024": 56823
+  },
+  {
+    "id": "20460",
+    "name": "Durant, OK",
+    "econ_impact": 742888.51,
+    "raw_funding": 263801.22,
+    "jobs": 2.7699,
+    "pop_2024": 50305
+  },
+  {
+    "id": "20500",
+    "name": "Durham-Chapel Hill, NC",
+    "econ_impact": 4838226893.17,
+    "raw_funding": 1933981267.27,
+    "jobs": 18759.6183,
+    "pop_2024": 620522
+  },
+  {
+    "id": "20540",
+    "name": "Dyersburg, TN",
+    "econ_impact": 2576461.67,
+    "raw_funding": 957080.69,
+    "jobs": 9.5708,
+    "pop_2024": 36403
+  },
+  {
+    "id": "20580",
+    "name": "Eagle Pass, TX",
+    "econ_impact": 2106786.83,
+    "raw_funding": 646750.81,
+    "jobs": 7.6317,
+    "pop_2024": 58829
+  },
+  {
+    "id": "20660",
+    "name": "Easton, MD",
+    "econ_impact": 7097143.82,
+    "raw_funding": 3240837.91,
+    "jobs": 27.223,
+    "pop_2024": 38244
+  },
+  {
+    "id": "20700",
+    "name": "East Stroudsburg, PA",
+    "econ_impact": 23572041.28,
+    "raw_funding": 9802885.35,
+    "jobs": 83.3245,
+    "pop_2024": 166523
+  },
+  {
+    "id": "20740",
+    "name": "Eau Claire, WI",
+    "econ_impact": 13920426.42,
+    "raw_funding": 5879371.43,
+    "jobs": 55.2661,
+    "pop_2024": 176153
+  },
+  {
+    "id": "20780",
+    "name": "Edwards, CO",
+    "econ_impact": 8223804.75,
+    "raw_funding": 2936168.35,
+    "jobs": 28.1872,
+    "pop_2024": 54330
+  },
+  {
+    "id": "20820",
+    "name": "Effingham, IL",
+    "econ_impact": 3286000.94,
+    "raw_funding": 1148691.68,
+    "jobs": 11.372,
+    "pop_2024": 44907
+  },
+  {
+    "id": "20900",
+    "name": "El Campo, TX",
+    "econ_impact": 11708568.11,
+    "raw_funding": 3594348.43,
+    "jobs": 42.4133,
+    "pop_2024": 42035
+  },
+  {
+    "id": "20940",
+    "name": "El Centro, CA",
+    "econ_impact": 12838484.19,
+    "raw_funding": 4784607.04,
+    "jobs": 42.1045,
+    "pop_2024": 181724
+  },
+  {
+    "id": "20980",
+    "name": "El Dorado, AR",
+    "econ_impact": 1416429.77,
+    "raw_funding": 504619.65,
+    "jobs": 4.4407,
+    "pop_2024": 37008
+  },
+  {
+    "id": "21020",
+    "name": "Elizabeth City, NC",
+    "econ_impact": 6874443.94,
+    "raw_funding": 2747916.97,
+    "jobs": 26.6548,
+    "pop_2024": 41418
+  },
+  {
+    "id": "21060",
+    "name": "Elizabethtown, KY",
+    "econ_impact": 13062419.65,
+    "raw_funding": 4996931.57,
+    "jobs": 42.9736,
+    "pop_2024": 127954
+  },
+  {
+    "id": "21120",
+    "name": "Elk City, OK",
+    "econ_impact": 1207209.15,
+    "raw_funding": 428682.43,
+    "jobs": 4.5012,
+    "pop_2024": 22248
+  },
+  {
+    "id": "21140",
+    "name": "Elkhart-Goshen, IN",
+    "econ_impact": 11581560.55,
+    "raw_funding": 4304818.4,
+    "jobs": 37.8824,
+    "pop_2024": 207436
+  },
+  {
+    "id": "21180",
+    "name": "Elkins, WV",
+    "econ_impact": 1460393.13,
+    "raw_funding": 522831.14,
+    "jobs": 4.0258,
+    "pop_2024": 27190
+  },
+  {
+    "id": "21220",
+    "name": "Elko, NV",
+    "econ_impact": 1532317.07,
+    "raw_funding": 289337.92,
+    "jobs": 2.5172,
+    "pop_2024": 56240
+  },
+  {
+    "id": "21260",
+    "name": "Ellensburg, WA",
+    "econ_impact": 12345932.46,
+    "raw_funding": 5107644.77,
+    "jobs": 39.8396,
+    "pop_2024": 48172
+  },
+  {
+    "id": "21300",
+    "name": "Elmira, NY",
+    "econ_impact": 16537953.53,
+    "raw_funding": 7015688.52,
+    "jobs": 49.8114,
+    "pop_2024": 81115
+  },
+  {
+    "id": "21340",
+    "name": "El Paso, TX",
+    "econ_impact": 145307542.37,
+    "raw_funding": 44607157.04,
+    "jobs": 526.3645,
+    "pop_2024": 879392
+  },
+  {
+    "id": "21380",
+    "name": "Emporia, KS",
+    "econ_impact": 2839208.13,
+    "raw_funding": 1027741.67,
+    "jobs": 8.3247,
+    "pop_2024": 35027
+  },
+  {
+    "id": "21420",
+    "name": "Enid, OK",
+    "econ_impact": 1645206.34,
+    "raw_funding": 584216.13,
+    "jobs": 6.1343,
+    "pop_2024": 62007
+  },
+  {
+    "id": "21460",
+    "name": "Enterprise, AL",
+    "econ_impact": 2732509.52,
+    "raw_funding": 1109667.76,
+    "jobs": 10.2089,
+    "pop_2024": 56358
+  },
+  {
+    "id": "21500",
+    "name": "Erie, PA",
+    "econ_impact": 51259216.85,
+    "raw_funding": 21317128.2,
+    "jobs": 181.1956,
+    "pop_2024": 267750
+  },
+  {
+    "id": "21540",
+    "name": "Escanaba, MI",
+    "econ_impact": 1343883.68,
+    "raw_funding": 527500.82,
+    "jobs": 5.1168,
+    "pop_2024": 36687
+  },
+  {
+    "id": "21580",
+    "name": "Espa\u00f1ola, NM",
+    "econ_impact": 1535527.93,
+    "raw_funding": 659642.17,
+    "jobs": 5.1452,
+    "pop_2024": 39955
+  },
+  {
+    "id": "21640",
+    "name": "Eufaula, AL-GA",
+    "econ_impact": 1464371.77,
+    "raw_funding": 588992.44,
+    "jobs": 5.4954,
+    "pop_2024": 26681
+  },
+  {
+    "id": "21660",
+    "name": "Eugene-Springfield, OR",
+    "econ_impact": 276050293.81,
+    "raw_funding": 113755207.23,
+    "jobs": 1001.0458,
+    "pop_2024": 382396
+  },
+  {
+    "id": "21700",
+    "name": "Eureka-Arcata, CA",
+    "econ_impact": 2992515.21,
+    "raw_funding": 1115241.42,
+    "jobs": 9.8141,
+    "pop_2024": 132380
+  },
+  {
+    "id": "21740",
+    "name": "Evanston, WY-UT",
+    "econ_impact": 374295.97,
+    "raw_funding": 118499.3,
+    "jobs": 1.2068,
+    "pop_2024": 23373
+  },
+  {
+    "id": "21780",
+    "name": "Evansville, IN",
+    "econ_impact": 16794850.4,
+    "raw_funding": 6242576.79,
+    "jobs": 54.9347,
+    "pop_2024": 271793
+  },
+  {
+    "id": "21820",
+    "name": "Fairbanks-College, AK",
+    "econ_impact": 74514624.45,
+    "raw_funding": 18743647.82,
+    "jobs": 146.2005,
+    "pop_2024": 94951
+  },
+  {
+    "id": "21860",
+    "name": "Fairmont, MN",
+    "econ_impact": 1565767.79,
+    "raw_funding": 633542.61,
+    "jobs": 5.7652,
+    "pop_2024": 19561
+  },
+  {
+    "id": "21900",
+    "name": "Fairmont, WV",
+    "econ_impact": 27577063.26,
+    "raw_funding": 9872784.92,
+    "jobs": 76.0204,
+    "pop_2024": 55649
+  },
+  {
+    "id": "21980",
+    "name": "Fallon, NV",
+    "econ_impact": 1897681.46,
+    "raw_funding": 358327.41,
+    "jobs": 3.1174,
+    "pop_2024": 26033
+  },
+  {
+    "id": "22020",
+    "name": "Fargo, ND-MN",
+    "econ_impact": 57687053.02,
+    "raw_funding": 16852339.45,
+    "jobs": 131.0518,
+    "pop_2024": 267793
+  },
+  {
+    "id": "22060",
+    "name": "Faribault-Northfield, MN",
+    "econ_impact": 15874248.52,
+    "raw_funding": 6423055.13,
+    "jobs": 58.4498,
+    "pop_2024": 69025
+  },
+  {
+    "id": "22100",
+    "name": "Farmington, MO",
+    "econ_impact": 6388186.93,
+    "raw_funding": 2716981.53,
+    "jobs": 23.366,
+    "pop_2024": 67503
+  },
+  {
+    "id": "22140",
+    "name": "Farmington, NM",
+    "econ_impact": 2395873.37,
+    "raw_funding": 1029235.01,
+    "jobs": 8.028,
+    "pop_2024": 120817
+  },
+  {
+    "id": "22180",
+    "name": "Fayetteville, NC",
+    "econ_impact": 63503859.43,
+    "raw_funding": 25384356.14,
+    "jobs": 246.2283,
+    "pop_2024": 393812
+  },
+  {
+    "id": "22190",
+    "name": "Fayetteville, TN",
+    "econ_impact": 3211260.68,
+    "raw_funding": 1192890.08,
+    "jobs": 11.9289,
+    "pop_2024": 36751
+  },
+  {
+    "id": "22220",
+    "name": "Fayetteville-Springdale-Rogers, AR",
+    "econ_impact": 61011463.68,
+    "raw_funding": 21736046.69,
+    "jobs": 191.2772,
+    "pop_2024": 605615
+  },
+  {
+    "id": "22260",
+    "name": "Fergus Falls, MN",
+    "econ_impact": 3179305.71,
+    "raw_funding": 1286414.02,
+    "jobs": 11.7064,
+    "pop_2024": 60884
+  },
+  {
+    "id": "22300",
+    "name": "Findlay, OH",
+    "econ_impact": 2814159.5,
+    "raw_funding": 1079057.43,
+    "jobs": 10.6827,
+    "pop_2024": 75016
+  },
+  {
+    "id": "22340",
+    "name": "Fitzgerald, GA",
+    "econ_impact": 215056.11,
+    "raw_funding": 73220.47,
+    "jobs": 0.864,
+    "pop_2024": 16945
+  },
+  {
+    "id": "22380",
+    "name": "Flagstaff, AZ",
+    "econ_impact": 65387387.41,
+    "raw_funding": 22261086.71,
+    "jobs": 227.0631,
+    "pop_2024": 145161
+  },
+  {
+    "id": "22420",
+    "name": "Flint, MI",
+    "econ_impact": 125342783.93,
+    "raw_funding": 49199512.01,
+    "jobs": 477.2353,
+    "pop_2024": 402279
+  },
+  {
+    "id": "22500",
+    "name": "Florence, SC",
+    "econ_impact": 7434936.28,
+    "raw_funding": 2571228.13,
+    "jobs": 26.4836,
+    "pop_2024": 200474
+  },
+  {
+    "id": "22520",
+    "name": "Florence-Muscle Shoals, AL",
+    "econ_impact": 8096341.4,
+    "raw_funding": 3287911.34,
+    "jobs": 30.2488,
+    "pop_2024": 156287
+  },
+  {
+    "id": "22540",
+    "name": "Fond du Lac, WI",
+    "econ_impact": 14431496.42,
+    "raw_funding": 6095224.76,
+    "jobs": 57.2951,
+    "pop_2024": 104269
+  },
+  {
+    "id": "22580",
+    "name": "Forest City, NC",
+    "econ_impact": 5713421.27,
+    "raw_funding": 2283822.14,
+    "jobs": 22.1531,
+    "pop_2024": 65587
+  },
+  {
+    "id": "22620",
+    "name": "Forrest City, AR",
+    "econ_impact": 1734538.09,
+    "raw_funding": 617949.46,
+    "jobs": 5.438,
+    "pop_2024": 21822
+  },
+  {
+    "id": "22660",
+    "name": "Fort Collins-Loveland, CO",
+    "econ_impact": 341147771.1,
+    "raw_funding": 121800957.03,
+    "jobs": 1169.2892,
+    "pop_2024": 374574
+  },
+  {
+    "id": "22700",
+    "name": "Fort Dodge, IA",
+    "econ_impact": 1412807.14,
+    "raw_funding": 575264.29,
+    "jobs": 4.5446,
+    "pop_2024": 36909
+  },
+  {
+    "id": "22780",
+    "name": "Fort Leonard Wood, MO",
+    "econ_impact": 2163220.86,
+    "raw_funding": 920046.83,
+    "jobs": 7.9124,
+    "pop_2024": 53964
+  },
+  {
+    "id": "22800",
+    "name": "Fort Madison, IA",
+    "econ_impact": 2958462.68,
+    "raw_funding": 1204621.56,
+    "jobs": 9.5165,
+    "pop_2024": 32376
+  },
+  {
+    "id": "22820",
+    "name": "Fort Morgan, CO",
+    "econ_impact": 3586452.74,
+    "raw_funding": 1280481.4,
+    "jobs": 12.2926,
+    "pop_2024": 30300
+  },
+  {
+    "id": "22840",
+    "name": "Fort Payne, AL",
+    "econ_impact": 2738423.53,
+    "raw_funding": 1112069.43,
+    "jobs": 10.231,
+    "pop_2024": 73122
+  },
+  {
+    "id": "22900",
+    "name": "Fort Smith, AR-OK",
+    "econ_impact": 6421133.19,
+    "raw_funding": 2285793.91,
+    "jobs": 21.0571,
+    "pop_2024": 232848
+  },
+  {
+    "id": "23060",
+    "name": "Fort Wayne, IN",
+    "econ_impact": 37896360.39,
+    "raw_funding": 14085921.22,
+    "jobs": 123.9561,
+    "pop_2024": 462978
+  },
+  {
+    "id": "23140",
+    "name": "Frankfort, IN",
+    "econ_impact": 7831895.0,
+    "raw_funding": 2911083.14,
+    "jobs": 25.6175,
+    "pop_2024": 32895
+  },
+  {
+    "id": "23180",
+    "name": "Frankfort, KY",
+    "econ_impact": 19855624.23,
+    "raw_funding": 7595621.5,
+    "jobs": 65.3223,
+    "pop_2024": 77325
+  },
+  {
+    "id": "23190",
+    "name": "Franklin, KY",
+    "econ_impact": 2157449.93,
+    "raw_funding": 825316.44,
+    "jobs": 7.0977,
+    "pop_2024": 20350
+  },
+  {
+    "id": "23240",
+    "name": "Fredericksburg, TX",
+    "econ_impact": 2594605.91,
+    "raw_funding": 796503.69,
+    "jobs": 9.3987,
+    "pop_2024": 28159
+  },
+  {
+    "id": "23300",
+    "name": "Freeport, IL",
+    "econ_impact": 2659894.16,
+    "raw_funding": 929822.71,
+    "jobs": 9.2052,
+    "pop_2024": 43088
+  },
+  {
+    "id": "23340",
+    "name": "Fremont, NE",
+    "econ_impact": 4550016.19,
+    "raw_funding": 1758357.87,
+    "jobs": 16.1769,
+    "pop_2024": 37884
+  },
+  {
+    "id": "23380",
+    "name": "Fremont, OH",
+    "econ_impact": 4911715.45,
+    "raw_funding": 1883341.38,
+    "jobs": 18.6451,
+    "pop_2024": 58866
+  },
+  {
+    "id": "23420",
+    "name": "Fresno, CA",
+    "econ_impact": 109821801.97,
+    "raw_funding": 40928053.46,
+    "jobs": 360.1669,
+    "pop_2024": 1189557
+  },
+  {
+    "id": "23460",
+    "name": "Gadsden, AL",
+    "econ_impact": 15266631.38,
+    "raw_funding": 6199754.67,
+    "jobs": 57.0377,
+    "pop_2024": 103207
+  },
+  {
+    "id": "23500",
+    "name": "Gaffney, SC",
+    "econ_impact": 6298670.33,
+    "raw_funding": 2178272.65,
+    "jobs": 22.4362,
+    "pop_2024": 57770
+  },
+  {
+    "id": "23540",
+    "name": "Gainesville, FL",
+    "econ_impact": 1289969847.59,
+    "raw_funding": 401596019.02,
+    "jobs": 4497.8754,
+    "pop_2024": 359780
+  },
+  {
+    "id": "23580",
+    "name": "Gainesville, GA",
+    "econ_impact": 17878109.28,
+    "raw_funding": 6086986.0,
+    "jobs": 71.8264,
+    "pop_2024": 221745
+  },
+  {
+    "id": "23620",
+    "name": "Gainesville, TX",
+    "econ_impact": 2580823.36,
+    "raw_funding": 792272.66,
+    "jobs": 9.3488,
+    "pop_2024": 44258
+  },
+  {
+    "id": "23660",
+    "name": "Galesburg, IL",
+    "econ_impact": 3213713.09,
+    "raw_funding": 1123421.92,
+    "jobs": 11.1219,
+    "pop_2024": 48716
+  },
+  {
+    "id": "23680",
+    "name": "Gallipolis, OH",
+    "econ_impact": 1754522.34,
+    "raw_funding": 672751.62,
+    "jobs": 6.6602,
+    "pop_2024": 28886
+  },
+  {
+    "id": "23700",
+    "name": "Gallup, NM",
+    "econ_impact": 3888842.61,
+    "raw_funding": 1670594.53,
+    "jobs": 13.0306,
+    "pop_2024": 68945
+  },
+  {
+    "id": "23780",
+    "name": "Garden City, KS",
+    "econ_impact": 773909.45,
+    "raw_funding": 280141.14,
+    "jobs": 2.2691,
+    "pop_2024": 38354
+  },
+  {
+    "id": "23820",
+    "name": "Gardnerville Ranchos, NV-CA",
+    "econ_impact": 4457248.26,
+    "raw_funding": 897908.03,
+    "jobs": 7.8232,
+    "pop_2024": 50663
+  },
+  {
+    "id": "23900",
+    "name": "Gettysburg, PA",
+    "econ_impact": 13918857.75,
+    "raw_funding": 5788423.88,
+    "jobs": 49.2016,
+    "pop_2024": 107914
+  },
+  {
+    "id": "23940",
+    "name": "Gillette, WY",
+    "econ_impact": 795113.61,
+    "raw_funding": 203605.25,
+    "jobs": 1.5881,
+    "pop_2024": 47946
+  },
+  {
+    "id": "23980",
+    "name": "Glasgow, KY",
+    "econ_impact": 4077779.82,
+    "raw_funding": 1559924.37,
+    "jobs": 13.4153,
+    "pop_2024": 56167
+  },
+  {
+    "id": "24020",
+    "name": "Glens Falls, NY",
+    "econ_impact": 9698499.15,
+    "raw_funding": 4114272.6,
+    "jobs": 29.2113,
+    "pop_2024": 125127
+  },
+  {
+    "id": "24100",
+    "name": "Gloversville, NY",
+    "econ_impact": 7179848.46,
+    "raw_funding": 3045817.03,
+    "jobs": 21.6253,
+    "pop_2024": 52073
+  },
+  {
+    "id": "24140",
+    "name": "Goldsboro, NC",
+    "econ_impact": 20379823.55,
+    "raw_funding": 8146413.52,
+    "jobs": 79.0202,
+    "pop_2024": 120338
+  },
+  {
+    "id": "24180",
+    "name": "Granbury, TX",
+    "econ_impact": 6041518.84,
+    "raw_funding": 1854652.38,
+    "jobs": 21.8849,
+    "pop_2024": 69126
+  },
+  {
+    "id": "24220",
+    "name": "Grand Forks, ND-MN",
+    "econ_impact": 118129092.45,
+    "raw_funding": 33280910.35,
+    "jobs": 252.959,
+    "pop_2024": 104184
+  },
+  {
+    "id": "24260",
+    "name": "Grand Island, NE",
+    "econ_impact": 4509169.87,
+    "raw_funding": 1742572.78,
+    "jobs": 16.0317,
+    "pop_2024": 77278
+  },
+  {
+    "id": "24300",
+    "name": "Grand Junction, CO",
+    "econ_impact": 3207448.75,
+    "raw_funding": 1145164.53,
+    "jobs": 10.9936,
+    "pop_2024": 161260
+  },
+  {
+    "id": "24330",
+    "name": "Grand Rapids, MN",
+    "econ_impact": 1132102.02,
+    "raw_funding": 458072.31,
+    "jobs": 4.1685,
+    "pop_2024": 45442
+  },
+  {
+    "id": "24340",
+    "name": "Grand Rapids-Wyoming-Kentwood, MI",
+    "econ_impact": 187380635.35,
+    "raw_funding": 73550590.86,
+    "jobs": 713.4407,
+    "pop_2024": 1178826
+  },
+  {
+    "id": "24420",
+    "name": "Grants Pass, OR",
+    "econ_impact": 3230552.51,
+    "raw_funding": 1331250.79,
+    "jobs": 11.715,
+    "pop_2024": 88276
+  },
+  {
+    "id": "24460",
+    "name": "Great Bend, KS",
+    "econ_impact": 6597395.91,
+    "raw_funding": 2388137.25,
+    "jobs": 19.3439,
+    "pop_2024": 24835
+  },
+  {
+    "id": "24500",
+    "name": "Great Falls, MT",
+    "econ_impact": 9034000.49,
+    "raw_funding": 3421763.74,
+    "jobs": 31.4802,
+    "pop_2024": 84523
+  },
+  {
+    "id": "24540",
+    "name": "Greeley, CO",
+    "econ_impact": 132339498.39,
+    "raw_funding": 47249546.74,
+    "jobs": 453.5956,
+    "pop_2024": 369745
+  },
+  {
+    "id": "24580",
+    "name": "Green Bay, WI",
+    "econ_impact": 36428279.74,
+    "raw_funding": 15385691.54,
+    "jobs": 144.6255,
+    "pop_2024": 334697
+  },
+  {
+    "id": "24600",
+    "name": "Greencastle, IN",
+    "econ_impact": 6605266.38,
+    "raw_funding": 2455150.34,
+    "jobs": 21.6053,
+    "pop_2024": 37804
+  },
+  {
+    "id": "24620",
+    "name": "Greeneville, TN",
+    "econ_impact": 2646613.05,
+    "raw_funding": 983139.89,
+    "jobs": 9.8314,
+    "pop_2024": 73398
+  },
+  {
+    "id": "24640",
+    "name": "Greenfield, MA",
+    "econ_impact": 50460616.45,
+    "raw_funding": 22527190.66,
+    "jobs": 177.9648,
+    "pop_2024": 70871
+  },
+  {
+    "id": "24660",
+    "name": "Greensboro-High Point, NC",
+    "econ_impact": 332768138.42,
+    "raw_funding": 133017190.03,
+    "jobs": 1290.2667,
+    "pop_2024": 800722
+  },
+  {
+    "id": "24700",
+    "name": "Greensburg, IN",
+    "econ_impact": 2963948.89,
+    "raw_funding": 1101687.61,
+    "jobs": 9.6949,
+    "pop_2024": 26421
+  },
+  {
+    "id": "24740",
+    "name": "Greenville, MS",
+    "econ_impact": 2587648.91,
+    "raw_funding": 803591.72,
+    "jobs": 7.152,
+    "pop_2024": 41181
+  },
+  {
+    "id": "24780",
+    "name": "Greenville, NC",
+    "econ_impact": 58999790.87,
+    "raw_funding": 23583947.76,
+    "jobs": 228.7643,
+    "pop_2024": 180783
+  },
+  {
+    "id": "24820",
+    "name": "Greenville, OH",
+    "econ_impact": 2480179.03,
+    "raw_funding": 950996.42,
+    "jobs": 9.4149,
+    "pop_2024": 51462
+  },
+  {
+    "id": "24860",
+    "name": "Greenville-Anderson-Greer, SC",
+    "econ_impact": 148634762.22,
+    "raw_funding": 51402442.12,
+    "jobs": 529.4452,
+    "pop_2024": 996680
+  },
+  {
+    "id": "24900",
+    "name": "Greenwood, MS",
+    "econ_impact": 1438367.0,
+    "raw_funding": 446683.4,
+    "jobs": 3.9755,
+    "pop_2024": 35535
+  },
+  {
+    "id": "24940",
+    "name": "Greenwood, SC",
+    "econ_impact": 7529243.06,
+    "raw_funding": 2603842.3,
+    "jobs": 26.8196,
+    "pop_2024": 94648
+  },
+  {
+    "id": "24980",
+    "name": "Grenada, MS",
+    "econ_impact": 2374818.34,
+    "raw_funding": 737497.41,
+    "jobs": 6.5637,
+    "pop_2024": 30342
+  },
+  {
+    "id": "25020",
+    "name": "Guayama, PR",
+    "econ_impact": 0.0,
+    "raw_funding": 0.0,
+    "jobs": 0.0,
+    "pop_2024": 0
+  },
+  {
+    "id": "25060",
+    "name": "Gulfport-Biloxi, MS",
+    "econ_impact": 15656868.03,
+    "raw_funding": 4862224.36,
+    "jobs": 43.2738,
+    "pop_2024": 426793
+  },
+  {
+    "id": "25100",
+    "name": "Guymon, OK",
+    "econ_impact": 321520.27,
+    "raw_funding": 114172.5,
+    "jobs": 1.1988,
+    "pop_2024": 20577
+  },
+  {
+    "id": "25180",
+    "name": "Hagerstown-Martinsburg, MD-WV",
+    "econ_impact": 44024223.4,
+    "raw_funding": 18529700.81,
+    "jobs": 151.6515,
+    "pop_2024": 311295
+  },
+  {
+    "id": "25200",
+    "name": "Hailey, ID",
+    "econ_impact": 407945.41,
+    "raw_funding": 97919.91,
+    "jobs": 0.9009,
+    "pop_2024": 32064
+  },
+  {
+    "id": "25220",
+    "name": "Hammond, LA",
+    "econ_impact": 9212508.53,
+    "raw_funding": 3329602.05,
+    "jobs": 32.6301,
+    "pop_2024": 139823
+  },
+  {
+    "id": "25260",
+    "name": "Hanford-Corcoran, CA",
+    "econ_impact": 9066743.86,
+    "raw_funding": 3378966.39,
+    "jobs": 29.7349,
+    "pop_2024": 154913
+  },
+  {
+    "id": "25300",
+    "name": "Hannibal, MO",
+    "econ_impact": 11400850.58,
+    "raw_funding": 4848934.57,
+    "jobs": 41.7008,
+    "pop_2024": 38924
+  },
+  {
+    "id": "25420",
+    "name": "Harrisburg-Carlisle, PA",
+    "econ_impact": 253514974.87,
+    "raw_funding": 105429063.36,
+    "jobs": 896.147,
+    "pop_2024": 615361
+  },
+  {
+    "id": "25460",
+    "name": "Harrison, AR",
+    "econ_impact": 1449285.87,
+    "raw_funding": 516325.02,
+    "jobs": 4.5437,
+    "pop_2024": 45662
+  },
+  {
+    "id": "25500",
+    "name": "Harrisonburg, VA",
+    "econ_impact": 38876885.29,
+    "raw_funding": 14068574.3,
+    "jobs": 119.5829,
+    "pop_2024": 138838
+  },
+  {
+    "id": "25540",
+    "name": "Hartford-West Hartford-East Hartford, CT",
+    "econ_impact": 775101983.78,
+    "raw_funding": 340770836.49,
+    "jobs": 2589.8584,
+    "pop_2024": 1169048
+  },
+  {
+    "id": "25580",
+    "name": "Hastings, NE",
+    "econ_impact": 2494960.09,
+    "raw_funding": 964179.59,
+    "jobs": 8.8705,
+    "pop_2024": 40625
+  },
+  {
+    "id": "25620",
+    "name": "Hattiesburg, MS",
+    "econ_impact": 26342000.64,
+    "raw_funding": 8180481.36,
+    "jobs": 72.8063,
+    "pop_2024": 156575
+  },
+  {
+    "id": "25700",
+    "name": "Hays, KS",
+    "econ_impact": 1428338.92,
+    "raw_funding": 517032.69,
+    "jobs": 4.188,
+    "pop_2024": 29007
+  },
+  {
+    "id": "25720",
+    "name": "Heber, UT",
+    "econ_impact": 49521838.79,
+    "raw_funding": 18029854.18,
+    "jobs": 207.3433,
+    "pop_2024": 80967
+  },
+  {
+    "id": "25740",
+    "name": "Helena, MT",
+    "econ_impact": 11070660.71,
+    "raw_funding": 4193179.47,
+    "jobs": 38.5773,
+    "pop_2024": 96735
+  },
+  {
+    "id": "25770",
+    "name": "Hemlock Farms, PA",
+    "econ_impact": 4613362.72,
+    "raw_funding": 1918555.35,
+    "jobs": 16.3077,
+    "pop_2024": 62376
+  },
+  {
+    "id": "25775",
+    "name": "Henderson, KY",
+    "econ_impact": 1585938.75,
+    "raw_funding": 606689.08,
+    "jobs": 5.2175,
+    "pop_2024": 57029
+  },
+  {
+    "id": "25780",
+    "name": "Henderson, NC",
+    "econ_impact": 38045467.74,
+    "raw_funding": 15207889.9,
+    "jobs": 147.5165,
+    "pop_2024": 42337
+  },
+  {
+    "id": "25820",
+    "name": "Hereford, TX",
+    "econ_impact": 265396.7,
+    "raw_funding": 81472.66,
+    "jobs": 0.9614,
+    "pop_2024": 18495
+  },
+  {
+    "id": "25840",
+    "name": "Hermiston-Pendleton, OR",
+    "econ_impact": 3907821.09,
+    "raw_funding": 1610340.61,
+    "jobs": 14.171,
+    "pop_2024": 92851
+  },
+  {
+    "id": "25850",
+    "name": "Hermitage, PA",
+    "econ_impact": 23057685.02,
+    "raw_funding": 9588980.44,
+    "jobs": 81.5063,
+    "pop_2024": 108140
+  },
+  {
+    "id": "25860",
+    "name": "Hickory-Lenoir-Morganton, NC",
+    "econ_impact": 49267618.6,
+    "raw_funding": 19693712.91,
+    "jobs": 191.029,
+    "pop_2024": 373031
+  },
+  {
+    "id": "25880",
+    "name": "Hillsdale, MI",
+    "econ_impact": 27178647.83,
+    "raw_funding": 10668154.71,
+    "jobs": 103.4811,
+    "pop_2024": 45590
+  },
+  {
+    "id": "25900",
+    "name": "Hilo-Kailua, HI",
+    "econ_impact": 10209748.95,
+    "raw_funding": 3608851.38,
+    "jobs": 32.8405,
+    "pop_2024": 209790
+  },
+  {
+    "id": "25940",
+    "name": "Hilton Head Island-Bluffton-Port Royal, SC",
+    "econ_impact": 11552960.79,
+    "raw_funding": 3995366.83,
+    "jobs": 41.1523,
+    "pop_2024": 237393
+  },
+  {
+    "id": "25980",
+    "name": "Hinesville, GA",
+    "econ_impact": 3812797.91,
+    "raw_funding": 1298148.88,
+    "jobs": 15.3182,
+    "pop_2024": 89046
+  },
+  {
+    "id": "26020",
+    "name": "Hobbs, NM",
+    "econ_impact": 1430639.62,
+    "raw_funding": 614583.56,
+    "jobs": 4.7938,
+    "pop_2024": 75151
+  },
+  {
+    "id": "26090",
+    "name": "Holland, MI",
+    "econ_impact": 11321857.11,
+    "raw_funding": 4444051.96,
+    "jobs": 43.1073,
+    "pop_2024": 122429
+  },
+  {
+    "id": "26140",
+    "name": "Homosassa Springs, FL",
+    "econ_impact": 7814211.53,
+    "raw_funding": 2432736.12,
+    "jobs": 27.2466,
+    "pop_2024": 170174
+  },
+  {
+    "id": "26220",
+    "name": "Hood River, OR",
+    "econ_impact": 1391782.44,
+    "raw_funding": 573527.74,
+    "jobs": 5.047,
+    "pop_2024": 23764
+  },
+  {
+    "id": "26300",
+    "name": "Hot Springs, AR",
+    "econ_impact": 10330828.59,
+    "raw_funding": 3680478.37,
+    "jobs": 32.3882,
+    "pop_2024": 99902
+  },
+  {
+    "id": "26340",
+    "name": "Houghton, MI",
+    "econ_impact": 17191060.23,
+    "raw_funding": 6747829.81,
+    "jobs": 65.4539,
+    "pop_2024": 40202
+  },
+  {
+    "id": "26380",
+    "name": "Houma-Bayou Cane-Thibodaux, LA",
+    "econ_impact": 10357207.71,
+    "raw_funding": 3743321.37,
+    "jobs": 36.6845,
+    "pop_2024": 199206
+  },
+  {
+    "id": "26420",
+    "name": "Houston-Pasadena-The Woodlands, TX",
+    "econ_impact": 6229823728.67,
+    "raw_funding": 1912459056.46,
+    "jobs": 22567.0169,
+    "pop_2024": 7796182
+  },
+  {
+    "id": "26460",
+    "name": "Hudson, NY",
+    "econ_impact": 12802023.15,
+    "raw_funding": 5430841.65,
+    "jobs": 38.559,
+    "pop_2024": 60299
+  },
+  {
+    "id": "26500",
+    "name": "Huntingdon, PA",
+    "econ_impact": 13115044.58,
+    "raw_funding": 5454142.77,
+    "jobs": 46.3602,
+    "pop_2024": 43359
+  },
+  {
+    "id": "26540",
+    "name": "Huntington, IN",
+    "econ_impact": 2836520.0,
+    "raw_funding": 1054322.81,
+    "jobs": 9.278,
+    "pop_2024": 36944
+  },
+  {
+    "id": "26580",
+    "name": "Huntington-Ashland, WV-KY-OH",
+    "econ_impact": 50536012.94,
+    "raw_funding": 18552416.46,
+    "jobs": 153.7535,
+    "pop_2024": 366920
+  },
+  {
+    "id": "26620",
+    "name": "Huntsville, AL",
+    "econ_impact": 65071311.17,
+    "raw_funding": 26425355.75,
+    "jobs": 243.1133,
+    "pop_2024": 542297
+  },
+  {
+    "id": "26660",
+    "name": "Huntsville, TX",
+    "econ_impact": 12519051.37,
+    "raw_funding": 3843154.19,
+    "jobs": 45.3492,
+    "pop_2024": 83722
+  },
+  {
+    "id": "26700",
+    "name": "Huron, SD",
+    "econ_impact": 969160.28,
+    "raw_funding": 310476.26,
+    "jobs": 2.577,
+    "pop_2024": 19459
+  },
+  {
+    "id": "26740",
+    "name": "Hutchinson, KS",
+    "econ_impact": 1835524.97,
+    "raw_funding": 664426.63,
+    "jobs": 5.3819,
+    "pop_2024": 61417
+  },
+  {
+    "id": "26780",
+    "name": "Hutchinson, MN",
+    "econ_impact": 2771716.88,
+    "raw_funding": 1121495.0,
+    "jobs": 10.2056,
+    "pop_2024": 36780
+  },
+  {
+    "id": "26820",
+    "name": "Idaho Falls, ID",
+    "econ_impact": 6485449.94,
+    "raw_funding": 1556714.86,
+    "jobs": 14.3218,
+    "pop_2024": 171233
+  },
+  {
+    "id": "26860",
+    "name": "Indiana, PA",
+    "econ_impact": 14735577.83,
+    "raw_funding": 6128072.59,
+    "jobs": 52.0886,
+    "pop_2024": 82953
+  },
+  {
+    "id": "26900",
+    "name": "Indianapolis-Carmel-Greenwood, IN",
+    "econ_impact": 1255546625.37,
+    "raw_funding": 466681514.31,
+    "jobs": 4106.7973,
+    "pop_2024": 2174833
+  },
+  {
+    "id": "26980",
+    "name": "Iowa City, IA",
+    "econ_impact": 689761326.77,
+    "raw_funding": 280855787.76,
+    "jobs": 2218.7607,
+    "pop_2024": 182711
+  },
+  {
+    "id": "27020",
+    "name": "Iron Mountain, MI-WI",
+    "econ_impact": 1299963.46,
+    "raw_funding": 512251.46,
+    "jobs": 4.9604,
+    "pop_2024": 30668
+  },
+  {
+    "id": "27060",
+    "name": "Ithaca, NY",
+    "econ_impact": 389624301.39,
+    "raw_funding": 165285428.74,
+    "jobs": 1173.5265,
+    "pop_2024": 105602
+  },
+  {
+    "id": "27100",
+    "name": "Jackson, MI",
+    "econ_impact": 81114325.78,
+    "raw_funding": 31838970.86,
+    "jobs": 308.838,
+    "pop_2024": 160233
+  },
+  {
+    "id": "27140",
+    "name": "Jackson, MS",
+    "econ_impact": 210056516.58,
+    "raw_funding": 65232836.42,
+    "jobs": 580.5722,
+    "pop_2024": 606178
+  },
+  {
+    "id": "27180",
+    "name": "Jackson, TN",
+    "econ_impact": 12565515.74,
+    "raw_funding": 4667724.18,
+    "jobs": 46.6772,
+    "pop_2024": 183680
+  },
+  {
+    "id": "27220",
+    "name": "Jackson, WY-ID",
+    "econ_impact": 231385.34,
+    "raw_funding": 56489.65,
+    "jobs": 0.4985,
+    "pop_2024": 36204
+  },
+  {
+    "id": "27260",
+    "name": "Jacksonville, FL",
+    "econ_impact": 437849198.17,
+    "raw_funding": 136312096.94,
+    "jobs": 1526.6955,
+    "pop_2024": 1760548
+  },
+  {
+    "id": "27300",
+    "name": "Jacksonville, IL",
+    "econ_impact": 8635275.15,
+    "raw_funding": 3018644.51,
+    "jobs": 29.8846,
+    "pop_2024": 37498
+  },
+  {
+    "id": "27340",
+    "name": "Jacksonville, NC",
+    "econ_impact": 31679178.03,
+    "raw_funding": 12663097.09,
+    "jobs": 122.832,
+    "pop_2024": 212954
+  },
+  {
+    "id": "27380",
+    "name": "Jacksonville, TX",
+    "econ_impact": 6391419.97,
+    "raw_funding": 1962066.59,
+    "jobs": 23.1524,
+    "pop_2024": 53223
+  },
+  {
+    "id": "27420",
+    "name": "Jamestown, ND",
+    "econ_impact": 532947.33,
+    "raw_funding": 144282.37,
+    "jobs": 1.0677,
+    "pop_2024": 21546
+  },
+  {
+    "id": "27460",
+    "name": "Jamestown-Dunkirk, NY",
+    "econ_impact": 18254248.06,
+    "raw_funding": 7743770.62,
+    "jobs": 54.9808,
+    "pop_2024": 124105
+  },
+  {
+    "id": "27500",
+    "name": "Janesville-Beloit, WI",
+    "econ_impact": 44649812.33,
+    "raw_funding": 18858102.69,
+    "jobs": 177.2662,
+    "pop_2024": 165461
+  },
+  {
+    "id": "27540",
+    "name": "Jasper, IN",
+    "econ_impact": 2236070.25,
+    "raw_funding": 831138.11,
+    "jobs": 7.314,
+    "pop_2024": 43629
+  },
+  {
+    "id": "27600",
+    "name": "Jefferson, GA",
+    "econ_impact": 23239398.49,
+    "raw_funding": 7912351.98,
+    "jobs": 93.3658,
+    "pop_2024": 93825
+  },
+  {
+    "id": "27620",
+    "name": "Jefferson City, MO",
+    "econ_impact": 27560883.04,
+    "raw_funding": 11722012.98,
+    "jobs": 100.8093,
+    "pop_2024": 151523
+  },
+  {
+    "id": "27700",
+    "name": "Jesup, GA",
+    "econ_impact": 759701.96,
+    "raw_funding": 258656.84,
+    "jobs": 3.0522,
+    "pop_2024": 32132
+  },
+  {
+    "id": "27740",
+    "name": "Johnson City, TN",
+    "econ_impact": 25447879.64,
+    "raw_funding": 9453148.24,
+    "jobs": 94.5315,
+    "pop_2024": 214948
+  },
+  {
+    "id": "27780",
+    "name": "Johnstown, PA",
+    "econ_impact": 26653866.11,
+    "raw_funding": 11084521.3,
+    "jobs": 94.2184,
+    "pop_2024": 130108
+  },
+  {
+    "id": "27860",
+    "name": "Jonesboro, AR",
+    "econ_impact": 8404510.86,
+    "raw_funding": 2994205.18,
+    "jobs": 26.349,
+    "pop_2024": 138152
+  },
+  {
+    "id": "27900",
+    "name": "Joplin, MO-KS",
+    "econ_impact": 15509400.01,
+    "raw_funding": 6566498.41,
+    "jobs": 56.3866,
+    "pop_2024": 207131
+  },
+  {
+    "id": "27940",
+    "name": "Juneau, AK",
+    "econ_impact": 1076863.76,
+    "raw_funding": 270877.77,
+    "jobs": 2.1128,
+    "pop_2024": 31572
+  },
+  {
+    "id": "27980",
+    "name": "Kahului-Wailuku, HI",
+    "econ_impact": 10829806.44,
+    "raw_funding": 3828023.79,
+    "jobs": 34.835,
+    "pop_2024": 163769
+  },
+  {
+    "id": "28020",
+    "name": "Kalamazoo-Portage, MI",
+    "econ_impact": 31710861.0,
+    "raw_funding": 12447137.66,
+    "jobs": 120.7372,
+    "pop_2024": 264780
+  },
+  {
+    "id": "28060",
+    "name": "Kalispell, MT",
+    "econ_impact": 4766856.06,
+    "raw_funding": 1805518.52,
+    "jobs": 16.6108,
+    "pop_2024": 114527
+  },
+  {
+    "id": "28100",
+    "name": "Kankakee, IL",
+    "econ_impact": 14540240.19,
+    "raw_funding": 5082850.91,
+    "jobs": 50.3202,
+    "pop_2024": 106410
+  },
+  {
+    "id": "28140",
+    "name": "Kansas City, MO-KS",
+    "econ_impact": 639018091.45,
+    "raw_funding": 246482638.64,
+    "jobs": 2047.4467,
+    "pop_2024": 2253579
+  },
+  {
+    "id": "28180",
+    "name": "Kapaa, HI",
+    "econ_impact": 2134387.7,
+    "raw_funding": 754444.41,
+    "jobs": 6.8654,
+    "pop_2024": 73840
+  },
+  {
+    "id": "28260",
+    "name": "Kearney, NE",
+    "econ_impact": 3834556.53,
+    "raw_funding": 1481867.84,
+    "jobs": 13.6332,
+    "pop_2024": 57905
+  },
+  {
+    "id": "28300",
+    "name": "Keene, NH",
+    "econ_impact": 42433267.73,
+    "raw_funding": 17575335.15,
+    "jobs": 123.0273,
+    "pop_2024": 78078
+  },
+  {
+    "id": "28340",
+    "name": "Kendallville, IN",
+    "econ_impact": 1752067.35,
+    "raw_funding": 651236.22,
+    "jobs": 5.7309,
+    "pop_2024": 47811
+  },
+  {
+    "id": "28380",
+    "name": "Kennett, MO",
+    "econ_impact": 599100.51,
+    "raw_funding": 254805.48,
+    "jobs": 2.1913,
+    "pop_2024": 27002
+  },
+  {
+    "id": "28420",
+    "name": "Kennewick-Richland, WA",
+    "econ_impact": 120455093.85,
+    "raw_funding": 49833565.17,
+    "jobs": 388.7018,
+    "pop_2024": 319428
+  },
+  {
+    "id": "28450",
+    "name": "Kenosha, WI",
+    "econ_impact": 20229035.98,
+    "raw_funding": 8543848.63,
+    "jobs": 80.3122,
+    "pop_2024": 168754
+  },
+  {
+    "id": "28500",
+    "name": "Kerrville, TX",
+    "econ_impact": 3882161.33,
+    "raw_funding": 1191763.19,
+    "jobs": 14.0628,
+    "pop_2024": 53900
+  },
+  {
+    "id": "28540",
+    "name": "Ketchikan, AK",
+    "econ_impact": 29909.33,
+    "raw_funding": 7523.49,
+    "jobs": 0.0587,
+    "pop_2024": 13677
+  },
+  {
+    "id": "28580",
+    "name": "Key West-Key Largo, FL",
+    "econ_impact": 6394531.26,
+    "raw_funding": 1990758.39,
+    "jobs": 22.2965,
+    "pop_2024": 80908
+  },
+  {
+    "id": "28620",
+    "name": "Kill Devil Hills, NC",
+    "econ_impact": 5624672.91,
+    "raw_funding": 2248346.82,
+    "jobs": 21.809,
+    "pop_2024": 38183
+  },
+  {
+    "id": "28660",
+    "name": "Killeen-Temple, TX",
+    "econ_impact": 27210777.57,
+    "raw_funding": 8353285.79,
+    "jobs": 98.5688,
+    "pop_2024": 509487
+  },
+  {
+    "id": "28680",
+    "name": "Kingsland, GA",
+    "econ_impact": 3477064.81,
+    "raw_funding": 1183841.34,
+    "jobs": 13.9693,
+    "pop_2024": 59099
+  },
+  {
+    "id": "28700",
+    "name": "Kingsport-Bristol, TN-VA",
+    "econ_impact": 18820861.12,
+    "raw_funding": 6930958.22,
+    "jobs": 65.8904,
+    "pop_2024": 313876
+  },
+  {
+    "id": "28740",
+    "name": "Kingston, NY",
+    "econ_impact": 46804383.68,
+    "raw_funding": 19855236.43,
+    "jobs": 140.9722,
+    "pop_2024": 182977
+  },
+  {
+    "id": "28780",
+    "name": "Kingsville, TX",
+    "econ_impact": 5727905.24,
+    "raw_funding": 1758377.88,
+    "jobs": 20.7489,
+    "pop_2024": 30442
+  },
+  {
+    "id": "28820",
+    "name": "Kinston, NC",
+    "econ_impact": 7188243.17,
+    "raw_funding": 2873351.73,
+    "jobs": 27.8715,
+    "pop_2024": 55332
+  },
+  {
+    "id": "28860",
+    "name": "Kirksville, MO",
+    "econ_impact": 1240967.1,
+    "raw_funding": 527799.94,
+    "jobs": 4.5391,
+    "pop_2024": 29729
+  },
+  {
+    "id": "28880",
+    "name": "Kiryas Joel-Poughkeepsie-Newburgh, NY",
+    "econ_impact": 216178513.49,
+    "raw_funding": 91706698.38,
+    "jobs": 651.1176,
+    "pop_2024": 711730
+  },
+  {
+    "id": "28900",
+    "name": "Klamath Falls, OR",
+    "econ_impact": 4522396.64,
+    "raw_funding": 1863595.8,
+    "jobs": 16.3996,
+    "pop_2024": 70438
+  },
+  {
+    "id": "28940",
+    "name": "Knoxville, TN",
+    "econ_impact": 85348058.26,
+    "raw_funding": 31704325.0,
+    "jobs": 317.0433,
+    "pop_2024": 957608
+  },
+  {
+    "id": "29020",
+    "name": "Kokomo, IN",
+    "econ_impact": 8932188.52,
+    "raw_funding": 3320057.72,
+    "jobs": 29.2165,
+    "pop_2024": 84082
+  },
+  {
+    "id": "29060",
+    "name": "Laconia, NH",
+    "econ_impact": 8097327.12,
+    "raw_funding": 3353812.84,
+    "jobs": 23.4767,
+    "pop_2024": 65257
+  },
+  {
+    "id": "29100",
+    "name": "La Crosse-Onalaska, WI-MN",
+    "econ_impact": 15529584.8,
+    "raw_funding": 6486033.77,
+    "jobs": 60.4692,
+    "pop_2024": 170763
+  },
+  {
+    "id": "29180",
+    "name": "Lafayette, LA",
+    "econ_impact": 42952091.37,
+    "raw_funding": 15523825.15,
+    "jobs": 152.1335,
+    "pop_2024": 419704
+  },
+  {
+    "id": "29200",
+    "name": "Lafayette-West Lafayette, IN",
+    "econ_impact": 296808134.28,
+    "raw_funding": 110322362.2,
+    "jobs": 970.8368,
+    "pop_2024": 229701
+  },
+  {
+    "id": "29260",
+    "name": "La Grande, OR",
+    "econ_impact": 837772.13,
+    "raw_funding": 345230.36,
+    "jobs": 3.038,
+    "pop_2024": 26058
+  },
+  {
+    "id": "29300",
+    "name": "LaGrange, GA-AL",
+    "econ_impact": 10495775.67,
+    "raw_funding": 4004201.96,
+    "jobs": 40.3203,
+    "pop_2024": 105326
+  },
+  {
+    "id": "29340",
+    "name": "Lake Charles, LA",
+    "econ_impact": 5430793.96,
+    "raw_funding": 1962807.7,
+    "jobs": 19.2355,
+    "pop_2024": 242975
+  },
+  {
+    "id": "29380",
+    "name": "Lake City, FL",
+    "econ_impact": 51694344.76,
+    "raw_funding": 16093587.85,
+    "jobs": 180.2482,
+    "pop_2024": 73977
+  },
+  {
+    "id": "29420",
+    "name": "Lake Havasu City-Kingman, AZ",
+    "econ_impact": 5184263.14,
+    "raw_funding": 1764978.48,
+    "jobs": 18.0028,
+    "pop_2024": 226479
+  },
+  {
+    "id": "29460",
+    "name": "Lakeland-Winter Haven, FL",
+    "econ_impact": 35501855.32,
+    "raw_funding": 11052509.32,
+    "jobs": 123.7881,
+    "pop_2024": 852878
+  },
+  {
+    "id": "29470",
+    "name": "Lake of the Woods, VA",
+    "econ_impact": 22422140.55,
+    "raw_funding": 8114012.94,
+    "jobs": 68.9691,
+    "pop_2024": 38986
+  },
+  {
+    "id": "29540",
+    "name": "Lancaster, PA",
+    "econ_impact": 101533674.59,
+    "raw_funding": 42224725.45,
+    "jobs": 358.9102,
+    "pop_2024": 563293
+  },
+  {
+    "id": "29620",
+    "name": "Lansing-East Lansing, MI",
+    "econ_impact": 446539938.97,
+    "raw_funding": 175275723.09,
+    "jobs": 1700.1745,
+    "pop_2024": 479971
+  },
+  {
+    "id": "29660",
+    "name": "Laramie, WY",
+    "econ_impact": 85617319.16,
+    "raw_funding": 21924081.73,
+    "jobs": 171.0078,
+    "pop_2024": 39288
+  },
+  {
+    "id": "29700",
+    "name": "Laredo, TX",
+    "econ_impact": 10209116.38,
+    "raw_funding": 3134040.05,
+    "jobs": 36.9817,
+    "pop_2024": 272823
+  },
+  {
+    "id": "29720",
+    "name": "Lares, PR",
+    "econ_impact": 0.0,
+    "raw_funding": 0.0,
+    "jobs": 0.0,
+    "pop_2024": 0
+  },
+  {
+    "id": "29740",
+    "name": "Las Cruces, NM",
+    "econ_impact": 48976301.86,
+    "raw_funding": 21039561.2,
+    "jobs": 164.1086,
+    "pop_2024": 229366
+  },
+  {
+    "id": "29780",
+    "name": "Las Vegas, NM",
+    "econ_impact": 1087222.36,
+    "raw_funding": 467056.12,
+    "jobs": 3.643,
+    "pop_2024": 30524
+  },
+  {
+    "id": "29820",
+    "name": "Las Vegas-Henderson-North Las Vegas, NV",
+    "econ_impact": 156483220.24,
+    "raw_funding": 29547755.42,
+    "jobs": 257.0655,
+    "pop_2024": 2398871
+  },
+  {
+    "id": "29860",
+    "name": "Laurel, MS",
+    "econ_impact": 3270478.02,
+    "raw_funding": 1015643.6,
+    "jobs": 9.0392,
+    "pop_2024": 81636
+  },
+  {
+    "id": "29900",
+    "name": "Laurinburg, NC",
+    "econ_impact": 6445398.8,
+    "raw_funding": 2576415.04,
+    "jobs": 24.9912,
+    "pop_2024": 33898
+  },
+  {
+    "id": "29940",
+    "name": "Lawrence, KS",
+    "econ_impact": 104203356.52,
+    "raw_funding": 37719718.54,
+    "jobs": 305.5297,
+    "pop_2024": 121989
+  },
+  {
+    "id": "29980",
+    "name": "Lawrenceburg, TN",
+    "econ_impact": 8968062.43,
+    "raw_funding": 3331374.75,
+    "jobs": 33.3137,
+    "pop_2024": 46467
+  },
+  {
+    "id": "30020",
+    "name": "Lawton, OK",
+    "econ_impact": 8175493.62,
+    "raw_funding": 2903134.47,
+    "jobs": 30.4829,
+    "pop_2024": 126899
+  },
+  {
+    "id": "30060",
+    "name": "Lebanon, MO",
+    "econ_impact": 7301043.3,
+    "raw_funding": 3105231.58,
+    "jobs": 26.705,
+    "pop_2024": 36738
+  },
+  {
+    "id": "30140",
+    "name": "Lebanon, PA",
+    "econ_impact": 54659035.97,
+    "raw_funding": 22731008.18,
+    "jobs": 193.2136,
+    "pop_2024": 145319
+  },
+  {
+    "id": "30150",
+    "name": "Lebanon-Claremont, NH-VT",
+    "econ_impact": 491083201.98,
+    "raw_funding": 207012744.95,
+    "jobs": 1487.0906,
+    "pop_2024": 224804
+  },
+  {
+    "id": "30180",
+    "name": "Le Mars, IA",
+    "econ_impact": 925021.96,
+    "raw_funding": 376648.79,
+    "jobs": 2.9755,
+    "pop_2024": 25825
+  },
+  {
+    "id": "30260",
+    "name": "Lewisburg, PA",
+    "econ_impact": 6877495.52,
+    "raw_funding": 2860138.39,
+    "jobs": 24.3112,
+    "pop_2024": 42159
+  },
+  {
+    "id": "30280",
+    "name": "Lewisburg, TN",
+    "econ_impact": 11277813.29,
+    "raw_funding": 4189380.11,
+    "jobs": 41.8938,
+    "pop_2024": 37847
+  },
+  {
+    "id": "30300",
+    "name": "Lewiston, ID-WA",
+    "econ_impact": 17361897.74,
+    "raw_funding": 4835681.49,
+    "jobs": 42.2597,
+    "pop_2024": 65370
+  },
+  {
+    "id": "30340",
+    "name": "Lewiston-Auburn, ME",
+    "econ_impact": 11103461.4,
+    "raw_funding": 4763717.57,
+    "jobs": 44.3026,
+    "pop_2024": 115272
+  },
+  {
+    "id": "30380",
+    "name": "Lewistown, PA",
+    "econ_impact": 15301699.6,
+    "raw_funding": 6363505.18,
+    "jobs": 54.0898,
+    "pop_2024": 45935
+  },
+  {
+    "id": "30420",
+    "name": "Lexington, NE",
+    "econ_impact": 1669664.75,
+    "raw_funding": 645243.46,
+    "jobs": 5.9362,
+    "pop_2024": 26362
+  },
+  {
+    "id": "30460",
+    "name": "Lexington-Fayette, KY",
+    "econ_impact": 615775425.31,
+    "raw_funding": 235560313.14,
+    "jobs": 2025.8187,
+    "pop_2024": 533366
+  },
+  {
+    "id": "30500",
+    "name": "Lexington Park, MD",
+    "econ_impact": 39893886.07,
+    "raw_funding": 18217133.77,
+    "jobs": 153.0239,
+    "pop_2024": 211382
+  },
+  {
+    "id": "30580",
+    "name": "Liberal, KS",
+    "econ_impact": 160314.13,
+    "raw_funding": 58030.8,
+    "jobs": 0.47,
+    "pop_2024": 21276
+  },
+  {
+    "id": "30620",
+    "name": "Lima, OH",
+    "econ_impact": 6972158.42,
+    "raw_funding": 2673394.79,
+    "jobs": 26.4666,
+    "pop_2024": 100866
+  },
+  {
+    "id": "30660",
+    "name": "Lincoln, IL",
+    "econ_impact": 2078473.4,
+    "raw_funding": 726574.68,
+    "jobs": 7.1931,
+    "pop_2024": 27518
+  },
+  {
+    "id": "30700",
+    "name": "Lincoln, NE",
+    "econ_impact": 123650620.87,
+    "raw_funding": 47784894.35,
+    "jobs": 439.621,
+    "pop_2024": 350626
+  },
+  {
+    "id": "30780",
+    "name": "Little Rock-North Little Rock-Conway, AR",
+    "econ_impact": 454567200.97,
+    "raw_funding": 161944875.71,
+    "jobs": 1425.1149,
+    "pop_2024": 769258
+  },
+  {
+    "id": "30820",
+    "name": "Lock Haven, PA",
+    "econ_impact": 20967570.12,
+    "raw_funding": 8719766.08,
+    "jobs": 74.118,
+    "pop_2024": 37865
+  },
+  {
+    "id": "30860",
+    "name": "Logan, UT-ID",
+    "econ_impact": 38815122.98,
+    "raw_funding": 14072086.42,
+    "jobs": 161.5634,
+    "pop_2024": 161125
+  },
+  {
+    "id": "30900",
+    "name": "Logansport, IN",
+    "econ_impact": 2528517.82,
+    "raw_funding": 939839.67,
+    "jobs": 8.2706,
+    "pop_2024": 37559
+  },
+  {
+    "id": "30980",
+    "name": "Longview, TX",
+    "econ_impact": 26704016.73,
+    "raw_funding": 8197718.08,
+    "jobs": 96.7331,
+    "pop_2024": 295490
+  },
+  {
+    "id": "31020",
+    "name": "Longview-Kelso, WA",
+    "econ_impact": 22490128.5,
+    "raw_funding": 9304407.55,
+    "jobs": 72.5744,
+    "pop_2024": 113982
+  },
+  {
+    "id": "31060",
+    "name": "Los Alamos, NM",
+    "econ_impact": 1616724.95,
+    "raw_funding": 694523.32,
+    "jobs": 5.4173,
+    "pop_2024": 19675
+  },
+  {
+    "id": "31080",
+    "name": "Los Angeles-Long Beach-Anaheim, CA",
+    "econ_impact": 8655948178.93,
+    "raw_funding": 3225872307.78,
+    "jobs": 28387.6763,
+    "pop_2024": 12927614
+  },
+  {
+    "id": "31140",
+    "name": "Louisville/Jefferson County, KY-IN",
+    "econ_impact": 503191237.16,
+    "raw_funding": 191901990.51,
+    "jobs": 1654.4013,
+    "pop_2024": 1394234
+  },
+  {
+    "id": "31180",
+    "name": "Lubbock, TX",
+    "econ_impact": 108344928.55,
+    "raw_funding": 33260209.09,
+    "jobs": 392.4705,
+    "pop_2024": 367109
+  },
+  {
+    "id": "31220",
+    "name": "Ludington, MI",
+    "econ_impact": 2106130.45,
+    "raw_funding": 826697.69,
+    "jobs": 8.019,
+    "pop_2024": 29093
+  },
+  {
+    "id": "31260",
+    "name": "Lufkin, TX",
+    "econ_impact": 9807687.76,
+    "raw_funding": 3010807.71,
+    "jobs": 35.5275,
+    "pop_2024": 88094
+  },
+  {
+    "id": "31300",
+    "name": "Lumberton, NC",
+    "econ_impact": 28622998.97,
+    "raw_funding": 11441452.63,
+    "jobs": 110.9821,
+    "pop_2024": 118624
+  },
+  {
+    "id": "31340",
+    "name": "Lynchburg, VA",
+    "econ_impact": 42108404.31,
+    "raw_funding": 15237980.36,
+    "jobs": 129.5228,
+    "pop_2024": 266432
+  },
+  {
+    "id": "31380",
+    "name": "Macomb, IL",
+    "econ_impact": 1346072.72,
+    "raw_funding": 470548.41,
+    "jobs": 4.6584,
+    "pop_2024": 26662
+  },
+  {
+    "id": "31420",
+    "name": "Macon-Bibb County, GA",
+    "econ_impact": 22775157.69,
+    "raw_funding": 7754291.23,
+    "jobs": 91.5006,
+    "pop_2024": 237617
+  },
+  {
+    "id": "31500",
+    "name": "Madison, IN",
+    "econ_impact": 2817477.72,
+    "raw_funding": 1047244.87,
+    "jobs": 9.2158,
+    "pop_2024": 32921
+  },
+  {
+    "id": "31540",
+    "name": "Madison, WI",
+    "econ_impact": 1610429305.79,
+    "raw_funding": 680173994.81,
+    "jobs": 6393.6356,
+    "pop_2024": 707606
+  },
+  {
+    "id": "31580",
+    "name": "Madisonville, KY",
+    "econ_impact": 2604228.01,
+    "raw_funding": 996228.07,
+    "jobs": 8.5676,
+    "pop_2024": 45218
+  },
+  {
+    "id": "31620",
+    "name": "Magnolia, AR",
+    "econ_impact": 650599.73,
+    "raw_funding": 231783.75,
+    "jobs": 2.0397,
+    "pop_2024": 22024
+  },
+  {
+    "id": "31680",
+    "name": "Malvern, AR",
+    "econ_impact": 3485036.8,
+    "raw_funding": 1241585.07,
+    "jobs": 10.9259,
+    "pop_2024": 33313
+  },
+  {
+    "id": "31700",
+    "name": "Manchester-Nashua, NH",
+    "econ_impact": 159433701.96,
+    "raw_funding": 66035469.23,
+    "jobs": 462.2483,
+    "pop_2024": 430462
+  },
+  {
+    "id": "31740",
+    "name": "Manhattan, KS",
+    "econ_impact": 55455381.96,
+    "raw_funding": 20073838.97,
+    "jobs": 162.5981,
+    "pop_2024": 134892
+  },
+  {
+    "id": "31820",
+    "name": "Manitowoc, WI",
+    "econ_impact": 5972586.92,
+    "raw_funding": 2522556.12,
+    "jobs": 23.712,
+    "pop_2024": 81513
+  },
+  {
+    "id": "31860",
+    "name": "Mankato, MN",
+    "econ_impact": 21706718.4,
+    "raw_funding": 8782995.22,
+    "jobs": 79.9253,
+    "pop_2024": 105193
+  },
+  {
+    "id": "31900",
+    "name": "Mansfield, OH",
+    "econ_impact": 6862255.59,
+    "raw_funding": 2631253.8,
+    "jobs": 26.0494,
+    "pop_2024": 124853
+  },
+  {
+    "id": "31930",
+    "name": "Marietta, OH",
+    "econ_impact": 4494908.01,
+    "raw_funding": 1723521.32,
+    "jobs": 17.0629,
+    "pop_2024": 58332
+  },
+  {
+    "id": "31940",
+    "name": "Marinette, WI-MI",
+    "econ_impact": 5179073.37,
+    "raw_funding": 2149869.69,
+    "jobs": 20.3569,
+    "pop_2024": 65393
+  },
+  {
+    "id": "31980",
+    "name": "Marion, IN",
+    "econ_impact": 4675370.28,
+    "raw_funding": 1737815.9,
+    "jobs": 15.2928,
+    "pop_2024": 66458
+  },
+  {
+    "id": "32000",
+    "name": "Marion, NC",
+    "econ_impact": 3476730.56,
+    "raw_funding": 1389751.23,
+    "jobs": 13.4806,
+    "pop_2024": 45269
+  },
+  {
+    "id": "32020",
+    "name": "Marion, OH",
+    "econ_impact": 7160450.42,
+    "raw_funding": 2745593.21,
+    "jobs": 27.1814,
+    "pop_2024": 64976
+  },
+  {
+    "id": "32060",
+    "name": "Marion-Herrin, IL",
+    "econ_impact": 4300455.39,
+    "raw_funding": 1503315.86,
+    "jobs": 14.8828,
+    "pop_2024": 67064
+  },
+  {
+    "id": "32100",
+    "name": "Marquette, MI",
+    "econ_impact": 3443223.35,
+    "raw_funding": 1351533.0,
+    "jobs": 13.1099,
+    "pop_2024": 67979
+  },
+  {
+    "id": "32140",
+    "name": "Marshall, MN",
+    "econ_impact": 1374700.49,
+    "raw_funding": 556232.76,
+    "jobs": 5.0617,
+    "pop_2024": 25577
+  },
+  {
+    "id": "32180",
+    "name": "Marshall, MO",
+    "econ_impact": 7001665.88,
+    "raw_funding": 2977902.35,
+    "jobs": 25.61,
+    "pop_2024": 23325
+  },
+  {
+    "id": "32260",
+    "name": "Marshalltown, IA",
+    "econ_impact": 3201382.48,
+    "raw_funding": 1303533.21,
+    "jobs": 10.2979,
+    "pop_2024": 40392
+  },
+  {
+    "id": "32280",
+    "name": "Martin, TN",
+    "econ_impact": 2771928.36,
+    "raw_funding": 1029690.89,
+    "jobs": 10.2969,
+    "pop_2024": 33162
+  },
+  {
+    "id": "32300",
+    "name": "Martinsville, VA",
+    "econ_impact": 6663377.97,
+    "raw_funding": 2411310.15,
+    "jobs": 20.4961,
+    "pop_2024": 63219
+  },
+  {
+    "id": "32340",
+    "name": "Maryville, MO",
+    "econ_impact": 735515.55,
+    "raw_funding": 312824.62,
+    "jobs": 2.6903,
+    "pop_2024": 20503
+  },
+  {
+    "id": "32380",
+    "name": "Mason City, IA",
+    "econ_impact": 2908575.65,
+    "raw_funding": 1184308.65,
+    "jobs": 9.356,
+    "pop_2024": 49800
+  },
+  {
+    "id": "32390",
+    "name": "Massena-Ogdensburg, NY",
+    "econ_impact": 9425449.06,
+    "raw_funding": 3998439.99,
+    "jobs": 28.3889,
+    "pop_2024": 106198
+  },
+  {
+    "id": "32420",
+    "name": "Mayagaez, PR",
+    "econ_impact": 0.0,
+    "raw_funding": 0.0,
+    "jobs": 0.0,
+    "pop_2024": 0
+  },
+  {
+    "id": "32460",
+    "name": "Mayfield, KY",
+    "econ_impact": 2223726.56,
+    "raw_funding": 850670.07,
+    "jobs": 7.3158,
+    "pop_2024": 36821
+  },
+  {
+    "id": "32540",
+    "name": "McAlester, OK",
+    "econ_impact": 1231177.62,
+    "raw_funding": 437193.69,
+    "jobs": 4.5905,
+    "pop_2024": 43395
+  },
+  {
+    "id": "32580",
+    "name": "McAllen-Edinburg-Mission, TX",
+    "econ_impact": 81528117.72,
+    "raw_funding": 25027864.97,
+    "jobs": 295.3288,
+    "pop_2024": 914820
+  },
+  {
+    "id": "32620",
+    "name": "McComb, MS",
+    "econ_impact": 2112635.62,
+    "raw_funding": 656076.83,
+    "jobs": 5.8391,
+    "pop_2024": 52819
+  },
+  {
+    "id": "32660",
+    "name": "McMinnville, TN",
+    "econ_impact": 9868372.69,
+    "raw_funding": 3665813.86,
+    "jobs": 36.6581,
+    "pop_2024": 43619
+  },
+  {
+    "id": "32700",
+    "name": "McPherson, KS",
+    "econ_impact": 1435256.83,
+    "raw_funding": 519536.85,
+    "jobs": 4.2082,
+    "pop_2024": 30334
+  },
+  {
+    "id": "32740",
+    "name": "Meadville, PA",
+    "econ_impact": 9729099.41,
+    "raw_funding": 4046032.54,
+    "jobs": 34.3913,
+    "pop_2024": 82089
+  },
+  {
+    "id": "32780",
+    "name": "Medford, OR",
+    "econ_impact": 6850679.3,
+    "raw_funding": 2823037.9,
+    "jobs": 24.8427,
+    "pop_2024": 221331
+  },
+  {
+    "id": "32820",
+    "name": "Memphis, TN-MS-AR",
+    "econ_impact": 930417700.52,
+    "raw_funding": 339559660.43,
+    "jobs": 3354.0772,
+    "pop_2024": 1339345
+  },
+  {
+    "id": "32860",
+    "name": "Menomonie, WI",
+    "econ_impact": 3606785.23,
+    "raw_funding": 1523346.3,
+    "jobs": 14.3195,
+    "pop_2024": 46135
+  },
+  {
+    "id": "32900",
+    "name": "Merced, CA",
+    "econ_impact": 49190275.07,
+    "raw_funding": 18332081.35,
+    "jobs": 161.3223,
+    "pop_2024": 296774
+  },
+  {
+    "id": "32940",
+    "name": "Meridian, MS",
+    "econ_impact": 3175011.94,
+    "raw_funding": 985996.71,
+    "jobs": 8.7754,
+    "pop_2024": 85743
+  },
+  {
+    "id": "33020",
+    "name": "Mexico, MO",
+    "econ_impact": 2831108.65,
+    "raw_funding": 1204108.46,
+    "jobs": 10.3553,
+    "pop_2024": 24304
+  },
+  {
+    "id": "33060",
+    "name": "Miami, OK",
+    "econ_impact": 531856.72,
+    "raw_funding": 188863.41,
+    "jobs": 1.9831,
+    "pop_2024": 30404
+  },
+  {
+    "id": "33100",
+    "name": "Miami-Fort Lauderdale-West Palm Beach, FL",
+    "econ_impact": 1909403193.61,
+    "raw_funding": 594439259.72,
+    "jobs": 6657.7197,
+    "pop_2024": 6457988
+  },
+  {
+    "id": "33140",
+    "name": "Michigan City-La Porte, IN",
+    "econ_impact": 12438634.35,
+    "raw_funding": 4623389.2,
+    "jobs": 40.6858,
+    "pop_2024": 111348
+  },
+  {
+    "id": "33180",
+    "name": "Middlesborough, KY",
+    "econ_impact": 2330561.47,
+    "raw_funding": 891538.97,
+    "jobs": 7.6672,
+    "pop_2024": 23051
+  },
+  {
+    "id": "33220",
+    "name": "Midland, MI",
+    "econ_impact": 6502178.85,
+    "raw_funding": 2552233.29,
+    "jobs": 24.7567,
+    "pop_2024": 84022
+  },
+  {
+    "id": "33260",
+    "name": "Midland, TX",
+    "econ_impact": 5013894.78,
+    "raw_funding": 1539187.77,
+    "jobs": 18.1624,
+    "pop_2024": 188766
+  },
+  {
+    "id": "33300",
+    "name": "Milledgeville, GA",
+    "econ_impact": 4284881.03,
+    "raw_funding": 1458879.71,
+    "jobs": 17.2148,
+    "pop_2024": 43644
+  },
+  {
+    "id": "33340",
+    "name": "Milwaukee-Waukesha, WI",
+    "econ_impact": 837643975.1,
+    "raw_funding": 353783706.45,
+    "jobs": 3325.5668,
+    "pop_2024": 1574452
+  },
+  {
+    "id": "33380",
+    "name": "Minden, LA",
+    "econ_impact": 3499646.11,
+    "raw_funding": 1264848.64,
+    "jobs": 12.3955,
+    "pop_2024": 35184
+  },
+  {
+    "id": "33420",
+    "name": "Mineral Wells, TX",
+    "econ_impact": 582347.64,
+    "raw_funding": 178771.67,
+    "jobs": 2.1095,
+    "pop_2024": 30231
+  },
+  {
+    "id": "33460",
+    "name": "Minneapolis-St. Paul-Bloomington, MN-WI",
+    "econ_impact": 2170575195.26,
+    "raw_funding": 878747060.54,
+    "jobs": 8000.0751,
+    "pop_2024": 3757952
+  },
+  {
+    "id": "33500",
+    "name": "Minot, ND",
+    "econ_impact": 3212794.65,
+    "raw_funding": 869785.08,
+    "jobs": 6.4364,
+    "pop_2024": 75938
+  },
+  {
+    "id": "33540",
+    "name": "Missoula, MT",
+    "econ_impact": 63442333.46,
+    "raw_funding": 24029739.25,
+    "jobs": 221.0736,
+    "pop_2024": 127741
+  },
+  {
+    "id": "33580",
+    "name": "Mitchell, SD",
+    "econ_impact": 1964041.51,
+    "raw_funding": 629192.39,
+    "jobs": 5.2223,
+    "pop_2024": 25776
+  },
+  {
+    "id": "33620",
+    "name": "Moberly, MO",
+    "econ_impact": 4118593.5,
+    "raw_funding": 1751693.02,
+    "jobs": 15.0646,
+    "pop_2024": 24077
+  },
+  {
+    "id": "33660",
+    "name": "Mobile, AL",
+    "econ_impact": 46077069.87,
+    "raw_funding": 18711824.63,
+    "jobs": 172.1488,
+    "pop_2024": 412339
+  },
+  {
+    "id": "33700",
+    "name": "Modesto, CA",
+    "econ_impact": 83086433.76,
+    "raw_funding": 30964398.16,
+    "jobs": 272.4867,
+    "pop_2024": 556972
+  },
+  {
+    "id": "33740",
+    "name": "Monroe, LA",
+    "econ_impact": 6633448.47,
+    "raw_funding": 2397473.35,
+    "jobs": 23.4952,
+    "pop_2024": 221921
+  },
+  {
+    "id": "33780",
+    "name": "Monroe, MI",
+    "econ_impact": 91955235.44,
+    "raw_funding": 36094241.47,
+    "jobs": 350.1141,
+    "pop_2024": 156045
+  },
+  {
+    "id": "33860",
+    "name": "Montgomery, AL",
+    "econ_impact": 43321118.7,
+    "raw_funding": 17592637.26,
+    "jobs": 161.8523,
+    "pop_2024": 387885
+  },
+  {
+    "id": "33900",
+    "name": "Monticello, IN",
+    "econ_impact": 10566490.18,
+    "raw_funding": 3927520.92,
+    "jobs": 34.5622,
+    "pop_2024": 24833
+  },
+  {
+    "id": "33910",
+    "name": "Monticello, NY",
+    "econ_impact": 16622182.05,
+    "raw_funding": 7051419.73,
+    "jobs": 50.0651,
+    "pop_2024": 80450
+  },
+  {
+    "id": "33940",
+    "name": "Montrose, CO",
+    "econ_impact": 1414064.47,
+    "raw_funding": 504867.45,
+    "jobs": 4.8467,
+    "pop_2024": 44806
+  },
+  {
+    "id": "33980",
+    "name": "Morehead City, NC",
+    "econ_impact": 10360989.97,
+    "raw_funding": 4141591.73,
+    "jobs": 40.1734,
+    "pop_2024": 70259
+  },
+  {
+    "id": "34020",
+    "name": "Morgan City, LA",
+    "econ_impact": 2204520.17,
+    "raw_funding": 796761.8,
+    "jobs": 7.8083,
+    "pop_2024": 46799
+  },
+  {
+    "id": "34060",
+    "name": "Morgantown, WV",
+    "econ_impact": 140544265.95,
+    "raw_funding": 50315847.53,
+    "jobs": 387.432,
+    "pop_2024": 142752
+  },
+  {
+    "id": "34100",
+    "name": "Morristown, TN",
+    "econ_impact": 3891714.93,
+    "raw_funding": 1445659.07,
+    "jobs": 14.4566,
+    "pop_2024": 126932
+  },
+  {
+    "id": "34140",
+    "name": "Moscow, ID",
+    "econ_impact": 104467977.27,
+    "raw_funding": 25075646.86,
+    "jobs": 230.696,
+    "pop_2024": 42180
+  },
+  {
+    "id": "34180",
+    "name": "Moses Lake, WA",
+    "econ_impact": 9785149.32,
+    "raw_funding": 4048221.3,
+    "jobs": 31.5761,
+    "pop_2024": 104717
+  },
+  {
+    "id": "34220",
+    "name": "Moultrie, GA",
+    "econ_impact": 2357511.55,
+    "raw_funding": 802665.4,
+    "jobs": 9.4715,
+    "pop_2024": 46977
+  },
+  {
+    "id": "34260",
+    "name": "Mountain Home, AR",
+    "econ_impact": 1328933.61,
+    "raw_funding": 473448.12,
+    "jobs": 4.1663,
+    "pop_2024": 43007
+  },
+  {
+    "id": "34300",
+    "name": "Mountain Home, ID",
+    "econ_impact": 778641.98,
+    "raw_funding": 186898.91,
+    "jobs": 1.7195,
+    "pop_2024": 29729
+  },
+  {
+    "id": "34340",
+    "name": "Mount Airy, NC",
+    "econ_impact": 24630562.33,
+    "raw_funding": 9845558.55,
+    "jobs": 95.5019,
+    "pop_2024": 71547
+  },
+  {
+    "id": "34380",
+    "name": "Mount Pleasant, MI",
+    "econ_impact": 13419402.86,
+    "raw_funding": 5267379.99,
+    "jobs": 51.0936,
+    "pop_2024": 65072
+  },
+  {
+    "id": "34420",
+    "name": "Mount Pleasant, TX",
+    "econ_impact": 2071575.14,
+    "raw_funding": 635941.37,
+    "jobs": 7.5041,
+    "pop_2024": 56895
+  },
+  {
+    "id": "34460",
+    "name": "Mount Sterling, KY",
+    "econ_impact": 14361592.03,
+    "raw_funding": 5493920.31,
+    "jobs": 47.2477,
+    "pop_2024": 48063
+  },
+  {
+    "id": "34500",
+    "name": "Mount Vernon, IL",
+    "econ_impact": 947675.61,
+    "raw_funding": 331280.21,
+    "jobs": 3.2797,
+    "pop_2024": 36107
+  },
+  {
+    "id": "34540",
+    "name": "Mount Vernon, OH",
+    "econ_impact": 3152781.96,
+    "raw_funding": 1208898.36,
+    "jobs": 11.9681,
+    "pop_2024": 63848
+  },
+  {
+    "id": "34580",
+    "name": "Mount Vernon-Anacortes, WA",
+    "econ_impact": 53393311.5,
+    "raw_funding": 22089386.04,
+    "jobs": 172.2972,
+    "pop_2024": 132736
+  },
+  {
+    "id": "34620",
+    "name": "Muncie, IN",
+    "econ_impact": 23950486.41,
+    "raw_funding": 8902297.25,
+    "jobs": 78.3402,
+    "pop_2024": 112951
+  },
+  {
+    "id": "34660",
+    "name": "Murray, KY",
+    "econ_impact": 2085055.55,
+    "raw_funding": 797622.51,
+    "jobs": 6.8596,
+    "pop_2024": 38975
+  },
+  {
+    "id": "34680",
+    "name": "Murrells Inlet, SC",
+    "econ_impact": 7113444.98,
+    "raw_funding": 2460046.62,
+    "jobs": 25.3385,
+    "pop_2024": 66035
+  },
+  {
+    "id": "34700",
+    "name": "Muscatine, IA",
+    "econ_impact": 24395843.84,
+    "raw_funding": 9933456.22,
+    "jobs": 78.4743,
+    "pop_2024": 42132
+  },
+  {
+    "id": "34740",
+    "name": "Muskegon-Norton Shores, MI",
+    "econ_impact": 10990214.68,
+    "raw_funding": 4313875.78,
+    "jobs": 41.8446,
+    "pop_2024": 177428
+  },
+  {
+    "id": "34780",
+    "name": "Muskogee, OK",
+    "econ_impact": 3308177.79,
+    "raw_funding": 1174740.68,
+    "jobs": 12.3348,
+    "pop_2024": 66752
+  },
+  {
+    "id": "34820",
+    "name": "Myrtle Beach-Conway-North Myrtle Beach, SC",
+    "econ_impact": 14033306.29,
+    "raw_funding": 4853146.08,
+    "jobs": 49.9874,
+    "pop_2024": 413391
+  },
+  {
+    "id": "34860",
+    "name": "Nacogdoches, TX",
+    "econ_impact": 7756179.61,
+    "raw_funding": 2381026.59,
+    "jobs": 28.0961,
+    "pop_2024": 65728
+  },
+  {
+    "id": "34880",
+    "name": "Nantucket, MA",
+    "econ_impact": 4230629.14,
+    "raw_funding": 1888684.6,
+    "jobs": 14.9206,
+    "pop_2024": 14670
+  },
+  {
+    "id": "34900",
+    "name": "Napa, CA",
+    "econ_impact": 50218994.75,
+    "raw_funding": 18715461.45,
+    "jobs": 164.6961,
+    "pop_2024": 132727
+  },
+  {
+    "id": "34940",
+    "name": "Naples-Marco Island, FL",
+    "econ_impact": 13268471.89,
+    "raw_funding": 4130767.48,
+    "jobs": 46.2646,
+    "pop_2024": 416233
+  },
+  {
+    "id": "34980",
+    "name": "Nashville-Davidson--Murfreesboro--Franklin, TN",
+    "econ_impact": 2924407022.73,
+    "raw_funding": 1086332279.66,
+    "jobs": 10863.3228,
+    "pop_2024": 2150553
+  },
+  {
+    "id": "35020",
+    "name": "Natchez, MS-LA",
+    "econ_impact": 2092104.17,
+    "raw_funding": 657750.71,
+    "jobs": 5.9055,
+    "pop_2024": 53371
+  },
+  {
+    "id": "35060",
+    "name": "Natchitoches, LA",
+    "econ_impact": 1457463.6,
+    "raw_funding": 526759.22,
+    "jobs": 5.1622,
+    "pop_2024": 35982
+  },
+  {
+    "id": "35100",
+    "name": "New Bern, NC",
+    "econ_impact": 23342788.21,
+    "raw_funding": 9330797.44,
+    "jobs": 90.5087,
+    "pop_2024": 126179
+  },
+  {
+    "id": "35140",
+    "name": "Newberry, SC",
+    "econ_impact": 5908168.2,
+    "raw_funding": 2043225.08,
+    "jobs": 21.0452,
+    "pop_2024": 39203
+  },
+  {
+    "id": "35220",
+    "name": "New Castle, IN",
+    "econ_impact": 5375838.61,
+    "raw_funding": 1998177.09,
+    "jobs": 17.584,
+    "pop_2024": 49081
+  },
+  {
+    "id": "35300",
+    "name": "New Haven, CT",
+    "econ_impact": 1831334422.9,
+    "raw_funding": 805139679.99,
+    "jobs": 6119.0616,
+    "pop_2024": 576718
+  },
+  {
+    "id": "35340",
+    "name": "New Iberia, LA",
+    "econ_impact": 3281840.91,
+    "raw_funding": 1186129.08,
+    "jobs": 11.6241,
+    "pop_2024": 67540
+  },
+  {
+    "id": "35380",
+    "name": "New Orleans-Metairie, LA",
+    "econ_impact": 681522923.45,
+    "raw_funding": 246317289.01,
+    "jobs": 2413.9094,
+    "pop_2024": 966230
+  },
+  {
+    "id": "35420",
+    "name": "New Philadelphia-Dover, OH",
+    "econ_impact": 5566696.08,
+    "raw_funding": 2134486.25,
+    "jobs": 21.1314,
+    "pop_2024": 92048
+  },
+  {
+    "id": "35440",
+    "name": "Newport, OR",
+    "econ_impact": 4696685.79,
+    "raw_funding": 1935417.12,
+    "jobs": 17.0317,
+    "pop_2024": 51212
+  },
+  {
+    "id": "35460",
+    "name": "Newport, TN",
+    "econ_impact": 1190783.43,
+    "raw_funding": 442341.46,
+    "jobs": 4.4234,
+    "pop_2024": 37596
+  },
+  {
+    "id": "35580",
+    "name": "New Ulm, MN",
+    "econ_impact": 1180389.12,
+    "raw_funding": 477610.29,
+    "jobs": 4.3463,
+    "pop_2024": 25710
+  },
+  {
+    "id": "35620",
+    "name": "New York-Newark-Jersey City, NY-NJ",
+    "econ_impact": 16993794718.49,
+    "raw_funding": 6774753425.46,
+    "jobs": 50045.9066,
+    "pop_2024": 19940274
+  },
+  {
+    "id": "35660",
+    "name": "Niles, MI",
+    "econ_impact": 19273891.38,
+    "raw_funding": 7565382.07,
+    "jobs": 73.3842,
+    "pop_2024": 152703
+  },
+  {
+    "id": "35700",
+    "name": "Nogales, AZ",
+    "econ_impact": 8055077.95,
+    "raw_funding": 2742345.21,
+    "jobs": 27.9719,
+    "pop_2024": 50508
+  },
+  {
+    "id": "35740",
+    "name": "Norfolk, NE",
+    "econ_impact": 7829716.15,
+    "raw_funding": 3025800.89,
+    "jobs": 27.8374,
+    "pop_2024": 48669
+  },
+  {
+    "id": "35820",
+    "name": "North Platte, NE",
+    "econ_impact": 2287874.08,
+    "raw_funding": 884151.01,
+    "jobs": 8.1342,
+    "pop_2024": 34013
+  },
+  {
+    "id": "35840",
+    "name": "North Port-Bradenton-Sarasota, FL",
+    "econ_impact": 53376781.99,
+    "raw_funding": 16617367.6,
+    "jobs": 186.1145,
+    "pop_2024": 934956
+  },
+  {
+    "id": "35900",
+    "name": "North Wilkesboro, NC",
+    "econ_impact": 23303370.78,
+    "raw_funding": 9315041.14,
+    "jobs": 90.3559,
+    "pop_2024": 66186
+  },
+  {
+    "id": "35940",
+    "name": "Norwalk, OH",
+    "econ_impact": 3491191.95,
+    "raw_funding": 1338657.81,
+    "jobs": 13.2527,
+    "pop_2024": 58168
+  },
+  {
+    "id": "35980",
+    "name": "Norwich-New London-Willimantic, CT",
+    "econ_impact": 115980475.82,
+    "raw_funding": 50990404.6,
+    "jobs": 387.5271,
+    "pop_2024": 282602
+  },
+  {
+    "id": "36020",
+    "name": "Oak Harbor, WA",
+    "econ_impact": 24657640.56,
+    "raw_funding": 10201130.55,
+    "jobs": 79.5688,
+    "pop_2024": 86478
+  },
+  {
+    "id": "36100",
+    "name": "Ocala, FL",
+    "econ_impact": 89328346.67,
+    "raw_funding": 27809881.35,
+    "jobs": 311.4707,
+    "pop_2024": 428905
+  },
+  {
+    "id": "36180",
+    "name": "Ocean Pines, MD",
+    "econ_impact": 4569049.3,
+    "raw_funding": 2086409.48,
+    "jobs": 17.5258,
+    "pop_2024": 54337
+  },
+  {
+    "id": "36220",
+    "name": "Odessa, TX",
+    "econ_impact": 6103343.93,
+    "raw_funding": 1873631.72,
+    "jobs": 22.1089,
+    "pop_2024": 170022
+  },
+  {
+    "id": "36260",
+    "name": "Ogden, UT",
+    "econ_impact": 274995169.21,
+    "raw_funding": 100119925.32,
+    "jobs": 1151.3791,
+    "pop_2024": 667681
+  },
+  {
+    "id": "36340",
+    "name": "Oil City, PA",
+    "econ_impact": 18673659.86,
+    "raw_funding": 7765799.51,
+    "jobs": 66.0093,
+    "pop_2024": 49476
+  },
+  {
+    "id": "36380",
+    "name": "Okeechobee, FL",
+    "econ_impact": 1924371.88,
+    "raw_funding": 599099.34,
+    "jobs": 6.7099,
+    "pop_2024": 42369
+  },
+  {
+    "id": "36420",
+    "name": "Oklahoma City, OK",
+    "econ_impact": 591118076.4,
+    "raw_funding": 209907235.29,
+    "jobs": 2204.026,
+    "pop_2024": 1497821
+  },
+  {
+    "id": "36460",
+    "name": "Olean, NY",
+    "econ_impact": 7978033.04,
+    "raw_funding": 3384420.86,
+    "jobs": 24.0294,
+    "pop_2024": 75475
+  },
+  {
+    "id": "36500",
+    "name": "Olympia-Lacey-Tumwater, WA",
+    "econ_impact": 55255544.81,
+    "raw_funding": 22859811.95,
+    "jobs": 178.3065,
+    "pop_2024": 302912
+  },
+  {
+    "id": "36540",
+    "name": "Omaha, NE-IA",
+    "econ_impact": 625086859.63,
+    "raw_funding": 242030202.82,
+    "jobs": 2214.8073,
+    "pop_2024": 1001010
+  },
+  {
+    "id": "36580",
+    "name": "Oneonta, NY",
+    "econ_impact": 5925005.04,
+    "raw_funding": 2513490.55,
+    "jobs": 17.8458,
+    "pop_2024": 60524
+  },
+  {
+    "id": "36620",
+    "name": "Ontario, OR-ID",
+    "econ_impact": 1943463.44,
+    "raw_funding": 730553.8,
+    "jobs": 6.4681,
+    "pop_2024": 59977
+  },
+  {
+    "id": "36660",
+    "name": "Opelousas, LA",
+    "econ_impact": 5311621.71,
+    "raw_funding": 1919736.25,
+    "jobs": 18.8134,
+    "pop_2024": 80869
+  },
+  {
+    "id": "36700",
+    "name": "Orangeburg, SC",
+    "econ_impact": 9185066.18,
+    "raw_funding": 3176476.52,
+    "jobs": 32.7177,
+    "pop_2024": 83129
+  },
+  {
+    "id": "36740",
+    "name": "Orlando-Kissimmee-Sanford, FL",
+    "econ_impact": 214280337.19,
+    "raw_funding": 66710187.47,
+    "jobs": 747.1541,
+    "pop_2024": 2940513
+  },
+  {
+    "id": "36780",
+    "name": "Oshkosh-Neenah, WI",
+    "econ_impact": 29719797.51,
+    "raw_funding": 12552325.85,
+    "jobs": 117.9919,
+    "pop_2024": 173307
+  },
+  {
+    "id": "36820",
+    "name": "Oskaloosa, IA",
+    "econ_impact": 2460903.1,
+    "raw_funding": 1002026.14,
+    "jobs": 7.916,
+    "pop_2024": 22034
+  },
+  {
+    "id": "36830",
+    "name": "Othello, WA",
+    "econ_impact": 3731920.38,
+    "raw_funding": 1543935.51,
+    "jobs": 12.0427,
+    "pop_2024": 21039
+  },
+  {
+    "id": "36837",
+    "name": "Ottawa, IL",
+    "econ_impact": 9289073.12,
+    "raw_funding": 3247193.53,
+    "jobs": 32.1472,
+    "pop_2024": 146509
+  },
+  {
+    "id": "36840",
+    "name": "Ottawa, KS",
+    "econ_impact": 1686188.38,
+    "raw_funding": 610369.51,
+    "jobs": 4.944,
+    "pop_2024": 26273
+  },
+  {
+    "id": "36900",
+    "name": "Ottumwa, IA",
+    "econ_impact": 1417534.8,
+    "raw_funding": 577189.29,
+    "jobs": 4.5598,
+    "pop_2024": 35681
+  },
+  {
+    "id": "36940",
+    "name": "Owatonna, MN",
+    "econ_impact": 15584288.11,
+    "raw_funding": 6305731.04,
+    "jobs": 57.3822,
+    "pop_2024": 37434
+  },
+  {
+    "id": "36980",
+    "name": "Owensboro, KY",
+    "econ_impact": 3278532.95,
+    "raw_funding": 1254178.42,
+    "jobs": 10.7859,
+    "pop_2024": 113583
+  },
+  {
+    "id": "37020",
+    "name": "Owosso, MI",
+    "econ_impact": 24843948.23,
+    "raw_funding": 9751739.12,
+    "jobs": 94.5919,
+    "pop_2024": 67982
+  },
+  {
+    "id": "37060",
+    "name": "Oxford, MS",
+    "econ_impact": 33094535.3,
+    "raw_funding": 10277474.09,
+    "jobs": 91.4695,
+    "pop_2024": 72301
+  },
+  {
+    "id": "37100",
+    "name": "Oxnard-Thousand Oaks-Ventura, CA",
+    "econ_impact": 226794935.66,
+    "raw_funding": 84521243.35,
+    "jobs": 743.7869,
+    "pop_2024": 835427
+  },
+  {
+    "id": "37120",
+    "name": "Ozark, AL",
+    "econ_impact": 3405609.64,
+    "raw_funding": 1383012.65,
+    "jobs": 12.7237,
+    "pop_2024": 50067
+  },
+  {
+    "id": "37140",
+    "name": "Paducah, KY-IL",
+    "econ_impact": 4014460.35,
+    "raw_funding": 1532553.63,
+    "jobs": 13.2234,
+    "pop_2024": 102395
+  },
+  {
+    "id": "37220",
+    "name": "Pahrump, NV",
+    "econ_impact": 1827571.46,
+    "raw_funding": 345088.98,
+    "jobs": 3.0023,
+    "pop_2024": 55990
+  },
+  {
+    "id": "37260",
+    "name": "Palatka, FL",
+    "econ_impact": 16072871.1,
+    "raw_funding": 5003838.7,
+    "jobs": 56.043,
+    "pop_2024": 77301
+  },
+  {
+    "id": "37300",
+    "name": "Palestine, TX",
+    "econ_impact": 4490188.82,
+    "raw_funding": 1378418.18,
+    "jobs": 16.2653,
+    "pop_2024": 59512
+  },
+  {
+    "id": "37340",
+    "name": "Palm Bay-Melbourne-Titusville, FL",
+    "econ_impact": 29839262.4,
+    "raw_funding": 9289619.45,
+    "jobs": 104.0437,
+    "pop_2024": 658447
+  },
+  {
+    "id": "37420",
+    "name": "Pampa, TX",
+    "econ_impact": 863456.84,
+    "raw_funding": 265067.83,
+    "jobs": 3.1278,
+    "pop_2024": 21725
+  },
+  {
+    "id": "37460",
+    "name": "Panama City-Panama City Beach, FL",
+    "econ_impact": 6833341.22,
+    "raw_funding": 2127369.59,
+    "jobs": 23.8265,
+    "pop_2024": 226221
+  },
+  {
+    "id": "37500",
+    "name": "Paragould, AR",
+    "econ_impact": 1926634.6,
+    "raw_funding": 686386.08,
+    "jobs": 6.0402,
+    "pop_2024": 46928
+  },
+  {
+    "id": "37540",
+    "name": "Paris, TN",
+    "econ_impact": 2627148.1,
+    "raw_funding": 975909.22,
+    "jobs": 9.7591,
+    "pop_2024": 32883
+  },
+  {
+    "id": "37580",
+    "name": "Paris, TX",
+    "econ_impact": 2399321.39,
+    "raw_funding": 736554.37,
+    "jobs": 8.6913,
+    "pop_2024": 62945
+  },
+  {
+    "id": "37620",
+    "name": "Parkersburg-Vienna, WV",
+    "econ_impact": 4843421.76,
+    "raw_funding": 1733979.46,
+    "jobs": 13.3516,
+    "pop_2024": 87681
+  },
+  {
+    "id": "37740",
+    "name": "Payson, AZ",
+    "econ_impact": 4060545.68,
+    "raw_funding": 1382409.71,
+    "jobs": 14.1006,
+    "pop_2024": 54073
+  },
+  {
+    "id": "37800",
+    "name": "Pella, IA",
+    "econ_impact": 1762094.54,
+    "raw_funding": 717486.52,
+    "jobs": 5.6681,
+    "pop_2024": 34048
+  },
+  {
+    "id": "37860",
+    "name": "Pensacola-Ferry Pass-Brent, FL",
+    "econ_impact": 14794295.01,
+    "raw_funding": 4605789.81,
+    "jobs": 51.5848,
+    "pop_2024": 538928
+  },
+  {
+    "id": "37900",
+    "name": "Peoria, IL",
+    "econ_impact": 22412397.34,
+    "raw_funding": 7834731.26,
+    "jobs": 77.5638,
+    "pop_2024": 364565
+  },
+  {
+    "id": "37940",
+    "name": "Peru, IN",
+    "econ_impact": 2781991.38,
+    "raw_funding": 1034054.75,
+    "jobs": 9.0997,
+    "pop_2024": 35613
+  },
+  {
+    "id": "37950",
+    "name": "Petoskey, MI",
+    "econ_impact": 1250714.79,
+    "raw_funding": 490930.2,
+    "jobs": 4.762,
+    "pop_2024": 33949
+  },
+  {
+    "id": "37980",
+    "name": "Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",
+    "econ_impact": 6924584130.48,
+    "raw_funding": 2758841676.31,
+    "jobs": 23148.8975,
+    "pop_2024": 6330422
+  },
+  {
+    "id": "38060",
+    "name": "Phoenix-Mesa-Chandler, AZ",
+    "econ_impact": 828213579.09,
+    "raw_funding": 281964688.15,
+    "jobs": 2876.0398,
+    "pop_2024": 5186958
+  },
+  {
+    "id": "38100",
+    "name": "Picayune, MS",
+    "econ_impact": 3139154.1,
+    "raw_funding": 974861.09,
+    "jobs": 8.6763,
+    "pop_2024": 59030
+  },
+  {
+    "id": "38180",
+    "name": "Pierre, SD",
+    "econ_impact": 1427773.0,
+    "raw_funding": 457395.58,
+    "jobs": 3.7964,
+    "pop_2024": 20541
+  },
+  {
+    "id": "38210",
+    "name": "Pikeville, KY",
+    "econ_impact": 4274765.1,
+    "raw_funding": 1635279.62,
+    "jobs": 14.0634,
+    "pop_2024": 89962
+  },
+  {
+    "id": "38220",
+    "name": "Pine Bluff, AR",
+    "econ_impact": 12973752.56,
+    "raw_funding": 4622050.91,
+    "jobs": 40.674,
+    "pop_2024": 71039
+  },
+  {
+    "id": "38240",
+    "name": "Pinehurst-Southern Pines, NC",
+    "econ_impact": 14703232.77,
+    "raw_funding": 5877313.61,
+    "jobs": 57.0099,
+    "pop_2024": 108417
+  },
+  {
+    "id": "38260",
+    "name": "Pittsburg, KS",
+    "econ_impact": 702779.0,
+    "raw_funding": 254393.21,
+    "jobs": 2.0606,
+    "pop_2024": 38904
+  },
+  {
+    "id": "38300",
+    "name": "Pittsburgh, PA",
+    "econ_impact": 3428212016.16,
+    "raw_funding": 1425687701.66,
+    "jobs": 12118.3455,
+    "pop_2024": 2429917
+  },
+  {
+    "id": "38340",
+    "name": "Pittsfield, MA",
+    "econ_impact": 38834135.58,
+    "raw_funding": 17336767.52,
+    "jobs": 136.9605,
+    "pop_2024": 128726
+  },
+  {
+    "id": "38380",
+    "name": "Plainview, TX",
+    "econ_impact": 2953249.24,
+    "raw_funding": 906601.61,
+    "jobs": 10.6979,
+    "pop_2024": 36995
+  },
+  {
+    "id": "38420",
+    "name": "Platteville, WI",
+    "econ_impact": 13248806.73,
+    "raw_funding": 5595709.03,
+    "jobs": 52.5997,
+    "pop_2024": 52330
+  },
+  {
+    "id": "38460",
+    "name": "Plattsburgh, NY",
+    "econ_impact": 7759776.85,
+    "raw_funding": 3291832.77,
+    "jobs": 23.372,
+    "pop_2024": 77871
+  },
+  {
+    "id": "38500",
+    "name": "Plymouth, IN",
+    "econ_impact": 2983874.51,
+    "raw_funding": 1109093.88,
+    "jobs": 9.76,
+    "pop_2024": 46464
+  },
+  {
+    "id": "38540",
+    "name": "Pocatello, ID",
+    "econ_impact": 9952338.05,
+    "raw_funding": 2388878.59,
+    "jobs": 21.9777,
+    "pop_2024": 91010
+  },
+  {
+    "id": "38620",
+    "name": "Ponca City, OK",
+    "econ_impact": 1987102.59,
+    "raw_funding": 705624.18,
+    "jobs": 7.4091,
+    "pop_2024": 43437
+  },
+  {
+    "id": "38660",
+    "name": "Ponce, PR",
+    "econ_impact": 0.0,
+    "raw_funding": 0.0,
+    "jobs": 0.0,
+    "pop_2024": 0
+  },
+  {
+    "id": "38700",
+    "name": "Pontiac, IL",
+    "econ_impact": 3844527.59,
+    "raw_funding": 1343936.57,
+    "jobs": 13.305,
+    "pop_2024": 35375
+  },
+  {
+    "id": "38740",
+    "name": "Poplar Bluff, MO",
+    "econ_impact": 356618.94,
+    "raw_funding": 151674.81,
+    "jobs": 1.3044,
+    "pop_2024": 41814
+  },
+  {
+    "id": "38820",
+    "name": "Port Angeles, WA",
+    "econ_impact": 25148693.0,
+    "raw_funding": 10404284.21,
+    "jobs": 81.1534,
+    "pop_2024": 77958
+  },
+  {
+    "id": "38860",
+    "name": "Portland-South Portland, ME",
+    "econ_impact": 137388770.64,
+    "raw_funding": 58943898.39,
+    "jobs": 548.1783,
+    "pop_2024": 571534
+  },
+  {
+    "id": "38900",
+    "name": "Portland-Vancouver-Hillsboro, OR-WA",
+    "econ_impact": 1712977394.8,
+    "raw_funding": 706166008.35,
+    "jobs": 6143.2163,
+    "pop_2024": 2537904
+  },
+  {
+    "id": "38920",
+    "name": "Port Lavaca, TX",
+    "econ_impact": 2048925.98,
+    "raw_funding": 628988.43,
+    "jobs": 7.4221,
+    "pop_2024": 19942
+  },
+  {
+    "id": "38940",
+    "name": "Port St. Lucie, FL",
+    "econ_impact": 44784923.17,
+    "raw_funding": 13942532.76,
+    "jobs": 156.1564,
+    "pop_2024": 556336
+  },
+  {
+    "id": "39020",
+    "name": "Portsmouth, OH",
+    "econ_impact": 3522480.31,
+    "raw_funding": 1350654.98,
+    "jobs": 13.3715,
+    "pop_2024": 71798
+  },
+  {
+    "id": "39040",
+    "name": "Port Townsend, WA",
+    "econ_impact": 3547008.65,
+    "raw_funding": 1467435.55,
+    "jobs": 11.446,
+    "pop_2024": 33944
+  },
+  {
+    "id": "39060",
+    "name": "Pottsville, PA",
+    "econ_impact": 17481174.82,
+    "raw_funding": 7269881.74,
+    "jobs": 61.794,
+    "pop_2024": 144523
+  },
+  {
+    "id": "39150",
+    "name": "Prescott Valley-Prescott, AZ",
+    "econ_impact": 12339485.3,
+    "raw_funding": 4200968.46,
+    "jobs": 42.8499,
+    "pop_2024": 252013
+  },
+  {
+    "id": "39220",
+    "name": "Price, UT",
+    "econ_impact": 2723866.78,
+    "raw_funding": 991702.29,
+    "jobs": 11.4046,
+    "pop_2024": 20613
+  },
+  {
+    "id": "39300",
+    "name": "Providence-Warwick, RI-MA",
+    "econ_impact": 1510541695.99,
+    "raw_funding": 710789579.75,
+    "jobs": 5358.4623,
+    "pop_2024": 1700901
+  },
+  {
+    "id": "39340",
+    "name": "Provo-Orem-Lehi, UT",
+    "econ_impact": 135311247.98,
+    "raw_funding": 49263963.73,
+    "jobs": 566.5356,
+    "pop_2024": 760531
+  },
+  {
+    "id": "39380",
+    "name": "Pueblo, CO",
+    "econ_impact": 8219499.97,
+    "raw_funding": 2934631.41,
+    "jobs": 28.1725,
+    "pop_2024": 169866
+  },
+  {
+    "id": "39420",
+    "name": "Pullman, WA",
+    "econ_impact": 87246259.27,
+    "raw_funding": 36094713.87,
+    "jobs": 281.5388,
+    "pop_2024": 48399
+  },
+  {
+    "id": "39460",
+    "name": "Punta Gorda, FL",
+    "econ_impact": 5722976.27,
+    "raw_funding": 1781688.53,
+    "jobs": 19.9549,
+    "pop_2024": 212122
+  },
+  {
+    "id": "39480",
+    "name": "Putnam, CT",
+    "econ_impact": 53218082.93,
+    "raw_funding": 23397141.3,
+    "jobs": 177.8183,
+    "pop_2024": 97701
+  },
+  {
+    "id": "39500",
+    "name": "Quincy, IL-MO",
+    "econ_impact": 1413197.33,
+    "raw_funding": 534610.81,
+    "jobs": 4.9963,
+    "pop_2024": 73961
+  },
+  {
+    "id": "39540",
+    "name": "Racine-Mount Pleasant, WI",
+    "econ_impact": 31874996.11,
+    "raw_funding": 13462586.26,
+    "jobs": 126.5483,
+    "pop_2024": 198651
+  },
+  {
+    "id": "39580",
+    "name": "Raleigh-Cary, NC",
+    "econ_impact": 2790641486.61,
+    "raw_funding": 1115501293.75,
+    "jobs": 10820.3625,
+    "pop_2024": 1562009
+  },
+  {
+    "id": "39660",
+    "name": "Rapid City, SD",
+    "econ_impact": 16303132.64,
+    "raw_funding": 5222805.56,
+    "jobs": 43.3493,
+    "pop_2024": 156227
+  },
+  {
+    "id": "39700",
+    "name": "Raymondville, TX",
+    "econ_impact": 941643.65,
+    "raw_funding": 289069.97,
+    "jobs": 3.411,
+    "pop_2024": 20027
+  },
+  {
+    "id": "39740",
+    "name": "Reading, PA",
+    "econ_impact": 49178493.64,
+    "raw_funding": 20451819.56,
+    "jobs": 173.8405,
+    "pop_2024": 439117
+  },
+  {
+    "id": "39780",
+    "name": "Red Bluff, CA",
+    "econ_impact": 9514537.75,
+    "raw_funding": 3545848.84,
+    "jobs": 31.2035,
+    "pop_2024": 64451
+  },
+  {
+    "id": "39820",
+    "name": "Redding, CA",
+    "econ_impact": 6217048.1,
+    "raw_funding": 2316950.48,
+    "jobs": 20.3892,
+    "pop_2024": 181121
+  },
+  {
+    "id": "39860",
+    "name": "Red Wing, MN",
+    "econ_impact": 50825907.92,
+    "raw_funding": 20565232.3,
+    "jobs": 187.1436,
+    "pop_2024": 47982
+  },
+  {
+    "id": "39900",
+    "name": "Reno, NV",
+    "econ_impact": 298611712.73,
+    "raw_funding": 56384996.68,
+    "jobs": 490.5495,
+    "pop_2024": 575110
+  },
+  {
+    "id": "39940",
+    "name": "Rexburg, ID",
+    "econ_impact": 2947132.53,
+    "raw_funding": 707405.81,
+    "jobs": 6.5081,
+    "pop_2024": 69948
+  },
+  {
+    "id": "39960",
+    "name": "Rice Lake, WI",
+    "econ_impact": 4207868.75,
+    "raw_funding": 1777217.35,
+    "jobs": 16.7058,
+    "pop_2024": 46810
+  },
+  {
+    "id": "39980",
+    "name": "Richmond, IN",
+    "econ_impact": 7110203.97,
+    "raw_funding": 2642833.56,
+    "jobs": 23.2569,
+    "pop_2024": 66410
+  },
+  {
+    "id": "40060",
+    "name": "Richmond, VA",
+    "econ_impact": 617313829.83,
+    "raw_funding": 223390464.89,
+    "jobs": 1898.819,
+    "pop_2024": 1370165
+  },
+  {
+    "id": "40080",
+    "name": "Richmond-Berea, KY",
+    "econ_impact": 42773852.2,
+    "raw_funding": 16362819.31,
+    "jobs": 140.7202,
+    "pop_2024": 129810
+  },
+  {
+    "id": "40090",
+    "name": "Rifle, CO",
+    "econ_impact": 4383349.48,
+    "raw_funding": 1564999.71,
+    "jobs": 15.024,
+    "pop_2024": 79810
+  },
+  {
+    "id": "40100",
+    "name": "Rio Grande City-Roma, TX",
+    "econ_impact": 2034810.4,
+    "raw_funding": 624655.17,
+    "jobs": 7.3709,
+    "pop_2024": 66587
+  },
+  {
+    "id": "40140",
+    "name": "Riverside-San Bernardino-Ontario, CA",
+    "econ_impact": 1004905202.06,
+    "raw_funding": 374504998.91,
+    "jobs": 3295.644,
+    "pop_2024": 4744214
+  },
+  {
+    "id": "40180",
+    "name": "Riverton, WY",
+    "econ_impact": 1389412.72,
+    "raw_funding": 355787.8,
+    "jobs": 2.7751,
+    "pop_2024": 39721
+  },
+  {
+    "id": "40220",
+    "name": "Roanoke, VA",
+    "econ_impact": 60482485.74,
+    "raw_funding": 21887101.75,
+    "jobs": 186.0404,
+    "pop_2024": 315749
+  },
+  {
+    "id": "40260",
+    "name": "Roanoke Rapids, NC",
+    "econ_impact": 12373192.92,
+    "raw_funding": 4945928.3,
+    "jobs": 47.9755,
+    "pop_2024": 63572
+  },
+  {
+    "id": "40300",
+    "name": "Rochelle, IL",
+    "econ_impact": 2829071.98,
+    "raw_funding": 988962.42,
+    "jobs": 9.7907,
+    "pop_2024": 51345
+  },
+  {
+    "id": "40340",
+    "name": "Rochester, MN",
+    "econ_impact": 1191509513.91,
+    "raw_funding": 482109832.34,
+    "jobs": 4387.1995,
+    "pop_2024": 230742
+  },
+  {
+    "id": "40380",
+    "name": "Rochester, NY",
+    "econ_impact": 958069404.87,
+    "raw_funding": 406429762.68,
+    "jobs": 2885.6513,
+    "pop_2024": 1057218
+  },
+  {
+    "id": "40420",
+    "name": "Rockford, IL",
+    "econ_impact": 20978390.26,
+    "raw_funding": 7333443.52,
+    "jobs": 72.6011,
+    "pop_2024": 337103
+  },
+  {
+    "id": "40460",
+    "name": "Rockingham, NC",
+    "econ_impact": 9058847.75,
+    "raw_funding": 3621087.28,
+    "jobs": 35.1245,
+    "pop_2024": 41990
+  },
+  {
+    "id": "40540",
+    "name": "Rock Springs, WY",
+    "econ_impact": 672199.12,
+    "raw_funding": 172130.46,
+    "jobs": 1.3426,
+    "pop_2024": 41273
+  },
+  {
+    "id": "40580",
+    "name": "Rocky Mount, NC",
+    "econ_impact": 27740049.19,
+    "raw_funding": 11088511.69,
+    "jobs": 107.5586,
+    "pop_2024": 147114
+  },
+  {
+    "id": "40620",
+    "name": "Rolla, MO",
+    "econ_impact": 3297817.92,
+    "raw_funding": 1402606.16,
+    "jobs": 12.0624,
+    "pop_2024": 45672
+  },
+  {
+    "id": "40660",
+    "name": "Rome, GA",
+    "econ_impact": 13009294.64,
+    "raw_funding": 4429293.56,
+    "jobs": 52.2657,
+    "pop_2024": 101390
+  },
+  {
+    "id": "40700",
+    "name": "Roseburg, OR",
+    "econ_impact": 7845982.66,
+    "raw_funding": 3233183.96,
+    "jobs": 28.452,
+    "pop_2024": 112255
+  },
+  {
+    "id": "40740",
+    "name": "Roswell, NM",
+    "econ_impact": 1386324.42,
+    "raw_funding": 595546.34,
+    "jobs": 4.6453,
+    "pop_2024": 63697
+  },
+  {
+    "id": "40760",
+    "name": "Ruidoso, NM",
+    "econ_impact": 720412.88,
+    "raw_funding": 309479.69,
+    "jobs": 2.4139,
+    "pop_2024": 20025
+  },
+  {
+    "id": "40770",
+    "name": "Russellville, AL",
+    "econ_impact": 2124604.14,
+    "raw_funding": 862798.36,
+    "jobs": 7.9377,
+    "pop_2024": 31874
+  },
+  {
+    "id": "40780",
+    "name": "Russellville, AR",
+    "econ_impact": 4508039.35,
+    "raw_funding": 1606041.68,
+    "jobs": 14.1332,
+    "pop_2024": 84963
+  },
+  {
+    "id": "40820",
+    "name": "Ruston, LA",
+    "econ_impact": 1959329.22,
+    "raw_funding": 708144.43,
+    "jobs": 6.9398,
+    "pop_2024": 48243
+  },
+  {
+    "id": "40860",
+    "name": "Rutland, VT",
+    "econ_impact": 12003711.89,
+    "raw_funding": 5219871.39,
+    "jobs": 39.149,
+    "pop_2024": 60198
+  },
+  {
+    "id": "40900",
+    "name": "Sacramento-Roseville-Folsom, CA",
+    "econ_impact": 1334466864.72,
+    "raw_funding": 497325031.94,
+    "jobs": 4376.4603,
+    "pop_2024": 2463127
+  },
+  {
+    "id": "40940",
+    "name": "Safford, AZ",
+    "econ_impact": 4493427.78,
+    "raw_funding": 1529784.1,
+    "jobs": 15.6038,
+    "pop_2024": 40242
+  },
+  {
+    "id": "40980",
+    "name": "Saginaw, MI",
+    "econ_impact": 11844917.64,
+    "raw_funding": 4649363.52,
+    "jobs": 45.0988,
+    "pop_2024": 187714
+  },
+  {
+    "id": "41060",
+    "name": "St. Cloud, MN",
+    "econ_impact": 12830246.16,
+    "raw_funding": 5191387.69,
+    "jobs": 47.2416,
+    "pop_2024": 205878
+  },
+  {
+    "id": "41100",
+    "name": "St. George, UT",
+    "econ_impact": 8145998.08,
+    "raw_funding": 2965785.62,
+    "jobs": 34.1065,
+    "pop_2024": 207943
+  },
+  {
+    "id": "41140",
+    "name": "St. Joseph, MO-KS",
+    "econ_impact": 4069449.24,
+    "raw_funding": 1718609.32,
+    "jobs": 14.7452,
+    "pop_2024": 119124
+  },
+  {
+    "id": "41180",
+    "name": "St. Louis, MO-IL",
+    "econ_impact": 3400926986.89,
+    "raw_funding": 1428452113.19,
+    "jobs": 12392.7322,
+    "pop_2024": 2811927
+  },
+  {
+    "id": "41260",
+    "name": "St. Marys, PA",
+    "econ_impact": 1699196.86,
+    "raw_funding": 706643.6,
+    "jobs": 6.0065,
+    "pop_2024": 30124
+  },
+  {
+    "id": "41400",
+    "name": "Salem, OH",
+    "econ_impact": 4495138.12,
+    "raw_funding": 1723609.55,
+    "jobs": 17.0637,
+    "pop_2024": 99823
+  },
+  {
+    "id": "41420",
+    "name": "Salem, OR",
+    "econ_impact": 38696998.69,
+    "raw_funding": 15946315.6,
+    "jobs": 140.3276,
+    "pop_2024": 443416
+  },
+  {
+    "id": "41460",
+    "name": "Salina, KS",
+    "econ_impact": 4202967.7,
+    "raw_funding": 1521397.81,
+    "jobs": 12.3233,
+    "pop_2024": 59312
+  },
+  {
+    "id": "41500",
+    "name": "Salinas, CA",
+    "econ_impact": 127758542.97,
+    "raw_funding": 47612663.26,
+    "jobs": 418.9914,
+    "pop_2024": 436251
+  },
+  {
+    "id": "41540",
+    "name": "Salisbury, MD",
+    "econ_impact": 29406824.04,
+    "raw_funding": 13428324.49,
+    "jobs": 112.7979,
+    "pop_2024": 131570
+  },
+  {
+    "id": "41620",
+    "name": "Salt Lake City-Murray, UT",
+    "econ_impact": 1042160130.65,
+    "raw_funding": 379428463.24,
+    "jobs": 4363.4273,
+    "pop_2024": 1300762
+  },
+  {
+    "id": "41660",
+    "name": "San Angelo, TX",
+    "econ_impact": 2891947.74,
+    "raw_funding": 887783.01,
+    "jobs": 10.4758,
+    "pop_2024": 121629
+  },
+  {
+    "id": "41700",
+    "name": "San Antonio-New Braunfels, TX",
+    "econ_impact": 1181977703.49,
+    "raw_funding": 362848783.85,
+    "jobs": 4281.6156,
+    "pop_2024": 2763006
+  },
+  {
+    "id": "41740",
+    "name": "San Diego-Chula Vista-Carlsbad, CA",
+    "econ_impact": 5998354083.17,
+    "raw_funding": 2235448263.91,
+    "jobs": 19671.9447,
+    "pop_2024": 3298799
+  },
+  {
+    "id": "41760",
+    "name": "Sandpoint, ID",
+    "econ_impact": 5176606.59,
+    "raw_funding": 1242550.7,
+    "jobs": 11.4315,
+    "pop_2024": 53955
+  },
+  {
+    "id": "41780",
+    "name": "Sandusky, OH",
+    "econ_impact": 9948125.97,
+    "raw_funding": 3814495.67,
+    "jobs": 37.7635,
+    "pop_2024": 113533
+  },
+  {
+    "id": "41820",
+    "name": "Sanford, NC",
+    "econ_impact": 33233269.47,
+    "raw_funding": 13284313.04,
+    "jobs": 128.8578,
+    "pop_2024": 68537
+  },
+  {
+    "id": "41860",
+    "name": "San Francisco-Oakland-Fremont, CA",
+    "econ_impact": 8551037591.27,
+    "raw_funding": 3186774550.66,
+    "jobs": 28043.616,
+    "pop_2024": 4648486
+  },
+  {
+    "id": "41940",
+    "name": "San Jose-Sunnyvale-Santa Clara, CA",
+    "econ_impact": 2006935440.43,
+    "raw_funding": 747938565.13,
+    "jobs": 6581.8594,
+    "pop_2024": 1995484
+  },
+  {
+    "id": "41980",
+    "name": "San Juan-Bayaman-Caguas, PR",
+    "econ_impact": 0.0,
+    "raw_funding": 0.0,
+    "jobs": 0.0,
+    "pop_2024": 0
+  },
+  {
+    "id": "42020",
+    "name": "San Luis Obispo-Paso Robles, CA",
+    "econ_impact": 30088400.69,
+    "raw_funding": 11213253.19,
+    "jobs": 98.6766,
+    "pop_2024": 281843
+  },
+  {
+    "id": "42100",
+    "name": "Santa Cruz-Watsonville, CA",
+    "econ_impact": 330855143.52,
+    "raw_funding": 123302083.53,
+    "jobs": 1085.0583,
+    "pop_2024": 262406
+  },
+  {
+    "id": "42140",
+    "name": "Santa Fe, NM",
+    "econ_impact": 12021073.97,
+    "raw_funding": 5164091.85,
+    "jobs": 40.2799,
+    "pop_2024": 157765
+  },
+  {
+    "id": "42200",
+    "name": "Santa Maria-Santa Barbara, CA",
+    "econ_impact": 133992686.15,
+    "raw_funding": 49935984.69,
+    "jobs": 439.4367,
+    "pop_2024": 444500
+  },
+  {
+    "id": "42220",
+    "name": "Santa Rosa-Petaluma, CA",
+    "econ_impact": 200057507.47,
+    "raw_funding": 74556820.35,
+    "jobs": 656.1,
+    "pop_2024": 485375
+  },
+  {
+    "id": "42300",
+    "name": "Sault Ste. Marie, MI",
+    "econ_impact": 1222625.83,
+    "raw_funding": 479904.72,
+    "jobs": 4.6551,
+    "pop_2024": 36253
+  },
+  {
+    "id": "42340",
+    "name": "Savannah, GA",
+    "econ_impact": 21612209.96,
+    "raw_funding": 7358340.72,
+    "jobs": 86.8284,
+    "pop_2024": 431589
+  },
+  {
+    "id": "42380",
+    "name": "Sayre, PA",
+    "econ_impact": 4635559.99,
+    "raw_funding": 1927786.51,
+    "jobs": 16.3862,
+    "pop_2024": 59699
+  },
+  {
+    "id": "42420",
+    "name": "Scottsbluff, NE",
+    "econ_impact": 280768.8,
+    "raw_funding": 108503.36,
+    "jobs": 0.9982,
+    "pop_2024": 36399
+  },
+  {
+    "id": "42460",
+    "name": "Scottsboro, AL",
+    "econ_impact": 2155853.62,
+    "raw_funding": 875488.72,
+    "jobs": 8.0545,
+    "pop_2024": 53780
+  },
+  {
+    "id": "42540",
+    "name": "Scranton--Wilkes-Barre, PA",
+    "econ_impact": 46113885.15,
+    "raw_funding": 19177343.36,
+    "jobs": 163.0074,
+    "pop_2024": 574009
+  },
+  {
+    "id": "42580",
+    "name": "Seaford, DE",
+    "econ_impact": 22102149.89,
+    "raw_funding": 9394160.06,
+    "jobs": 51.6679,
+    "pop_2024": 271134
+  },
+  {
+    "id": "42620",
+    "name": "Searcy, AR",
+    "econ_impact": 8660863.26,
+    "raw_funding": 3085533.72,
+    "jobs": 27.1527,
+    "pop_2024": 79091
+  },
+  {
+    "id": "42660",
+    "name": "Seattle-Tacoma-Bellevue, WA",
+    "econ_impact": 6146269915.94,
+    "raw_funding": 2542777832.04,
+    "jobs": 19833.6671,
+    "pop_2024": 4145494
+  },
+  {
+    "id": "42680",
+    "name": "Sebastian-Vero Beach-West Vero Corridor, FL",
+    "econ_impact": 7532659.65,
+    "raw_funding": 2345082.82,
+    "jobs": 26.2649,
+    "pop_2024": 172139
+  },
+  {
+    "id": "42700",
+    "name": "Sebring, FL",
+    "econ_impact": 2871811.52,
+    "raw_funding": 894058.16,
+    "jobs": 10.0135,
+    "pop_2024": 109778
+  },
+  {
+    "id": "42740",
+    "name": "Sedalia, MO",
+    "econ_impact": 1981668.12,
+    "raw_funding": 842830.01,
+    "jobs": 7.2483,
+    "pop_2024": 43791
+  },
+  {
+    "id": "42780",
+    "name": "Selinsgrove, PA",
+    "econ_impact": 8578760.49,
+    "raw_funding": 3567642.05,
+    "jobs": 30.325,
+    "pop_2024": 39627
+  },
+  {
+    "id": "42820",
+    "name": "Selma, AL",
+    "econ_impact": 4296345.08,
+    "raw_funding": 1744738.89,
+    "jobs": 16.0516,
+    "pop_2024": 35545
+  },
+  {
+    "id": "42860",
+    "name": "Seneca, SC",
+    "econ_impact": 28406279.46,
+    "raw_funding": 9823759.36,
+    "jobs": 101.1847,
+    "pop_2024": 82475
+  },
+  {
+    "id": "42900",
+    "name": "Seneca Falls, NY",
+    "econ_impact": 12442795.82,
+    "raw_funding": 5278451.15,
+    "jobs": 37.477,
+    "pop_2024": 32650
+  },
+  {
+    "id": "42940",
+    "name": "Sevierville, TN",
+    "econ_impact": 2572105.41,
+    "raw_funding": 955462.46,
+    "jobs": 9.5546,
+    "pop_2024": 100184
+  },
+  {
+    "id": "42980",
+    "name": "Seymour, IN",
+    "econ_impact": 8152961.14,
+    "raw_funding": 3030422.11,
+    "jobs": 26.6677,
+    "pop_2024": 47420
+  },
+  {
+    "id": "43020",
+    "name": "Shawano, WI",
+    "econ_impact": 5504866.77,
+    "raw_funding": 2325011.85,
+    "jobs": 21.8551,
+    "pop_2024": 45585
+  },
+  {
+    "id": "43060",
+    "name": "Shawnee, OK",
+    "econ_impact": 11245496.1,
+    "raw_funding": 3993298.62,
+    "jobs": 41.9296,
+    "pop_2024": 74446
+  },
+  {
+    "id": "43100",
+    "name": "Sheboygan, WI",
+    "econ_impact": 10141503.35,
+    "raw_funding": 4283321.73,
+    "jobs": 40.2632,
+    "pop_2024": 118331
+  },
+  {
+    "id": "43140",
+    "name": "Shelby-Kings Mountain, NC",
+    "econ_impact": 9408392.49,
+    "raw_funding": 3760810.57,
+    "jobs": 36.4799,
+    "pop_2024": 102194
+  },
+  {
+    "id": "43180",
+    "name": "Shelbyville, TN",
+    "econ_impact": 11002800.89,
+    "raw_funding": 4087220.99,
+    "jobs": 40.8722,
+    "pop_2024": 54228
+  },
+  {
+    "id": "43220",
+    "name": "Shelton, WA",
+    "econ_impact": 16896323.34,
+    "raw_funding": 6990190.31,
+    "jobs": 54.5235,
+    "pop_2024": 69632
+  },
+  {
+    "id": "43260",
+    "name": "Sheridan, WY",
+    "econ_impact": 1858909.09,
+    "raw_funding": 476012.04,
+    "jobs": 3.7129,
+    "pop_2024": 32978
+  },
+  {
+    "id": "43300",
+    "name": "Sherman-Denison, TX",
+    "econ_impact": 7283747.95,
+    "raw_funding": 2235997.41,
+    "jobs": 26.3848,
+    "pop_2024": 150532
+  },
+  {
+    "id": "43320",
+    "name": "Show Low, AZ",
+    "econ_impact": 7501948.64,
+    "raw_funding": 2554032.75,
+    "jobs": 26.0511,
+    "pop_2024": 109516
+  },
+  {
+    "id": "43340",
+    "name": "Shreveport-Bossier City, LA",
+    "econ_impact": 88005943.25,
+    "raw_funding": 31807272.53,
+    "jobs": 311.7113,
+    "pop_2024": 383269
+  },
+  {
+    "id": "43380",
+    "name": "Sidney, OH",
+    "econ_impact": 2392976.52,
+    "raw_funding": 917559.61,
+    "jobs": 9.0838,
+    "pop_2024": 47952
+  },
+  {
+    "id": "43420",
+    "name": "Sierra Vista-Douglas, AZ",
+    "econ_impact": 14306727.42,
+    "raw_funding": 4870714.56,
+    "jobs": 49.6813,
+    "pop_2024": 125773
+  },
+  {
+    "id": "43460",
+    "name": "Sikeston, MO",
+    "econ_impact": 11082271.4,
+    "raw_funding": 4713438.57,
+    "jobs": 40.5356,
+    "pop_2024": 49707
+  },
+  {
+    "id": "43500",
+    "name": "Silver City, NM",
+    "econ_impact": 770603.39,
+    "raw_funding": 331040.86,
+    "jobs": 2.5821,
+    "pop_2024": 27541
+  },
+  {
+    "id": "43580",
+    "name": "Sioux City, IA-NE-SD",
+    "econ_impact": 7521578.71,
+    "raw_funding": 2734885.57,
+    "jobs": 22.2602,
+    "pop_2024": 145994
+  },
+  {
+    "id": "43620",
+    "name": "Sioux Falls, SD-MN",
+    "econ_impact": 94806750.33,
+    "raw_funding": 30517800.36,
+    "jobs": 253.8582,
+    "pop_2024": 308266
+  },
+  {
+    "id": "43640",
+    "name": "Slidell-Mandeville-Covington, LA",
+    "econ_impact": 53427556.13,
+    "raw_funding": 19309887.21,
+    "jobs": 189.2369,
+    "pop_2024": 277615
+  },
+  {
+    "id": "43660",
+    "name": "Snyder, TX",
+    "econ_impact": 324178.2,
+    "raw_funding": 99517.67,
+    "jobs": 1.1743,
+    "pop_2024": 16211
+  },
+  {
+    "id": "43700",
+    "name": "Somerset, KY",
+    "econ_impact": 2971405.75,
+    "raw_funding": 1136689.19,
+    "jobs": 9.7755,
+    "pop_2024": 66842
+  },
+  {
+    "id": "43740",
+    "name": "Somerset, PA",
+    "econ_impact": 17846879.95,
+    "raw_funding": 7421967.23,
+    "jobs": 63.0867,
+    "pop_2024": 72134
+  },
+  {
+    "id": "43760",
+    "name": "Sonora, CA",
+    "econ_impact": 28275123.52,
+    "raw_funding": 10537486.6,
+    "jobs": 92.7299,
+    "pop_2024": 53893
+  },
+  {
+    "id": "43780",
+    "name": "South Bend-Mishawaka, IN-MI",
+    "econ_impact": 149147690.44,
+    "raw_funding": 55597933.77,
+    "jobs": 491.9821,
+    "pop_2024": 325294
+  },
+  {
+    "id": "43890",
+    "name": "Sparta, WI",
+    "econ_impact": 2146626.56,
+    "raw_funding": 906639.96,
+    "jobs": 8.5224,
+    "pop_2024": 46370
+  },
+  {
+    "id": "43900",
+    "name": "Spartanburg, SC",
+    "econ_impact": 34645783.4,
+    "raw_funding": 11981570.46,
+    "jobs": 123.4102,
+    "pop_2024": 395934
+  },
+  {
+    "id": "43940",
+    "name": "Spearfish, SD",
+    "econ_impact": 1078898.68,
+    "raw_funding": 345631.61,
+    "jobs": 2.8687,
+    "pop_2024": 28809
+  },
+  {
+    "id": "43980",
+    "name": "Spencer, IA",
+    "econ_impact": 151108.1,
+    "raw_funding": 61527.93,
+    "jobs": 0.4861,
+    "pop_2024": 16474
+  },
+  {
+    "id": "44020",
+    "name": "Spirit Lake, IA",
+    "econ_impact": 960288.63,
+    "raw_funding": 391008.61,
+    "jobs": 3.089,
+    "pop_2024": 18158
+  },
+  {
+    "id": "44060",
+    "name": "Spokane-Spokane Valley, WA",
+    "econ_impact": 83105457.26,
+    "raw_funding": 34381619.64,
+    "jobs": 268.1766,
+    "pop_2024": 604962
+  },
+  {
+    "id": "44100",
+    "name": "Springfield, IL",
+    "econ_impact": 27245399.42,
+    "raw_funding": 9524210.16,
+    "jobs": 94.2897,
+    "pop_2024": 206308
+  },
+  {
+    "id": "44140",
+    "name": "Springfield, MA",
+    "econ_impact": 174665904.33,
+    "raw_funding": 77976299.24,
+    "jobs": 616.0128,
+    "pop_2024": 464151
+  },
+  {
+    "id": "44180",
+    "name": "Springfield, MO",
+    "econ_impact": 42899573.4,
+    "raw_funding": 18245763.6,
+    "jobs": 156.9136,
+    "pop_2024": 496975
+  },
+  {
+    "id": "44220",
+    "name": "Springfield, OH",
+    "econ_impact": 12243733.43,
+    "raw_funding": 4694720.22,
+    "jobs": 46.4777,
+    "pop_2024": 134985
+  },
+  {
+    "id": "44260",
+    "name": "Starkville, MS",
+    "econ_impact": 19341703.34,
+    "raw_funding": 6006546.19,
+    "jobs": 53.4583,
+    "pop_2024": 62004
+  },
+  {
+    "id": "44300",
+    "name": "State College, PA",
+    "econ_impact": 271888444.12,
+    "raw_funding": 113070022.85,
+    "jobs": 961.0952,
+    "pop_2024": 159805
+  },
+  {
+    "id": "44340",
+    "name": "Statesboro, GA",
+    "econ_impact": 2979553.46,
+    "raw_funding": 1014452.92,
+    "jobs": 11.9705,
+    "pop_2024": 96323
+  },
+  {
+    "id": "44420",
+    "name": "Staunton-Stuarts Draft, VA",
+    "econ_impact": 61923545.55,
+    "raw_funding": 22408585.32,
+    "jobs": 190.473,
+    "pop_2024": 128481
+  },
+  {
+    "id": "44460",
+    "name": "Steamboat Springs, CO",
+    "econ_impact": 4374161.4,
+    "raw_funding": 1561719.26,
+    "jobs": 14.9925,
+    "pop_2024": 38385
+  },
+  {
+    "id": "44500",
+    "name": "Stephenville, TX",
+    "econ_impact": 2952944.54,
+    "raw_funding": 906508.08,
+    "jobs": 10.6968,
+    "pop_2024": 44496
+  },
+  {
+    "id": "44540",
+    "name": "Sterling, CO",
+    "econ_impact": 8823151.46,
+    "raw_funding": 3150154.81,
+    "jobs": 30.2415,
+    "pop_2024": 20755
+  },
+  {
+    "id": "44580",
+    "name": "Sterling, IL",
+    "econ_impact": 3184931.99,
+    "raw_funding": 1113360.87,
+    "jobs": 11.0223,
+    "pop_2024": 54657
+  },
+  {
+    "id": "44620",
+    "name": "Stevens Point-Plover, WI",
+    "econ_impact": 8491576.94,
+    "raw_funding": 3586465.91,
+    "jobs": 33.7128,
+    "pop_2024": 72040
+  },
+  {
+    "id": "44660",
+    "name": "Stillwater, OK",
+    "econ_impact": 40487949.97,
+    "raw_funding": 14377353.66,
+    "jobs": 150.9622,
+    "pop_2024": 84199
+  },
+  {
+    "id": "44700",
+    "name": "Stockton-Lodi, CA",
+    "econ_impact": 202628680.56,
+    "raw_funding": 75515037.27,
+    "jobs": 664.5323,
+    "pop_2024": 816108
+  },
+  {
+    "id": "44740",
+    "name": "Storm Lake, IA",
+    "econ_impact": 375098.26,
+    "raw_funding": 152731.84,
+    "jobs": 1.2066,
+    "pop_2024": 20816
+  },
+  {
+    "id": "44780",
+    "name": "Sturgis, MI",
+    "econ_impact": 4511312.41,
+    "raw_funding": 1770779.0,
+    "jobs": 17.1766,
+    "pop_2024": 61171
+  },
+  {
+    "id": "44860",
+    "name": "Sulphur Springs, TX",
+    "econ_impact": 1322625.81,
+    "raw_funding": 406025.57,
+    "jobs": 4.7911,
+    "pop_2024": 38784
+  },
+  {
+    "id": "44900",
+    "name": "Summerville, GA",
+    "econ_impact": 2528821.61,
+    "raw_funding": 860991.59,
+    "jobs": 10.1597,
+    "pop_2024": 25306
+  },
+  {
+    "id": "44940",
+    "name": "Sumter, SC",
+    "econ_impact": 9114134.77,
+    "raw_funding": 3151946.27,
+    "jobs": 32.465,
+    "pop_2024": 104776
+  },
+  {
+    "id": "44980",
+    "name": "Sunbury, PA",
+    "econ_impact": 29526315.85,
+    "raw_funding": 12279084.6,
+    "jobs": 104.3722,
+    "pop_2024": 108142
+  },
+  {
+    "id": "45000",
+    "name": "Susanville, CA",
+    "econ_impact": 495253.48,
+    "raw_funding": 184569.55,
+    "jobs": 1.6242,
+    "pop_2024": 28340
+  },
+  {
+    "id": "45020",
+    "name": "Sweetwater, TX",
+    "econ_impact": 989471.58,
+    "raw_funding": 303752.4,
+    "jobs": 3.5843,
+    "pop_2024": 14182
+  },
+  {
+    "id": "45060",
+    "name": "Syracuse, NY",
+    "econ_impact": 179782393.26,
+    "raw_funding": 76266828.95,
+    "jobs": 541.4945,
+    "pop_2024": 655189
+  },
+  {
+    "id": "45140",
+    "name": "Tahlequah, OK",
+    "econ_impact": 9882134.03,
+    "raw_funding": 3509165.96,
+    "jobs": 36.8462,
+    "pop_2024": 48729
+  },
+  {
+    "id": "45180",
+    "name": "Talladega-Sylacauga, AL",
+    "econ_impact": 24054089.46,
+    "raw_funding": 9768327.39,
+    "jobs": 89.8686,
+    "pop_2024": 91666
+  },
+  {
+    "id": "45220",
+    "name": "Tallahassee, FL",
+    "econ_impact": 337086763.96,
+    "raw_funding": 104942532.36,
+    "jobs": 1175.3564,
+    "pop_2024": 397675
+  },
+  {
+    "id": "45300",
+    "name": "Tampa-St. Petersburg-Clearwater, FL",
+    "econ_impact": 1102888952.31,
+    "raw_funding": 343353616.75,
+    "jobs": 3845.5605,
+    "pop_2024": 3424560
+  },
+  {
+    "id": "45340",
+    "name": "Taos, NM",
+    "econ_impact": 2916347.94,
+    "raw_funding": 1252823.89,
+    "jobs": 9.772,
+    "pop_2024": 34482
+  },
+  {
+    "id": "45380",
+    "name": "Taylorville, IL",
+    "econ_impact": 2515352.76,
+    "raw_funding": 879295.18,
+    "jobs": 8.705,
+    "pop_2024": 33247
+  },
+  {
+    "id": "45460",
+    "name": "Terre Haute, IN",
+    "econ_impact": 16326295.74,
+    "raw_funding": 6068416.95,
+    "jobs": 53.4021,
+    "pop_2024": 168874
+  },
+  {
+    "id": "45500",
+    "name": "Texarkana, TX-AR",
+    "econ_impact": 4399312.68,
+    "raw_funding": 1427622.05,
+    "jobs": 15.1737,
+    "pop_2024": 145576
+  },
+  {
+    "id": "45520",
+    "name": "The Dalles, OR",
+    "econ_impact": 1551733.64,
+    "raw_funding": 639440.66,
+    "jobs": 5.6271,
+    "pop_2024": 26507
+  },
+  {
+    "id": "45580",
+    "name": "Thomaston, GA",
+    "econ_impact": 846603.91,
+    "raw_funding": 288244.47,
+    "jobs": 3.4013,
+    "pop_2024": 28358
+  },
+  {
+    "id": "45620",
+    "name": "Thomasville, GA",
+    "econ_impact": 6332220.49,
+    "raw_funding": 2155940.37,
+    "jobs": 25.4401,
+    "pop_2024": 72325
+  },
+  {
+    "id": "45660",
+    "name": "Tiffin, OH",
+    "econ_impact": 2544529.67,
+    "raw_funding": 975670.94,
+    "jobs": 9.6591,
+    "pop_2024": 54730
+  },
+  {
+    "id": "45700",
+    "name": "Tifton, GA",
+    "econ_impact": 2839835.21,
+    "raw_funding": 966882.84,
+    "jobs": 11.4092,
+    "pop_2024": 50731
+  },
+  {
+    "id": "45740",
+    "name": "Toccoa, GA",
+    "econ_impact": 5540516.17,
+    "raw_funding": 1886387.64,
+    "jobs": 22.2594,
+    "pop_2024": 27498
+  },
+  {
+    "id": "45780",
+    "name": "Toledo, OH",
+    "econ_impact": 127240734.16,
+    "raw_funding": 48789011.24,
+    "jobs": 483.0112,
+    "pop_2024": 601396
+  },
+  {
+    "id": "45820",
+    "name": "Topeka, KS",
+    "econ_impact": 24501766.03,
+    "raw_funding": 8869193.37,
+    "jobs": 71.8405,
+    "pop_2024": 232648
+  },
+  {
+    "id": "45860",
+    "name": "Torrington, CT",
+    "econ_impact": 63614651.13,
+    "raw_funding": 27967955.62,
+    "jobs": 212.5565,
+    "pop_2024": 114101
+  },
+  {
+    "id": "45880",
+    "name": "Town of Pecos, TX",
+    "econ_impact": 363086.69,
+    "raw_funding": 111461.97,
+    "jobs": 1.3153,
+    "pop_2024": 11956
+  },
+  {
+    "id": "45900",
+    "name": "Traverse City, MI",
+    "econ_impact": 5588254.23,
+    "raw_funding": 2193499.88,
+    "jobs": 21.2769,
+    "pop_2024": 156634
+  },
+  {
+    "id": "45940",
+    "name": "Trenton-Princeton, NJ",
+    "econ_impact": 337153074.08,
+    "raw_funding": 103674291.83,
+    "jobs": 912.3338,
+    "pop_2024": 392138
+  },
+  {
+    "id": "45980",
+    "name": "Troy, AL",
+    "econ_impact": 2345724.79,
+    "raw_funding": 952595.1,
+    "jobs": 8.7639,
+    "pop_2024": 33124
+  },
+  {
+    "id": "46020",
+    "name": "Truckee-Grass Valley, CA",
+    "econ_impact": 10285286.68,
+    "raw_funding": 3833089.2,
+    "jobs": 33.7312,
+    "pop_2024": 102195
+  },
+  {
+    "id": "46060",
+    "name": "Tucson, AZ",
+    "econ_impact": 1012980996.92,
+    "raw_funding": 344868616.15,
+    "jobs": 3517.6599,
+    "pop_2024": 1080149
+  },
+  {
+    "id": "46100",
+    "name": "Tullahoma-Manchester, TN",
+    "econ_impact": 5116331.46,
+    "raw_funding": 1900568.55,
+    "jobs": 19.0057,
+    "pop_2024": 68058
+  },
+  {
+    "id": "46140",
+    "name": "Tulsa, OK",
+    "econ_impact": 108985941.18,
+    "raw_funding": 38701130.13,
+    "jobs": 406.3619,
+    "pop_2024": 1059803
+  },
+  {
+    "id": "46180",
+    "name": "Tupelo, MS",
+    "econ_impact": 4661177.76,
+    "raw_funding": 1447523.99,
+    "jobs": 12.883,
+    "pop_2024": 132699
+  },
+  {
+    "id": "46220",
+    "name": "Tuscaloosa, AL",
+    "econ_impact": 90646011.91,
+    "raw_funding": 36811200.96,
+    "jobs": 338.663,
+    "pop_2024": 281963
+  },
+  {
+    "id": "46300",
+    "name": "Twin Falls, ID",
+    "econ_impact": 834948.49,
+    "raw_funding": 200414.27,
+    "jobs": 1.8438,
+    "pop_2024": 122565
+  },
+  {
+    "id": "46340",
+    "name": "Tyler, TX",
+    "econ_impact": 36841760.35,
+    "raw_funding": 11309847.81,
+    "jobs": 133.4562,
+    "pop_2024": 249091
+  },
+  {
+    "id": "46380",
+    "name": "Ukiah, CA",
+    "econ_impact": 7046734.93,
+    "raw_funding": 2626155.63,
+    "jobs": 23.1102,
+    "pop_2024": 89175
+  },
+  {
+    "id": "46460",
+    "name": "Union City, TN",
+    "econ_impact": 2192055.56,
+    "raw_funding": 814284.98,
+    "jobs": 8.1428,
+    "pop_2024": 30261
+  },
+  {
+    "id": "46500",
+    "name": "Urbana, OH",
+    "econ_impact": 2418569.03,
+    "raw_funding": 927372.77,
+    "jobs": 9.181,
+    "pop_2024": 38907
+  },
+  {
+    "id": "46520",
+    "name": "Urban Honolulu, HI",
+    "econ_impact": 340577701.57,
+    "raw_funding": 120384381.0,
+    "jobs": 1095.4979,
+    "pop_2024": 998747
+  },
+  {
+    "id": "46540",
+    "name": "Utica-Rome, NY",
+    "econ_impact": 28166222.89,
+    "raw_funding": 11948603.33,
+    "jobs": 84.8351,
+    "pop_2024": 287932
+  },
+  {
+    "id": "46580",
+    "name": "Utuado, PR",
+    "econ_impact": 0.0,
+    "raw_funding": 0.0,
+    "jobs": 0.0,
+    "pop_2024": 0
+  },
+  {
+    "id": "46620",
+    "name": "Uvalde, TX",
+    "econ_impact": 1382234.35,
+    "raw_funding": 424324.46,
+    "jobs": 5.007,
+    "pop_2024": 25138
+  },
+  {
+    "id": "46660",
+    "name": "Valdosta, GA",
+    "econ_impact": 7435394.3,
+    "raw_funding": 2531539.57,
+    "jobs": 29.8722,
+    "pop_2024": 152588
+  },
+  {
+    "id": "46700",
+    "name": "Vallejo, CA",
+    "econ_impact": 405560068.98,
+    "raw_funding": 151142886.79,
+    "jobs": 1330.0574,
+    "pop_2024": 455101
+  },
+  {
+    "id": "46780",
+    "name": "Van Wert, OH",
+    "econ_impact": 455718.55,
+    "raw_funding": 174740.09,
+    "jobs": 1.7299,
+    "pop_2024": 28887
+  },
+  {
+    "id": "46820",
+    "name": "Vermillion, SD",
+    "econ_impact": 33133103.76,
+    "raw_funding": 10614386.97,
+    "jobs": 88.0994,
+    "pop_2024": 15245
+  },
+  {
+    "id": "46860",
+    "name": "Vernal, UT",
+    "econ_impact": 2133675.32,
+    "raw_funding": 776826.06,
+    "jobs": 8.9335,
+    "pop_2024": 38307
+  },
+  {
+    "id": "46900",
+    "name": "Vernon, TX",
+    "econ_impact": 722945.96,
+    "raw_funding": 221933.17,
+    "jobs": 2.6188,
+    "pop_2024": 12455
+  },
+  {
+    "id": "46980",
+    "name": "Vicksburg, MS",
+    "econ_impact": 3462556.96,
+    "raw_funding": 1075293.52,
+    "jobs": 9.5701,
+    "pop_2024": 42105
+  },
+  {
+    "id": "47020",
+    "name": "Victoria, TX",
+    "econ_impact": 7519575.88,
+    "raw_funding": 2308392.92,
+    "jobs": 27.239,
+    "pop_2024": 99170
+  },
+  {
+    "id": "47080",
+    "name": "Vidalia, GA",
+    "econ_impact": 999873.79,
+    "raw_funding": 340428.49,
+    "jobs": 4.0171,
+    "pop_2024": 36054
+  },
+  {
+    "id": "47180",
+    "name": "Vincennes, IN",
+    "econ_impact": 3934874.44,
+    "raw_funding": 1462576.64,
+    "jobs": 12.8707,
+    "pop_2024": 35872
+  },
+  {
+    "id": "47220",
+    "name": "Vineland, NJ",
+    "econ_impact": 23645325.02,
+    "raw_funding": 7270917.91,
+    "jobs": 63.9841,
+    "pop_2024": 155678
+  },
+  {
+    "id": "47240",
+    "name": "Vineyard Haven, MA",
+    "econ_impact": 5741177.74,
+    "raw_funding": 2563040.54,
+    "jobs": 20.248,
+    "pop_2024": 21061
+  },
+  {
+    "id": "47260",
+    "name": "Virginia Beach-Chesapeake-Norfolk, VA-NC",
+    "econ_impact": 208270659.88,
+    "raw_funding": 75662764.61,
+    "jobs": 646.8692,
+    "pop_2024": 1794278
+  },
+  {
+    "id": "47300",
+    "name": "Visalia, CA",
+    "econ_impact": 21837907.46,
+    "raw_funding": 8138484.6,
+    "jobs": 71.6187,
+    "pop_2024": 483546
+  },
+  {
+    "id": "47340",
+    "name": "Wabash, IN",
+    "econ_impact": 2896627.87,
+    "raw_funding": 1076664.66,
+    "jobs": 9.4746,
+    "pop_2024": 30777
+  },
+  {
+    "id": "47380",
+    "name": "Waco, TX",
+    "econ_impact": 63170388.6,
+    "raw_funding": 19392327.46,
+    "jobs": 228.8295,
+    "pop_2024": 307123
+  },
+  {
+    "id": "47420",
+    "name": "Wahpeton, ND-MN",
+    "econ_impact": 948763.65,
+    "raw_funding": 287625.55,
+    "jobs": 2.2865,
+    "pop_2024": 22926
+  },
+  {
+    "id": "47460",
+    "name": "Walla Walla, WA",
+    "econ_impact": 28534744.28,
+    "raw_funding": 11805129.97,
+    "jobs": 92.08,
+    "pop_2024": 62068
+  },
+  {
+    "id": "47540",
+    "name": "Wapakoneta, OH",
+    "econ_impact": 1478942.6,
+    "raw_funding": 567083.71,
+    "jobs": 5.6141,
+    "pop_2024": 45922
+  },
+  {
+    "id": "47580",
+    "name": "Warner Robins, GA",
+    "econ_impact": 7698306.44,
+    "raw_funding": 2621053.65,
+    "jobs": 30.9284,
+    "pop_2024": 204110
+  },
+  {
+    "id": "47620",
+    "name": "Warren, PA",
+    "econ_impact": 5360623.61,
+    "raw_funding": 2229318.11,
+    "jobs": 18.9492,
+    "pop_2024": 37373
+  },
+  {
+    "id": "47660",
+    "name": "Warrensburg, MO",
+    "econ_impact": 1754723.87,
+    "raw_funding": 746307.58,
+    "jobs": 6.4182,
+    "pop_2024": 55880
+  },
+  {
+    "id": "47700",
+    "name": "Warsaw, IN",
+    "econ_impact": 5284096.99,
+    "raw_funding": 1964077.11,
+    "jobs": 17.2839,
+    "pop_2024": 80669
+  },
+  {
+    "id": "47780",
+    "name": "Washington, IN",
+    "econ_impact": 4595226.36,
+    "raw_funding": 1708026.73,
+    "jobs": 15.0306,
+    "pop_2024": 34097
+  },
+  {
+    "id": "47820",
+    "name": "Washington, NC",
+    "econ_impact": 7533262.5,
+    "raw_funding": 3011266.09,
+    "jobs": 29.2093,
+    "pop_2024": 44576
+  },
+  {
+    "id": "47900",
+    "name": "Washington-Arlington-Alexandria, DC-VA-MD-WV",
+    "econ_impact": 3308242900.56,
+    "raw_funding": 1410452639.71,
+    "jobs": 10533.5578,
+    "pop_2024": 6436489
+  },
+  {
+    "id": "47920",
+    "name": "Washington Court House, OH",
+    "econ_impact": 2965269.72,
+    "raw_funding": 1136998.92,
+    "jobs": 11.2563,
+    "pop_2024": 28782
+  },
+  {
+    "id": "47930",
+    "name": "Waterbury-Shelton, CT",
+    "econ_impact": 377903827.61,
+    "raw_funding": 166144076.7,
+    "jobs": 1262.695,
+    "pop_2024": 462220
+  },
+  {
+    "id": "47940",
+    "name": "Waterloo-Cedar Falls, IA",
+    "econ_impact": 8723052.31,
+    "raw_funding": 3551836.9,
+    "jobs": 28.0595,
+    "pop_2024": 170081
+  },
+  {
+    "id": "47980",
+    "name": "Watertown, SD",
+    "econ_impact": 2373466.6,
+    "raw_funding": 760354.15,
+    "jobs": 6.3109,
+    "pop_2024": 29278
+  },
+  {
+    "id": "48020",
+    "name": "Watertown-Fort Atkinson, WI",
+    "econ_impact": 22441150.61,
+    "raw_funding": 9478147.85,
+    "jobs": 89.0946,
+    "pop_2024": 86245
+  },
+  {
+    "id": "48060",
+    "name": "Watertown-Fort Drum, NY",
+    "econ_impact": 9678902.7,
+    "raw_funding": 4105959.45,
+    "jobs": 29.1523,
+    "pop_2024": 113140
+  },
+  {
+    "id": "48140",
+    "name": "Wausau, WI",
+    "econ_impact": 25633196.03,
+    "raw_funding": 10826326.42,
+    "jobs": 101.7675,
+    "pop_2024": 139091
+  },
+  {
+    "id": "48180",
+    "name": "Waycross, GA",
+    "econ_impact": 1256393.99,
+    "raw_funding": 427766.3,
+    "jobs": 5.0476,
+    "pop_2024": 56891
+  },
+  {
+    "id": "48200",
+    "name": "Waynesville, NC",
+    "econ_impact": 3993398.02,
+    "raw_funding": 1596278.37,
+    "jobs": 15.4839,
+    "pop_2024": 63048
+  },
+  {
+    "id": "48220",
+    "name": "Weatherford, OK",
+    "econ_impact": 1214580.18,
+    "raw_funding": 431299.9,
+    "jobs": 4.5286,
+    "pop_2024": 39105
+  },
+  {
+    "id": "48260",
+    "name": "Weirton-Steubenville, WV-OH",
+    "econ_impact": 14750048.15,
+    "raw_funding": 5420682.96,
+    "jobs": 46.3851,
+    "pop_2024": 113239
+  },
+  {
+    "id": "48300",
+    "name": "Wenatchee-East Wenatchee, WA",
+    "econ_impact": 28038008.79,
+    "raw_funding": 11599625.17,
+    "jobs": 90.4771,
+    "pop_2024": 127023
+  },
+  {
+    "id": "48460",
+    "name": "West Plains, MO",
+    "econ_impact": 719905.92,
+    "raw_funding": 306185.64,
+    "jobs": 2.6332,
+    "pop_2024": 40762
+  },
+  {
+    "id": "48540",
+    "name": "Wheeling, WV-OH",
+    "econ_impact": 19778996.69,
+    "raw_funding": 7192223.07,
+    "jobs": 59.0687,
+    "pop_2024": 135136
+  },
+  {
+    "id": "48580",
+    "name": "Whitewater-Elkhorn, WI",
+    "econ_impact": 26142513.71,
+    "raw_funding": 11041439.65,
+    "jobs": 103.7895,
+    "pop_2024": 106029
+  },
+  {
+    "id": "48620",
+    "name": "Wichita, KS",
+    "econ_impact": 35274470.48,
+    "raw_funding": 12768716.31,
+    "jobs": 103.4266,
+    "pop_2024": 661217
+  },
+  {
+    "id": "48660",
+    "name": "Wichita Falls, TX",
+    "econ_impact": 7228337.9,
+    "raw_funding": 2218987.39,
+    "jobs": 26.1841,
+    "pop_2024": 149869
+  },
+  {
+    "id": "48680",
+    "name": "Wildwood-The Villages, FL",
+    "econ_impact": 4896389.51,
+    "raw_funding": 1524353.87,
+    "jobs": 17.0728,
+    "pop_2024": 154693
+  },
+  {
+    "id": "48700",
+    "name": "Williamsport, PA",
+    "econ_impact": 10978044.53,
+    "raw_funding": 4565430.32,
+    "jobs": 38.8062,
+    "pop_2024": 113236
+  },
+  {
+    "id": "48780",
+    "name": "Williston, ND",
+    "econ_impact": 606021.96,
+    "raw_funding": 164065.53,
+    "jobs": 1.2141,
+    "pop_2024": 40763
+  },
+  {
+    "id": "48820",
+    "name": "Willmar, MN",
+    "econ_impact": 2124942.04,
+    "raw_funding": 859796.28,
+    "jobs": 7.8241,
+    "pop_2024": 44674
+  },
+  {
+    "id": "48900",
+    "name": "Wilmington, NC",
+    "econ_impact": 71803581.32,
+    "raw_funding": 28701998.53,
+    "jobs": 278.4094,
+    "pop_2024": 480522
+  },
+  {
+    "id": "48940",
+    "name": "Wilmington, OH",
+    "econ_impact": 4963164.07,
+    "raw_funding": 1903068.77,
+    "jobs": 18.8404,
+    "pop_2024": 42019
+  },
+  {
+    "id": "48980",
+    "name": "Wilson, NC",
+    "econ_impact": 14029411.39,
+    "raw_funding": 5607967.43,
+    "jobs": 54.3973,
+    "pop_2024": 79958
+  },
+  {
+    "id": "49010",
+    "name": "Winchester, TN",
+    "econ_impact": 3882573.84,
+    "raw_funding": 1442263.43,
+    "jobs": 14.4226,
+    "pop_2024": 45137
+  },
+  {
+    "id": "49020",
+    "name": "Winchester, VA-WV",
+    "econ_impact": 19104233.27,
+    "raw_funding": 6905300.89,
+    "jobs": 58.0994,
+    "pop_2024": 149702
+  },
+  {
+    "id": "49080",
+    "name": "Winnemucca, NV",
+    "econ_impact": 775501.57,
+    "raw_funding": 146433.15,
+    "jobs": 1.274,
+    "pop_2024": 17116
+  },
+  {
+    "id": "49100",
+    "name": "Winona, MN",
+    "econ_impact": 38806100.86,
+    "raw_funding": 15701765.33,
+    "jobs": 142.8861,
+    "pop_2024": 49973
+  },
+  {
+    "id": "49180",
+    "name": "Winston-Salem, NC",
+    "econ_impact": 557625875.87,
+    "raw_funding": 222899426.15,
+    "jobs": 2162.1244,
+    "pop_2024": 705187
+  },
+  {
+    "id": "49220",
+    "name": "Wisconsin Rapids-Marshfield, WI",
+    "econ_impact": 35969337.15,
+    "raw_funding": 15191854.53,
+    "jobs": 142.8034,
+    "pop_2024": 73943
+  },
+  {
+    "id": "49260",
+    "name": "Woodward, OK",
+    "econ_impact": 773204.97,
+    "raw_funding": 274566.66,
+    "jobs": 2.8829,
+    "pop_2024": 19991
+  },
+  {
+    "id": "49300",
+    "name": "Wooster, OH",
+    "econ_impact": 11851259.46,
+    "raw_funding": 4544230.55,
+    "jobs": 44.9879,
+    "pop_2024": 116632
+  },
+  {
+    "id": "49340",
+    "name": "Worcester, MA",
+    "econ_impact": 1009695879.37,
+    "raw_funding": 450759685.09,
+    "jobs": 3561.0015,
+    "pop_2024": 881248
+  },
+  {
+    "id": "49380",
+    "name": "Worthington, MN",
+    "econ_impact": 2055915.35,
+    "raw_funding": 831866.63,
+    "jobs": 7.57,
+    "pop_2024": 21969
+  },
+  {
+    "id": "49420",
+    "name": "Yakima, WA",
+    "econ_impact": 35842896.94,
+    "raw_funding": 14828591.17,
+    "jobs": 115.663,
+    "pop_2024": 258523
+  },
+  {
+    "id": "49460",
+    "name": "Yankton, SD",
+    "econ_impact": 3404941.44,
+    "raw_funding": 1090793.25,
+    "jobs": 9.0536,
+    "pop_2024": 23509
+  },
+  {
+    "id": "49620",
+    "name": "York-Hanover, PA",
+    "econ_impact": 139810921.55,
+    "raw_funding": 58143052.55,
+    "jobs": 494.2159,
+    "pop_2024": 471240
+  },
+  {
+    "id": "49660",
+    "name": "Youngstown-Warren, OH",
+    "econ_impact": 46088659.06,
+    "raw_funding": 17672171.73,
+    "jobs": 174.9545,
+    "pop_2024": 426086
+  },
+  {
+    "id": "49700",
+    "name": "Yuba City, CA",
+    "econ_impact": 43898122.93,
+    "raw_funding": 16359818.27,
+    "jobs": 143.9664,
+    "pop_2024": 186014
+  },
+  {
+    "id": "49740",
+    "name": "Yuma, AZ",
+    "econ_impact": 12136254.02,
+    "raw_funding": 4131778.52,
+    "jobs": 42.1441,
+    "pop_2024": 220310
+  },
+  {
+    "id": "49780",
+    "name": "Zanesville, OH",
+    "econ_impact": 8492150.04,
+    "raw_funding": 3256218.27,
+    "jobs": 32.2366,
+    "pop_2024": 86582
+  },
+  {
+    "id": "49820",
+    "name": "Zapata, TX",
+    "econ_impact": 783538.55,
+    "raw_funding": 240534.16,
+    "jobs": 2.8383,
+    "pop_2024": 13819
+  }
+]
