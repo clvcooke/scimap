@@ -20,6 +20,9 @@ function Header() {
           <Link to="/methodology" className="transition-colors hover:text-gray-300">Methods</Link>
           <button className="transition-colors hover:text-gray-300">About</button>
           <button className="transition-colors hover:text-gray-300">Report Issues</button>
+          <Link to="/contact" className="transition-colors hover:text-gray-300">
+            Contact Us
+          </Link>
         </nav>
 
         {/* Mobile hamburger */}
@@ -38,6 +41,13 @@ function Header() {
           <Link to="/methodology" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>Methods</Link>
           <button className="text-left transition-colors hover:text-gray-300">About</button>
           <button className="text-left transition-colors hover:text-gray-300">Report Issues</button>
+          <Link
+            to="/contact"
+            className="text-left transition-colors hover:text-gray-300"
+            onClick={() => setMenuOpen(false)}
+          >
+            Contact Us
+          </Link>
         </nav>
       )}
     </header>
@@ -98,9 +108,9 @@ export const Route = createRootRoute({
                   </a>
                 </li>
                 <li>
-                  <a href="/" className="transition-colors hover:text-brand-yellow">
+                  <Link to="/contact" className="transition-colors hover:text-brand-yellow">
                     Contact Us
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
