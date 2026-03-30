@@ -1,6 +1,55 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, ChevronDown } from 'lucide-react'
+
+function MapsDropdown() {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1 transition-colors hover:text-gray-300"
+      >
+        Maps <ChevronDown className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-52 rounded-md bg-white py-1 shadow-lg ring-1 ring-black/10">
+          <Link
+            to="/map"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={() => setOpen(false)}
+          >
+            Baseline Funding
+          </Link>
+          <Link
+            to="/grants"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={() => setOpen(false)}
+          >
+            Grant Disruptions
+          </Link>
+          <Link
+            to="/fy26"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={() => setOpen(false)}
+          >
+            Award Funding Changes
+          </Link>
+        </div>
+      )}
+    </div>
+  )
+}
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -17,15 +66,7 @@ function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-[15px] font-semibold text-white md:flex">
-          <Link to="/map" className="transition-colors hover:text-gray-300">
-            Baseline
-          </Link>
-          <Link to="/grants" className="transition-colors hover:text-gray-300">
-            Grant Losses
-          </Link>
-          <Link to="/fy26" className="transition-colors hover:text-gray-300">
-            FY26 Budget
-          </Link>
+          <MapsDropdown />
           <Link to="/contact" className="transition-colors hover:text-gray-300">
             Contact Us
           </Link>
@@ -44,14 +85,15 @@ function Header() {
       {/* Mobile dropdown */}
       {menuOpen && (
         <nav className="mt-3 flex flex-col gap-3 border-t border-white/20 pt-3 text-[15px] font-semibold text-white md:hidden">
-          <Link to="/map" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
-            Baseline
+          <div className="text-gray-300">Maps</div>
+          <Link to="/map" className="pl-3 text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            Baseline Funding
           </Link>
-          <Link to="/grants" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
-            Grant Losses
+          <Link to="/grants" className="pl-3 text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            Grant Disruptions
           </Link>
-          <Link to="/fy26" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
-            FY26 Budget
+          <Link to="/fy26" className="pl-3 text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            Award Funding Changes
           </Link>
           <Link to="/contact" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
             Contact Us

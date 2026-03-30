@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/c/Users/clvco/miniconda3_1/python.exe:*)",
+      "Bash(npx tsc:*)",
+      "Bash(timeout 15 npm run dev:*)",
+      "WebSearch",
+      "WebFetch(domain:deck.gl)",
+      "WebFetch(domain:medium.com)",
+      "Bash(ls:*)",
+      "Bash(xargs cat:*)",
+      "WebFetch(domain:base-ui.com)",
+      "Bash(findstr:*)",
+      "Bash(timeout 15 npx vite:*)",
+      "Bash(timeout 10 npx vite:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(npx vite build:*)",
+      "Bash(dir:*)",
+      "Bash(node -e:*)",
+      "Bash(npx tsr generate:*)",
+      "Bash(wc:*)",
+      "Bash(C:Usersclvcominiconda3_1python.exe \"C:\\\\Users\\\\clvco\\\\Documents\\\\code\\\\scimap\\\\scimap-rewrite\\\\scripts\\\\generate_table_data.py\")",
+      "Bash(\"C:/Users/clvco/miniconda3_1/python.exe\":*)"
+    ]
+  }
+}
