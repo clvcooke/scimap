@@ -9,7 +9,7 @@ const btnBase =
 
 export default function MapControls({ setViewState }: { setViewState: SetViewState }) {
   return (
-    <div className="absolute bottom-2 right-2 z-10 flex flex-col gap-1 md:bottom-4 md:right-4">
+    <div className="absolute bottom-2 left-2 z-10 flex flex-col gap-1 md:bottom-4 md:left-4">
       <button
         onClick={() => setViewState((vs) => ({ ...vs, zoom: vs.zoom + 1 }))}
         className={`${btnBase} rounded-t-lg`}

@@ -10,12 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MapRouteImport } from './routes/map'
+import { Route as GrantsRouteImport } from './routes/grants'
+import { Route as Fy26RouteImport } from './routes/fy26'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 
 const MapRoute = MapRouteImport.update({
   id: '/map',
   path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GrantsRoute = GrantsRouteImport.update({
+  id: '/grants',
+  path: '/grants',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Fy26Route = Fy26RouteImport.update({
+  id: '/fy26',
+  path: '/fy26',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -32,30 +44,38 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/fy26': typeof Fy26Route
+  '/grants': typeof GrantsRoute
   '/map': typeof MapRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/fy26': typeof Fy26Route
+  '/grants': typeof GrantsRoute
   '/map': typeof MapRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/fy26': typeof Fy26Route
+  '/grants': typeof GrantsRoute
   '/map': typeof MapRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contact' | '/map'
+  fullPaths: '/' | '/contact' | '/fy26' | '/grants' | '/map'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/map'
-  id: '__root__' | '/' | '/contact' | '/map'
+  to: '/' | '/contact' | '/fy26' | '/grants' | '/map'
+  id: '__root__' | '/' | '/contact' | '/fy26' | '/grants' | '/map'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
+  Fy26Route: typeof Fy26Route
+  GrantsRoute: typeof GrantsRoute
   MapRoute: typeof MapRoute
 }
 
@@ -66,6 +86,20 @@ declare module '@tanstack/react-router' {
       path: '/map'
       fullPath: '/map'
       preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grants': {
+      id: '/grants'
+      path: '/grants'
+      fullPath: '/grants'
+      preLoaderRoute: typeof GrantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fy26': {
+      id: '/fy26'
+      path: '/fy26'
+      fullPath: '/fy26'
+      preLoaderRoute: typeof Fy26RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -88,6 +122,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
+  Fy26Route: Fy26Route,
+  GrantsRoute: GrantsRoute,
   MapRoute: MapRoute,
 }
 export const routeTree = rootRouteImport

@@ -1,6 +1,6 @@
 import { scaleLinear, type ScaleLinear } from 'd3-scale'
-import { interpolateOrRd } from 'd3-scale-chromatic'
 import { MVTLayer } from '@deck.gl/geo-layers'
+import { LUT_OR_RD, LUT_SIZE, FILL_ALPHA } from './color-lut'
 import type { GeoLevel } from './constants'
 
 // --- Types ---
@@ -25,8 +25,6 @@ export interface GeoConfig {
 
 const DOMAIN = 'https://data.scienceimpacts.org'
 const TILE_VERSION = 'baseline-v1'
-const FILL_ALPHA = 200
-
 export const INITIAL_VIEW_STATE = {
   longitude: -98.5795,
   latitude: 39.8283,
@@ -68,35 +66,6 @@ export const GEO_LEVELS: Record<GeoLevel, GeoConfig> = {
   },
 }
 
-// --- Color LUT ---
-// Pre-compute a 256-entry RGBA lookup table from the OrRd ramp.
-// Avoids per-feature string creation + parsing at render time.
-
-const LUT_SIZE = 256
-
-function buildColorLUT(): Uint8Array {
-  const lut = new Uint8Array(LUT_SIZE * 4)
-  for (let i = 0; i < LUT_SIZE; i++) {
-    const t = i / (LUT_SIZE - 1)
-    const rgb = interpolateOrRd(t)
-    const o = i * 4
-    if (rgb.startsWith('rgb')) {
-      const [r, g, b] = rgb.slice(4, -1).split(',')
-      lut[o] = parseInt(r, 10)
-      lut[o + 1] = parseInt(g, 10)
-      lut[o + 2] = parseInt(b, 10)
-    } else {
-      lut[o] = parseInt(rgb.slice(1, 3), 16)
-      lut[o + 1] = parseInt(rgb.slice(3, 5), 16)
-      lut[o + 2] = parseInt(rgb.slice(5, 7), 16)
-    }
-    lut[o + 3] = FILL_ALPHA
-  }
-  return lut
-}
-
-const COLOR_LUT = buildColorLUT()
-
 // --- Layer factory ---
 
 export function createBaselineLayer(
@@ -125,7 +94,7 @@ export function createBaselineLayer(
         v = pop > 0 ? v / pop : 0
       }
       const idx = Math.round(colorScale(v > 0 ? Math.log(v) : 0) * (LUT_SIZE - 1)) * 4
-      return [COLOR_LUT[idx], COLOR_LUT[idx + 1], COLOR_LUT[idx + 2], COLOR_LUT[idx + 3]]
+      return [LUT_OR_RD[idx], LUT_OR_RD[idx + 1], LUT_OR_RD[idx + 2], LUT_OR_RD[idx + 3]]
     },
   })
 }

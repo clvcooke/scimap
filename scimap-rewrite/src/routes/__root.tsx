@@ -17,9 +17,15 @@ function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-[15px] font-semibold text-white md:flex">
-          <button className="transition-colors hover:text-gray-300">Methods</button>
-          <button className="transition-colors hover:text-gray-300">About</button>
-          <button className="transition-colors hover:text-gray-300">Report Issues</button>
+          <Link to="/map" className="transition-colors hover:text-gray-300">
+            Baseline
+          </Link>
+          <Link to="/grants" className="transition-colors hover:text-gray-300">
+            Grant Losses
+          </Link>
+          <Link to="/fy26" className="transition-colors hover:text-gray-300">
+            FY26 Budget
+          </Link>
           <Link to="/contact" className="transition-colors hover:text-gray-300">
             Contact Us
           </Link>
@@ -38,14 +44,16 @@ function Header() {
       {/* Mobile dropdown */}
       {menuOpen && (
         <nav className="mt-3 flex flex-col gap-3 border-t border-white/20 pt-3 text-[15px] font-semibold text-white md:hidden">
-          <button className="text-left transition-colors hover:text-gray-300">Methods</button>
-          <button className="text-left transition-colors hover:text-gray-300">About</button>
-          <button className="text-left transition-colors hover:text-gray-300">Report Issues</button>
-          <Link
-            to="/contact"
-            className="text-left transition-colors hover:text-gray-300"
-            onClick={() => setMenuOpen(false)}
-          >
+          <Link to="/map" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            Baseline
+          </Link>
+          <Link to="/grants" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            Grant Losses
+          </Link>
+          <Link to="/fy26" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            FY26 Budget
+          </Link>
+          <Link to="/contact" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
             Contact Us
           </Link>
         </nav>

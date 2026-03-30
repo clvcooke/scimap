@@ -1,0 +1,122 @@
+{
+  "marker-1": {
+    "x": 13,
+    "y": 5,
+    "width": 105,
+    "height": 105
+  },
+  "marker-2": {
+    "x": 141,
+    "y": 5,
+    "width": 105,
+    "height": 105
+  },
+  "marker-3": {
+    "x": 269,
+    "y": 5,
+    "width": 105,
+    "height": 105
+  },
+  "marker-4": {
+    "x": 397,
+    "y": 5,
+    "width": 105,
+    "height": 105
+  },
+  "marker-5": {
+    "x": 13,
+    "y": 133,
+    "width": 105,
+    "height": 105
+  },
+  "marker-6": {
+    "x": 141,
+    "y": 133,
+    "width": 105,
+    "height": 105
+  },
+  "marker-7": {
+    "x": 269,
+    "y": 133,
+    "width": 105,
+    "height": 105
+  },
+  "marker-8": {
+    "x": 397,
+    "y": 133,
+    "width": 105,
+    "height": 105
+  },
+  "marker-9": {
+    "x": 13,
+    "y": 261,
+    "width": 105,
+    "height": 105
+  },
+  "marker-10": {
+    "x": 141,
+    "y": 261,
+    "width": 105,
+    "height": 105
+  },
+  "marker-20": {
+    "x": 269,
+    "y": 261,
+    "width": 105,
+    "height": 105
+  },
+  "marker-30": {
+    "x": 397,
+    "y": 261,
+    "width": 105,
+    "height": 105
+  },
+  "marker-40": {
+    "x": 13,
+    "y": 389,
+    "width": 105,
+    "height": 105
+  },
+  "marker-50": {
+    "x": 141,
+    "y": 389,
+    "width": 105,
+    "height": 105
+  },
+  "marker-60": {
+    "x": 269,
+    "y": 389,
+    "width": 105,
+    "height": 105
+  },
+  "marker-70": {
+    "x": 397,
+    "y": 389,
+    "width": 105,
+    "height": 105
+  },
+  "marker-80": {
+    "x": 13,
+    "y": 517,
+    "width": 105,
+    "height": 105
+  },
+  "marker-90": {
+    "x": 141,
+    "y": 517,
+    "width": 105,
+    "height": 105
+  },
+  "marker-100": {
+    "x": 269,
+    "y": 517,
+    "width": 105,
+    "height": 105
+  },
+  "marker": {
+    "x": 397,
+    "y": 517,
+    "width": 105,
+    "height": 105
+  }
+}
