@@ -66,7 +66,19 @@ function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-[15px] font-semibold text-white md:flex">
+          <Link to="/" className="transition-colors hover:text-gray-300">
+            Home
+          </Link>
           <MapsDropdown />
+          <Link to="/news" className="transition-colors hover:text-gray-300">
+            News
+          </Link>
+          <Link to="/insights" className="transition-colors hover:text-gray-300">
+            Insights
+          </Link>
+          <Link to="/about" className="transition-colors hover:text-gray-300">
+            About
+          </Link>
           <Link to="/methodology" className="transition-colors hover:text-gray-300">
             Methodology
           </Link>
@@ -88,6 +100,9 @@ function Header() {
       {/* Mobile dropdown */}
       {menuOpen && (
         <nav className="mt-3 flex flex-col gap-3 border-t border-white/20 pt-3 text-[15px] font-semibold text-white md:hidden">
+          <Link to="/" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            Home
+          </Link>
           <div className="text-gray-300">Maps</div>
           <Link to="/map" className="pl-3 text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
             Baseline Funding
@@ -97,6 +112,15 @@ function Header() {
           </Link>
           <Link to="/fy26" className="pl-3 text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
             Award Funding Changes
+          </Link>
+          <Link to="/news" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            News
+          </Link>
+          <Link to="/insights" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            Insights
+          </Link>
+          <Link to="/about" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            About
           </Link>
           <Link to="/methodology" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
             Methodology
@@ -133,19 +157,19 @@ export const Route = createRootRoute({
               <h4 className="text-lg font-semibold text-white">Navigation</h4>
               <ul className="flex flex-col space-y-3 text-sm text-gray-300">
                 <li>
-                  <a href="/" className="transition-colors hover:text-brand-yellow">
+                  <Link to="/about" className="transition-colors hover:text-brand-yellow">
                     About the Project
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/" className="transition-colors hover:text-brand-yellow">
+                  <Link to="/news" className="transition-colors hover:text-brand-yellow">
                     News
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="/" className="transition-colors hover:text-brand-yellow">
+                  <Link to="/insights" className="transition-colors hover:text-brand-yellow">
                     Insights
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -159,9 +183,9 @@ export const Route = createRootRoute({
                   </a>
                 </li>
                 <li>
-                  <a href="/" className="transition-colors hover:text-brand-yellow">
+                  <Link to="/insights" className="transition-colors hover:text-brand-yellow">
                     Insights
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <Link to="/contact" className="transition-colors hover:text-brand-yellow">
