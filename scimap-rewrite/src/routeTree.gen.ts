@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MethodologyRouteImport } from './routes/methodology'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as GrantsRouteImport } from './routes/grants'
 import { Route as Fy26RouteImport } from './routes/fy26'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 
+const MethodologyRoute = MethodologyRouteImport.update({
+  id: '/methodology',
+  path: '/methodology',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MapRoute = MapRouteImport.update({
   id: '/map',
   path: '/map',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/fy26': typeof Fy26Route
   '/grants': typeof GrantsRoute
   '/map': typeof MapRoute
+  '/methodology': typeof MethodologyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/fy26': typeof Fy26Route
   '/grants': typeof GrantsRoute
   '/map': typeof MapRoute
+  '/methodology': typeof MethodologyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,21 @@ export interface FileRoutesById {
   '/fy26': typeof Fy26Route
   '/grants': typeof GrantsRoute
   '/map': typeof MapRoute
+  '/methodology': typeof MethodologyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contact' | '/fy26' | '/grants' | '/map'
+  fullPaths: '/' | '/contact' | '/fy26' | '/grants' | '/map' | '/methodology'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/fy26' | '/grants' | '/map'
-  id: '__root__' | '/' | '/contact' | '/fy26' | '/grants' | '/map'
+  to: '/' | '/contact' | '/fy26' | '/grants' | '/map' | '/methodology'
+  id:
+    | '__root__'
+    | '/'
+    | '/contact'
+    | '/fy26'
+    | '/grants'
+    | '/map'
+    | '/methodology'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,10 +93,18 @@ export interface RootRouteChildren {
   Fy26Route: typeof Fy26Route
   GrantsRoute: typeof GrantsRoute
   MapRoute: typeof MapRoute
+  MethodologyRoute: typeof MethodologyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/methodology': {
+      id: '/methodology'
+      path: '/methodology'
+      fullPath: '/methodology'
+      preLoaderRoute: typeof MethodologyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/map': {
       id: '/map'
       path: '/map'
@@ -125,6 +149,7 @@ const rootRouteChildren: RootRouteChildren = {
   Fy26Route: Fy26Route,
   GrantsRoute: GrantsRoute,
   MapRoute: MapRoute,
+  MethodologyRoute: MethodologyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

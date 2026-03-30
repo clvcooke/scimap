@@ -67,6 +67,9 @@ function Header() {
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-[15px] font-semibold text-white md:flex">
           <MapsDropdown />
+          <Link to="/methodology" className="transition-colors hover:text-gray-300">
+            Methodology
+          </Link>
           <Link to="/contact" className="transition-colors hover:text-gray-300">
             Contact Us
           </Link>
@@ -94,6 +97,9 @@ function Header() {
           </Link>
           <Link to="/fy26" className="pl-3 text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
             Award Funding Changes
+          </Link>
+          <Link to="/methodology" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+            Methodology
           </Link>
           <Link to="/contact" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
             Contact Us
