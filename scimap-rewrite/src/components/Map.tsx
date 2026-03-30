@@ -13,6 +13,7 @@ import {
   createColorScale,
 } from '@/lib/map-config'
 import type { TileProperties, SelectedFeature } from '@/lib/map-config'
+import { createStateOutlineLayer } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
 import MapControls from './MapControls'
 import DetailDrawer from './DetailDrawer'
@@ -32,6 +33,10 @@ export default function SCIMap() {
   const mapLayer = useMemo(
     () => createBaselineLayer(config, perCapita, colorScale),
     [config, perCapita, colorScale],
+  )
+  const outlineLayer = useMemo(
+    () => createStateOutlineLayer(GEO_LEVELS.states.tileUrl),
+    [],
   )
 
   const onHover = useCallback(
@@ -132,7 +137,7 @@ export default function SCIMap() {
         viewState={viewState}
         onViewStateChange={({ viewState: vs }) => setViewState(vs as typeof INITIAL_VIEW_STATE)}
         controller
-        layers={[mapLayer]}
+        layers={[mapLayer, outlineLayer]}
         useDevicePixels={false}
         getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'grab')}
         onHover={onHover}

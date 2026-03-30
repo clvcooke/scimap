@@ -64,10 +64,10 @@ export function createChoroplethLayer(
 const STATE_TILE =
   'https://data.scienceimpacts.org/tiles_states_budget_v1/{z}/{x}/{y}.pbf'
 
-export function createStateOutlineLayer() {
+export function createStateOutlineLayer(tileUrl: string = STATE_TILE) {
   return new MVTLayer({
     id: 'state-outline-mvt',
-    data: [STATE_TILE],
+    data: [tileUrl],
     binary: true,
     getLineColor: [255, 255, 255, 200],
     lineWidthMinPixels: 2,
