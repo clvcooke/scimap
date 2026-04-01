@@ -1,56 +1,73 @@
-# Science & Community Impacts Mapping Project (SCIMaP)
+# React + TypeScript + Vite
 
-This repo powers the website at [https://scienceimpacts.org/](https://scienceimpacts.org/).
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-SCIMaP is an interdisciplinary project that aims to help Americans explore how science and health research fuels the economy, supports jobs, and improves health outcomes. Through interactive, data-driven visualizations, we show the impacts of scientific research and how proposed changes to federal funding can affect science, the economy, and healthcare.
+Currently, two official plugins are available:
 
-## The Team
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-We are an interdisciplinary team of researchers from the University of Maryland, College Park (Dr. Joshua Weitz and Dr. Mallory Harris), the University of Pennsylvania (Dr. Alyssa Sinclair, Dr. Emily Falk, and Dr. Danielle Cosme), the University of Utah (Dr. Angela Fagerlin), the Georgia Institute of Technology (Dr. Clio Andris), and University of Oregon (Dr. Ellen Peters). We have expertise in different areas—biology, psychology, neuroscience, communication, and geographic information science— united by our common goal.
+## React Compiler
 
-## Mission
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-The White House has ordered large cuts to federal funding for scientific research. These changes include a proposal to reduce support for all health-related research nationwide, and cancellations of many grants for specific research projects. We aim to share how these proposed changes impact science, the economy, and healthcare.
+## Expanding the ESLint configuration
 
-Our [recent correspondence piece](https://www.nature.com/articles/s41562-025-02238-x) published in Nature Human Behaviour describes our approach to communicating the impact of these funding cuts nationwide.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## Data and Methodology
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-We track the impact of funding cuts in three main areas:
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-*   **Cancelled and Frozen Grants:** We track NIH grants that have been cancelled or frozen using the [Grant Watch database](https://grant-watch.us/nih-data.html).
-*   **Indirect Costs:** We estimate the future impact of proposed changes that would cap funding for indirect costs at 15%.
-*   **Proposed FY2026 Budget:** We compare the proposed NIH FY 2026 budget to the FY2024 budget to estimate the proportion of funding lost.
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-We use a multiplier of 2.56 to estimate the local economic impact of these cuts, based on a [recent report](https://www.unitedformedicalresearch.org/wp-content/uploads/2025/03/UMR_NIH-Role-in-Sustaining-US-Economy-FY2024-2025-Update.pdf). Our data and code are [publicly available here](http.doi.org/10.17605/OSF.IO/H398E).
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-For a more detailed methodology, please see our preprint on [medrxiv](https://www.medrxiv.org/content/10.1101/2025.07.24.25332092v1).
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## Codebase Overview
-
-This repository is organized as follows:
-
-*   `src/`: Contains the frontend React application, built with Vite.
-*   `python/`: Includes Python scripts and notebooks for data processing and analysis.
-*   `functions/`: Holds Cloudflare serverless functions.
-
-The project uses the following technologies:
-
-*   **Hosting:** Cloudflare Pages and Workers
-*   **Map Rendering:** Deck.GL
-*   **Geospatial Data:** Titiler and various Python libraries
-*   **Frontend:** React, TypeScript, Vite
-
-## Contact Us
-
-For questions, comments, and press inquiries, please email [contact@scienceimpacts.org](mailto:contact@scienceimpacts.org).
-
-To receive email updates about major website releases, reports, and publications, [please sign up here](https://upenn.co1.qualtrics.com/jfe/form/SV_5vDEXlLWG9IyWmW).
-
-## News and Policy Mentions
-
-SCIMaP has been featured in a variety of news outlets and policy discussions. For a full list, please see the "News and Policy Mentions" section on our [About page](https://scienceimpacts.org/).
-
-## Data Updates
-
-SCIMaP updates its data and visualization to reflect the current state of funding cuts. For the full data history, you can reference the [publicly available data at the Open Science Framework link](http://doi.org/10.17605/OSF.IO/H398E).
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```

@@ -39,7 +39,7 @@ jobs:
           # Run the script to generate ~/.config/rclone/rclone.conf
           ./scripts/rclone_setup.sh
           rclone listremotes
-          python python/data-update-script.py
+          python scripts/data-update-script.py
 
       - name: Commit changes
         run: |
