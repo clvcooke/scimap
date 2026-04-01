@@ -80,23 +80,23 @@ function InsightsPage() {
               >
                 <TabsTrigger
                   value="research"
-                  className="h-10 gap-2 rounded-none px-4 text-sm font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
                 >
-                  <BookOpen className="h-4 w-4" />
+                  <BookOpen className="hidden h-4 w-4 sm:block" />
                   Research
                 </TabsTrigger>
                 <TabsTrigger
                   value="substack"
-                  className="h-10 gap-2 rounded-none px-4 text-sm font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
                 >
-                  <Newspaper className="h-4 w-4" />
+                  <Newspaper className="hidden h-4 w-4 sm:block" />
                   Science Matters
                 </TabsTrigger>
                 <TabsTrigger
                   value="idc"
-                  className="h-10 gap-2 rounded-none px-4 text-sm font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
                 >
-                  <BarChart3 className="h-4 w-4" />
+                  <BarChart3 className="hidden h-4 w-4 sm:block" />
                   IDC Analysis
                 </TabsTrigger>
               </TabsList>
