@@ -1,10 +1,18 @@
 import { useState, useRef, useEffect } from 'react'
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
 import { Menu, X, ChevronDown } from 'lucide-react'
+
+const navLinkBase = 'pb-1 border-b-2 transition-colors'
+const navLinkActive = { className: `${navLinkBase} border-brand-orange` }
+const navLinkInactive = {
+  className: `${navLinkBase} border-transparent hover:text-brand-blue-light`,
+}
 
 function MapsDropdown() {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const { pathname } = useLocation()
+  const isMapActive = ['/map', '/grants', '/fy26', '/idc'].some((p) => pathname.startsWith(p))
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -18,9 +26,9 @@ function MapsDropdown() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1 transition-colors hover:text-gray-300"
+        className={`flex items-center gap-1 ${navLinkBase} ${isMapActive ? 'border-brand-orange' : 'border-transparent hover:text-brand-blue-light'}`}
       >
-        Maps <ChevronDown className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+        Impact Maps <ChevronDown className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
         <div className="absolute right-0 top-full mt-2 w-52 rounded-md bg-white py-1 shadow-lg ring-1 ring-black/10">
@@ -55,41 +63,48 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 bg-brand-blue px-4 py-3 md:px-6 md:py-4">
+    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white px-4 py-3 md:px-6 md:py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-baseline gap-3">
-          <div className="text-xl font-bold tracking-tight text-white md:text-2xl">SCIMaP</div>
-          <div className="hidden text-[15px] font-medium text-gray-200 md:block">
+          <Link to="/" className="text-xl font-bold tracking-tight text-brand-blue md:text-2xl">
+            SCIMaP
+          </Link>
+          <div className="hidden text-[15px] font-medium text-gray-500 md:block">
             Science & Community Impacts Mapping Project
           </div>
         </div>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 text-[15px] font-semibold text-white md:flex">
-          <Link to="/" className="transition-colors hover:text-gray-300">
+        <nav className="hidden items-center gap-6 text-[15px] font-medium text-brand-blue md:flex">
+          <Link
+            to="/"
+            activeProps={navLinkActive}
+            inactiveProps={navLinkInactive}
+            activeOptions={{ exact: true }}
+          >
             Home
           </Link>
           <MapsDropdown />
-          <Link to="/news" className="transition-colors hover:text-gray-300">
-            News
-          </Link>
-          <Link to="/insights" className="transition-colors hover:text-gray-300">
-            Insights
-          </Link>
-          <Link to="/about" className="transition-colors hover:text-gray-300">
-            About
-          </Link>
-          <Link to="/methodology" className="transition-colors hover:text-gray-300">
+          <Link to="/methodology" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
             Methodology
           </Link>
-          <Link to="/contact" className="transition-colors hover:text-gray-300">
-            Contact Us
+          <Link to="/insights" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
+            Insights
+          </Link>
+          <Link to="/news" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
+            News
+          </Link>
+          <Link to="/about" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
+            About Us
+          </Link>
+          <Link to="/contact" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
+            Contact
           </Link>
         </nav>
 
         {/* Mobile hamburger */}
         <button
-          className="p-1 text-white md:hidden"
+          className="p-1 text-brand-blue md:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
         >
@@ -99,33 +114,80 @@ function Header() {
 
       {/* Mobile dropdown */}
       {menuOpen && (
-        <nav className="mt-3 flex flex-col gap-3 border-t border-white/20 pt-3 text-[15px] font-semibold text-white md:hidden">
-          <Link to="/" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+        <nav className="mt-3 flex flex-col gap-3 border-t border-gray-200 pt-3 text-[15px] font-medium text-brand-blue md:hidden">
+          <Link
+            to="/"
+            className="text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
+            activeOptions={{ exact: true }}
+            onClick={() => setMenuOpen(false)}
+          >
             Home
           </Link>
-          <div className="text-gray-300">Maps</div>
-          <Link to="/map" className="pl-3 text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+          <div className="text-gray-400">Impacts Maps</div>
+          <Link
+            to="/map"
+            className="pl-3 text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
+            onClick={() => setMenuOpen(false)}
+          >
             Baseline Funding
           </Link>
-          <Link to="/grants" className="pl-3 text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+          <Link
+            to="/grants"
+            className="pl-3 text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
+            onClick={() => setMenuOpen(false)}
+          >
             Grant Disruptions
           </Link>
-          <Link to="/fy26" className="pl-3 text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+          <Link
+            to="/fy26"
+            className="pl-3 text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
+            onClick={() => setMenuOpen(false)}
+          >
             Award Funding Changes
           </Link>
-          <Link to="/news" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
-            News
-          </Link>
-          <Link to="/insights" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+
+          <Link
+            to="/insights"
+            className="text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
+            onClick={() => setMenuOpen(false)}
+          >
             Insights
           </Link>
-          <Link to="/about" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
-            About
+          <Link
+            to="/news"
+            className="text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            News
           </Link>
-          <Link to="/methodology" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+          <Link
+            to="/about"
+            className="text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            About Us
+          </Link>
+          <Link
+            to="/methodology"
+            className="text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
+            onClick={() => setMenuOpen(false)}
+          >
             Methodology
           </Link>
-          <Link to="/contact" className="text-left transition-colors hover:text-gray-300" onClick={() => setMenuOpen(false)}>
+          <Link
+            to="/contact"
+            className="text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
+            onClick={() => setMenuOpen(false)}
+          >
             Contact Us
           </Link>
         </nav>
@@ -157,17 +219,17 @@ export const Route = createRootRoute({
               <h4 className="text-lg font-semibold text-white">Navigation</h4>
               <ul className="flex flex-col space-y-3 text-sm text-gray-300">
                 <li>
-                  <Link to="/about" className="transition-colors hover:text-brand-yellow">
+                  <Link to="/about" className="transition-colors hover:text-brand-orange">
                     About the Project
                   </Link>
                 </li>
                 <li>
-                  <Link to="/news" className="transition-colors hover:text-brand-yellow">
+                  <Link to="/news" className="transition-colors hover:text-brand-orange">
                     News
                   </Link>
                 </li>
                 <li>
-                  <Link to="/insights" className="transition-colors hover:text-brand-yellow">
+                  <Link to="/insights" className="transition-colors hover:text-brand-orange">
                     Insights
                   </Link>
                 </li>
@@ -178,17 +240,17 @@ export const Route = createRootRoute({
               <h4 className="text-lg font-semibold text-white">Resources</h4>
               <ul className="flex flex-col space-y-3 text-sm text-gray-300">
                 <li>
-                  <a href="/" className="transition-colors hover:text-brand-yellow">
+                  <a href="/" className="transition-colors hover:text-brand-orange">
                     Impact Map
                   </a>
                 </li>
                 <li>
-                  <Link to="/insights" className="transition-colors hover:text-brand-yellow">
+                  <Link to="/insights" className="transition-colors hover:text-brand-orange">
                     Insights
                   </Link>
                 </li>
                 <li>
-                  <Link to="/contact" className="transition-colors hover:text-brand-yellow">
+                  <Link to="/contact" className="transition-colors hover:text-brand-orange">
                     Contact Us
                   </Link>
                 </li>

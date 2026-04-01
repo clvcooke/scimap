@@ -25,7 +25,7 @@ function Index() {
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link
                 to="/map"
-                className="inline-flex shrink-0 items-center justify-center bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-base px-6 py-3 h-auto rounded-md transition-all"
+                className="inline-flex shrink-0 items-center justify-center bg-brand-orange hover:bg-brand-orange-hover text-brand-blue font-bold text-base px-6 py-3 h-auto rounded-md transition-all"
               >
                 View the Map
               </Link>
@@ -128,9 +128,9 @@ function Index() {
               <input
                 type="text"
                 placeholder="ZIP Code"
-                className="w-full rounded-l-md border-0 px-4 py-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-yellow text-lg font-medium"
+                className="w-full rounded-l-md border-0 px-4 py-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-orange text-lg font-medium"
               />
-              <button className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-blue font-bold text-lg px-6 py-4 rounded-r-md transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
+              <button className="bg-brand-orange hover:bg-brand-orange-hover text-brand-blue font-bold text-lg px-6 py-4 rounded-r-md transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
                 Search <span aria-hidden="true">&rarr;</span>
               </button>
             </div>
@@ -187,28 +187,28 @@ function Index() {
             <h3 className="text-2xl font-bold text-brand-blue mb-8">Who We Serve</h3>
             <ul className="space-y-6">
               <li className="flex items-start">
-                <span className="text-brand-yellow text-2xl mr-4 leading-none">&bull;</span>
+                <span className="text-brand-orange text-2xl mr-4 leading-none">&bull;</span>
                 <p className="text-gray-800 text-lg">
                   <strong className="text-brand-blue">Policy Makers:</strong> Data-driven insights
                   for informed decision making
                 </p>
               </li>
               <li className="flex items-start">
-                <span className="text-brand-yellow text-2xl mr-4 leading-none">&bull;</span>
+                <span className="text-brand-orange text-2xl mr-4 leading-none">&bull;</span>
                 <p className="text-gray-800 text-lg">
                   <strong className="text-brand-blue">Journalists:</strong> Unbiased data and
                   visualizations for reporting
                 </p>
               </li>
               <li className="flex items-start">
-                <span className="text-brand-yellow text-2xl mr-4 leading-none">&bull;</span>
+                <span className="text-brand-orange text-2xl mr-4 leading-none">&bull;</span>
                 <p className="text-gray-800 text-lg">
                   <strong className="text-brand-blue">Advocacy Groups:</strong> Evidence-based
                   resources for campaigns
                 </p>
               </li>
               <li className="flex items-start">
-                <span className="text-brand-yellow text-2xl mr-4 leading-none">&bull;</span>
+                <span className="text-brand-orange text-2xl mr-4 leading-none">&bull;</span>
                 <p className="text-gray-800 text-lg">
                   <strong className="text-brand-blue">The Public:</strong> Clear understanding of
                   science funding&apos;s local impact

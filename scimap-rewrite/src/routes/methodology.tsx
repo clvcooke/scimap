@@ -63,7 +63,7 @@ function Intro({ children }: { children: ReactNode }) {
 
 function BulletList({
   items,
-  dotColor = 'bg-brand-yellow',
+  dotColor = 'bg-brand-orange',
   textColor = 'text-gray-700',
 }: {
   items: (string | { name: string; desc: string })[]
@@ -191,7 +191,7 @@ function MethodologyPage() {
       <section className="relative w-full overflow-hidden bg-brand-blue px-6 py-14 md:py-20">
         <div className="pointer-events-none absolute inset-0 opacity-10">
           <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-brand-sky blur-3xl" />
-          <div className="absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-brand-yellow blur-3xl" />
+          <div className="absolute -bottom-20 -right-20 h-96 w-96 rounded-full bg-brand-orange blur-3xl" />
         </div>
         <div className="relative mx-auto max-w-4xl text-center">
           <h1 className="text-4xl font-extrabold leading-tight text-white md:text-5xl">
