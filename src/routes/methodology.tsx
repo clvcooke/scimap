@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { getPage } from '@/lib/content'
+import { InlineMarkdown } from '@/components/InlineMarkdown'
 
 export const Route = createFileRoute('/methodology')({
   component: MethodologyPage,
@@ -161,7 +162,9 @@ function MethodologyPage() {
         </div>
         {a.economic_callout && (
           <div className="mt-5 rounded-lg border-l-4 border-brand-sky bg-brand-sky/10 px-5 py-3">
-            <p className="text-gray-700">{a.economic_callout}</p>
+            <p className="text-gray-700">
+              <InlineMarkdown>{a.economic_callout}</InlineMarkdown>
+            </p>
           </div>
         )}
       </Section>

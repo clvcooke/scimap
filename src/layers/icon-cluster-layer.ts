@@ -35,11 +35,11 @@ export default class IconClusterLayer<
     z: number
   }
 
-  shouldUpdateState({ changeFlags }: UpdateParameters<this>) {
+  override shouldUpdateState({ changeFlags }: UpdateParameters<this>) {
     return changeFlags.somethingChanged
   }
 
-  updateState({ props, oldProps, changeFlags }: UpdateParameters<this>) {
+  override updateState({ props, oldProps, changeFlags }: UpdateParameters<this>) {
     const rebuildIndex =
       changeFlags.dataChanged || props.sizeScale !== oldProps.sizeScale
     if (rebuildIndex) {
@@ -67,7 +67,7 @@ export default class IconClusterLayer<
     }
   }
 
-  getPickingInfo({
+  override getPickingInfo({
     info,
     mode,
   }: {
@@ -79,15 +79,15 @@ export default class IconClusterLayer<
       let objects: DataT[] | undefined
       if (pickedObject.cluster && mode !== 'hover') {
         objects = this.state.index
-          .getLeaves(pickedObject.cluster_id, 1_000_000)
+          .getLeaves(pickedObject.cluster_id as number, 1_000_000)
           .map((f) => f.properties)
       }
-      return { ...info, object: pickedObject, objects }
+      return { ...info, object: pickedObject, objects } as IconClusterLayerPickingInfo<DataT>
     }
-    return { ...info, object: undefined }
+    return { ...info, object: undefined } as unknown as IconClusterLayerPickingInfo<DataT>
   }
 
-  renderLayers() {
+  override renderLayers() {
     const { data } = this.state
     const { iconAtlas, iconMapping, sizeScale } = this.props
 
@@ -99,9 +99,9 @@ export default class IconClusterLayer<
         sizeScale,
         getPosition: (d) => d.geometry.coordinates as [number, number],
         getIcon: (d) =>
-          getIconName(d.properties.cluster ? d.properties.point_count : 1),
+          getIconName(d.properties.cluster ? (d.properties.point_count as number) : 1),
         getSize: (d) =>
-          getIconSize(d.properties.cluster ? d.properties.point_count : 1),
+          getIconSize(d.properties.cluster ? (d.properties.point_count as number) : 1),
       },
       this.getSubLayerProps({ id: 'icon' }),
     )

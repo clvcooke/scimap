@@ -105,7 +105,7 @@ export default function ChoroplethMap({
         useDevicePixels={false}
         getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'grab')}
         onHover={onHover}
-        onClick={onMapClick}
+        onClick={onMapClick ?? null}
       >
         <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json" />
       </DeckGL>

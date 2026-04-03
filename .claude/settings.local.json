@@ -11,7 +11,8 @@
       "Bash(ls -la /c/Users/clvco/Documents/code/scimap/scimap-rewrite/src/components/*.tsx)",
       "Bash(npx @tanstack/router-cli generate)",
       "Bash(find /c/Users/clvco/Documents/code/scimap/old/src -type f -name *.tsx -o -name *.ts)",
-      "Bash(grep -E \"^-.*\\\\.\\(toml|config|json\\)$\")"
+      "Bash(grep -E \"^-.*\\\\.\\(toml|config|json\\)$\")",
+      "Bash(find C:\\\\Users\\\\clvco\\\\Documents\\\\code\\\\scimap\\\\src:*)"
     ]
   }
 }

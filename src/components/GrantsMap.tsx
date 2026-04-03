@@ -36,7 +36,7 @@ export default function GrantsMap() {
     () =>
       new IconClusterLayer({
         data: GRANT_LOSSES,
-        getPosition: (d: GrantTermination) => [d.lon, d.lat],
+        getPosition: ((d: GrantTermination) => [d.lon, d.lat, 0]) as unknown as [number, number, number],
         getSize: 50,
         iconAtlas: '/location-icon-atlas-v7.png',
         iconMapping: '/location-icon-mapping.json',
