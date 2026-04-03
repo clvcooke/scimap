@@ -84,7 +84,7 @@
   --color-brand-blue-dark: #020C45;
   --color-brand-orange: #F1A892;
   --color-brand-orange-hover: #e8917a;
-  --color-brand-sky: #D0DCED;
+  --color-brand-sky: #47B7E7;
   --color-brand-red: #CC606A;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -142,6 +142,6 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-heading);
+    font-family: var(--font-heading), serif;
   }
 }

@@ -17,12 +17,15 @@ function Index() {
     <div className="flex w-full flex-col">
       {/* Hero Section */}
       <section className="relative w-full bg-brand-blue">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-12 px-6 py-20 md:flex-row">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-12 px-3 py-20 md:flex-row">
           {/* Left: Content (60%) */}
           <div className="w-full space-y-8 text-white md:w-3/5">
             <h1 className="text-4xl font-extrabold leading-tight md:text-5xl">
               {a.hero_title}
             </h1>
+            <p className="max-w-2xl text-xl font-semibold leading-snug text-white md:text-2xl">
+              {a.hero_subheading}
+            </p>
             <p className="max-w-2xl text-lg leading-relaxed text-gray-200 md:text-xl">
               {a.hero_subtitle}
             </p>
@@ -43,31 +46,18 @@ function Index() {
           </div>
 
           {/* Right: Placeholder Image (40%) */}
-          <div className="flex w-full justify-center md:w-2/5 md:justify-end">
-            <div className="relative flex aspect-square w-full max-w-md flex-col items-center justify-center overflow-hidden rounded-lg bg-gray-300 text-gray-500 shadow-xl">
-              <svg
-                className="mb-4 h-24 w-24 opacity-50"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1}
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-              <span className="font-medium">Thematic Image Placeholder</span>
-              <span className="text-sm">(Grayscale Map/Science imagery)</span>
-            </div>
+          <div className="flex w-full justify-center md:w-1/2 md:justify-end">
+            <img
+              src="/map-img.png"
+              alt="Science map visualization"
+              className="w-full max-w-xl rounded-lg object-cover shadow-xl"
+            />
           </div>
         </div>
       </section>
 
       {/* Informational Section */}
-      <section className="w-full bg-white px-6 py-20">
+      <section className="w-full bg-blue-50 px-6 py-20">
         <div className="mx-auto flex max-w-4xl flex-col items-center space-y-10 text-center">
           <h2 className="text-3xl font-bold text-brand-blue">
             {a.stakes_heading}
@@ -137,7 +127,7 @@ function Index() {
               >
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
               </svg>
-              <div className="absolute inset-0 bg-gradient-to-tr from-red-500/10 via-transparent to-blue-500/10 mix-blend-overlay"></div>
+              <div className="absolute inset-0 bg-linear-to-tr from-red-500/10 via-transparent to-blue-500/10 mix-blend-overlay"></div>
               <span className="mt-6 text-lg font-medium uppercase tracking-wide text-blue-200/70">
                 Interactive Map Preview
               </span>

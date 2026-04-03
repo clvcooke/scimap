@@ -1,6 +1,7 @@
 ---
-hero_title: "Science & Community Impacts Mapping Project"
-hero_subtitle: "Understand how proposed federal funding cuts to research and science initiatives affect local communities, universities, and economic development across the nation."
+hero_title: "Mapping the Impact of Science Funding Cuts"
+hero_subtitle: "The Science & Community Impact Mapping Project (SCIMaP) maps the local and national impact of federal investment in science— and how science funding cuts cause widespread losses that harm communities nationwide. Find out how science funding impacts your local area, and how you can take action."
+hero_subheading: "Discover how federal science funding impacts research, health, jobs, and economic activity across the U.S."
 hero_cta_primary: "View the Map"
 hero_cta_secondary: "Read the Report"
 
