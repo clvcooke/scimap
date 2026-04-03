@@ -47,11 +47,16 @@ export default class IconClusterLayer<
         maxZoom: 16,
         radius: props.sizeScale * Math.sqrt(2),
       })
+      const positionAccessor = props.getPosition
+      const getPos = typeof positionAccessor === 'function'
+        ? positionAccessor
+        : () => positionAccessor
+      if (!props.data || typeof props.data === 'string' || !(Symbol.iterator in props.data)) return
+      const data = [...props.data]
       index.load(
-        // @ts-expect-error – Supercluster expects GeoJSON features
-        (props.data as DataT[]).map((d) => ({
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-          geometry: { coordinates: (props.getPosition as Function)(d) },
+        // @ts-expect-error – Supercluster expects full GeoJSON Feature objects; we pass minimal shape
+        data.map((d, i) => ({
+          geometry: { coordinates: getPos(d, { index: i, data: props.data, target: [] }) },
           properties: d,
         })),
       )
@@ -77,14 +82,18 @@ export default class IconClusterLayer<
     const pickedObject = info.object?.properties
     if (pickedObject) {
       let objects: DataT[] | undefined
-      if (pickedObject.cluster && mode !== 'hover') {
+      if (
+        'cluster' in pickedObject && pickedObject.cluster &&
+        'cluster_id' in pickedObject && typeof pickedObject.cluster_id === 'number' &&
+        mode !== 'hover'
+      ) {
         objects = this.state.index
-          .getLeaves(pickedObject.cluster_id as number, 1_000_000)
+          .getLeaves(pickedObject.cluster_id, 1_000_000)
           .map((f) => f.properties)
       }
-      return { ...info, object: pickedObject, objects } as IconClusterLayerPickingInfo<DataT>
+      return Object.assign({}, info, { object: pickedObject, objects })
     }
-    return { ...info, object: undefined } as unknown as IconClusterLayerPickingInfo<DataT>
+    return Object.assign({}, info, { object: undefined })
   }
 
   override renderLayers() {
@@ -97,11 +106,20 @@ export default class IconClusterLayer<
         iconAtlas,
         iconMapping,
         sizeScale,
-        getPosition: (d) => d.geometry.coordinates as [number, number],
+        getPosition: (d) => {
+          const [lng, lat] = d.geometry.coordinates
+          return [lng, lat] satisfies [number, number]
+        },
         getIcon: (d) =>
-          getIconName(d.properties.cluster ? (d.properties.point_count as number) : 1),
+          getIconName(
+            'point_count' in d.properties && typeof d.properties.point_count === 'number'
+              ? d.properties.point_count : 1,
+          ),
         getSize: (d) =>
-          getIconSize(d.properties.cluster ? (d.properties.point_count as number) : 1),
+          getIconSize(
+            'point_count' in d.properties && typeof d.properties.point_count === 'number'
+              ? d.properties.point_count : 1,
+          ),
       },
       this.getSubLayerProps({ id: 'icon' }),
     )

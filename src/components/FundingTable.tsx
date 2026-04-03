@@ -3,6 +3,7 @@ import { ChevronUp, ChevronDown } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { formatCurrency, formatNumber } from '@/lib/constants'
 import type { GeoLevel } from '@/lib/constants'
+import { typedKeys } from '@/lib/utils'
 
 import statesData from '@/data/table_states.json'
 import countiesData from '@/data/table_counties.json'
@@ -23,10 +24,10 @@ interface RegionRow {
 type SortKey = 'econ_impact' | 'raw_funding' | 'jobs' | 'pop_2024'
 
 const GEO_TABLE: Record<GeoLevel, { label: string; data: RegionRow[] }> = {
-  states: { label: 'States', data: statesData as RegionRow[] },
-  counties: { label: 'Counties', data: countiesData as RegionRow[] },
-  districts: { label: 'Districts', data: districtsData as RegionRow[] },
-  cities: { label: 'Cities', data: citiesData as RegionRow[] },
+  states: { label: 'States', data: statesData },
+  counties: { label: 'Counties', data: countiesData },
+  districts: { label: 'Districts', data: districtsData },
+  cities: { label: 'Cities', data: citiesData },
 }
 
 // --- Component ---
@@ -80,10 +81,10 @@ export default function FundingTable() {
 
         <Tabs
           value={geoLevel}
-          onValueChange={(v) => setGeoLevel(v as GeoLevel)}
+          onValueChange={(v: string) => setGeoLevel(v as GeoLevel)}
         >
           <TabsList className="mb-4">
-            {(Object.keys(GEO_TABLE) as GeoLevel[]).map((key) => (
+            {typedKeys(GEO_TABLE).map((key) => (
               <TabsTrigger key={key} value={key}>
                 {GEO_TABLE[key].label}
               </TabsTrigger>

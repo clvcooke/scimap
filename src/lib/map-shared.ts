@@ -103,8 +103,8 @@ export function buildTooltipHeader(
   props: TileProps,
   geoLevel: LossGeoLevel,
 ): { locationLine: string; politicianHtml: string } {
-  const state = (props.state as string) ?? ''
-  const county = props.county as string | undefined
+  const state = props.state != null ? String(props.state) : ''
+  const county = props.county != null ? String(props.county) : undefined
 
   let locationLine = state
   if (county) locationLine = `${county}, ${state}`
@@ -120,7 +120,7 @@ export function buildTooltipHeader(
     if (rep) html += `<div>Rep: ${formatPoliticianName(rep.name, rep.party)}</div>`
   }
   if ((geoLevel === 'districts' || geoLevel === 'states') && props.state_code) {
-    html += getSenatorsList(props.state_code as string)
+    html += getSenatorsList(String(props.state_code))
       .map((s) => `<div>Sen: ${formatPoliticianName(s.name, s.party)}</div>`)
       .join('')
   }

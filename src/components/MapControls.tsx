@@ -28,11 +28,12 @@ export default function MapControls({ setViewState }: { setViewState: SetViewSta
         onClick={() => {
           navigator.geolocation.getCurrentPosition(
             (pos) =>
-              setViewState({
+              setViewState((prev) => ({
+                ...prev,
                 longitude: pos.coords.longitude,
                 latitude: pos.coords.latitude,
                 zoom: 10,
-              }),
+              })),
           )
         }}
         className={`${btnBase} rounded-b-lg`}

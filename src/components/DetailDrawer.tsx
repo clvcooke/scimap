@@ -19,12 +19,12 @@ function DrawerBody({
   perCapita: boolean
 }) {
   const [metric, setMetric] = useState<Metric>('econ_impact')
-  const props = feature.properties as Record<string, number | string>
-  const population = (props.pop_2024 as number) ?? 0
+  const props = feature.properties
+  const population = props.pop_2024 ?? 0
 
   const rows = useMemo(() => {
     return INSTITUTES.map((inst) => {
-      let value = (props[`${inst.key}_${metric}`] as number) ?? 0
+      let value = props[`${inst.key}_${metric}`] ?? 0
       if (perCapita && population > 0) value = value / population
       return { ...inst, value }
     }).sort((a, b) => b.value - a.value)
@@ -32,7 +32,7 @@ function DrawerBody({
 
   const maxValue = rows[0]?.value ?? 1
 
-  let nihTotal = (props[`NIH_tot_${metric}`] as number) ?? 0
+  let nihTotal = props[`NIH_tot_${metric}`] ?? 0
   if (perCapita && population > 0) nihTotal = nihTotal / population
 
   return (
@@ -55,7 +55,7 @@ function DrawerBody({
       {/* Summary cards */}
       <div className="grid grid-cols-2 gap-2 border-b px-4 py-3 sm:grid-cols-3 sm:gap-3 sm:px-5 sm:py-4">
         {METRICS.map((m) => {
-          let val = (props[`NIH_tot_${m.key}`] as number) ?? 0
+          let val = props[`NIH_tot_${m.key}`] ?? 0
           if (perCapita && population > 0) val = val / population
           return (
             <div key={m.key} className="rounded-lg bg-gray-50 px-3 py-2">
@@ -70,7 +70,7 @@ function DrawerBody({
 
       {/* Metric tabs */}
       <div className="border-b px-5 py-3">
-        <Tabs value={metric} onValueChange={(val) => setMetric(val as Metric)}>
+        <Tabs value={metric} onValueChange={(val: string) => setMetric(val as Metric)}>
           <TabsList>
             {METRICS.map((m) => (
               <TabsTrigger key={m.key} value={m.key}>

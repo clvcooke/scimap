@@ -24,11 +24,11 @@ function parseFrontmatter(raw: string): { attrs: Attrs; body: string } {
 }
 
 /** Load a single page content file. */
-const pageFiles = import.meta.glob('/content/pages/*.md', {
+const pageFiles = import.meta.glob<string>('/content/pages/*.md', {
   query: '?raw',
   import: 'default',
   eager: true,
-}) as Record<string, string>
+})
 
 export interface PageContent {
   attrs: Attrs
@@ -52,11 +52,11 @@ export interface NewsItem {
   isOngoing: boolean
 }
 
-const newsFiles = import.meta.glob('/content/news/*.md', {
+const newsFiles = import.meta.glob<string>('/content/news/*.md', {
   query: '?raw',
   import: 'default',
   eager: true,
-}) as Record<string, string>
+})
 
 export function getNewsItems(): NewsItem[] {
   return Object.values(newsFiles)
@@ -86,11 +86,11 @@ export interface PressRelease {
   url: string
 }
 
-const pressFiles = import.meta.glob('/content/press-releases/*.md', {
+const pressFiles = import.meta.glob<string>('/content/press-releases/*.md', {
   query: '?raw',
   import: 'default',
   eager: true,
-}) as Record<string, string>
+})
 
 export function getPressReleases(): PressRelease[] {
   return Object.values(pressFiles)
@@ -114,11 +114,11 @@ export interface Article {
   blurb: string
 }
 
-const articleFiles = import.meta.glob('/content/articles/*.md', {
+const articleFiles = import.meta.glob<string>('/content/articles/*.md', {
   query: '?raw',
   import: 'default',
   eager: true,
-}) as Record<string, string>
+})
 
 export function getArticles(): Article[] {
   return Object.values(articleFiles)
@@ -135,11 +135,11 @@ export function getArticles(): Article[] {
 }
 
 /** Load all team members from content/team/*.md (uses Vite's import.meta.glob). */
-const teamFiles = import.meta.glob('/content/team/*.md', {
+const teamFiles = import.meta.glob<string>('/content/team/*.md', {
   query: '?raw',
   import: 'default',
   eager: true,
-}) as Record<string, string>
+})
 
 export function getTeamMembers(): TeamMember[] {
   return Object.values(teamFiles)

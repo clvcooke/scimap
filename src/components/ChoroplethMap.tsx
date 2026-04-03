@@ -1,8 +1,10 @@
 import { useState, useRef, useMemo, useCallback, type ReactNode } from 'react'
 import { Map } from 'react-map-gl/maplibre'
 import DeckGL from '@deck.gl/react'
-import type { Layer } from '@deck.gl/core'
+import type { Layer, PickingInfo } from '@deck.gl/core'
+import type { MjolnirGestureEvent } from 'mjolnir.js'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { typedKeys } from '@/lib/utils'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { INITIAL_VIEW_STATE } from '@/lib/map-config'
 import {
@@ -30,8 +32,7 @@ interface ChoroplethMapProps {
   /** Extra deck.gl layers to render on top (e.g. cluster layer). */
   extraLayers?: Layer[]
   /** Click handler forwarded to DeckGL. */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onMapClick?: (event: any) => void
+  onMapClick?: ((info: PickingInfo, event: MjolnirGestureEvent) => void) | null
   /** Whether to disable map controller (e.g. when a modal is open). */
   controllerDisabled?: boolean
   /** Slot for overlay content (modals, etc.) rendered inside the map container. */
@@ -98,9 +99,9 @@ export default function ChoroplethMap({
     <div className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-4">
       {/* Geo-level tabs */}
       <div className="absolute left-2 top-2 z-10 flex flex-col gap-2 rounded-lg bg-white/90 p-2 shadow-md backdrop-blur-sm md:left-4 md:top-4 md:gap-3 md:p-3">
-        <Tabs value={geoLevel} onValueChange={(v) => setGeoLevel(v as LossGeoLevel)}>
+        <Tabs value={geoLevel} onValueChange={(v: string) => setGeoLevel(v as LossGeoLevel)}>
           <TabsList>
-            {(Object.keys(geoLevels) as LossGeoLevel[]).map((key) => (
+            {typedKeys(geoLevels).map((key) => (
               <TabsTrigger key={key} value={key} className="text-xs md:text-sm">
                 {geoLevels[key].label}
               </TabsTrigger>
@@ -111,7 +112,9 @@ export default function ChoroplethMap({
 
       <DeckGL
         viewState={viewState}
-        onViewStateChange={({ viewState: vs }) => setViewState(vs as typeof INITIAL_VIEW_STATE)}
+        onViewStateChange={({ viewState: vs }) => {
+          if ('longitude' in vs) setViewState((prev) => ({ ...prev, ...vs }))
+        }}
         controller={!controllerDisabled}
         layers={[dataLayer, outlineLayer, ...extraLayers]}
         useDevicePixels={false}
@@ -124,8 +127,7 @@ export default function ChoroplethMap({
 
       {/* Labels-only map overlay so roads/cities render above shaded layers */}
       <Map
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        viewState={viewState as any}
+        {...viewState}
         mapStyle="https://basemaps.cartocdn.com/gl/positron-labels-gl-style/style.json"
         interactive={false}
         style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}

@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { formatCurrency } from '@/lib/constants'
 import type { GeoLevel } from '@/lib/constants'
+import { typedKeys } from '@/lib/utils'
 import {
   GEO_LEVELS,
   INITIAL_VIEW_STATE,
@@ -113,9 +114,9 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
     <div className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-4">
       {/* Control panel */}
       <div className="absolute left-2 top-2 z-10 flex flex-col gap-2 rounded-lg bg-white/90 p-2 shadow-md backdrop-blur-sm md:left-4 md:top-4 md:gap-3 md:p-3">
-        <Tabs value={geoLevel} onValueChange={(v) => setGeoLevel(v as GeoLevel)}>
+        <Tabs value={geoLevel} onValueChange={(v: string) => setGeoLevel(v as GeoLevel)}>
           <TabsList>
-            {(Object.keys(GEO_LEVELS) as GeoLevel[]).map((key) => (
+            {typedKeys(GEO_LEVELS).map((key) => (
               <TabsTrigger key={key} value={key} className="text-xs md:text-sm">
                 {GEO_LEVELS[key].label}
               </TabsTrigger>

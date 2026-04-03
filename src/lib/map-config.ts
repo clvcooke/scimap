@@ -29,6 +29,9 @@ export const INITIAL_VIEW_STATE = {
   longitude: -98.5795,
   latitude: 39.8283,
   zoom: 3.5,
+  bearing: 0,
+  pitch: 0,
+  padding: { top: 0, bottom: 0, left: 0, right: 0 },
 }
 
 export const GEO_LEVELS: Record<GeoLevel, GeoConfig> = {

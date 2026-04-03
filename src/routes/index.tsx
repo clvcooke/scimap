@@ -29,7 +29,8 @@ function Index() {
       const res = await fetch(
         `https://nominatim.openstreetmap.org/search?postalcode=${trimmed}&country=US&format=json&limit=1`,
       )
-      const data = await res.json() as { lat: string; lon: string }[]
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const data: { lat: string; lon: string }[] = await res.json()
       if (!data.length) {
         setZipError('Could not find that ZIP code')
         return
