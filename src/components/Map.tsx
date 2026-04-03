@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo, useCallback } from 'react'
 import { Map } from 'react-map-gl/maplibre'
 import DeckGL from '@deck.gl/react'
+import { ScatterplotLayer } from '@deck.gl/layers'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
@@ -35,6 +36,9 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
       ? { latitude: initialLat, longitude: initialLng, zoom: initialZoom ?? 10 }
       : {}),
   }))
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(
+    initialLat != null && initialLng != null ? [initialLng, initialLat] : null,
+  )
   const tooltipRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
 
@@ -48,6 +52,29 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
     () => createStateOutlineLayer(GEO_LEVELS.states.tileUrl),
     [],
   )
+  const locationLayer = useMemo(
+    () =>
+      userLocation
+        ? new ScatterplotLayer({
+            id: 'user-location',
+            data: [{ position: userLocation }],
+            getPosition: (d: { position: [number, number] }) => d.position,
+            getFillColor: [66, 133, 244, 180],
+            getLineColor: [255, 255, 255, 255],
+            getRadius: 8,
+            radiusMinPixels: 8,
+            radiusMaxPixels: 12,
+            stroked: true,
+            lineWidthMinPixels: 2,
+            pickable: false,
+          })
+        : null,
+    [userLocation],
+  )
+
+  const handleGeolocate = useCallback((lat: number, lng: number) => {
+    setUserLocation([lng, lat])
+  }, [])
 
   const onHover = useCallback(
     (info: { x: number; y: number; object?: { properties?: TileProperties } }) => {
@@ -147,7 +174,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
         viewState={viewState}
         onViewStateChange={({ viewState: vs }) => setViewState(vs as typeof INITIAL_VIEW_STATE)}
         controller
-        layers={[mapLayer, outlineLayer]}
+        layers={[mapLayer, outlineLayer, locationLayer].filter(Boolean)}
         useDevicePixels={false}
         getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'grab')}
         onHover={onHover}
@@ -156,7 +183,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
         <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json" />
       </DeckGL>
 
-      <MapControls setViewState={setViewState} />
+      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} />
 
       {/* Hover tooltip (desktop only, ref-driven) */}
       {!isMobile && (

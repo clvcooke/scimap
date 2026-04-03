@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getPage } from '@/lib/content'
 
@@ -15,6 +16,7 @@ function Index() {
   const whoItems: { name: string; desc: string }[] = a.who_items ?? []
   const [zip, setZip] = useState('')
   const [zipError, setZipError] = useState('')
+  const [zipLoading, setZipLoading] = useState(false)
   const navigate = useNavigate()
 
   const handleZipSearch = async () => {
@@ -24,6 +26,7 @@ function Index() {
       return
     }
     setZipError('')
+    setZipLoading(true)
 
     try {
       const res = await fetch(
@@ -42,6 +45,8 @@ function Index() {
       })
     } catch {
       setZipError('Geocoding failed — please try again')
+    } finally {
+      setZipLoading(false)
     }
   }
 
@@ -161,9 +166,14 @@ function Index() {
                 />
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-2 whitespace-nowrap rounded-r-md bg-white px-6 py-4 text-lg font-bold text-brand-blue transition-colors hover:bg-gray-100"
+                  disabled={zipLoading}
+                  className="flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-r-md bg-white px-6 py-4 text-lg font-bold text-brand-blue transition-colors hover:bg-gray-100 disabled:cursor-wait disabled:opacity-70"
                 >
-                  Search <span aria-hidden="true">&rarr;</span>
+                  {zipLoading ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : (
+                    <>Search <span aria-hidden="true">&rarr;</span></>
+                  )}
                 </button>
               </div>
               {zipError && (

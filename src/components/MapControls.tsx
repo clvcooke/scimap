@@ -7,7 +7,13 @@ type SetViewState = React.Dispatch<React.SetStateAction<ViewState>>
 const btnBase =
   'flex size-8 items-center justify-center bg-white shadow-md transition-colors hover:bg-gray-100 active:bg-gray-200'
 
-export default function MapControls({ setViewState }: { setViewState: SetViewState }) {
+export default function MapControls({
+  setViewState,
+  onGeolocate,
+}: {
+  setViewState: SetViewState
+  onGeolocate?: (lat: number, lng: number) => void
+}) {
   return (
     <div className="absolute bottom-2 left-2 z-10 flex flex-col gap-1 md:bottom-4 md:left-4">
       <button
@@ -26,15 +32,16 @@ export default function MapControls({ setViewState }: { setViewState: SetViewSta
       </button>
       <button
         onClick={() => {
-          navigator.geolocation.getCurrentPosition(
-            (pos) =>
-              setViewState((prev) => ({
-                ...prev,
-                longitude: pos.coords.longitude,
-                latitude: pos.coords.latitude,
-                zoom: 10,
-              })),
-          )
+          navigator.geolocation.getCurrentPosition((pos) => {
+            const { latitude, longitude } = pos.coords
+            setViewState((prev) => ({
+              ...prev,
+              longitude,
+              latitude,
+              zoom: 10,
+            }))
+            onGeolocate?.(latitude, longitude)
+          })
         }}
         className={`${btnBase} rounded-b-lg`}
         aria-label="Zoom to my location"

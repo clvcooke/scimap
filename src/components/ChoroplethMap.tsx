@@ -2,6 +2,7 @@ import { useState, useRef, useMemo, useCallback, type ReactNode } from 'react'
 import { Map } from 'react-map-gl/maplibre'
 import DeckGL from '@deck.gl/react'
 import type { Layer, PickingInfo } from '@deck.gl/core'
+import { ScatterplotLayer } from '@deck.gl/layers'
 import type { MjolnirGestureEvent } from 'mjolnir.js'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { typedKeys } from '@/lib/utils'
@@ -66,6 +67,9 @@ export default function ChoroplethMap({
       ? { latitude: initialLat, longitude: initialLng, zoom: initialZoom ?? 10 }
       : {}),
   }))
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(
+    initialLat != null && initialLng != null ? [initialLng, initialLat] : null,
+  )
   const tooltipRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
 
@@ -76,6 +80,29 @@ export default function ChoroplethMap({
     [config, colorScale, colorProperty, colorLUT, layerId],
   )
   const outlineLayer = useMemo(() => createStateOutlineLayer(), [])
+  const locationLayer = useMemo(
+    () =>
+      userLocation
+        ? new ScatterplotLayer({
+            id: 'user-location',
+            data: [{ position: userLocation }],
+            getPosition: (d: { position: [number, number] }) => d.position,
+            getFillColor: [66, 133, 244, 180],
+            getLineColor: [255, 255, 255, 255],
+            getRadius: 8,
+            radiusMinPixels: 8,
+            radiusMaxPixels: 12,
+            stroked: true,
+            lineWidthMinPixels: 2,
+            pickable: false,
+          })
+        : null,
+    [userLocation],
+  )
+
+  const handleGeolocate = useCallback((lat: number, lng: number) => {
+    setUserLocation([lng, lat])
+  }, [])
 
   const onHover = useCallback(
     (info: { x: number; y: number; object?: { properties?: TileProps } }) => {
@@ -116,7 +143,7 @@ export default function ChoroplethMap({
           if ('longitude' in vs) setViewState((prev) => ({ ...prev, ...vs }))
         }}
         controller={!controllerDisabled}
-        layers={[dataLayer, outlineLayer, ...extraLayers]}
+        layers={[dataLayer, outlineLayer, ...extraLayers, locationLayer].filter(Boolean)}
         useDevicePixels={false}
         getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'grab')}
         onHover={onHover}
@@ -133,7 +160,7 @@ export default function ChoroplethMap({
         style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
       />
 
-      <MapControls setViewState={setViewState} />
+      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} />
 
       {/* Color scale legend */}
       <div className="pointer-events-none absolute bottom-12 right-2 z-10 md:bottom-16 md:right-4">
