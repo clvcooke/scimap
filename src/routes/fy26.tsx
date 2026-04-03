@@ -1,15 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router'
 import FY26Map from '../components/FY26Map'
+import { validateMapSearch, useScrollToMap } from '@/lib/map-search-params'
 
 export const Route = createFileRoute('/fy26')({
   component: FY26Route,
+  validateSearch: validateMapSearch,
 })
 
 function FY26Route() {
+  const { lat, lng, zoom } = Route.useSearch()
+  const mapRef = useScrollToMap(lat, lng)
+
   return (
     <>
-      <div className="relative w-full min-h-[calc(100vh-140px)]">
-        <FY26Map />
+      <div ref={mapRef} className="relative w-full min-h-[calc(100vh-140px)] scroll-mt-16">
+        <FY26Map initialLat={lat} initialLng={lng} initialZoom={zoom} />
       </div>
 
       <section className="w-full bg-gray-50 px-3 py-6 md:px-6 md:py-10">

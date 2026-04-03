@@ -27,7 +27,11 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
   )
 }
 
-export default function FY26Map() {
+export default function FY26Map({ initialLat, initialLng, initialZoom }: {
+  initialLat?: number
+  initialLng?: number
+  initialZoom?: number
+}) {
   return (
     <ChoroplethMap
       geoLevels={FY26_GEO_LEVELS}
@@ -37,6 +41,9 @@ export default function FY26Map() {
       layerId="fy26-mvt"
       useMagma
       renderTooltip={renderTooltip}
+      initialLat={initialLat}
+      initialLng={initialLng}
+      initialZoom={initialZoom}
     />
   )
 }

@@ -36,6 +36,10 @@ interface ChoroplethMapProps {
   controllerDisabled?: boolean
   /** Slot for overlay content (modals, etc.) rendered inside the map container. */
   children?: ReactNode
+  /** Optional initial coordinates to center the map on (e.g. from zip code search). */
+  initialLat?: number
+  initialLng?: number
+  initialZoom?: number
 }
 
 export default function ChoroplethMap({
@@ -50,9 +54,17 @@ export default function ChoroplethMap({
   onMapClick,
   controllerDisabled = false,
   children,
+  initialLat,
+  initialLng,
+  initialZoom,
 }: ChoroplethMapProps) {
   const [geoLevel, setGeoLevel] = useState<LossGeoLevel>(defaultLevel)
-  const [viewState, setViewState] = useState(INITIAL_VIEW_STATE)
+  const [viewState, setViewState] = useState(() => ({
+    ...INITIAL_VIEW_STATE,
+    ...(initialLat != null && initialLng != null
+      ? { latitude: initialLat, longitude: initialLng, zoom: initialZoom ?? 10 }
+      : {}),
+  }))
   const tooltipRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
 

@@ -1,16 +1,21 @@
 import { createFileRoute } from '@tanstack/react-router'
 import SCIMap from '../components/Map'
 import FundingTable from '../components/FundingTable'
+import { validateMapSearch, useScrollToMap } from '@/lib/map-search-params'
 
 export const Route = createFileRoute('/map')({
   component: MapRoute,
+  validateSearch: validateMapSearch,
 })
 
 function MapRoute() {
+  const { lat, lng, zoom } = Route.useSearch()
+  const mapRef = useScrollToMap(lat, lng)
+
   return (
     <>
-      <div className="relative w-full min-h-[calc(100vh-140px)]">
-        <SCIMap />
+      <div ref={mapRef} className="relative w-full min-h-[calc(100vh-140px)] scroll-mt-16">
+        <SCIMap initialLat={lat} initialLng={lng} initialZoom={zoom} />
       </div>
       <FundingTable />
 

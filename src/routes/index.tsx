@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { useState } from 'react'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { getPage } from '@/lib/content'
 
@@ -12,6 +13,36 @@ function Index() {
   const a = PAGE.attrs
   const metrics: { value: string; label: string }[] = a.metrics ?? []
   const whoItems: { name: string; desc: string }[] = a.who_items ?? []
+  const [zip, setZip] = useState('')
+  const [zipError, setZipError] = useState('')
+  const navigate = useNavigate()
+
+  const handleZipSearch = async () => {
+    const trimmed = zip.trim()
+    if (!/^\d{5}$/.test(trimmed)) {
+      setZipError('Please enter a valid 5-digit ZIP code')
+      return
+    }
+    setZipError('')
+
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?postalcode=${trimmed}&country=US&format=json&limit=1`,
+      )
+      const data = await res.json() as { lat: string; lon: string }[]
+      if (!data.length) {
+        setZipError('Could not find that ZIP code')
+        return
+      }
+      const { lat, lon } = data[0]
+      void navigate({
+        to: '/map',
+        search: { lat: parseFloat(lat), lng: parseFloat(lon), zoom: 8 },
+      })
+    } catch {
+      setZipError('Geocoding failed — please try again')
+    }
+  }
 
   return (
     <div className="flex w-full flex-col">
@@ -32,7 +63,7 @@ function Index() {
             <div className="flex flex-col gap-4 pt-4 sm:flex-row">
               <Link
                 to="/map"
-                className="inline-flex h-auto shrink-0 items-center justify-center rounded-md bg-brand-orange px-6 py-3 text-base font-bold text-brand-blue transition-all hover:bg-brand-orange-hover"
+                className="inline-flex h-auto shrink-0 items-center justify-center rounded-md bg-white px-6 py-3 text-base font-bold text-brand-blue transition-all hover:bg-gray-100"
               >
                 {a.hero_cta_primary}
               </Link>
@@ -104,16 +135,40 @@ function Index() {
             <p className="text-lg leading-relaxed text-gray-200">
               {a.local_description}
             </p>
-            <div className="flex w-full max-w-sm pt-4">
-              <input
-                type="text"
-                placeholder="ZIP Code"
-                className="w-full rounded-l-md border-0 px-4 py-4 text-lg font-medium text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-orange"
-              />
-              <button className="flex items-center justify-center gap-2 whitespace-nowrap rounded-r-md bg-brand-orange px-6 py-4 text-lg font-bold text-brand-blue transition-colors hover:bg-brand-orange-hover">
-                Search <span aria-hidden="true">&rarr;</span>
-              </button>
-            </div>
+            <form
+              className="flex w-full max-w-sm flex-col pt-4"
+              onSubmit={(e) => {
+                e.preventDefault()
+                void handleZipSearch()
+              }}
+            >
+              <div className="flex">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="postal-code"
+                  name="postal-code"
+                  maxLength={5}
+                  placeholder="ZIP Code"
+                  value={zip}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '').slice(0, 5)
+                    setZip(val)
+                    setZipError('')
+                  }}
+                  className="w-full rounded-l-md border-0 px-4 py-4 text-lg font-medium text-white ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-sky"
+                />
+                <button
+                  type="submit"
+                  className="flex items-center justify-center gap-2 whitespace-nowrap rounded-r-md bg-white px-6 py-4 text-lg font-bold text-brand-blue transition-colors hover:bg-gray-100"
+                >
+                  Search <span aria-hidden="true">&rarr;</span>
+                </button>
+              </div>
+              {zipError && (
+                <p className="mt-2 text-sm text-red-300">{zipError}</p>
+              )}
+            </form>
           </div>
 
           {/* Right Column (Visual) - 60% */}
@@ -164,7 +219,7 @@ function Index() {
             <h3 className="mb-8 text-2xl font-bold text-brand-blue">
               {a.who_heading}
             </h3>
-            <ul className="space-y-6">
+            <ul className="space-y-4">
               {whoItems.map((item) => (
                 <li key={item.name} className="flex items-start">
                   <span className="mr-4 text-2xl leading-none text-brand-orange">

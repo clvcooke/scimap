@@ -28,7 +28,11 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
   )
 }
 
-export default function GrantsMap() {
+export default function GrantsMap({ initialLat, initialLng, initialZoom }: {
+  initialLat?: number | undefined
+  initialLng?: number | undefined
+  initialZoom?: number | undefined
+}) {
   const [overlayGrants, setOverlayGrants] = useState<GrantTermination[]>([])
   const [showOverlay, setShowOverlay] = useState(false)
 
@@ -71,6 +75,9 @@ export default function GrantsMap() {
       colorLUT={LUT_OR_RD}
       layerId="grants-mvt"
       renderTooltip={renderTooltip}
+      initialLat={initialLat}
+      initialLng={initialLng}
+      initialZoom={initialZoom}
       extraLayers={[clusterLayer]}
       onMapClick={onClick}
       controllerDisabled={showOverlay}
