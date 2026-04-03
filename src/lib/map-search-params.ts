@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
 
 export interface MapSearchParams {
-  lat?: number
-  lng?: number
-  zoom?: number
+  lat?: number | undefined
+  lng?: number | undefined
+  zoom?: number | undefined
 }
 
 export function validateMapSearch(search: Record<string, unknown>): MapSearchParams {

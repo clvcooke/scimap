@@ -28,9 +28,9 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
 }
 
 export default function FY26Map({ initialLat, initialLng, initialZoom }: {
-  initialLat?: number
-  initialLng?: number
-  initialZoom?: number
+  initialLat?: number | undefined
+  initialLng?: number | undefined
+  initialZoom?: number | undefined
 }) {
   return (
     <ChoroplethMap

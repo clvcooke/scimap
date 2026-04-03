@@ -37,9 +37,9 @@ interface ChoroplethMapProps {
   /** Slot for overlay content (modals, etc.) rendered inside the map container. */
   children?: ReactNode
   /** Optional initial coordinates to center the map on (e.g. from zip code search). */
-  initialLat?: number
-  initialLng?: number
-  initialZoom?: number
+  initialLat?: number | undefined
+  initialLng?: number | undefined
+  initialZoom?: number | undefined
 }
 
 export default function ChoroplethMap({
@@ -121,6 +121,15 @@ export default function ChoroplethMap({
       >
         <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json" />
       </DeckGL>
+
+      {/* Labels-only map overlay so roads/cities render above shaded layers */}
+      <Map
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        viewState={viewState as any}
+        mapStyle="https://basemaps.cartocdn.com/gl/positron-labels-gl-style/style.json"
+        interactive={false}
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+      />
 
       <MapControls setViewState={setViewState} />
 

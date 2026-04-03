@@ -20,9 +20,9 @@ import DetailDrawer from './DetailDrawer'
 import MobileInfoCard from './MobileInfoCard'
 
 export default function SCIMap({ initialLat, initialLng, initialZoom }: {
-  initialLat?: number
-  initialLng?: number
-  initialZoom?: number
+  initialLat?: number | undefined
+  initialLng?: number | undefined
+  initialZoom?: number | undefined
 }) {
   const [geoLevel, setGeoLevel] = useState<GeoLevel>('states')
   const [perCapita, setPerCapita] = useState(false)
