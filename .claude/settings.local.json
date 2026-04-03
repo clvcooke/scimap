@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsr:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vite:*)",
+      "Bash(grep -E \"\\\\.\\(tsx?|jsx?\\)$\")",
+      "Bash(find /c/Users/clvco/Documents/code/scimap/scimap-rewrite/src -type f \\\\\\(-name *.tsx -o -name *.ts \\\\\\))",
+      "Bash(find /c/Users/clvco/Documents/code/scimap/scimap-rewrite/src -type f -name *.tsx -o -name *.ts)",
+      "Bash(grep -E \"^d|\\\\.json$|\\\\.tsx$|\\\\.ts$\")",
+      "Bash(ls -la /c/Users/clvco/Documents/code/scimap/scimap-rewrite/src/components/*.tsx)",
+      "Bash(npx @tanstack/router-cli generate)",
+      "Bash(find /c/Users/clvco/Documents/code/scimap/old/src -type f -name *.tsx -o -name *.ts)",
+      "Bash(grep -E \"^-.*\\\\.\\(toml|config|json\\)$\")"
+    ]
+  }
+}
