@@ -15,7 +15,7 @@ function MapsDropdown() {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const { pathname } = useLocation()
-  const isMapActive = ['/map', '/grants', '/fy26', '/idc'].some((p) => pathname.startsWith(p))
+  const isMapActive = ['/map', '/grants', '/fy26', '/fy27', '/idc'].some((p) => pathname.startsWith(p))
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -54,7 +54,14 @@ function MapsDropdown() {
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => setOpen(false)}
           >
-            Award Funding Changes
+            FY26 Budget Impact
+          </Link>
+          <Link
+            to="/fy27"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={() => setOpen(false)}
+          >
+            FY27 Budget Impact
           </Link>
         </div>
       )}
@@ -150,7 +157,15 @@ function Header() {
             activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
             onClick={() => setMenuOpen(false)}
           >
-            Award Funding Changes
+            FY26 Budget Impact
+          </Link>
+          <Link
+            to="/fy27"
+            className="pl-3 text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            FY27 Budget Impact
           </Link>
 
           <Link

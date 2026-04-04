@@ -15,7 +15,10 @@
       "Bash(find C:\\\\Users\\\\clvco\\\\Documents\\\\code\\\\scimap\\\\src:*)",
       "Bash(npx eslint:*)",
       "Bash(ls:*)",
-      "Bash(find /c/Users/clvco/Documents/code/scimap -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" -o -name \"*.js\" \\\\\\) -exec grep -l \"reduce\\\\|sum\\\\|total\" {} \\\\;)"
+      "Bash(find /c/Users/clvco/Documents/code/scimap -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" -o -name \"*.js\" \\\\\\) -exec grep -l \"reduce\\\\|sum\\\\|total\" {} \\\\;)",
+      "Bash(wc:*)",
+      "Bash(curl -sI \"https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data/Cities_Counties.zip\")",
+      "Bash(curl -sI \"https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data/merged_data_states_CLIP.geojson\")"
     ]
   }
 }

@@ -42,6 +42,14 @@ export const FY26_SLOTS: InfoSlot[] = [
   { label: 'NIH Funding at Stake', value: formatCurrency(baseline.funding) },
 ]
 
+// ── FY27 Budget (proposed NIH + NSF cuts) ────────────────────────────
+
+export const FY27_SLOTS: InfoSlot[] = [
+  { label: 'Agencies Affected', value: 'NIH + NSF' },
+  { label: 'NIH Funding at Stake', value: formatCurrency(baseline.funding) },
+  { label: 'Jobs Supported', value: formatNumber(baseline.jobs) },
+]
+
 // ── IDC (indirect cost cap policy) ────────────────────────────────────
 
 export const IDC_SLOTS: InfoSlot[] = [
