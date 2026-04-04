@@ -18,6 +18,7 @@ import {
   type TileProps,
 } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { exportMapAsPng } from '@/lib/export-map'
 import MapControls from './MapControls'
 import ColorScale from './ColorScale'
 
@@ -70,6 +71,7 @@ export default function ChoroplethMap({
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     initialLat != null && initialLng != null ? [initialLng, initialLat] : null,
   )
+  const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
 
@@ -104,6 +106,10 @@ export default function ChoroplethMap({
     setUserLocation([lng, lat])
   }, [])
 
+  const handleExport = useCallback(() => {
+    if (containerRef.current) exportMapAsPng(containerRef.current)
+  }, [])
+
   const onHover = useCallback(
     (info: { x: number; y: number; object?: { properties?: TileProps } }) => {
       if (isMobile) return
@@ -123,7 +129,7 @@ export default function ChoroplethMap({
   )
 
   return (
-    <div className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-4">
+    <div ref={containerRef} className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-4">
       {/* Geo-level tabs */}
       <div className="absolute left-2 top-2 z-10 flex flex-col gap-2 rounded-lg bg-white/90 p-2 shadow-md backdrop-blur-sm md:left-4 md:top-4 md:gap-3 md:p-3">
         <Tabs value={geoLevel} onValueChange={(v: string) => setGeoLevel(v as LossGeoLevel)}>
@@ -145,11 +151,15 @@ export default function ChoroplethMap({
         controller={!controllerDisabled}
         layers={[dataLayer, outlineLayer, ...extraLayers, locationLayer].filter(Boolean)}
         useDevicePixels={false}
+        glOptions={{ preserveDrawingBuffer: true }}
         getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'grab')}
         onHover={onHover}
         onClick={onMapClick ?? null}
       >
-        <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json" />
+        <Map
+          mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"
+          preserveDrawingBuffer
+        />
       </DeckGL>
 
       {/* Labels-only map overlay so roads/cities render above shaded layers */}
@@ -157,10 +167,11 @@ export default function ChoroplethMap({
         {...viewState}
         mapStyle="https://basemaps.cartocdn.com/gl/positron-labels-gl-style/style.json"
         interactive={false}
+        preserveDrawingBuffer
         style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
       />
 
-      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} />
+      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} onExport={handleExport} />
 
       {/* Color scale legend */}
       <div className="pointer-events-none absolute bottom-12 right-2 z-10 md:bottom-16 md:right-4">

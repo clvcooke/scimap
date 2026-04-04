@@ -17,6 +17,7 @@ import {
 import type { TileProperties, SelectedFeature } from '@/lib/map-config'
 import { createStateOutlineLayer } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { exportMapAsPng } from '@/lib/export-map'
 import MapControls from './MapControls'
 import DetailDrawer from './DetailDrawer'
 import MobileInfoCard from './MobileInfoCard'
@@ -39,6 +40,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     initialLat != null && initialLng != null ? [initialLng, initialLat] : null,
   )
+  const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
 
@@ -74,6 +76,10 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
 
   const handleGeolocate = useCallback((lat: number, lng: number) => {
     setUserLocation([lng, lat])
+  }, [])
+
+  const handleExport = useCallback(() => {
+    if (containerRef.current) exportMapAsPng(containerRef.current)
   }, [])
 
   const onHover = useCallback(
@@ -138,7 +144,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
   )
 
   return (
-    <div className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-4">
+    <div ref={containerRef} className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-4">
       {/* Control panel */}
       <div className="absolute left-2 top-2 z-10 flex flex-col gap-2 rounded-lg bg-white/90 p-2 shadow-md backdrop-blur-sm md:left-4 md:top-4 md:gap-3 md:p-3">
         <Tabs value={geoLevel} onValueChange={(v: string) => setGeoLevel(v as GeoLevel)}>
@@ -176,14 +182,18 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
         controller
         layers={[mapLayer, outlineLayer, locationLayer].filter(Boolean)}
         useDevicePixels={false}
+        glOptions={{ preserveDrawingBuffer: true }}
         getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'grab')}
         onHover={onHover}
         onClick={onClick}
       >
-        <Map mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json" />
+        <Map
+          mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"
+          preserveDrawingBuffer
+        />
       </DeckGL>
 
-      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} />
+      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} onExport={handleExport} />
 
       {/* Hover tooltip (desktop only, ref-driven) */}
       {!isMobile && (

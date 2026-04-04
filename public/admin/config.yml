@@ -1,7 +1,8 @@
 backend:
-  name: github
-  repo: clvcooke/scimap
+  name: git-gateway
   branch: cms
+  identity_url: https://YOUR-NETLIFY-SITE.netlify.app/.netlify/identity
+  gateway_url: https://YOUR-NETLIFY-SITE.netlify.app/.netlify/git
 
 media_folder: scimap-rewrite/public/images/team
 public_folder: /images/team
