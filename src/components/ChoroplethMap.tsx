@@ -18,7 +18,7 @@ import {
   type TileProps,
 } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { exportMapAsPng } from '@/lib/export-map'
+import { exportMapCard, currentDateLabel, type InfoSlot } from '@/lib/export-map'
 import MapControls from './MapControls'
 import ColorScale from './ColorScale'
 
@@ -43,6 +43,12 @@ interface ChoroplethMapProps {
   initialLat?: number | undefined
   initialLng?: number | undefined
   initialZoom?: number | undefined
+  /** Card export branding — if provided, the download button generates a branded card. */
+  exportTitle?: string
+  exportSubtitle?: string
+  exportFilename?: string
+  /** Headline stat figures for the export card footer. */
+  exportExtraSlots?: InfoSlot[]
 }
 
 export default function ChoroplethMap({
@@ -60,6 +66,10 @@ export default function ChoroplethMap({
   initialLat,
   initialLng,
   initialZoom,
+  exportTitle,
+  exportSubtitle,
+  exportFilename,
+  exportExtraSlots = [],
 }: ChoroplethMapProps) {
   const [geoLevel, setGeoLevel] = useState<LossGeoLevel>(defaultLevel)
   const [viewState, setViewState] = useState(() => ({
@@ -107,8 +117,16 @@ export default function ChoroplethMap({
   }, [])
 
   const handleExport = useCallback(() => {
-    if (containerRef.current) exportMapAsPng(containerRef.current)
-  }, [])
+    if (!containerRef.current || !exportTitle) return
+    exportMapCard({
+      container: containerRef.current,
+      title: exportTitle,
+      subtitle: exportSubtitle ?? '',
+      stats: exportExtraSlots,
+      meta: `${config.label}  ·  ${currentDateLabel()}`,
+      filename: exportFilename,
+    }).then(r => console.log('Exported:', r), e => console.error('Export failed:', e))
+  }, [config.label, exportTitle, exportSubtitle, exportFilename, exportExtraSlots])
 
   const onHover = useCallback(
     (info: { x: number; y: number; object?: { properties?: TileProps } }) => {
@@ -171,7 +189,7 @@ export default function ChoroplethMap({
         style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
       />
 
-      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} onExport={handleExport} />
+      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} onExport={exportTitle ? handleExport : undefined} />
 
       {/* Color scale legend */}
       <div className="pointer-events-none absolute bottom-12 right-2 z-10 md:bottom-16 md:right-4">

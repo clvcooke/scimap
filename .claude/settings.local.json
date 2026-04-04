@@ -14,7 +14,8 @@
       "Bash(grep -E \"^-.*\\\\.\\(toml|config|json\\)$\")",
       "Bash(find C:\\\\Users\\\\clvco\\\\Documents\\\\code\\\\scimap\\\\src:*)",
       "Bash(npx eslint:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(find /c/Users/clvco/Documents/code/scimap -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" -o -name \"*.js\" \\\\\\) -exec grep -l \"reduce\\\\|sum\\\\|total\" {} \\\\;)"
     ]
   }
 }

@@ -17,7 +17,8 @@ import {
 import type { TileProperties, SelectedFeature } from '@/lib/map-config'
 import { createStateOutlineLayer } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { exportMapAsPng } from '@/lib/export-map'
+import { exportMapCard, currentDateLabel } from '@/lib/export-map'
+import { BASELINE_SLOTS } from '@/lib/card-stats'
 import MapControls from './MapControls'
 import DetailDrawer from './DetailDrawer'
 import MobileInfoCard from './MobileInfoCard'
@@ -80,8 +81,16 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
   }, [])
 
   const handleExport = useCallback(() => {
-    if (containerRef.current) exportMapAsPng(containerRef.current)
-  }, [])
+    if (!containerRef.current) return
+    void exportMapCard({
+      container: containerRef.current,
+      title: 'NIH Economic Impact',
+      subtitle: 'Baseline Federal Research Funding Across the U.S.',
+      stats: BASELINE_SLOTS,
+      meta: `${config.label}  ·  ${perCapita ? 'Per Capita' : 'Total'}  ·  ${currentDateLabel()}`,
+      filename: 'scimap-baseline.png',
+    })
+  }, [config.label, perCapita])
 
   const onHover = useCallback(
     (info: { x: number; y: number; object?: { properties?: TileProperties } }) => {

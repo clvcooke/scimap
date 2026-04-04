@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react'
 import type { PickingInfo, Position } from '@deck.gl/core'
 import { formatCurrency } from '@/lib/constants'
 import { GRANTS_GEO_LEVELS, GRANTS_COLOR_PROPERTY } from '@/lib/grants-map-config'
+import { GRANTS_SLOTS } from '@/lib/card-stats'
 import {
   LUT_OR_RD,
   buildTooltipHeader,
@@ -83,6 +84,10 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom }: {
       extraLayers={[clusterLayer]}
       onMapClick={onClick}
       controllerDisabled={showOverlay}
+      exportTitle="Grant Disruptions"
+      exportSubtitle="Terminated & At-Risk Federal Research Grants"
+      exportFilename="scimap-grant-disruptions.png"
+      exportExtraSlots={GRANTS_SLOTS}
     >
       <GrantsOverlay
         grants={overlayGrants}
