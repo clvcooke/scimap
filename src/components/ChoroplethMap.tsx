@@ -124,7 +124,7 @@ export default function ChoroplethMap({
       subtitle: exportSubtitle ?? '',
       stats: exportExtraSlots,
       meta: `${config.label}  ·  ${currentDateLabel()}`,
-      filename: exportFilename,
+      ...(exportFilename != null && { filename: exportFilename }),
     }).then(r => console.log('Exported:', r), e => console.error('Export failed:', e))
   }, [config.label, exportTitle, exportSubtitle, exportFilename, exportExtraSlots])
 
@@ -189,7 +189,7 @@ export default function ChoroplethMap({
         style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
       />
 
-      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} onExport={exportTitle ? handleExport : undefined} />
+      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} {...(exportTitle ? { onExport: handleExport } : {})} />
 
       {/* Color scale legend */}
       <div className="pointer-events-none absolute bottom-12 right-2 z-10 md:bottom-16 md:right-4">
