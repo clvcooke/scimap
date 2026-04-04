@@ -199,12 +199,21 @@ function Header() {
   )
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
 export const Route = createRootRoute({
   component: () => (
     <div className="flex min-h-screen w-full flex-col bg-white">
+      <ScrollToTop />
       <Header />
 
-      <main className="relative flex w-full flex-1 flex-col overflow-auto">
+      <main className="relative flex w-full flex-1 flex-col">
         <Outlet />
       </main>
 
