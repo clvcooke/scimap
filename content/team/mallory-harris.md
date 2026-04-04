@@ -1,7 +1,7 @@
 ---
 name: TEST TEAM
 role: TEST ROLE
-photo: ""
+photo: /images/team/images.webp
 order: 6
 ---
-Test changes again
+Testing 4/3/2026
