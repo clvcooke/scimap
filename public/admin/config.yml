@@ -4,13 +4,13 @@ backend:
   identity_url: https://scimap.netlify.app/.netlify/identity
   gateway_url: https://scimap.netlify.app/.netlify/git
 
-media_folder: scimap-rewrite/public/images/team
+media_folder: public/images/team
 public_folder: /images/team
 
 collections:
   - name: team
     label: Team Members
-    folder: scimap-rewrite/content/team
+    folder: content/team
     create: true
     slug: "{{slug}}"
     sortable_fields: ["order", "name"]
@@ -23,7 +23,7 @@ collections:
 
   - name: news
     label: News
-    folder: scimap-rewrite/content/news
+    folder: content/news
     create: true
     slug: "{{slug}}"
     sortable_fields: ["date", "title"]
@@ -37,7 +37,7 @@ collections:
 
   - name: press-releases
     label: Press Releases
-    folder: scimap-rewrite/content/press-releases
+    folder: content/press-releases
     create: true
     slug: "{{slug}}"
     sortable_fields: ["date", "title"]
@@ -49,7 +49,7 @@ collections:
 
   - name: articles
     label: Research Articles
-    folder: scimap-rewrite/content/articles
+    folder: content/articles
     create: true
     slug: "{{slug}}"
     sortable_fields: ["order", "title"]
@@ -64,7 +64,7 @@ collections:
     files:
       - name: home
         label: "Home Page"
-        file: scimap-rewrite/content/pages/home.md
+        file: content/pages/home.md
         fields:
           - { label: "Hero Title", name: "hero_title", widget: "string" }
           - { label: "Hero Subtitle", name: "hero_subtitle", widget: "text" }
@@ -105,7 +105,7 @@ collections:
 
       - name: about-overview
         label: "About — Overview"
-        file: scimap-rewrite/content/pages/about-overview.md
+        file: content/pages/about-overview.md
         fields:
           - { label: "Title", name: "title", widget: "string" }
           - { label: "Video URL", name: "video_url", widget: "string", required: false }
@@ -114,7 +114,7 @@ collections:
 
       - name: methodology
         label: Methodology
-        file: scimap-rewrite/content/pages/methodology.md
+        file: content/pages/methodology.md
         fields:
           - { label: "Hero Title", name: "hero_title", widget: "string" }
           - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
@@ -165,7 +165,7 @@ collections:
 
       - name: insights
         label: "Insights"
-        file: scimap-rewrite/content/pages/insights.md
+        file: content/pages/insights.md
         fields:
           - { label: "Research Intro", name: "research_intro", widget: "text" }
           - { label: "Substack Heading", name: "substack_heading", widget: "string" }
@@ -176,7 +176,7 @@ collections:
 
       - name: contact
         label: "Contact"
-        file: scimap-rewrite/content/pages/contact.md
+        file: content/pages/contact.md
         fields:
           - { label: "Hero Title", name: "hero_title", widget: "string" }
           - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
