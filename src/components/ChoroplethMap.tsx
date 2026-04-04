@@ -158,6 +158,7 @@ export default function ChoroplethMap({
       >
         <Map
           mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"
+          attributionControl={false}
         />
       </DeckGL>
 
@@ -166,6 +167,7 @@ export default function ChoroplethMap({
         {...viewState}
         mapStyle="https://basemaps.cartocdn.com/gl/positron-labels-gl-style/style.json"
         interactive={false}
+        attributionControl={false}
         style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
       />
 

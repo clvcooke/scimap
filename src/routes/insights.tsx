@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { BookOpen, ExternalLink, Newspaper, BarChart3 } from 'lucide-react'
 import IDCMap from '@/components/IDCMap'
+import MapAttribution from '@/components/MapAttribution'
 import {
   Tabs,
   TabsList,
@@ -133,6 +134,7 @@ function InsightsPage() {
               <div className="relative h-[500px] md:h-[600px]">
                 <IDCMap />
               </div>
+              <MapAttribution />
             </div>
           </div>
         </TabsContent>

@@ -45,6 +45,7 @@ export default function MapPreview() {
       >
         <Map
           mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"
+          attributionControl={false}
         />
       </DeckGL>
     </div>

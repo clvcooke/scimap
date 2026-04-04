@@ -190,6 +190,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
       >
         <Map
           mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"
+          attributionControl={false}
         />
       </DeckGL>
 

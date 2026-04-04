@@ -4,6 +4,7 @@ import FundingTable from '../components/FundingTable'
 import { validateMapSearch, useScrollToMap } from '@/lib/map-search-params'
 import { getPage } from '@/lib/content'
 import { MapAboutSection } from '@/components/MapAboutSection'
+import MapAttribution from '@/components/MapAttribution'
 
 export const Route = createFileRoute('/map')({
   component: MapRoute,
@@ -21,6 +22,7 @@ function MapRoute() {
       <div ref={mapRef} className="relative w-full min-h-[calc(100vh-140px)] scroll-mt-16">
         <SCIMap initialLat={lat} initialLng={lng} initialZoom={zoom} displayLocation={showLocation !== false} />
       </div>
+      <MapAttribution />
       <FundingTable />
       <MapAboutSection page={PAGE} />
     </>

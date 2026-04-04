@@ -218,9 +218,11 @@ function Index() {
               ))}
             </div>
             <div className="pt-4">
-              <Button className="flex h-auto w-full items-center gap-2 rounded-md bg-brand-blue px-8 py-6 text-lg font-bold text-white hover:bg-brand-blue-dark sm:w-auto">
-                {a.why_cta} <span>&rarr;</span>
-              </Button>
+              <Link to="/insights">
+                <Button className="flex h-auto w-full items-center gap-2 rounded-md bg-brand-blue px-8 py-6 text-lg font-bold text-white hover:bg-brand-blue-dark sm:w-auto">
+                  {a.why_cta} <span>&rarr;</span>
+                </Button>
+              </Link>
             </div>
           </div>
 
