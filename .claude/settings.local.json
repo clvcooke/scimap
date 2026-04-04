@@ -13,7 +13,8 @@
       "Bash(find /c/Users/clvco/Documents/code/scimap/old/src -type f -name *.tsx -o -name *.ts)",
       "Bash(grep -E \"^-.*\\\\.\\(toml|config|json\\)$\")",
       "Bash(find C:\\\\Users\\\\clvco\\\\Documents\\\\code\\\\scimap\\\\src:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(ls:*)"
     ]
   }
 }

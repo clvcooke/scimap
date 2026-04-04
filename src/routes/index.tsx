@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getPage } from '@/lib/content'
+import { InlineMarkdown } from '@/components/InlineMarkdown'
+
+const MapPreview = lazy(() => import('@/components/MapPreview'))
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -102,7 +105,7 @@ function Index() {
 
           <div className="space-y-6 text-xl leading-relaxed text-gray-700">
             {(a.stakes_paragraphs ?? []).map((p: string, i: number) => (
-              <p key={i}>{p}</p>
+              <p key={i}><InlineMarkdown>{p}</InlineMarkdown></p>
             ))}
           </div>
         </div>
@@ -184,23 +187,19 @@ function Index() {
 
           {/* Right Column (Visual) - 60% */}
           <div className="flex w-full justify-center md:w-3/5 md:justify-end">
-            <div className="group relative flex aspect-video w-full max-w-2xl cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border border-brand-blue-light bg-brand-blue-dark shadow-2xl">
-              <svg
-                className="h-32 w-32 text-blue-400/30 transition-colors group-hover:text-blue-400/50"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-              </svg>
-              <div className="absolute inset-0 bg-linear-to-tr from-red-500/10 via-transparent to-blue-500/10 mix-blend-overlay"></div>
-              <span className="mt-6 text-lg font-medium uppercase tracking-wide text-blue-200/70">
-                Interactive Map Preview
+            <Link
+              to="/map"
+              search={{ lat: 39.8283, lng: -98.5795, zoom: 3.5, showLocation: false }}
+              className="group relative block aspect-video w-full max-w-2xl overflow-hidden rounded-2xl border border-brand-blue-light shadow-2xl transition-shadow hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]"
+            >
+              <Suspense fallback={<div className="h-full w-full animate-pulse bg-brand-blue-dark" />}>
+                <MapPreview />
+              </Suspense>
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
+              <span className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-full bg-white/90 px-5 py-2 text-sm font-bold text-brand-blue shadow transition-colors group-hover:bg-white">
+                Explore the Map &rarr;
               </span>
-              <span className="mt-2 text-sm text-blue-300/50">
-                (Choropleth Heatmap Style)
-              </span>
-            </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -215,7 +214,7 @@ function Index() {
             </h3>
             <div className="space-y-6 text-lg leading-relaxed text-gray-700">
               {(a.why_paragraphs ?? []).map((p: string, i: number) => (
-                <p key={i}>{p}</p>
+                <p key={i}><InlineMarkdown>{p}</InlineMarkdown></p>
               ))}
             </div>
             <div className="pt-4">

@@ -22,10 +22,11 @@ import MapControls from './MapControls'
 import DetailDrawer from './DetailDrawer'
 import MobileInfoCard from './MobileInfoCard'
 
-export default function SCIMap({ initialLat, initialLng, initialZoom }: {
+export default function SCIMap({ initialLat, initialLng, initialZoom, displayLocation = true }: {
   initialLat?: number | undefined
   initialLng?: number | undefined
   initialZoom?: number | undefined
+  displayLocation?: boolean
 }) {
   const [geoLevel, setGeoLevel] = useState<GeoLevel>('states')
   const [perCapita, setPerCapita] = useState(false)
@@ -38,7 +39,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
       : {}),
   }))
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
-    initialLat != null && initialLng != null ? [initialLng, initialLat] : null,
+    displayLocation && initialLat != null && initialLng != null ? [initialLng, initialLat] : null,
   )
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)

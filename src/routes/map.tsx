@@ -13,13 +13,13 @@ export const Route = createFileRoute('/map')({
 const PAGE = getPage('map-baseline')
 
 function MapRoute() {
-  const { lat, lng, zoom } = Route.useSearch()
+  const { lat, lng, zoom, showLocation } = Route.useSearch()
   const mapRef = useScrollToMap(lat, lng)
 
   return (
     <>
       <div ref={mapRef} className="relative w-full min-h-[calc(100vh-140px)] scroll-mt-16">
-        <SCIMap initialLat={lat} initialLng={lng} initialZoom={zoom} />
+        <SCIMap initialLat={lat} initialLng={lng} initialZoom={zoom} displayLocation={showLocation !== false} />
       </div>
       <FundingTable />
       <MapAboutSection page={PAGE} />

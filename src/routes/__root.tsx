@@ -5,10 +5,10 @@ import { getPage } from '@/lib/content'
 
 const FOOTER = getPage('footer').attrs
 
-const navLinkBase = 'pb-1 border-b-2 transition-colors'
+const navLinkBase = 'pb-1 border-b-2 transition-colors cursor-pointer'
 const navLinkActive = { className: `${navLinkBase} border-brand-orange` }
 const navLinkInactive = {
-  className: `${navLinkBase} border-transparent hover:text-brand-blue-light`,
+  className: `${navLinkBase} border-transparent hover:border-brand-blue-light/50 hover:text-brand-blue-light`,
 }
 
 function MapsDropdown() {
@@ -29,7 +29,7 @@ function MapsDropdown() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-1 ${navLinkBase} ${isMapActive ? 'border-brand-orange' : 'border-transparent hover:text-brand-blue-light'}`}
+        className={`flex cursor-pointer items-center gap-1 ${navLinkBase} ${isMapActive ? 'border-brand-orange' : 'border-transparent hover:text-brand-blue-light'}`}
       >
         Impact Maps <ChevronDown className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
@@ -208,8 +208,8 @@ export const Route = createRootRoute({
         <Outlet />
       </main>
 
-      <footer className="border-t border-brand-blue-light/30 bg-brand-blue-dark px-4 pb-8 pt-12 text-white md:px-6 md:pt-16">
-        <div className="mx-auto flex max-w-7xl flex-col space-y-12">
+      <footer className="border-t border-brand-blue-light/30 bg-brand-blue-dark px-4 pb-4 pt-6 text-white md:px-6 md:pt-8">
+        <div className="mx-auto flex max-w-7xl flex-col space-y-3">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-4">
               <div className="text-lg font-bold tracking-tight">{FOOTER.site_name}</div>
@@ -268,7 +268,7 @@ export const Route = createRootRoute({
               </ul>
               <div className="flex gap-4 pt-4">
                 <a
-                  href="/"
+                  href="https://bsky.app/profile/scienceimpacts.org"
                   className="text-gray-300 transition-colors hover:text-white"
                   aria-label="Bluesky"
                 >
@@ -316,7 +316,7 @@ export const Route = createRootRoute({
             </div>
           </div>
 
-          <div className="mt-12 border-t border-brand-blue-light/50 pt-8 text-center text-sm text-gray-300">
+          <div className="mt-6 border-t border-brand-blue-light/50 pt-4 text-center text-sm text-gray-300">
             {FOOTER.org_line}
           </div>
         </div>
