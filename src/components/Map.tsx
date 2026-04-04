@@ -182,14 +182,13 @@ export default function SCIMap({ initialLat, initialLng, initialZoom }: {
         controller
         layers={[mapLayer, outlineLayer, locationLayer].filter(Boolean)}
         useDevicePixels={false}
-        glOptions={{ preserveDrawingBuffer: true }}
+        deviceProps={{ webgl: { preserveDrawingBuffer: true } }}
         getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'grab')}
         onHover={onHover}
         onClick={onClick}
       >
         <Map
           mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"
-          preserveDrawingBuffer
         />
       </DeckGL>
 

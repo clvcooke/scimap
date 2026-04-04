@@ -52,11 +52,11 @@ export default class IconClusterLayer<
         ? positionAccessor
         : () => positionAccessor
       if (!props.data || typeof props.data === 'string' || !(Symbol.iterator in props.data)) return
-      const data = [...props.data]
+      const data = [...props.data] as DataT[]
       index.load(
         // @ts-expect-error – Supercluster expects full GeoJSON Feature objects; we pass minimal shape
         data.map((d, i) => ({
-          geometry: { coordinates: getPos(d, { index: i, data: props.data, target: [] }) },
+          geometry: { coordinates: getPos(d, { index: i, data, target: [] }) },
           properties: d,
         })),
       )
@@ -91,9 +91,9 @@ export default class IconClusterLayer<
           .getLeaves(pickedObject.cluster_id, 1_000_000)
           .map((f) => f.properties)
       }
-      return Object.assign({}, info, { object: pickedObject, objects })
+      return { ...info, object: pickedObject, objects } as unknown as IconClusterLayerPickingInfo<DataT>
     }
-    return Object.assign({}, info, { object: undefined })
+    return info as unknown as IconClusterLayerPickingInfo<DataT>
   }
 
   override renderLayers() {

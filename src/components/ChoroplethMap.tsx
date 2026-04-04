@@ -151,14 +151,13 @@ export default function ChoroplethMap({
         controller={!controllerDisabled}
         layers={[dataLayer, outlineLayer, ...extraLayers, locationLayer].filter(Boolean)}
         useDevicePixels={false}
-        glOptions={{ preserveDrawingBuffer: true }}
+        deviceProps={{ webgl: { preserveDrawingBuffer: true } }}
         getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'grab')}
         onHover={onHover}
         onClick={onMapClick ?? null}
       >
         <Map
           mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"
-          preserveDrawingBuffer
         />
       </DeckGL>
 
@@ -167,7 +166,6 @@ export default function ChoroplethMap({
         {...viewState}
         mapStyle="https://basemaps.cartocdn.com/gl/positron-labels-gl-style/style.json"
         interactive={false}
-        preserveDrawingBuffer
         style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
       />
 
