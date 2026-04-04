@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
 import { Menu, X, ChevronDown } from 'lucide-react'
+import { getPage } from '@/lib/content'
+
+const FOOTER = getPage('footer').attrs
 
 const navLinkBase = 'pb-1 border-b-2 transition-colors'
 const navLinkActive = { className: `${navLinkBase} border-brand-orange` }
@@ -209,9 +212,9 @@ export const Route = createRootRoute({
         <div className="mx-auto flex max-w-7xl flex-col space-y-12">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-4">
-              <div className="text-lg font-bold tracking-tight">SCIMaP</div>
+              <div className="text-lg font-bold tracking-tight">{FOOTER.site_name}</div>
               <p className="pr-8 text-sm leading-relaxed text-gray-300">
-                Tracking federal cuts to science and their impact on communities.
+                {FOOTER.tagline}
               </p>
             </div>
 
@@ -260,8 +263,8 @@ export const Route = createRootRoute({
             <div className="space-y-4">
               <h4 className="text-lg font-semibold text-white">Get in Touch</h4>
               <ul className="flex flex-col space-y-1 text-sm text-gray-300">
-                <li>Press Inquiries: press@scienceimpacts.org</li>
-                <li>Other: contact@scienceimpacts.org</li>
+                <li>Press Inquiries: {FOOTER.press_email}</li>
+                <li>Other: {FOOTER.contact_email}</li>
               </ul>
               <div className="flex gap-4 pt-4">
                 <a
@@ -314,8 +317,7 @@ export const Route = createRootRoute({
           </div>
 
           <div className="mt-12 border-t border-brand-blue-light/50 pt-8 text-center text-sm text-gray-300">
-            Science & Community Impact Mapping Project (SCIMaP), University of Maryland, College of
-            Math & Natural Sciences, College Park Maryland
+            {FOOTER.org_line}
           </div>
         </div>
       </footer>
