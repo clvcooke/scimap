@@ -21,6 +21,8 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { exportMapCard, currentDateLabel, type InfoSlot } from '@/lib/export-map'
 import MapControls from './MapControls'
 import ColorScale from './ColorScale'
+import BudgetDrawer, { type BudgetDrawerConfig } from './BudgetDrawer'
+import BudgetMobileCard from './BudgetMobileCard'
 
 interface ChoroplethMapProps {
   geoLevels: Record<LossGeoLevel, MapGeoConfig>
@@ -49,6 +51,8 @@ interface ChoroplethMapProps {
   exportFilename?: string
   /** Headline stat figures for the export card footer. */
   exportExtraSlots?: InfoSlot[]
+  /** When provided, clicking a region opens a detail drawer with this config. */
+  drawerConfig?: BudgetDrawerConfig
 }
 
 export default function ChoroplethMap({
@@ -70,8 +74,11 @@ export default function ChoroplethMap({
   exportSubtitle,
   exportFilename,
   exportExtraSlots = [],
+  drawerConfig,
 }: ChoroplethMapProps) {
   const [geoLevel, setGeoLevel] = useState<LossGeoLevel>(defaultLevel)
+  const [selectedProps, setSelectedProps] = useState<TileProps | null>(null)
+  const [previewProps, setPreviewProps] = useState<TileProps | null>(null)
   const [viewState, setViewState] = useState(() => ({
     ...INITIAL_VIEW_STATE,
     ...(initialLat != null && initialLng != null
@@ -146,6 +153,33 @@ export default function ChoroplethMap({
     [geoLevel, isMobile, renderTooltip],
   )
 
+  const handleClick = useCallback(
+    (info: PickingInfo, event: MjolnirGestureEvent) => {
+      // If a custom click handler is provided, delegate to it
+      if (onMapClick) {
+        onMapClick(info, event)
+        return
+      }
+
+      // Built-in drawer click handling
+      if (!drawerConfig) return
+
+      const props = (info.object as { properties?: TileProps } | undefined)?.properties
+      if (!props) {
+        setSelectedProps(null)
+        setPreviewProps(null)
+        return
+      }
+
+      if (isMobile) {
+        requestAnimationFrame(() => setPreviewProps(props))
+      } else {
+        requestAnimationFrame(() => setSelectedProps(props))
+      }
+    },
+    [onMapClick, drawerConfig, isMobile],
+  )
+
   return (
     <div ref={containerRef} className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-4">
       {/* Geo-level tabs */}
@@ -170,9 +204,9 @@ export default function ChoroplethMap({
         layers={[dataLayer, outlineLayer, ...extraLayers, locationLayer].filter(Boolean)}
         useDevicePixels={false}
         deviceProps={{ webgl: { preserveDrawingBuffer: true } }}
-        getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'grab')}
+        getCursor={({ isDragging, isHovering }) => (isDragging ? 'grabbing' : isHovering && (drawerConfig || onMapClick) ? 'pointer' : 'grab')}
         onHover={onHover}
-        onClick={onMapClick ?? null}
+        onClick={handleClick}
       >
         <Map
           mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"
@@ -203,6 +237,30 @@ export default function ChoroplethMap({
           className="pointer-events-none absolute z-20 max-w-xs rounded bg-black/80 px-3 py-2 text-sm text-white shadow-lg"
           style={{ display: 'none', left: 0, top: 0 }}
         />
+      )}
+
+      {/* Built-in drawer for budget maps */}
+      {drawerConfig && (
+        <>
+          {isMobile && previewProps && (
+            <BudgetMobileCard
+              props={previewProps}
+              geoLevel={geoLevel}
+              config={drawerConfig}
+              onSeeMore={() => {
+                setSelectedProps(previewProps)
+                setPreviewProps(null)
+              }}
+              onClose={() => setPreviewProps(null)}
+            />
+          )}
+          <BudgetDrawer
+            props={selectedProps}
+            geoLevel={geoLevel}
+            config={drawerConfig}
+            onClose={() => setSelectedProps(null)}
+          />
+        </>
       )}
 
       {children}

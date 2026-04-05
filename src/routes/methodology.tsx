@@ -5,8 +5,6 @@ import {
   TrendingUp,
   Users,
   MapPin,
-  ShieldCheck,
-  AlertTriangle,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { getPage } from '@/lib/content'
@@ -185,22 +183,10 @@ function MethodologyPage() {
         <BulletList items={a.spatial_items ?? []} />
       </Section>
 
-      {/* Transparency & Validation */}
-      <Section bg="neutral">
-        <SectionHeading icon={ShieldCheck}>
-          Transparency &amp; Validation
-        </SectionHeading>
-        <Intro>{a.transparency_intro}</Intro>
-        <BulletList items={a.transparency_items ?? []} />
-      </Section>
 
       {/* Limitations */}
-      <section className="w-full px-6 py-8 md:py-10">
-        <div className="mx-auto max-w-4xl rounded-xl border border-amber-300 bg-amber-50 p-6 md:p-8">
+      <Section bg="neutral">
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-200">
-              <AlertTriangle className="h-5 w-5 text-amber-700" />
-            </div>
             <h2 className="text-2xl font-bold text-amber-900">
               Limitations &amp; Considerations
             </h2>
@@ -213,8 +199,7 @@ function MethodologyPage() {
             dotColor="bg-amber-400"
             textColor="text-amber-900"
           />
-        </div>
-      </section>
+      </Section>
     </div>
   )
 }

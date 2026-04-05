@@ -36,7 +36,7 @@ who_items:
   - name: "Policy Makers"
     desc: "Data-driven insights for informed decision making"
   - name: "Journalists"
-    desc: "Unbiased data and visualizations for reporting"
+    desc: "Local and national data and visualizations for reporting"
   - name: "Advocacy Groups"
     desc: "Evidence-based resources for campaigns"
   - name: "The Public"
