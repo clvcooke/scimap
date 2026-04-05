@@ -85,13 +85,23 @@ function Index() {
             </div>
           </div>
 
-          {/* Right: Placeholder Image (40%) */}
+          {/* Right: Map Preview (40%) */}
           <div className="flex w-full justify-center md:w-1/2 md:justify-end">
-            <img
-              src="/map-img.png"
-              alt="Science map visualization"
-              className="w-full max-w-xl rounded-lg object-cover shadow-xl"
-            />
+            <Link
+              to="/fy27"
+              search={{ lat: 39.8283, lng: -98.5795, zoom: 3.5, showLocation: false }}
+              className="group relative block aspect-video w-full max-w-xl overflow-hidden rounded-lg shadow-xl"
+            >
+              <div className="h-full w-full grayscale transition-[filter] duration-500 group-hover:grayscale-0">
+                <Suspense fallback={<div className="h-full w-full animate-pulse bg-brand-blue-dark" />}>
+                  <MapPreview />
+                </Suspense>
+              </div>
+              <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-white/10" />
+              <span className="pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2 rounded-full bg-white/90 px-4 py-1.5 text-sm font-bold text-brand-blue opacity-0 shadow transition-opacity duration-300 group-hover:opacity-100">
+                Explore the Map &rarr;
+              </span>
+            </Link>
           </div>
         </div>
       </section>

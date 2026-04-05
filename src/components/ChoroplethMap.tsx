@@ -20,7 +20,7 @@ import {
 import { useIsMobile } from '@/hooks/use-mobile'
 import { exportMapCard, currentDateLabel, type InfoSlot } from '@/lib/export-map'
 import MapControls from './MapControls'
-import ColorScale from './ColorScale'
+import ColorScale, { type ColorScheme } from './ColorScale'
 import BudgetDrawer, { type BudgetDrawerConfig } from './BudgetDrawer'
 import BudgetMobileCard from './BudgetMobileCard'
 
@@ -31,6 +31,7 @@ interface ChoroplethMapProps {
   colorLUT: Uint8Array
   layerId: string
   useMagma?: boolean
+  colorScheme?: ColorScheme
   /** Build the inner HTML for the hover tooltip given tile props + current geo level. */
   renderTooltip: (props: TileProps, geoLevel: LossGeoLevel) => string
   /** Extra deck.gl layers to render on top (e.g. cluster layer). */
@@ -62,6 +63,7 @@ export default function ChoroplethMap({
   colorLUT,
   layerId,
   useMagma = false,
+  colorScheme,
   renderTooltip,
   extraLayers = [],
   onMapClick,
@@ -227,7 +229,7 @@ export default function ChoroplethMap({
 
       {/* Color scale legend */}
       <div className="pointer-events-none absolute bottom-2 right-2 z-10 md:bottom-4 md:right-4">
-        <ColorScale domain={config.domain} useMagma={useMagma} />
+        <ColorScale domain={config.domain} useMagma={useMagma} scheme={colorScheme} />
       </div>
 
       {/* Hover tooltip (desktop, fixed so it escapes overflow-hidden) */}

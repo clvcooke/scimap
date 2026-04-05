@@ -3,6 +3,7 @@ import FY27Map from '../components/FY27Map'
 import { validateMapSearch, useScrollToMap } from '@/lib/map-search-params'
 import { getPage } from '@/lib/content'
 import { MapAboutSection } from '@/components/MapAboutSection'
+import { MapHeader } from '@/components/MapHeader'
 import MapAttribution from '@/components/MapAttribution'
 
 export const Route = createFileRoute('/fy27')({
@@ -18,8 +19,11 @@ function FY27Route() {
 
   return (
     <>
-      <div ref={mapRef} className="relative w-full min-h-[calc(100vh-140px)] scroll-mt-16">
-        <FY27Map initialLat={lat} initialLng={lng} initialZoom={zoom} />
+      <div className="flex h-[calc(100dvh-57px)] flex-col md:h-[calc(100dvh-65px)]">
+        <MapHeader page={PAGE} />
+        <div ref={mapRef} className="relative w-full flex-1 min-h-0 scroll-mt-16">
+          <FY27Map initialLat={lat} initialLng={lng} initialZoom={zoom} />
+        </div>
       </div>
       <MapAttribution />
       <MapAboutSection page={PAGE} />

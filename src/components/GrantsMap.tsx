@@ -87,6 +87,7 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom }: {
       exportTitle="Grant Terminations"
       exportSubtitle="Terminated & At-Risk Federal Research Grants"
       exportFilename="scimap-grant-terminations.png"
+      colorScheme="orrd"
       exportExtraSlots={GRANTS_SLOTS}
     >
       <GrantsOverlay

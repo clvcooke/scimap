@@ -15,7 +15,7 @@ function MapsDropdown() {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const { pathname } = useLocation()
-  const isMapActive = ['/map', '/grants', '/fy27', '/idc'].some((p) => pathname.startsWith(p))
+  const isMapActive = ['/map', '/maps', '/grants', '/fy27', '/idc'].some((p) => pathname.startsWith(p))
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -35,6 +35,13 @@ function MapsDropdown() {
       </button>
       {open && (
         <div className="absolute right-0 top-full mt-2 w-52 rounded-md bg-white py-1 shadow-lg ring-1 ring-black/10">
+          <Link
+            to="/maps"
+            className="block border-b border-gray-100 px-4 py-2 text-sm font-medium text-brand-blue hover:bg-gray-100"
+            onClick={() => setOpen(false)}
+          >
+            All Maps
+          </Link>
           <Link
             to="/map"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -127,7 +134,14 @@ function Header() {
           >
             Home
           </Link>
-          <div className="text-gray-400">Impacts Maps</div>
+          <Link
+            to="/maps"
+            className="text-left font-medium transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            All Maps
+          </Link>
           <Link
             to="/map"
             className="pl-3 text-left transition-colors hover:text-brand-blue-light"

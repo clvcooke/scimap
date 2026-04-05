@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as MethodologyRouteImport } from './routes/methodology'
+import { Route as MapsRouteImport } from './routes/maps'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as GrantsRouteImport } from './routes/grants'
@@ -29,6 +30,11 @@ const NewsRoute = NewsRouteImport.update({
 const MethodologyRoute = MethodologyRouteImport.update({
   id: '/methodology',
   path: '/methodology',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapsRoute = MapsRouteImport.update({
+  id: '/maps',
+  path: '/maps',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MapRoute = MapRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/grants': typeof GrantsRoute
   '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
+  '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
 }
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/grants': typeof GrantsRoute
   '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
+  '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
 }
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/grants': typeof GrantsRoute
   '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
+  '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
 }
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/grants'
     | '/insights'
     | '/map'
+    | '/maps'
     | '/methodology'
     | '/news'
   fileRoutesByTo: FileRoutesByTo
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
     | '/grants'
     | '/insights'
     | '/map'
+    | '/maps'
     | '/methodology'
     | '/news'
   id:
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/grants'
     | '/insights'
     | '/map'
+    | '/maps'
     | '/methodology'
     | '/news'
   fileRoutesById: FileRoutesById
@@ -169,6 +181,7 @@ export interface RootRouteChildren {
   GrantsRoute: typeof GrantsRoute
   InsightsRoute: typeof InsightsRoute
   MapRoute: typeof MapRoute
+  MapsRoute: typeof MapsRoute
   MethodologyRoute: typeof MethodologyRoute
   NewsRoute: typeof NewsRoute
 }
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/methodology'
       fullPath: '/methodology'
       preLoaderRoute: typeof MethodologyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maps': {
+      id: '/maps'
+      path: '/maps'
+      fullPath: '/maps'
+      preLoaderRoute: typeof MapsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/map': {
@@ -265,6 +285,7 @@ const rootRouteChildren: RootRouteChildren = {
   GrantsRoute: GrantsRoute,
   InsightsRoute: InsightsRoute,
   MapRoute: MapRoute,
+  MapsRoute: MapsRoute,
   MethodologyRoute: MethodologyRoute,
   NewsRoute: NewsRoute,
 }
