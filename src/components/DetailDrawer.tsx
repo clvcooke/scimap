@@ -126,12 +126,10 @@ function DrawerBody({
 
 export default function DetailDrawer({
   feature,
-  geoLabel,
   perCapita,
   onClose,
 }: {
   feature: SelectedFeature | null
-  geoLabel: string
   perCapita: boolean
   onClose: () => void
 }) {
@@ -149,7 +147,7 @@ export default function DetailDrawer({
           <Drawer.Popup className="fixed inset-y-0 right-0 w-full transition-transform duration-300 ease-out data-ending-style:translate-x-full data-starting-style:translate-x-full sm:w-105 sm:max-w-[calc(100vw-48px)]">
             <Drawer.Content className="flex h-full w-full flex-col overflow-hidden rounded-l-xl bg-white shadow-2xl">
               {feature && (
-                <DrawerBody feature={feature} geoLabel={geoLabel} perCapita={perCapita} />
+                <DrawerBody feature={feature}  perCapita={perCapita} />
               )}
             </Drawer.Content>
           </Drawer.Popup>

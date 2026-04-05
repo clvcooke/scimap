@@ -249,7 +249,6 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
 
       <DetailDrawer
         feature={selectedFeature}
-        geoLabel={config.label.replace(/s$/, '')}
         perCapita={perCapita}
         onClose={() => setSelectedFeature(null)}
       />
