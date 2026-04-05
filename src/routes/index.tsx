@@ -43,7 +43,7 @@ function Index() {
       }
       const { lat, lon } = data[0]
       void navigate({
-        to: '/map',
+        to: '/fy27',
         search: { lat: parseFloat(lat), lng: parseFloat(lon), zoom: 8 },
       })
     } catch {
@@ -76,12 +76,12 @@ function Index() {
               >
                 {a.hero_cta_primary}
               </Link>
-              <Button
-                variant="outline"
-                className="h-auto rounded-md border-2 border-white bg-transparent px-8 py-6 text-lg font-bold text-white hover:bg-white/10 hover:text-white"
+              <Link
+                to="/about"
+                className="inline-flex h-auto items-center justify-center rounded-md border-2 border-white bg-transparent px-8 py-6 text-lg font-bold text-white transition-all hover:bg-white/10 hover:text-white"
               >
                 {a.hero_cta_secondary}
-              </Button>
+              </Link>
             </div>
           </div>
 
@@ -188,7 +188,7 @@ function Index() {
           {/* Right Column (Visual) - 60% */}
           <div className="flex w-full justify-center md:w-3/5 md:justify-end">
             <Link
-              to="/map"
+              to="/fy27"
               search={{ lat: 39.8283, lng: -98.5795, zoom: 3.5, showLocation: false }}
               className="group relative block aspect-video w-full max-w-2xl overflow-hidden rounded-2xl border border-brand-blue-light shadow-2xl transition-shadow hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]"
             >

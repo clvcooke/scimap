@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { DrawerPreview as Drawer } from '@base-ui/react/drawer'
-import { interpolateOrRd } from 'd3-scale-chromatic'
+import { interpolateBlues } from 'd3-scale-chromatic'
 import { X } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { METRICS, INSTITUTES, formatMetricValue } from '@/lib/constants'
@@ -11,11 +11,9 @@ import type { SelectedFeature } from '@/lib/map-config'
 
 function DrawerBody({
   feature,
-  geoLabel,
   perCapita,
 }: {
   feature: SelectedFeature
-  geoLabel: string
   perCapita: boolean
 }) {
   const [metric, setMetric] = useState<Metric>('econ_impact')
@@ -41,7 +39,7 @@ function DrawerBody({
       <div className="flex items-start justify-between border-b px-5 py-4">
         <div>
           <Drawer.Title className="text-lg font-semibold text-gray-900">
-            {geoLabel}: {feature.id}
+            {feature.id}
           </Drawer.Title>
           <p className="mt-0.5 text-sm text-gray-500">
             Population: {population.toLocaleString()}
@@ -92,31 +90,28 @@ function DrawerBody({
             {perCapita ? ' per capita' : ''}
           </span>
         </div>
-        <div className="space-y-1.5">
+        <div className="space-y-3">
           {rows.map((row) => {
             const pct = maxValue > 0 ? (row.value / maxValue) * 100 : 0
             const t = maxValue > 0 ? row.value / maxValue : 0
             return (
-              <div key={row.key} className="group">
-                <div className="flex items-baseline justify-between text-sm">
-                  <span className="font-medium text-gray-700" title={row.name}>
-                    {row.key}
+              <div key={row.key}>
+                <div className="flex items-baseline justify-between gap-2 text-sm">
+                  <span className="font-medium text-gray-700">
+                    {row.name} ({row.key})
                   </span>
-                  <span className="text-xs tabular-nums text-gray-500">
+                  <span className="shrink-0 text-xs tabular-nums text-gray-500">
                     {formatMetricValue(row.value, metric)}
                   </span>
                 </div>
-                <div className="mt-0.5 h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-100">
                   <div
                     className="h-full rounded-full transition-all duration-300"
                     style={{
                       width: `${pct}%`,
-                      backgroundColor: interpolateOrRd(0.3 + t * 0.7),
+                      backgroundColor: interpolateBlues(0.3 + t * 0.7),
                     }}
                   />
-                </div>
-                <div className="mt-0.5 text-[11px] leading-tight text-gray-400 opacity-0 transition-opacity group-hover:opacity-100">
-                  {row.name}
                 </div>
               </div>
             )

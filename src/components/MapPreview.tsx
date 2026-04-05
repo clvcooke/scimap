@@ -2,11 +2,13 @@ import { useMemo } from 'react'
 import { Map } from 'react-map-gl/maplibre'
 import DeckGL from '@deck.gl/react'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { FY27_GEO_LEVELS, FY27_COLOR_PROPERTY } from '@/lib/fy27-map-config'
 import {
-  GEO_LEVELS,
-  createBaselineLayer,
-  createColorScale,
-} from '@/lib/map-config'
+  createLogColorScale,
+  createChoroplethLayer,
+  createStateOutlineLayer,
+  LUT_MAGMA_INV,
+} from '@/lib/map-shared'
 
 const PREVIEW_VIEW_STATE = {
   longitude: -98.5795,
@@ -16,21 +18,27 @@ const PREVIEW_VIEW_STATE = {
   pitch: 0,
   padding: { top: 0, bottom: 0, left: 0, right: 0 },
 }
-import { createStateOutlineLayer } from '@/lib/map-shared'
 
 /**
- * A static, non-interactive preview of the baseline funding map.
+ * A static, non-interactive preview of the FY27 budget impact map.
  * Renders the real choropleth tiles at the default US-wide view.
  */
 export default function MapPreview() {
-  const config = GEO_LEVELS.states
-  const colorScale = useMemo(() => createColorScale(config, false), [config])
+  const config = FY27_GEO_LEVELS.states
+  const colorScale = useMemo(() => createLogColorScale(config.domain), [config])
   const mapLayer = useMemo(
-    () => createBaselineLayer(config, false, colorScale),
+    () =>
+      createChoroplethLayer(
+        config,
+        colorScale,
+        FY27_COLOR_PROPERTY,
+        LUT_MAGMA_INV,
+        'fy27-preview-mvt',
+      ),
     [config, colorScale],
   )
   const outlineLayer = useMemo(
-    () => createStateOutlineLayer(GEO_LEVELS.states.tileUrl),
+    () => createStateOutlineLayer(FY27_GEO_LEVELS.states.tileUrl),
     [],
   )
 

@@ -84,9 +84,9 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom }: {
       extraLayers={[clusterLayer]}
       onMapClick={onClick}
       controllerDisabled={showOverlay}
-      exportTitle="Grant Disruptions"
+      exportTitle="Grant Terminations"
       exportSubtitle="Terminated & At-Risk Federal Research Grants"
-      exportFilename="scimap-grant-disruptions.png"
+      exportFilename="scimap-grant-terminations.png"
       exportExtraSlots={GRANTS_SLOTS}
     >
       <GrantsOverlay

@@ -1,6 +1,6 @@
 import { scaleLinear } from 'd3-scale'
 import { MVTLayer } from '@deck.gl/geo-layers'
-import { LUT_OR_RD, LUT_MAGMA_INV, LUT_SIZE, FILL_ALPHA } from './color-lut'
+import { LUT_BLUES, LUT_OR_RD, LUT_MAGMA_INV, LUT_SIZE, FILL_ALPHA } from './color-lut'
 import {
   getHouseRep,
   getSenatorsList,
@@ -79,19 +79,23 @@ export function createStateOutlineLayer(tileUrl: string = STATE_TILE) {
 
 // ── Tooltip helpers ────────────────────────────────────────────────
 
-/** Position a tooltip element near the cursor, flipping to stay in-viewport. */
-export function positionTooltip(el: HTMLElement, x: number, y: number) {
+/** Position a fixed-position tooltip near the cursor, flipping to stay in-viewport.
+ *  `x`/`y` are container-relative (e.g. from deck.gl); `container` provides the viewport offset. */
+export function positionTooltip(el: HTMLElement, x: number, y: number, container?: HTMLElement) {
   const gap = 12
+  const offset = container?.getBoundingClientRect() ?? { left: 0, top: 0 }
+  const vx = offset.left + x
+  const vy = offset.top + y
   const rect = el.getBoundingClientRect()
   el.style.left = `${
-    x + gap + rect.width > window.innerWidth
-      ? x - gap - rect.width
-      : x + gap
+    vx + gap + rect.width > window.innerWidth
+      ? vx - gap - rect.width
+      : vx + gap
   }px`
   el.style.top = `${
-    y + gap + rect.height > window.innerHeight
-      ? y - gap - rect.height
-      : y + gap
+    vy + gap + rect.height > window.innerHeight
+      ? vy - gap - rect.height
+      : vy + gap
   }px`
 }
 
@@ -130,4 +134,4 @@ export function buildTooltipHeader(
 
 // ── LUT re-exports (so consumers don't need to import color-lut directly) ──
 
-export { LUT_OR_RD, LUT_MAGMA_INV }
+export { LUT_BLUES, LUT_OR_RD, LUT_MAGMA_INV }

@@ -15,7 +15,7 @@ function MapsDropdown() {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const { pathname } = useLocation()
-  const isMapActive = ['/map', '/grants', '/fy26', '/fy27', '/idc'].some((p) => pathname.startsWith(p))
+  const isMapActive = ['/map', '/grants', '/fy27', '/idc'].some((p) => pathname.startsWith(p))
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -47,14 +47,7 @@ function MapsDropdown() {
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => setOpen(false)}
           >
-            Grant Disruptions
-          </Link>
-          <Link
-            to="/fy26"
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            onClick={() => setOpen(false)}
-          >
-            FY26 Budget Impact
+            Grant Terminations
           </Link>
           <Link
             to="/fy27"
@@ -149,15 +142,7 @@ function Header() {
             activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
             onClick={() => setMenuOpen(false)}
           >
-            Grant Disruptions
-          </Link>
-          <Link
-            to="/fy26"
-            className="pl-3 text-left transition-colors hover:text-brand-blue-light"
-            activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
-            onClick={() => setMenuOpen(false)}
-          >
-            FY26 Budget Impact
+            Grant Terminations
           </Link>
           <Link
             to="/fy27"
@@ -234,54 +219,12 @@ export const Route = createRootRoute({
 
       <footer className="border-t border-brand-blue-light/30 bg-brand-blue-dark px-4 pb-4 pt-6 text-white md:px-6 md:pt-8">
         <div className="mx-auto flex max-w-7xl flex-col space-y-3">
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
             <div className="space-y-4">
               <div className="text-lg font-bold tracking-tight">{FOOTER.site_name}</div>
               <p className="pr-8 text-sm leading-relaxed text-gray-300">
                 {FOOTER.tagline}
               </p>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white">Navigation</h4>
-              <ul className="flex flex-col space-y-3 text-sm text-gray-300">
-                <li>
-                  <Link to="/about" className="transition-colors hover:text-brand-orange">
-                    About the Project
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/news" className="transition-colors hover:text-brand-orange">
-                    News
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/insights" className="transition-colors hover:text-brand-orange">
-                    Insights
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white">Resources</h4>
-              <ul className="flex flex-col space-y-3 text-sm text-gray-300">
-                <li>
-                  <a href="/" className="transition-colors hover:text-brand-orange">
-                    Impact Map
-                  </a>
-                </li>
-                <li>
-                  <Link to="/insights" className="transition-colors hover:text-brand-orange">
-                    Insights
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="transition-colors hover:text-brand-orange">
-                    Contact Us
-                  </Link>
-                </li>
-              </ul>
             </div>
 
             <div className="space-y-4">
@@ -301,7 +244,9 @@ export const Route = createRootRoute({
                   </svg>
                 </a>
                 <a
-                  href="/"
+                  href="https://www.instagram.com/science_impacts"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-gray-300 transition-colors hover:text-white"
                   aria-label="Instagram"
                 >
@@ -322,18 +267,10 @@ export const Route = createRootRoute({
                 <a
                   href="/"
                   className="text-gray-300 transition-colors hover:text-white"
-                  aria-label="Map/Book"
+                  aria-label="LinkedIn"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                   </svg>
                 </a>
               </div>

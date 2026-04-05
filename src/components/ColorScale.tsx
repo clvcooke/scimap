@@ -1,5 +1,5 @@
 import { scaleLinear } from 'd3-scale'
-import { interpolateOrRd, interpolateMagma } from 'd3-scale-chromatic'
+import { interpolateBlues, interpolateMagma } from 'd3-scale-chromatic'
 
 const COMPACT = new Intl.NumberFormat('en-US', {
   notation: 'compact',
@@ -28,7 +28,7 @@ export default function ColorScale({
   const steps = Array.from({ length: buckets }, (_, i) => {
     const color = useMagma
       ? interpolateMagma(1 - colorScale(buckets - 1 - i))
-      : interpolateOrRd(colorScale(buckets - 1 - i))
+      : interpolateBlues(colorScale(buckets - 1 - i))
 
     let label: string
     if (i === buckets - 1) {

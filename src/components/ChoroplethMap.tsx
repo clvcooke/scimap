@@ -148,7 +148,7 @@ export default function ChoroplethMap({
 
       el.innerHTML = renderTooltip(info.object.properties, geoLevel)
       el.style.display = 'block'
-      positionTooltip(el, info.x, info.y)
+      positionTooltip(el, info.x, info.y, containerRef.current ?? undefined)
     },
     [geoLevel, isMobile, renderTooltip],
   )
@@ -226,15 +226,15 @@ export default function ChoroplethMap({
       <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} {...(exportTitle ? { onExport: handleExport } : {})} />
 
       {/* Color scale legend */}
-      <div className="pointer-events-none absolute bottom-12 right-2 z-10 md:bottom-16 md:right-4">
+      <div className="pointer-events-none absolute bottom-2 right-2 z-10 md:bottom-4 md:right-4">
         <ColorScale domain={config.domain} useMagma={useMagma} />
       </div>
 
-      {/* Hover tooltip (desktop) */}
+      {/* Hover tooltip (desktop, fixed so it escapes overflow-hidden) */}
       {!isMobile && (
         <div
           ref={tooltipRef}
-          className="pointer-events-none absolute z-20 max-w-xs rounded bg-black/80 px-3 py-2 text-sm text-white shadow-lg"
+          className="pointer-events-none fixed z-50 max-w-xs rounded bg-black/80 px-3 py-2 text-sm text-white shadow-lg"
           style={{ display: 'none', left: 0, top: 0 }}
         />
       )}

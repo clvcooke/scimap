@@ -1,4 +1,4 @@
-import { interpolateOrRd, interpolateMagma } from 'd3-scale-chromatic'
+import { interpolateBlues, interpolateOrRd, interpolateMagma } from 'd3-scale-chromatic'
 
 const LUT_SIZE = 256
 const FILL_ALPHA = 200
@@ -24,6 +24,7 @@ function buildLUT(interpolator: (t: number) => string): Uint8Array {
   return lut
 }
 
+export const LUT_BLUES = buildLUT(interpolateBlues)
 export const LUT_OR_RD = buildLUT(interpolateOrRd)
 export const LUT_MAGMA_INV = buildLUT((t) => interpolateMagma(1 - t))
 export { LUT_SIZE, FILL_ALPHA }

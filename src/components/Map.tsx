@@ -15,13 +15,39 @@ import {
   createColorScale,
 } from '@/lib/map-config'
 import type { TileProperties, SelectedFeature } from '@/lib/map-config'
-import { createStateOutlineLayer } from '@/lib/map-shared'
+import { createStateOutlineLayer, positionTooltip } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { exportMapCard, currentDateLabel } from '@/lib/export-map'
 import { BASELINE_SLOTS } from '@/lib/card-stats'
 import MapControls from './MapControls'
+import ColorScale from './ColorScale'
 import DetailDrawer from './DetailDrawer'
 import MobileInfoCard from './MobileInfoCard'
+
+function getBaselineDisplayName(tile: TileProperties, geoLevel: GeoLevel): string {
+  switch (geoLevel) {
+    case 'counties': {
+      const name = tile.name as unknown as string | undefined
+      const state = tile.state as unknown as string | undefined
+      if (name && state) return `${name}, ${state}`
+      if (name) return name
+      return `County ${tile.FIPS ?? ''}`
+    }
+    case 'districts': {
+      const state = tile.state as unknown as string | undefined
+      const geoid = String(tile.GEOID ?? '')
+      const num = geoid.slice(-2)
+      const distLabel = num === '00' ? 'At-Large' : `District ${parseInt(num, 10)}`
+      return state ? `${state} ${distLabel}` : `District ${geoid}`
+    }
+    case 'cities': {
+      const name = tile.CBSA_NAME as unknown as string | undefined
+      return name ?? `City ${tile.CBSA_FIPS ?? ''}`
+    }
+    default:
+      return String(tile.state ?? '')
+  }
+}
 
 export default function SCIMap({ initialLat, initialLng, initialZoom, displayLocation = true }: {
   initialLat?: number | undefined
@@ -107,30 +133,18 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
       const tile = info.object.properties
       const impact = tile.NIH_tot_econ_impact ?? 0
       const pop = tile.pop_2024 ?? 0
-      const id = tile[config.uniqueIdProperty] ?? ''
+      const displayName = getBaselineDisplayName(tile, geoLevel)
       const pc = pop > 0 ? impact / pop : 0
 
       el.innerHTML =
-        `<div class="font-semibold">${config.label}: ${id}</div>` +
+        `<div class="font-semibold">${displayName}</div>` +
         `<div>Economic Impact: ${formatCurrency(impact)}</div>` +
         `<div>Population: ${pop.toLocaleString()}</div>` +
         (perCapita ? `<div>Per Capita: ${formatCurrency(pc)}</div>` : '')
       el.style.display = 'block'
-
-      const gap = 12
-      const rect = el.getBoundingClientRect()
-      const left =
-        info.x + gap + rect.width > window.innerWidth
-          ? info.x - gap - rect.width
-          : info.x + gap
-      const top =
-        info.y + gap + rect.height > window.innerHeight
-          ? info.y - gap - rect.height
-          : info.y + gap
-      el.style.left = `${left}px`
-      el.style.top = `${top}px`
+      positionTooltip(el, info.x, info.y, containerRef.current ?? undefined)
     },
-    [config.uniqueIdProperty, config.label, perCapita, isMobile],
+    [geoLevel, perCapita, isMobile],
   )
 
   const onClick = useCallback(
@@ -141,7 +155,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
         return
       }
       const tile = info.object.properties
-      const id = String(tile[config.uniqueIdProperty] ?? '')
+      const id = getBaselineDisplayName(tile, geoLevel)
       const feature = { id, properties: tile }
 
       if (isMobile) {
@@ -150,7 +164,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
         requestAnimationFrame(() => setSelectedFeature(feature))
       }
     },
-    [config.uniqueIdProperty, isMobile],
+    [geoLevel, isMobile],
   )
 
   return (
@@ -205,11 +219,16 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
 
       <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} onExport={handleExport} />
 
-      {/* Hover tooltip (desktop only, ref-driven) */}
+      {/* Color scale legend */}
+      <div className="pointer-events-none absolute bottom-2 right-2 z-10 md:bottom-4 md:right-4">
+        <ColorScale domain={perCapita ? config.perCapitaDomain : config.totalDomain} />
+      </div>
+
+      {/* Hover tooltip (desktop only, ref-driven, fixed so it escapes overflow-hidden) */}
       {!isMobile && (
         <div
           ref={tooltipRef}
-          className="pointer-events-none absolute z-20 rounded bg-black/80 px-3 py-2 text-sm text-white shadow-lg"
+          className="pointer-events-none fixed z-50 rounded bg-black/80 px-3 py-2 text-sm text-white shadow-lg"
           style={{ display: 'none', left: 0, top: 0 }}
         />
       )}
