@@ -1,6 +1,6 @@
 import { scaleLinear, type ScaleLinear } from 'd3-scale'
 import { MVTLayer } from '@deck.gl/geo-layers'
-import { LUT_OR_RD, LUT_SIZE, FILL_ALPHA } from './color-lut'
+import { LUT_BLUES, LUT_SIZE, FILL_ALPHA } from './color-lut'
 import type { GeoLevel } from './constants'
 
 // --- Types ---
@@ -29,6 +29,7 @@ export const INITIAL_VIEW_STATE = {
   longitude: -98.5795,
   latitude: 39.8283,
   zoom: 3.5,
+  maxZoom: 12,
   bearing: 0,
   pitch: 0,
   padding: { top: 0, bottom: 0, left: 0, right: 0 },
@@ -97,7 +98,7 @@ export function createBaselineLayer(
         v = pop > 0 ? v / pop : 0
       }
       const idx = Math.round(colorScale(v > 0 ? Math.log(v) : 0) * (LUT_SIZE - 1)) * 4
-      return [LUT_OR_RD[idx], LUT_OR_RD[idx + 1], LUT_OR_RD[idx + 2], LUT_OR_RD[idx + 3]]
+      return [LUT_BLUES[idx], LUT_BLUES[idx + 1], LUT_BLUES[idx + 2], LUT_BLUES[idx + 3]]
     },
   })
 }

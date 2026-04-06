@@ -83,6 +83,7 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom }: {
       extraLayers={[clusterLayer]}
       onMapClick={onClick}
       controllerDisabled={showOverlay}
+      colorScheme="orrd"
     >
       <GrantsOverlay
         grants={overlayGrants}

@@ -121,7 +121,7 @@ export default class IconClusterLayer<
               ? d.properties.point_count : 1,
           ),
       },
-      this.getSubLayerProps({ id: 'icon' }),
+      this.getSubLayerProps({ id: 'icon' }) as Partial<IconLayerProps<PointFeature<DataT> | ClusterFeature<DataT>>>,
     )
   }
 }

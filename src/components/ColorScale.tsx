@@ -1,22 +1,27 @@
 import { scaleLinear } from 'd3-scale'
-import { interpolateOrRd, interpolateMagma } from 'd3-scale-chromatic'
+import { interpolateBlues, interpolateMagma, interpolateOrRd } from 'd3-scale-chromatic'
 
 const COMPACT = new Intl.NumberFormat('en-US', {
   notation: 'compact',
   compactDisplay: 'short',
 })
 
+export type ColorScheme = 'blues' | 'magma' | 'orrd'
+
 interface ColorScaleProps {
   domain: [number, number]
   buckets?: number
   useMagma?: boolean
+  scheme?: ColorScheme | undefined
 }
 
 export default function ColorScale({
   domain,
   buckets = 6,
   useMagma = false,
+  scheme,
 }: ColorScaleProps) {
+  const resolvedScheme: ColorScheme = scheme ?? (useMagma ? 'magma' : 'blues')
   const colorScale = scaleLinear()
     .domain([0, buckets - 1])
     .range([0, 1])
@@ -26,9 +31,13 @@ export default function ColorScale({
   const logMin = domain[0] > 1 ? Math.log(domain[0]) : 0
 
   const steps = Array.from({ length: buckets }, (_, i) => {
-    const color = useMagma
-      ? interpolateMagma(1 - colorScale(buckets - 1 - i))
-      : interpolateOrRd(colorScale(buckets - 1 - i))
+    const t = colorScale(buckets - 1 - i)
+    const color =
+      resolvedScheme === 'magma'
+        ? interpolateMagma(1 - t)
+        : resolvedScheme === 'orrd'
+          ? interpolateOrRd(t)
+          : interpolateBlues(t)
 
     let label: string
     if (i === buckets - 1) {
@@ -39,7 +48,7 @@ export default function ColorScale({
       label = `$${COMPACT.format(Math.round(value / 100) * 100)}${i === 0 ? '+' : ''}`
     }
 
-    return { color: useMagma ? color + 'C8' : color, label }
+    return { color: resolvedScheme === 'magma' ? color + 'C8' : color, label }
   })
 
   return (

@@ -1,18 +1,21 @@
 import { useState, useRef, useEffect } from 'react'
 import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
 import { Menu, X, ChevronDown } from 'lucide-react'
+import { getPage } from '@/lib/content'
 
-const navLinkBase = 'pb-1 border-b-2 transition-colors'
+const FOOTER = getPage('footer').attrs
+
+const navLinkBase = 'pb-1 border-b-2 transition-colors cursor-pointer'
 const navLinkActive = { className: `${navLinkBase} border-brand-orange` }
 const navLinkInactive = {
-  className: `${navLinkBase} border-transparent hover:text-brand-blue-light`,
+  className: `${navLinkBase} border-transparent hover:border-brand-blue-light/50 hover:text-brand-blue-light`,
 }
 
 function MapsDropdown() {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const { pathname } = useLocation()
-  const isMapActive = ['/map', '/grants', '/fy26', '/idc'].some((p) => pathname.startsWith(p))
+  const isMapActive = ['/map', '/maps', '/grants', '/fy27', '/idc'].some((p) => pathname.startsWith(p))
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -26,12 +29,19 @@ function MapsDropdown() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-1 ${navLinkBase} ${isMapActive ? 'border-brand-orange' : 'border-transparent hover:text-brand-blue-light'}`}
+        className={`flex cursor-pointer items-center gap-1 ${navLinkBase} ${isMapActive ? 'border-brand-orange' : 'border-transparent hover:text-brand-blue-light'}`}
       >
         Impact Maps <ChevronDown className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
         <div className="absolute right-0 top-full mt-2 w-52 rounded-md bg-white py-1 shadow-lg ring-1 ring-black/10">
+          <Link
+            to="/maps"
+            className="block border-b border-gray-100 px-4 py-2 text-sm font-medium text-brand-blue hover:bg-gray-100"
+            onClick={() => setOpen(false)}
+          >
+            All Maps
+          </Link>
           <Link
             to="/map"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -44,14 +54,14 @@ function MapsDropdown() {
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => setOpen(false)}
           >
-            Grant Disruptions
+            Grant Terminations
           </Link>
           <Link
-            to="/fy26"
+            to="/fy27"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => setOpen(false)}
           >
-            Award Funding Changes
+            FY27 Budget Impact
           </Link>
         </div>
       )}
@@ -97,6 +107,9 @@ function Header() {
           <Link to="/about" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
             About Us
           </Link>
+          <Link to="/take-action" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
+            Take Action
+          </Link>
           <Link to="/contact" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
             Contact
           </Link>
@@ -124,7 +137,14 @@ function Header() {
           >
             Home
           </Link>
-          <div className="text-gray-400">Impacts Maps</div>
+          <Link
+            to="/maps"
+            className="text-left font-medium transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            All Maps
+          </Link>
           <Link
             to="/map"
             className="pl-3 text-left transition-colors hover:text-brand-blue-light"
@@ -139,15 +159,15 @@ function Header() {
             activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
             onClick={() => setMenuOpen(false)}
           >
-            Grant Disruptions
+            Grant Terminations
           </Link>
           <Link
-            to="/fy26"
+            to="/fy27"
             className="pl-3 text-left transition-colors hover:text-brand-blue-light"
             activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
             onClick={() => setMenuOpen(false)}
           >
-            Award Funding Changes
+            FY27 Budget Impact
           </Link>
 
           <Link
@@ -183,6 +203,14 @@ function Header() {
             Methodology
           </Link>
           <Link
+            to="/take-action"
+            className="text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            Take Action
+          </Link>
+          <Link
             to="/contact"
             className="text-left transition-colors hover:text-brand-blue-light"
             activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
@@ -196,76 +224,43 @@ function Header() {
   )
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
 export const Route = createRootRoute({
   component: () => (
     <div className="flex min-h-screen w-full flex-col bg-white">
+      <ScrollToTop />
       <Header />
 
-      <main className="relative flex w-full flex-1 flex-col overflow-auto">
+      <main className="relative flex w-full flex-1 flex-col">
         <Outlet />
       </main>
 
-      <footer className="border-t border-brand-blue-light/30 bg-brand-blue-dark px-4 pb-8 pt-12 text-white md:px-6 md:pt-16">
-        <div className="mx-auto flex max-w-7xl flex-col space-y-12">
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+      <footer className="border-t border-brand-blue-light/30 bg-brand-blue-dark px-4 pb-4 pt-6 text-white md:px-6 md:pt-8">
+        <div className="mx-auto flex max-w-7xl flex-col space-y-3">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
             <div className="space-y-4">
-              <div className="text-lg font-bold tracking-tight">SCIMaP</div>
+              <div className="text-lg font-bold tracking-tight">{FOOTER.site_name}</div>
               <p className="pr-8 text-sm leading-relaxed text-gray-300">
-                Tracking federal cuts to science and their impact on communities.
+                {FOOTER.tagline}
               </p>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white">Navigation</h4>
-              <ul className="flex flex-col space-y-3 text-sm text-gray-300">
-                <li>
-                  <Link to="/about" className="transition-colors hover:text-brand-orange">
-                    About the Project
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/news" className="transition-colors hover:text-brand-orange">
-                    News
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/insights" className="transition-colors hover:text-brand-orange">
-                    Insights
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white">Resources</h4>
-              <ul className="flex flex-col space-y-3 text-sm text-gray-300">
-                <li>
-                  <a href="/" className="transition-colors hover:text-brand-orange">
-                    Impact Map
-                  </a>
-                </li>
-                <li>
-                  <Link to="/insights" className="transition-colors hover:text-brand-orange">
-                    Insights
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="transition-colors hover:text-brand-orange">
-                    Contact Us
-                  </Link>
-                </li>
-              </ul>
             </div>
 
             <div className="space-y-4">
               <h4 className="text-lg font-semibold text-white">Get in Touch</h4>
               <ul className="flex flex-col space-y-1 text-sm text-gray-300">
-                <li>Press Inquiries: press@scienceimpacts.org</li>
-                <li>Other: contact@scienceimpacts.org</li>
+                <li>Press Inquiries: {FOOTER.press_email}</li>
+                <li>Other: {FOOTER.contact_email}</li>
               </ul>
               <div className="flex gap-4 pt-4">
                 <a
-                  href="/"
+                  href="https://bsky.app/profile/scienceimpacts.org"
                   className="text-gray-300 transition-colors hover:text-white"
                   aria-label="Bluesky"
                 >
@@ -274,7 +269,9 @@ export const Route = createRootRoute({
                   </svg>
                 </a>
                 <a
-                  href="/"
+                  href="https://www.instagram.com/science_impacts"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-gray-300 transition-colors hover:text-white"
                   aria-label="Instagram"
                 >
@@ -295,27 +292,18 @@ export const Route = createRootRoute({
                 <a
                   href="/"
                   className="text-gray-300 transition-colors hover:text-white"
-                  aria-label="Map/Book"
+                  aria-label="LinkedIn"
                 >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                   </svg>
                 </a>
               </div>
             </div>
           </div>
 
-          <div className="mt-12 border-t border-brand-blue-light/50 pt-8 text-center text-sm text-gray-300">
-            Science & Community Impact Mapping Project (SCIMaP), University of Maryland, College of
-            Math & Natural Sciences, College Park Maryland
+          <div className="mt-6 border-t border-brand-blue-light/50 pt-4 text-center text-sm text-gray-300">
+            {FOOTER.org_line}
           </div>
         </div>
       </footer>

@@ -18,7 +18,7 @@ type Attrs = Record<string, any>
 
 /** Parse YAML frontmatter from a markdown string. */
 function parseFrontmatter(raw: string): { attrs: Attrs; body: string } {
-  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/)
+  const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/.exec(raw)
   if (!match) return { attrs: {}, body: raw }
   return { attrs: parseYaml(match[1]) ?? {}, body: match[2].trim() }
 }
@@ -74,7 +74,7 @@ export function getNewsItems(): NewsItem[] {
     .sort((a, b) => {
       if (a.isOngoing && !b.isOngoing) return -1
       if (!a.isOngoing && b.isOngoing) return 1
-      return new Date(b.date).getTime() - new Date(a.date).getTime()
+      return new Date(String(b.date)).getTime() - new Date(String(a.date)).getTime()
     })
 }
 
@@ -103,7 +103,7 @@ export function getPressReleases(): PressRelease[] {
         url: attrs.url ?? '',
       }
     })
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .sort((a, b) => new Date(String(b.date)).getTime() - new Date(String(a.date)).getTime())
 }
 
 /** Load all research articles from content/articles/*.md */

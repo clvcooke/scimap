@@ -1,3 +1,13 @@
+"""
+Generate MVT tiles for the FY2027 NIH + NSF budget impact map.
+
+Reads per-geography CSVs for NIH and NSF, merges them with geometry files,
+and produces vector tiles via tippecanoe.  Upload via rclone.
+
+Usage:
+    python scripts/fy27_budget.py
+"""
+
 import pandas as pd
 import geopandas as gpd
 import json
@@ -5,17 +15,17 @@ import os
 import subprocess
 import platform
 import tempfile
+import urllib.request
 import zipfile
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 
-DATA_DIR = os.path.join(PROJECT_ROOT, "data", "baseline")
-GEO_REF_DIR = os.path.join(PROJECT_ROOT, "data", "geo_ref")
+NIH_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NIH Budget")
+NSF_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NSF Budget")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "baseline-v1"
-VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
+TILE_VERSION = "v1"
 
 # ── Remote geo-reference data (Cloudflare R2) ────────────────────────
 R2_BASE = "https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data"
@@ -57,8 +67,51 @@ def download_geo_refs():
     print(f"  Geo cache: {GEO_CACHE_DIR}")
 
 
+# Resolved paths (populated after download)
 def geo_path(name):
     return os.path.join(GEO_CACHE_DIR, name)
+
+
+def build_levels():
+    """Build LEVELS config using cached geo-ref paths."""
+    return {
+        "states": {
+            "nih_csv": os.path.join(NIH_DIR, "NIH_budget27_state.csv"),
+            "nsf_csv": os.path.join(NSF_DIR, "NSF_budget27_state.csv"),
+            "geo": geo_path("merged_data_states_CLIP.geojson"),
+            "csv_key": "state",
+            "geo_key": "state_code",
+            "zoom": 7,
+        },
+        "counties": {
+            "nih_csv": os.path.join(NIH_DIR, "NIH_budget27_county.csv"),
+            "nsf_csv": os.path.join(NSF_DIR, "NSF_budget27_county.csv"),
+            "geo": geo_path("merged_data_counties_CLIP_Compress.geojson"),
+            "csv_key": "FIPS",
+            "geo_key": "FIPS",
+            "csv_key_pad": 5,  # ensure "01001" format
+            "geo_key_pad": 5,  # geojson has int FIPS (1001) -> zero-pad to "01001"
+            "zoom": 9,
+        },
+        "districts": {
+            "nih_csv": os.path.join(NIH_DIR, "NIH_budget27_cong.csv"),
+            "nsf_csv": os.path.join(NSF_DIR, "NSF_budget27_cong.csv"),
+            "geo": geo_path("CongDist_shp"),
+            "csv_key": "GEOID",
+            "geo_key": "GEOID",
+            "csv_key_pad": 4,
+            "zoom": 9,
+        },
+        "cities": {
+            "nih_csv": os.path.join(NIH_DIR, "NIH_budget27_city.csv"),
+            "nsf_csv": os.path.join(NSF_DIR, "NSF_budget27_city.csv"),
+            "geo": geo_path("Cities_Counties"),
+            "csv_key": "CBSA_FIPS",
+            "geo_key": "FIPSCITY",
+            "geo_filter": {"CITYFLAG": 1},  # only metro-area rows
+            "zoom": 9,
+        },
+    }
 
 
 def find_shapefile(directory):
@@ -67,108 +120,82 @@ def find_shapefile(directory):
         for f in files:
             if f.endswith(".shp"):
                 return os.path.join(root, f)
-    raise FileNotFoundError(f"No .shp found in {directory}")
+    return None
 
 
-def build_levels():
-    """Build LEVELS config using cached geo-ref paths."""
-    return {
-        "states": {
-            "csv": os.path.join(DATA_DIR, "baseline_state.csv"),
-            "geo": geo_path("merged_data_states_CLIP.geojson"),
-            "csv_key": "state",
-            "geo_key": "state_code",
-            "zoom": 7,
-        },
-        "counties": {
-            "csv": os.path.join(DATA_DIR, "baseline_county.csv"),
-            "geo": geo_path("merged_data_counties_CLIP_Compress.geojson"),
-            "csv_key": "FIPS",
-            "geo_key": "FIPS",
-            "zoom": 9,
-        },
-        "districts": {
-            "csv": os.path.join(DATA_DIR, "baseline_district.csv"),
-            "geo": geo_path("CongDist_shp"),
-            "csv_key": "GEOID",
-            "geo_key": "GEOID",
-            "csv_key_pad": 4,  # zero-pad CSV key to 4 digits to match geo
-            "zoom": 9,
-        },
-        "cities": {
-            "csv": os.path.join(DATA_DIR, "baseline_city.csv"),
-            "geo": geo_path("Cities_Counties"),
-            "csv_key": "CBSA_FIPS",
-            "geo_key": "FIPSCITY",
-            "filter": {"CITYFLAG": 1},
-            "dissolve_key": "FIPSCITY",
-            "zoom": 9,
-        },
-    }
+def load_geometries(geo_path, geo_key, geo_filter=None, geo_key_pad=None):
+    # If geo_path is a directory (extracted zip), find the shapefile inside
+    if os.path.isdir(geo_path):
+        shp = find_shapefile(geo_path)
+        if shp is None:
+            raise FileNotFoundError(f"No .shp found in {geo_path}")
+        print(f"  Using shapefile: {os.path.basename(shp)}")
+        geo_path = shp
 
-
-def load_geometries(geo_file, geo_key, filter_by=None, dissolve_key=None):
-    """Load a GeoJSON or shapefile and return a dict of key -> geometry."""
-    # If path is a directory, find the shapefile inside it
-    if os.path.isdir(geo_file):
-        geo_file = find_shapefile(geo_file)
-
-    gdf = gpd.read_file(geo_file)
+    gdf = gpd.read_file(geo_path)
     if gdf.crs and gdf.crs != "EPSG:4326":
         gdf = gdf.to_crs(epsg=4326)
 
-    if filter_by:
-        for col, val in filter_by.items():
+    # Optional row filter (e.g. CITYFLAG == 1 for metro areas)
+    if geo_filter:
+        for col, val in geo_filter.items():
             gdf = gdf[gdf[col] == val]
-
-    if dissolve_key:
-        gdf = gdf.dissolve(by=dissolve_key).reset_index()
+        print(f"  Filtered to {len(gdf)} rows ({geo_filter})")
 
     geometries = {}
     for _, row in gdf.iterrows():
         key = row[geo_key]
         if pd.notna(key) and pd.notna(row.geometry):
-            geometries[str(key)] = row.geometry.__geo_interface__
-
+            key_str = str(int(key)) if isinstance(key, float) else str(key)
+            if geo_key_pad:
+                key_str = key_str.zfill(geo_key_pad)
+            geometries[key_str] = row.geometry.__geo_interface__
     return geometries
 
 
-def pivot_baseline_data(csv_path, key_col):
+def merge_nih_nsf(nih_csv, nsf_csv, csv_key):
     """
-    Pivot baseline CSV so each geographic unit becomes one row with columns like:
-    FIC_raw_funding, FIC_econ_impact, FIC_jobs, NCI_raw_funding, ..., pop_2024
-    Also preserves name/state/label columns (e.g. name, state, CBSA_NAME).
+    Load NIH and NSF CSVs and merge on the geographic key.
+    Adds a combined econ_budg_total_cuts column.
     """
-    df = pd.read_csv(csv_path)
+    nih = pd.read_csv(nih_csv)
+    nsf = pd.read_csv(nsf_csv)
 
-    pivoted = df.pivot_table(
-        index=key_col, columns="funding_ics", values=VALUE_COLUMNS, aggfunc="sum"
-    )
+    # Normalize key columns to string
+    nih[csv_key] = nih[csv_key].astype(str)
+    nsf[csv_key] = nsf[csv_key].astype(str)
 
-    # Flatten multi-level columns: (raw_funding, FIC) -> FIC_raw_funding
-    pivoted.columns = [f"{ics}_{metric}" for metric, ics in pivoted.columns]
+    # Drop overlapping non-data columns from NSF before merge (keep the csv_key!)
+    nsf_drop = [c for c in ["state_name", "state", "name", "rep_name", "pol_party", "state_FIPS", "CBSA_NAME"]
+                if c in nsf.columns and c != csv_key]
+    nsf_trimmed = nsf.drop(columns=nsf_drop, errors="ignore")
 
-    # Preserve non-metric columns (pop_2024, name, state, CBSA_NAME, etc.)
-    meta_cols = [c for c in df.columns if c not in [key_col, "funding_ics"] + VALUE_COLUMNS]
-    meta = df.drop_duplicates(subset=[key_col])[[key_col] + meta_cols].set_index(key_col)
-    pivoted = pivoted.join(meta)
+    merged = nih.merge(nsf_trimmed, on=csv_key, how="outer")
 
-    pivoted = pivoted.reset_index()
-    return pivoted
+    # Compute combined totals (handle columns that may not exist)
+    def safe_col(df, col):
+        if col in df.columns:
+            return pd.to_numeric(df[col], errors="coerce").fillna(0)
+        return pd.Series(0, index=df.index)
+
+    merged["econ_budg_total_cuts"] = safe_col(merged, "econ_budg_NIH_cuts") + safe_col(merged, "econ_budg_NSF_cuts")
+    merged["budg_total_cuts"] = safe_col(merged, "budg_NIH_cuts") + safe_col(merged, "budg_NSF_cuts")
+    merged["jobs_budg_total_cuts"] = safe_col(merged, "jobs_budg_NIH_cuts")
+
+    return merged
 
 
-def build_geojson(pivoted_df, geometries, csv_key):
-    """Merge pivoted data with geometries into a GeoJSON FeatureCollection."""
+def build_geojson(df, geometries, csv_key):
     features = []
     matched = 0
-    for _, row in pivoted_df.iterrows():
+    for _, row in df.iterrows():
         key = str(row[csv_key])
         geometry = geometries.get(key)
         if geometry is None:
             continue
 
         properties = {}
-        for col in pivoted_df.columns:
+        for col in df.columns:
             val = row[col]
             if pd.isna(val):
                 properties[col] = None
@@ -184,7 +211,7 @@ def build_geojson(pivoted_df, geometries, csv_key):
         })
         matched += 1
 
-    total = len(pivoted_df)
+    total = len(df)
     if matched < total:
         print(f"  Warning: matched {matched}/{total} features to geometries")
 
@@ -199,7 +226,6 @@ def save_geojson(geojson_data, output_path):
 
 
 def to_wsl_path(windows_path):
-    """Convert a Windows path to a WSL /mnt/c/... path."""
     abs_path = os.path.abspath(windows_path)
     drive = abs_path[0].lower()
     rest = abs_path[2:].replace("\\", "/")
@@ -207,7 +233,6 @@ def to_wsl_path(windows_path):
 
 
 def run_wsl(cmd):
-    """Run a command through WSL if on Windows, otherwise directly."""
     if platform.system() == "Windows":
         full_cmd = ["wsl", "bash", "-c", cmd]
     else:
@@ -246,36 +271,37 @@ def process_level(name, config):
     print(f"Processing: {name}")
     print(f"{'='*60}")
 
-    csv_path = config["csv"]
-    geo_file = config["geo"]
     csv_key = config["csv_key"]
     geo_key = config["geo_key"]
     zoom = config["zoom"]
 
-    print(f"Loading geometries from {os.path.basename(geo_file)}...")
+    if not os.path.exists(config["geo"]):
+        print(f"  SKIPPED: geo file not found: {config['geo']}")
+        return
+
+    print(f"Loading geometries from {os.path.basename(config['geo'])}...")
     geometries = load_geometries(
-        geo_file, geo_key,
-        filter_by=config.get("filter"),
-        dissolve_key=config.get("dissolve_key"),
+        config["geo"], geo_key,
+        geo_filter=config.get("geo_filter"),
+        geo_key_pad=config.get("geo_key_pad"),
     )
     print(f"  Loaded {len(geometries)} geometries")
 
-    print(f"Pivoting {os.path.basename(csv_path)}...")
-    pivoted = pivot_baseline_data(csv_path, csv_key)
-    print(f"  Pivoted: {len(pivoted)} rows, {len(pivoted.columns)} columns")
+    print(f"Merging NIH + NSF data...")
+    merged = merge_nih_nsf(config["nih_csv"], config["nsf_csv"], csv_key)
+    print(f"  Merged: {len(merged)} rows, {len(merged.columns)} columns")
 
-    # Normalize keys to strings for matching
     pad_width = config.get("csv_key_pad")
     if pad_width:
-        pivoted[csv_key] = pivoted[csv_key].astype(str).str.zfill(pad_width)
+        merged[csv_key] = merged[csv_key].astype(str).str.zfill(pad_width)
     else:
-        pivoted[csv_key] = pivoted[csv_key].astype(str)
+        merged[csv_key] = merged[csv_key].astype(str)
 
     print("Building GeoJSON...")
-    geojson_data = build_geojson(pivoted, geometries, csv_key)
+    geojson_data = build_geojson(merged, geometries, csv_key)
 
-    tile_name = f"tiles_{name}_baseline_{TILE_VERSION}"
-    geojson_output = os.path.join(OUTPUT_DIR, f"baseline_{name}.geojson")
+    tile_name = f"tiles_{name}_budget27_{TILE_VERSION}"
+    geojson_output = os.path.join(OUTPUT_DIR, f"budget27_{name}.geojson")
     save_geojson(geojson_data, geojson_output)
 
     print("Generating tiles...")
@@ -289,7 +315,7 @@ def process_level(name, config):
 
 
 def main():
-    print("Downloading geo-reference data...")
+    print("Ensuring geo-reference data is cached...")
     download_geo_refs()
 
     levels = build_levels()

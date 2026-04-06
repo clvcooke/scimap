@@ -188,3 +188,46 @@ collections:
               - { label: "Icon", name: "icon", widget: "select", options: ["mail", "newspaper"], default: "mail" }
               - { label: "Description", name: "description", widget: "text" }
               - { label: "Email", name: "email", widget: "string" }
+
+      - name: map-baseline
+        label: "Map — Baseline Funding"
+        file: content/pages/map-baseline.md
+        fields:
+          - { label: "Heading", name: "heading", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - label: "Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string" }
+
+      - name: map-fy26
+        label: "Map — FY26 Budget"
+        file: content/pages/map-fy26.md
+        fields:
+          - { label: "Heading", name: "heading", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - label: "Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string" }
+
+      - name: map-grants
+        label: "Map — Grant Disruptions"
+        file: content/pages/map-grants.md
+        fields:
+          - { label: "Heading", name: "heading", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - label: "Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string" }
+
+      - name: footer
+        label: "Footer"
+        file: content/pages/footer.md
+        fields:
+          - { label: "Site Name", name: "site_name", widget: "string" }
+          - { label: "Tagline", name: "tagline", widget: "text" }
+          - { label: "Press Email", name: "press_email", widget: "string" }
+          - { label: "Contact Email", name: "contact_email", widget: "string" }
+          - { label: "Organization Line", name: "org_line", widget: "text" }

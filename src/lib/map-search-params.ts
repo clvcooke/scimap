@@ -4,6 +4,7 @@ export interface MapSearchParams {
   lat?: number | undefined
   lng?: number | undefined
   zoom?: number | undefined
+  showLocation?: boolean | undefined
 }
 
 export function validateMapSearch(search: Record<string, unknown>): MapSearchParams {
@@ -11,6 +12,7 @@ export function validateMapSearch(search: Record<string, unknown>): MapSearchPar
     lat: search.lat ? Number(search.lat) : undefined,
     lng: search.lng ? Number(search.lng) : undefined,
     zoom: search.zoom ? Number(search.zoom) : undefined,
+    showLocation: search.showLocation === false ? false : undefined,
   }
 }
 

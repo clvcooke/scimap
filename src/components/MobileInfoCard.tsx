@@ -4,7 +4,6 @@ import type { SelectedFeature } from '@/lib/map-config'
 
 export default function MobileInfoCard({
   feature,
-  geoLabel,
   perCapita,
   onSeeMore,
   onClose,
@@ -26,7 +25,7 @@ export default function MobileInfoCard({
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm font-semibold text-gray-900">
-            {geoLabel}: {feature.id}
+            {feature.id}
           </div>
           <div className="mt-0.5 text-xs text-gray-500">
             <span>Impact: {formatCurrency(impact)}</span>

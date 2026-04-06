@@ -126,6 +126,10 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+.deck-tooltip {
+  display: none !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

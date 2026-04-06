@@ -1,6 +1,7 @@
+import { lazy, Suspense, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { BookOpen, ExternalLink, Newspaper, BarChart3 } from 'lucide-react'
-import IDCMap from '@/components/IDCMap'
+import { BookOpen, ExternalLink, Newspaper, Archive, ChevronDown } from 'lucide-react'
+import MapAttribution from '@/components/MapAttribution'
 import {
   Tabs,
   TabsList,
@@ -8,6 +9,9 @@ import {
   TabsContent,
 } from '@/components/ui/tabs'
 import { getArticles, getPage } from '@/lib/content'
+
+const IDCMap = lazy(() => import('@/components/IDCMap'))
+const FY26Map = lazy(() => import('@/components/FY26Map'))
 
 export const Route = createFileRoute('/insights')({
   component: InsightsPage,
@@ -17,6 +21,32 @@ export const Route = createFileRoute('/insights')({
 
 const ARTICLES = getArticles()
 const PAGE = getPage('insights')
+
+/* ── Collapsible section ───────────────────────────────────────────── */
+
+function CollapsibleSection({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left text-lg font-semibold text-gray-900 hover:bg-gray-50"
+      >
+        {title}
+        <ChevronDown
+          className={`h-5 w-5 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+      {open && <div className="border-t border-gray-200 px-5 py-5">{children}</div>}
+    </div>
+  )
+}
 
 /* ── Page ──────────────────────────────────────────────────────────── */
 
@@ -53,11 +83,11 @@ function InsightsPage() {
                   Science Matters
                 </TabsTrigger>
                 <TabsTrigger
-                  value="idc"
+                  value="archived"
                   className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
                 >
-                  <BarChart3 className="hidden h-4 w-4 sm:block" />
-                  IDC Analysis
+                  <Archive className="hidden h-4 w-4 sm:block" />
+                  Archived Maps
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -122,17 +152,30 @@ function InsightsPage() {
           </div>
         </TabsContent>
 
-        {/* ── IDC Analysis ─────────────────────────────────────────── */}
-        <TabsContent value="idc" className="text-base">
+        {/* ── Archived Maps ────────────────────────────────────────── */}
+        <TabsContent value="archived" className="text-base">
           <div className="w-full px-6 py-8 md:py-10">
-            <div className="mx-auto max-w-4xl">
-              <p className="mb-6 leading-relaxed text-gray-600">
-                {a.idc_intro}
-              </p>
+            <div className="mx-auto max-w-4xl space-y-4">
+              <CollapsibleSection title="IDC Analysis">
+                <p className="mb-6 leading-relaxed text-gray-600">
+                  {a.idc_intro}
+                </p>
+                <div className="relative h-125 md:h-150">
+                  <Suspense fallback={<div className="flex h-full items-center justify-center text-gray-400">Loading map…</div>}>
+                    <IDCMap />
+                  </Suspense>
+                </div>
+                <MapAttribution />
+              </CollapsibleSection>
 
-              <div className="relative h-[500px] md:h-[600px]">
-                <IDCMap />
-              </div>
+              <CollapsibleSection title="FY26 Budget Impact">
+                <div className="relative h-125 md:h-150">
+                  <Suspense fallback={<div className="flex h-full items-center justify-center text-gray-400">Loading map…</div>}>
+                    <FY26Map />
+                  </Suspense>
+                </div>
+                <MapAttribution />
+              </CollapsibleSection>
             </div>
           </div>
         </TabsContent>

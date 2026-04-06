@@ -9,16 +9,31 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TakeActionRouteImport } from './routes/take-action'
+import { Route as ScorecardRouteImport } from './routes/scorecard'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as MethodologyRouteImport } from './routes/methodology'
+import { Route as MapsRouteImport } from './routes/maps'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as GrantsRouteImport } from './routes/grants'
+import { Route as Fy27RouteImport } from './routes/fy27'
 import { Route as Fy26RouteImport } from './routes/fy26'
+import { Route as ExportPreviewRouteImport } from './routes/export-preview'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TakeActionRoute = TakeActionRouteImport.update({
+  id: '/take-action',
+  path: '/take-action',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScorecardRoute = ScorecardRouteImport.update({
+  id: '/scorecard',
+  path: '/scorecard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsRoute = NewsRouteImport.update({
   id: '/news',
   path: '/news',
@@ -27,6 +42,11 @@ const NewsRoute = NewsRouteImport.update({
 const MethodologyRoute = MethodologyRouteImport.update({
   id: '/methodology',
   path: '/methodology',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapsRoute = MapsRouteImport.update({
+  id: '/maps',
+  path: '/maps',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MapRoute = MapRouteImport.update({
@@ -44,9 +64,19 @@ const GrantsRoute = GrantsRouteImport.update({
   path: '/grants',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Fy27Route = Fy27RouteImport.update({
+  id: '/fy27',
+  path: '/fy27',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Fy26Route = Fy26RouteImport.update({
   id: '/fy26',
   path: '/fy26',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExportPreviewRoute = ExportPreviewRouteImport.update({
+  id: '/export-preview',
+  path: '/export-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -69,35 +99,50 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/export-preview': typeof ExportPreviewRoute
   '/fy26': typeof Fy26Route
+  '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
   '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
+  '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
+  '/scorecard': typeof ScorecardRoute
+  '/take-action': typeof TakeActionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/export-preview': typeof ExportPreviewRoute
   '/fy26': typeof Fy26Route
+  '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
   '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
+  '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
+  '/scorecard': typeof ScorecardRoute
+  '/take-action': typeof TakeActionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/export-preview': typeof ExportPreviewRoute
   '/fy26': typeof Fy26Route
+  '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
   '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
+  '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
+  '/scorecard': typeof ScorecardRoute
+  '/take-action': typeof TakeActionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -105,50 +150,84 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/export-preview'
     | '/fy26'
+    | '/fy27'
     | '/grants'
     | '/insights'
     | '/map'
+    | '/maps'
     | '/methodology'
     | '/news'
+    | '/scorecard'
+    | '/take-action'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/contact'
+    | '/export-preview'
     | '/fy26'
+    | '/fy27'
     | '/grants'
     | '/insights'
     | '/map'
+    | '/maps'
     | '/methodology'
     | '/news'
+    | '/scorecard'
+    | '/take-action'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/contact'
+    | '/export-preview'
     | '/fy26'
+    | '/fy27'
     | '/grants'
     | '/insights'
     | '/map'
+    | '/maps'
     | '/methodology'
     | '/news'
+    | '/scorecard'
+    | '/take-action'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
+  ExportPreviewRoute: typeof ExportPreviewRoute
   Fy26Route: typeof Fy26Route
+  Fy27Route: typeof Fy27Route
   GrantsRoute: typeof GrantsRoute
   InsightsRoute: typeof InsightsRoute
   MapRoute: typeof MapRoute
+  MapsRoute: typeof MapsRoute
   MethodologyRoute: typeof MethodologyRoute
   NewsRoute: typeof NewsRoute
+  ScorecardRoute: typeof ScorecardRoute
+  TakeActionRoute: typeof TakeActionRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/take-action': {
+      id: '/take-action'
+      path: '/take-action'
+      fullPath: '/take-action'
+      preLoaderRoute: typeof TakeActionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scorecard': {
+      id: '/scorecard'
+      path: '/scorecard'
+      fullPath: '/scorecard'
+      preLoaderRoute: typeof ScorecardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/news': {
       id: '/news'
       path: '/news'
@@ -161,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/methodology'
       fullPath: '/methodology'
       preLoaderRoute: typeof MethodologyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maps': {
+      id: '/maps'
+      path: '/maps'
+      fullPath: '/maps'
+      preLoaderRoute: typeof MapsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/map': {
@@ -184,11 +270,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GrantsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fy27': {
+      id: '/fy27'
+      path: '/fy27'
+      fullPath: '/fy27'
+      preLoaderRoute: typeof Fy27RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fy26': {
       id: '/fy26'
       path: '/fy26'
       fullPath: '/fy26'
       preLoaderRoute: typeof Fy26RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/export-preview': {
+      id: '/export-preview'
+      path: '/export-preview'
+      fullPath: '/export-preview'
+      preLoaderRoute: typeof ExportPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -219,12 +319,17 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
+  ExportPreviewRoute: ExportPreviewRoute,
   Fy26Route: Fy26Route,
+  Fy27Route: Fy27Route,
   GrantsRoute: GrantsRoute,
   InsightsRoute: InsightsRoute,
   MapRoute: MapRoute,
+  MapsRoute: MapsRoute,
   MethodologyRoute: MethodologyRoute,
   NewsRoute: NewsRoute,
+  ScorecardRoute: ScorecardRoute,
+  TakeActionRoute: TakeActionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

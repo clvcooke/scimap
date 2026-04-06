@@ -13,14 +13,17 @@ import {
   createChoroplethLayer,
   createStateOutlineLayer,
   positionTooltip,
+  useLabelsStyle,
   type LossGeoLevel,
   type MapGeoConfig,
   type TileProps,
 } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { exportMapAsPng } from '@/lib/export-map'
 import MapControls from './MapControls'
-import ColorScale from './ColorScale'
+import ShareMenu from './ShareMenu'
+import ColorScale, { type ColorScheme } from './ColorScale'
+import BudgetDrawer, { type BudgetDrawerConfig } from './BudgetDrawer'
+import BudgetMobileCard from './BudgetMobileCard'
 
 interface ChoroplethMapProps {
   geoLevels: Record<LossGeoLevel, MapGeoConfig>
@@ -29,6 +32,7 @@ interface ChoroplethMapProps {
   colorLUT: Uint8Array
   layerId: string
   useMagma?: boolean
+  colorScheme?: ColorScheme
   /** Build the inner HTML for the hover tooltip given tile props + current geo level. */
   renderTooltip: (props: TileProps, geoLevel: LossGeoLevel) => string
   /** Extra deck.gl layers to render on top (e.g. cluster layer). */
@@ -43,6 +47,8 @@ interface ChoroplethMapProps {
   initialLat?: number | undefined
   initialLng?: number | undefined
   initialZoom?: number | undefined
+  /** When provided, clicking a region opens a detail drawer with this config. */
+  drawerConfig?: BudgetDrawerConfig
 }
 
 export default function ChoroplethMap({
@@ -52,6 +58,7 @@ export default function ChoroplethMap({
   colorLUT,
   layerId,
   useMagma = false,
+  colorScheme,
   renderTooltip,
   extraLayers = [],
   onMapClick,
@@ -60,8 +67,11 @@ export default function ChoroplethMap({
   initialLat,
   initialLng,
   initialZoom,
+  drawerConfig,
 }: ChoroplethMapProps) {
   const [geoLevel, setGeoLevel] = useState<LossGeoLevel>(defaultLevel)
+  const [selectedProps, setSelectedProps] = useState<TileProps | null>(null)
+  const [previewProps, setPreviewProps] = useState<TileProps | null>(null)
   const [viewState, setViewState] = useState(() => ({
     ...INITIAL_VIEW_STATE,
     ...(initialLat != null && initialLng != null
@@ -74,6 +84,7 @@ export default function ChoroplethMap({
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
+  const labelsStyle = useLabelsStyle()
 
   const config = geoLevels[geoLevel]
   const colorScale = useMemo(() => createLogColorScale(config.domain), [config])
@@ -106,9 +117,6 @@ export default function ChoroplethMap({
     setUserLocation([lng, lat])
   }, [])
 
-  const handleExport = useCallback(() => {
-    if (containerRef.current) exportMapAsPng(containerRef.current)
-  }, [])
 
   const onHover = useCallback(
     (info: { x: number; y: number; object?: { properties?: TileProps } }) => {
@@ -123,9 +131,36 @@ export default function ChoroplethMap({
 
       el.innerHTML = renderTooltip(info.object.properties, geoLevel)
       el.style.display = 'block'
-      positionTooltip(el, info.x, info.y)
+      positionTooltip(el, info.x, info.y, containerRef.current ?? undefined)
     },
     [geoLevel, isMobile, renderTooltip],
+  )
+
+  const handleClick = useCallback(
+    (info: PickingInfo, event: MjolnirGestureEvent) => {
+      // If a custom click handler is provided, delegate to it
+      if (onMapClick) {
+        onMapClick(info, event)
+        return
+      }
+
+      // Built-in drawer click handling
+      if (!drawerConfig) return
+
+      const props = (info.object as { properties?: TileProps } | undefined)?.properties
+      if (!props) {
+        setSelectedProps(null)
+        setPreviewProps(null)
+        return
+      }
+
+      if (isMobile) {
+        requestAnimationFrame(() => setPreviewProps(props))
+      } else {
+        requestAnimationFrame(() => setSelectedProps(props))
+      }
+    },
+    [onMapClick, drawerConfig, isMobile],
   )
 
   return (
@@ -152,37 +187,66 @@ export default function ChoroplethMap({
         layers={[dataLayer, outlineLayer, ...extraLayers, locationLayer].filter(Boolean)}
         useDevicePixels={false}
         deviceProps={{ webgl: { preserveDrawingBuffer: true } }}
-        getCursor={({ isDragging }) => (isDragging ? 'grabbing' : 'grab')}
+        getCursor={({ isDragging, isHovering }) => (isDragging ? 'grabbing' : isHovering && (drawerConfig || onMapClick) ? 'pointer' : 'grab')}
         onHover={onHover}
-        onClick={onMapClick ?? null}
+        onClick={handleClick}
       >
         <Map
           mapStyle="https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json"
+          attributionControl={false}
         />
       </DeckGL>
 
       {/* Labels-only map overlay so roads/cities render above shaded layers */}
-      <Map
-        {...viewState}
-        mapStyle="https://basemaps.cartocdn.com/gl/positron-labels-gl-style/style.json"
-        interactive={false}
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-      />
+      {labelsStyle && (
+        <Map
+          {...viewState}
+          mapStyle={labelsStyle}
+          interactive={false}
+          attributionControl={false}
+          style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+        />
+      )}
 
-      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} onExport={handleExport} />
+      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} />
+      <ShareMenu className="absolute top-2 right-2 z-10 md:top-4 md:right-4" />
 
       {/* Color scale legend */}
-      <div className="pointer-events-none absolute bottom-12 right-2 z-10 md:bottom-16 md:right-4">
-        <ColorScale domain={config.domain} useMagma={useMagma} />
+      <div className="pointer-events-none absolute bottom-2 right-2 z-10 md:bottom-4 md:right-4">
+        <ColorScale domain={config.domain} useMagma={useMagma} scheme={colorScheme} />
       </div>
 
-      {/* Hover tooltip (desktop) */}
+      {/* Hover tooltip (desktop, fixed so it escapes overflow-hidden) */}
       {!isMobile && (
         <div
           ref={tooltipRef}
-          className="pointer-events-none absolute z-20 max-w-xs rounded bg-black/80 px-3 py-2 text-sm text-white shadow-lg"
+          className="pointer-events-none fixed z-50 max-w-xs rounded bg-black/80 px-3 py-2 text-sm text-white shadow-lg"
           style={{ display: 'none', left: 0, top: 0 }}
         />
+      )}
+
+      {/* Built-in drawer for budget maps */}
+      {drawerConfig && (
+        <>
+          {isMobile && previewProps && (
+            <BudgetMobileCard
+              props={previewProps}
+              geoLevel={geoLevel}
+              config={drawerConfig}
+              onSeeMore={() => {
+                setSelectedProps(previewProps)
+                setPreviewProps(null)
+              }}
+              onClose={() => setPreviewProps(null)}
+            />
+          )}
+          <BudgetDrawer
+            props={selectedProps}
+            geoLevel={geoLevel}
+            config={drawerConfig}
+            onClose={() => setSelectedProps(null)}
+          />
+        </>
       )}
 
       {children}
