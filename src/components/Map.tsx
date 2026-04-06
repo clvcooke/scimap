@@ -15,11 +15,10 @@ import {
   createColorScale,
 } from '@/lib/map-config'
 import type { TileProperties, SelectedFeature } from '@/lib/map-config'
-import { createStateOutlineLayer, positionTooltip } from '@/lib/map-shared'
+import { createStateOutlineLayer, positionTooltip, useLabelsStyle } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { exportMapCard, currentDateLabel } from '@/lib/export-map'
-import { BASELINE_SLOTS } from '@/lib/card-stats'
 import MapControls from './MapControls'
+import ShareMenu from './ShareMenu'
 import ColorScale from './ColorScale'
 import DetailDrawer from './DetailDrawer'
 import MobileInfoCard from './MobileInfoCard'
@@ -71,6 +70,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
+  const labelsStyle = useLabelsStyle()
 
   const config = GEO_LEVELS[geoLevel]
   const colorScale = useMemo(() => createColorScale(config, perCapita), [config, perCapita])
@@ -106,17 +106,6 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
     setUserLocation([lng, lat])
   }, [])
 
-  const handleExport = useCallback(() => {
-    if (!containerRef.current) return
-    void exportMapCard({
-      container: containerRef.current,
-      title: 'NIH Economic Impact',
-      subtitle: 'Baseline Federal Research Funding Across the U.S.',
-      stats: BASELINE_SLOTS,
-      meta: `${config.label}  ·  ${perCapita ? 'Per Capita' : 'Total'}  ·  ${currentDateLabel()}`,
-      filename: 'scimap-baseline.png',
-    })
-  }, [config.label, perCapita])
 
   const onHover = useCallback(
     (info: { x: number; y: number; object?: { properties?: TileProperties } }) => {
@@ -217,7 +206,19 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
         />
       </DeckGL>
 
-      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} onExport={handleExport} />
+      {/* Labels-only map overlay so roads/cities render above shaded layers */}
+      {labelsStyle && (
+        <Map
+          {...viewState}
+          mapStyle={labelsStyle}
+          interactive={false}
+          attributionControl={false}
+          style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+        />
+      )}
+
+      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} />
+      <ShareMenu className="absolute top-2 right-2 z-10 md:top-4 md:right-4" />
 
       {/* Color scale legend */}
       <div className="pointer-events-none absolute bottom-2 right-2 z-10 md:bottom-4 md:right-4">

@@ -97,15 +97,17 @@ def build_levels():
         },
         "cities": {
             "csv": os.path.join(DATA_DIR, "baseline_city.csv"),
-            "geo": os.path.join(GEO_REF_DIR, "tl_2024_us_cbsa.shp"),
+            "geo": geo_path("Cities_Counties"),
             "csv_key": "CBSA_FIPS",
-            "geo_key": "CBSAFP",
+            "geo_key": "FIPSCITY",
+            "filter": {"CITYFLAG": 1},
+            "dissolve_key": "FIPSCITY",
             "zoom": 9,
         },
     }
 
 
-def load_geometries(geo_file, geo_key):
+def load_geometries(geo_file, geo_key, filter_by=None, dissolve_key=None):
     """Load a GeoJSON or shapefile and return a dict of key -> geometry."""
     # If path is a directory, find the shapefile inside it
     if os.path.isdir(geo_file):
@@ -114,6 +116,13 @@ def load_geometries(geo_file, geo_key):
     gdf = gpd.read_file(geo_file)
     if gdf.crs and gdf.crs != "EPSG:4326":
         gdf = gdf.to_crs(epsg=4326)
+
+    if filter_by:
+        for col, val in filter_by.items():
+            gdf = gdf[gdf[col] == val]
+
+    if dissolve_key:
+        gdf = gdf.dissolve(by=dissolve_key).reset_index()
 
     geometries = {}
     for _, row in gdf.iterrows():
@@ -244,7 +253,11 @@ def process_level(name, config):
     zoom = config["zoom"]
 
     print(f"Loading geometries from {os.path.basename(geo_file)}...")
-    geometries = load_geometries(geo_file, geo_key)
+    geometries = load_geometries(
+        geo_file, geo_key,
+        filter_by=config.get("filter"),
+        dissolve_key=config.get("dissolve_key"),
+    )
     print(f"  Loaded {len(geometries)} geometries")
 
     print(f"Pivoting {os.path.basename(csv_path)}...")

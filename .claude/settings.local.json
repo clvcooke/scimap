@@ -19,7 +19,16 @@
       "Bash(wc:*)",
       "Bash(curl -sI \"https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data/Cities_Counties.zip\")",
       "Bash(curl -sI \"https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data/merged_data_states_CLIP.geojson\")",
-      "Bash(grep -E \"\\\\.\\(ts|tsx|py|csv\\)$\")"
+      "Bash(grep -E \"\\\\.\\(ts|tsx|py|csv\\)$\")",
+      "Bash(tasklist)",
+      "Bash(wsl ps:*)",
+      "Bash(curl -s \"https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json\")",
+      "Bash(node -e \"const d=JSON.parse\\(require\\('fs'\\).readFileSync\\(0,'utf8'\\)\\); d.layers.forEach\\(l=>console.log\\(l.id, l.type\\)\\)\")",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/react/package.json'\\).version\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(list\\(d.keys\\(\\)\\)[:5]\\)\")",
+      "Bash(node:*)",
+      "Bash(find src/routes -type f -exec basename {} \\\\;)",
+      "Bash(head -20 data/baseline/*.json)"
     ]
   }
 }

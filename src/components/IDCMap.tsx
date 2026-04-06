@@ -1,6 +1,5 @@
 import { formatCurrency } from '@/lib/constants'
 import { IDC_GEO_LEVELS, IDC_COLOR_PROPERTY } from '@/lib/idc-map-config'
-import { IDC_SLOTS } from '@/lib/card-stats'
 import {
   LUT_OR_RD,
   buildTooltipHeader,
@@ -71,13 +70,10 @@ export default function IDCMap() {
       defaultLevel="states"
       colorProperty={IDC_COLOR_PROPERTY}
       colorLUT={LUT_OR_RD}
+      colorScheme="orrd"
       layerId="idc-mvt"
       renderTooltip={renderTooltip}
       drawerConfig={drawerConfig}
-      exportTitle="IDC Rate Analysis"
-      exportSubtitle="Indirect Cost Recovery Impact on Research Funding"
-      exportFilename="scimap-idc-analysis.png"
-      exportExtraSlots={IDC_SLOTS}
     />
   )
 }

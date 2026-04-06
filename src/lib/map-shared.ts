@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { scaleLinear } from 'd3-scale'
+import type { StyleSpecification } from 'maplibre-gl'
 import { MVTLayer } from '@deck.gl/geo-layers'
 import { LUT_BLUES, LUT_OR_RD, LUT_MAGMA_INV, LUT_SIZE, FILL_ALPHA } from './color-lut'
 import {
@@ -130,6 +132,42 @@ export function buildTooltipHeader(
   }
 
   return { locationLine, politicianHtml: html }
+}
+
+// ── Labels-only basemap style ─────────────────────────────────────
+// Fetch the full Positron style once, strip everything except symbol
+// (text/icon) layers, and set a transparent background so the labels
+// render on top of the DeckGL choropleth without hiding it.
+
+const POSITRON_URL =
+  'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
+
+let _labelsStylePromise: Promise<StyleSpecification> | null = null
+
+export function getLabelsStyle(): Promise<StyleSpecification> {
+  _labelsStylePromise ??= fetch(POSITRON_URL)
+      .then((r) => r.json())
+      .then((style: StyleSpecification) => ({
+        ...style,
+        layers: style.layers
+          .filter((l) => l.type === 'symbol')
+          .map((l) => ({
+            ...l,
+            paint: {
+              ...l.paint,
+              'text-color': '#2c2c2c',
+              'text-halo-color': 'rgba(255,255,255,0.85)',
+              'text-halo-width': 2,
+            },
+          })),
+      }))
+  return _labelsStylePromise
+}
+
+export function useLabelsStyle() {
+  const [style, setStyle] = useState<StyleSpecification | undefined>()
+  useEffect(() => { void getLabelsStyle().then(setStyle) }, [])
+  return style
 }
 
 // ── LUT re-exports (so consumers don't need to import color-lut directly) ──

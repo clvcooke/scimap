@@ -1,6 +1,5 @@
 import { formatCurrency } from '@/lib/constants'
 import { FY26_GEO_LEVELS, FY26_COLOR_PROPERTY } from '@/lib/fy26-map-config'
-import { FY26_SLOTS } from '@/lib/card-stats'
 import {
   LUT_MAGMA_INV,
   buildTooltipHeader,
@@ -96,10 +95,6 @@ export default function FY26Map({ initialLat, initialLng, initialZoom }: {
       initialLat={initialLat}
       initialLng={initialLng}
       initialZoom={initialZoom}
-      exportTitle="FY26 Budget Impact"
-      exportSubtitle="Projected NIH Funding Cuts by Region"
-      exportFilename="scimap-fy26-budget.png"
-      exportExtraSlots={FY26_SLOTS}
     />
   )
 }

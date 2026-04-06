@@ -13,13 +13,14 @@ import {
   createChoroplethLayer,
   createStateOutlineLayer,
   positionTooltip,
+  useLabelsStyle,
   type LossGeoLevel,
   type MapGeoConfig,
   type TileProps,
 } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { exportMapCard, currentDateLabel, type InfoSlot } from '@/lib/export-map'
 import MapControls from './MapControls'
+import ShareMenu from './ShareMenu'
 import ColorScale, { type ColorScheme } from './ColorScale'
 import BudgetDrawer, { type BudgetDrawerConfig } from './BudgetDrawer'
 import BudgetMobileCard from './BudgetMobileCard'
@@ -46,12 +47,6 @@ interface ChoroplethMapProps {
   initialLat?: number | undefined
   initialLng?: number | undefined
   initialZoom?: number | undefined
-  /** Card export branding — if provided, the download button generates a branded card. */
-  exportTitle?: string
-  exportSubtitle?: string
-  exportFilename?: string
-  /** Headline stat figures for the export card footer. */
-  exportExtraSlots?: InfoSlot[]
   /** When provided, clicking a region opens a detail drawer with this config. */
   drawerConfig?: BudgetDrawerConfig
 }
@@ -72,10 +67,6 @@ export default function ChoroplethMap({
   initialLat,
   initialLng,
   initialZoom,
-  exportTitle,
-  exportSubtitle,
-  exportFilename,
-  exportExtraSlots = [],
   drawerConfig,
 }: ChoroplethMapProps) {
   const [geoLevel, setGeoLevel] = useState<LossGeoLevel>(defaultLevel)
@@ -93,6 +84,7 @@ export default function ChoroplethMap({
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
+  const labelsStyle = useLabelsStyle()
 
   const config = geoLevels[geoLevel]
   const colorScale = useMemo(() => createLogColorScale(config.domain), [config])
@@ -125,17 +117,6 @@ export default function ChoroplethMap({
     setUserLocation([lng, lat])
   }, [])
 
-  const handleExport = useCallback(() => {
-    if (!containerRef.current || !exportTitle) return
-    exportMapCard({
-      container: containerRef.current,
-      title: exportTitle,
-      subtitle: exportSubtitle ?? '',
-      stats: exportExtraSlots,
-      meta: `${config.label}  ·  ${currentDateLabel()}`,
-      ...(exportFilename != null && { filename: exportFilename }),
-    }).then(r => console.log('Exported:', r), e => console.error('Export failed:', e))
-  }, [config.label, exportTitle, exportSubtitle, exportFilename, exportExtraSlots])
 
   const onHover = useCallback(
     (info: { x: number; y: number; object?: { properties?: TileProps } }) => {
@@ -217,15 +198,18 @@ export default function ChoroplethMap({
       </DeckGL>
 
       {/* Labels-only map overlay so roads/cities render above shaded layers */}
-      <Map
-        {...viewState}
-        mapStyle="https://basemaps.cartocdn.com/gl/positron-labels-gl-style/style.json"
-        interactive={false}
-        attributionControl={false}
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-      />
+      {labelsStyle && (
+        <Map
+          {...viewState}
+          mapStyle={labelsStyle}
+          interactive={false}
+          attributionControl={false}
+          style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+        />
+      )}
 
-      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} {...(exportTitle ? { onExport: handleExport } : {})} />
+      <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} />
+      <ShareMenu className="absolute top-2 right-2 z-10 md:top-4 md:right-4" />
 
       {/* Color scale legend */}
       <div className="pointer-events-none absolute bottom-2 right-2 z-10 md:bottom-4 md:right-4">

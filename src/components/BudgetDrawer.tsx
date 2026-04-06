@@ -1,7 +1,8 @@
 import { type ReactNode } from 'react'
 import { DrawerPreview as Drawer } from '@base-ui/react/drawer'
+import { Link } from '@tanstack/react-router'
 import { interpolateOrRd } from 'd3-scale-chromatic'
-import { X } from 'lucide-react'
+import { X, FileText } from 'lucide-react'
 import { formatCurrency, formatNumber } from '@/lib/constants'
 import {
   getHouseRep,
@@ -38,6 +39,32 @@ export interface BudgetDrawerConfig {
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────
+
+const FIPS_TO_STATE: Record<string, string> = {
+  '01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT',
+  '10':'DE','11':'DC','12':'FL','13':'GA','15':'HI','16':'ID','17':'IL',
+  '18':'IN','19':'IA','20':'KS','21':'KY','22':'LA','23':'ME','24':'MD',
+  '25':'MA','26':'MI','27':'MN','28':'MS','29':'MO','30':'MT','31':'NE',
+  '32':'NV','33':'NH','34':'NJ','35':'NM','36':'NY','37':'NC','38':'ND',
+  '39':'OH','40':'OK','41':'OR','42':'PA','44':'RI','45':'SC','46':'SD',
+  '47':'TN','48':'TX','49':'UT','50':'VT','51':'VA','53':'WA','54':'WV',
+  '55':'WI','56':'WY','60':'AS','66':'GU','69':'MP','72':'PR','78':'VI',
+}
+
+/** Extract stateCode + districtId from tile props, deriving from GEOID if needed. */
+function getScorecardParams(props: TileProps): { stateCode: string; districtId: string } | null {
+  if (props.state_code && props.CD119FP) {
+    return { stateCode: String(props.state_code), districtId: String(props.CD119FP) }
+  }
+  if (props.GEOID) {
+    const geoid = String(props.GEOID).padStart(4, '0')
+    const fips = geoid.slice(0, 2)
+    const dist = geoid.slice(2)
+    const sc = FIPS_TO_STATE[fips]
+    if (sc) return { stateCode: sc, districtId: dist }
+  }
+  return null
+}
 
 function formatStat(value: number, format: 'currency' | 'number') {
   return format === 'currency' ? formatCurrency(value) : formatNumber(value)
@@ -118,6 +145,26 @@ function DrawerBody({
           <X className="size-5" />
         </Drawer.Close>
       </div>
+
+      {/* Scorecard link (districts only) */}
+      {geoLevel === 'districts' && (() => {
+        const sc = getScorecardParams(props)
+        if (!sc) return null
+        return (
+          <div className="border-b px-5 py-2">
+            <Drawer.Close render={<span />}>
+              <Link
+                to="/scorecard"
+                search={sc}
+                className="flex items-center gap-2 rounded-lg bg-brand-blue/10 px-3 py-2 text-sm font-medium text-brand-blue transition-colors hover:bg-brand-blue/20"
+              >
+                <FileText className="size-4" />
+                View Full Scorecard
+              </Link>
+            </Drawer.Close>
+          </div>
+        )
+      })()}
 
       {/* Summary cards */}
       {stats.length > 0 && (

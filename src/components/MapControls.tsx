@@ -1,4 +1,4 @@
-import { Plus, Minus, LocateFixed, Download } from 'lucide-react'
+import { Plus, Minus, LocateFixed } from 'lucide-react'
 import type { INITIAL_VIEW_STATE } from '@/lib/map-config'
 
 type ViewState = typeof INITIAL_VIEW_STATE
@@ -10,11 +10,9 @@ const btnBase =
 export default function MapControls({
   setViewState,
   onGeolocate,
-  onExport,
 }: {
   setViewState: SetViewState
   onGeolocate?: (lat: number, lng: number) => void
-  onExport?: () => void
 }) {
   return (
     <div className="absolute bottom-2 left-2 z-10 flex flex-col gap-1 md:bottom-4 md:left-4">
@@ -45,20 +43,11 @@ export default function MapControls({
             onGeolocate?.(latitude, longitude)
           })
         }}
-        className={`${btnBase} ${onExport ? '' : 'rounded-b-lg'}`}
+        className={`${btnBase} rounded-b-lg`}
         aria-label="Zoom to my location"
       >
         <LocateFixed className="size-4" />
       </button>
-      {onExport && (
-        <button
-          onClick={onExport}
-          className={`${btnBase} rounded-b-lg`}
-          aria-label="Download map as PNG"
-        >
-          <Download className="size-4" />
-        </button>
-      )}
     </div>
   )
 }

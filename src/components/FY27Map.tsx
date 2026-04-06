@@ -1,6 +1,5 @@
 import { formatCurrency } from '@/lib/constants'
 import { FY27_GEO_LEVELS, FY27_COLOR_PROPERTY } from '@/lib/fy27-map-config'
-import { FY27_SLOTS } from '@/lib/card-stats'
 import {
   LUT_MAGMA_INV,
   buildTooltipHeader,
@@ -101,10 +100,6 @@ export default function FY27Map({ initialLat, initialLng, initialZoom }: {
       initialLat={initialLat}
       initialLng={initialLng}
       initialZoom={initialZoom}
-      exportTitle="FY27 Budget Impact"
-      exportSubtitle="Projected NIH & NSF Funding Cuts by Region"
-      exportFilename="scimap-fy27-budget.png"
-      exportExtraSlots={FY27_SLOTS}
     />
   )
 }

@@ -123,6 +123,7 @@ function AboutPage() {
                       controls
                       preload="metadata"
                     >
+                      <track kind="captions" />
                       Your browser does not support the video tag.
                     </video>
                   </div>

@@ -107,6 +107,9 @@ function Header() {
           <Link to="/about" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
             About Us
           </Link>
+          <Link to="/take-action" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
+            Take Action
+          </Link>
           <Link to="/contact" activeProps={navLinkActive} inactiveProps={navLinkInactive}>
             Contact
           </Link>
@@ -198,6 +201,14 @@ function Header() {
             onClick={() => setMenuOpen(false)}
           >
             Methodology
+          </Link>
+          <Link
+            to="/take-action"
+            className="text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'text-left border-l-2 border-brand-orange pl-2' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            Take Action
           </Link>
           <Link
             to="/contact"
