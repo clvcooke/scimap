@@ -91,7 +91,7 @@ function Index() {
               search={{ lat: 39.8283, lng: -98.5795, zoom: 3.5, showLocation: false }}
               className="group relative block aspect-video w-full max-w-xl overflow-hidden rounded-lg shadow-xl"
             >
-              <div className="h-full w-full grayscale transition-[filter] duration-500 group-hover:grayscale-0">
+              <div className="h-full w-full">
                 <Suspense fallback={<div className="h-full w-full animate-pulse bg-brand-blue-dark" />}>
                   <MapPreview />
                 </Suspense>
