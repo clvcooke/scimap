@@ -70,7 +70,7 @@ function Index() {
             </p>
             <div className="flex flex-col gap-4 pt-4 sm:flex-row">
               <Link
-                to="/map"
+                to="/maps"
                 className="inline-flex h-auto shrink-0 items-center justify-center rounded-md bg-white px-6 py-3 text-base font-bold text-brand-blue transition-all hover:bg-gray-100"
               >
                 {a.hero_cta_primary}

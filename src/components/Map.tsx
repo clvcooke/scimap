@@ -157,7 +157,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
   )
 
   return (
-    <div ref={containerRef} className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-4">
+    <div ref={containerRef} className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-8">
       {/* Control panel */}
       <div className="absolute left-2 top-2 z-10 flex flex-col gap-2 rounded-lg bg-white/90 p-2 shadow-md backdrop-blur-sm md:left-4 md:top-4 md:gap-3 md:p-3">
         <Tabs value={geoLevel} onValueChange={(v: string) => setGeoLevel(v as GeoLevel)}>

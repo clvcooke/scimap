@@ -5,6 +5,7 @@ import { getPage } from '@/lib/content'
 import { MapAboutSection } from '@/components/MapAboutSection'
 import { MapHeader } from '@/components/MapHeader'
 import MapAttribution from '@/components/MapAttribution'
+import MapFocusOverlay from '@/components/MapFocusOverlay'
 
 export const Route = createFileRoute('/fy27')({
   component: FY27Route,
@@ -23,6 +24,7 @@ function FY27Route() {
         <MapHeader page={PAGE} />
         <div ref={mapRef} className="relative w-full flex-1 min-h-0 scroll-mt-16">
           <FY27Map initialLat={lat} initialLng={lng} initialZoom={zoom} />
+          <MapFocusOverlay />
         </div>
       </div>
       <MapAttribution />
