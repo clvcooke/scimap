@@ -247,9 +247,7 @@ export const Route = createRootRoute({
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
             <div className="space-y-4">
               <div className="text-lg font-bold tracking-tight">{FOOTER.site_name}</div>
-              <p className="pr-8 text-sm leading-relaxed text-gray-300">
-                {FOOTER.tagline}
-              </p>
+              <p className="pr-8 text-sm leading-relaxed text-gray-300">{FOOTER.tagline}</p>
             </div>
 
             <div className="space-y-4">
@@ -290,7 +288,7 @@ export const Route = createRootRoute({
                   </svg>
                 </a>
                 <a
-                  href="/"
+                  href="https://www.linkedin.com/company/science-community-impacts-mapping-project/about/"
                   className="text-gray-300 transition-colors hover:text-white"
                   aria-label="LinkedIn"
                 >
