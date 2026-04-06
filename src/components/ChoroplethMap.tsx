@@ -14,9 +14,9 @@ import {
   createStateOutlineLayer,
   positionTooltip,
   useLabelsStyle,
-  type LossGeoLevel,
   type MapGeoConfig,
   type TileProps,
+  type LossGeoLevel,
 } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
 import MapControls from './MapControls'
@@ -25,16 +25,26 @@ import ColorScale, { type ColorScheme } from './ColorScale'
 import BudgetDrawer, { type BudgetDrawerConfig } from './BudgetDrawer'
 import BudgetMobileCard from './BudgetMobileCard'
 
-interface ChoroplethMapProps {
-  geoLevels: Record<LossGeoLevel, MapGeoConfig>
-  defaultLevel: LossGeoLevel
-  colorProperty: string
-  colorLUT: Uint8Array
-  layerId: string
+interface ChoroplethMapProps<K extends string> {
+  geoLevels: Record<K, MapGeoConfig>
+  defaultLevel: K
+  /** Build the inner HTML for the hover tooltip given tile props + current geo level. */
+  renderTooltip: (props: TileProps, geoLevel: K) => string
+
+  // --- Layer creation (provide EITHER colorProperty+colorLUT+layerId OR layers callback) ---
+  /** Property name for the color scale (used with colorLUT for automatic layer creation). */
+  colorProperty?: string
+  /** Pre-computed color lookup table (used with colorProperty). */
+  colorLUT?: Uint8Array
+  /** Deck.gl layer ID (used with colorProperty). */
+  layerId?: string
+  /** Callback that returns the data layers for the current geo config. Overrides colorProperty/colorLUT. */
+  layers?: (config: MapGeoConfig) => Layer[]
+
   useMagma?: boolean
   colorScheme?: ColorScheme
-  /** Build the inner HTML for the hover tooltip given tile props + current geo level. */
-  renderTooltip: (props: TileProps, geoLevel: LossGeoLevel) => string
+  /** Override the domain used for the color scale legend. */
+  colorScaleDomain?: [number, number]
   /** Extra deck.gl layers to render on top (e.g. cluster layer). */
   extraLayers?: Layer[]
   /** Click handler forwarded to DeckGL. */
@@ -43,33 +53,44 @@ interface ChoroplethMapProps {
   controllerDisabled?: boolean
   /** Slot for overlay content (modals, etc.) rendered inside the map container. */
   children?: ReactNode
+  /** Extra controls rendered below the geo-level tabs (e.g. per-capita toggle). */
+  extraControls?: ReactNode
   /** Optional initial coordinates to center the map on (e.g. from zip code search). */
   initialLat?: number | undefined
   initialLng?: number | undefined
   initialZoom?: number | undefined
   /** When provided, clicking a region opens a detail drawer with this config. */
   drawerConfig?: BudgetDrawerConfig
+  /** Whether to show user location dot when initial coords are provided. Defaults to true. */
+  displayLocation?: boolean
+  /** Called when the user changes the geo level tab. */
+  onGeoLevelChange?: (level: K) => void
 }
 
-export default function ChoroplethMap({
+export default function ChoroplethMap<K extends string>({
   geoLevels,
   defaultLevel,
+  renderTooltip,
   colorProperty,
   colorLUT,
   layerId,
+  layers: layersFn,
   useMagma = false,
   colorScheme,
-  renderTooltip,
+  colorScaleDomain,
   extraLayers = [],
   onMapClick,
   controllerDisabled = false,
   children,
+  extraControls,
   initialLat,
   initialLng,
   initialZoom,
   drawerConfig,
-}: ChoroplethMapProps) {
-  const [geoLevel, setGeoLevel] = useState<LossGeoLevel>(defaultLevel)
+  displayLocation = true,
+  onGeoLevelChange,
+}: ChoroplethMapProps<K>) {
+  const [geoLevel, setGeoLevel] = useState<K>(defaultLevel)
   const [selectedProps, setSelectedProps] = useState<TileProps | null>(null)
   const [previewProps, setPreviewProps] = useState<TileProps | null>(null)
   const [viewState, setViewState] = useState(() => ({
@@ -79,7 +100,7 @@ export default function ChoroplethMap({
       : {}),
   }))
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
-    initialLat != null && initialLng != null ? [initialLng, initialLat] : null,
+    displayLocation && initialLat != null && initialLng != null ? [initialLng, initialLat] : null,
   )
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
@@ -87,11 +108,15 @@ export default function ChoroplethMap({
   const labelsStyle = useLabelsStyle()
 
   const config = geoLevels[geoLevel]
-  const colorScale = useMemo(() => createLogColorScale(config.domain), [config])
-  const dataLayer = useMemo(
-    () => createChoroplethLayer(config, colorScale, colorProperty, colorLUT, layerId),
-    [config, colorScale, colorProperty, colorLUT, layerId],
-  )
+  const domain = colorScaleDomain ?? config.domain
+  const colorScale = useMemo(() => createLogColorScale(domain), [domain])
+  const dataLayers = useMemo(() => {
+    if (layersFn) return layersFn(config)
+    if (colorProperty && colorLUT) {
+      return [createChoroplethLayer(config, colorScale, colorProperty, colorLUT, layerId ?? 'choropleth-mvt')]
+    }
+    return []
+  }, [config, colorScale, colorProperty, colorLUT, layerId, layersFn])
   const outlineLayer = useMemo(() => createStateOutlineLayer(), [])
   const locationLayer = useMemo(
     () =>
@@ -165,9 +190,9 @@ export default function ChoroplethMap({
 
   return (
     <div ref={containerRef} className="absolute inset-2 overflow-hidden rounded-xl shadow-lg md:inset-8">
-      {/* Geo-level tabs */}
+      {/* Control panel */}
       <div className="absolute left-2 top-2 z-10 flex flex-col gap-2 rounded-lg bg-white/90 p-2 shadow-md backdrop-blur-sm md:left-4 md:top-4 md:gap-3 md:p-3">
-        <Tabs value={geoLevel} onValueChange={(v: string) => setGeoLevel(v as LossGeoLevel)}>
+        <Tabs value={geoLevel} onValueChange={(v: string) => { const level = v as K; setGeoLevel(level); onGeoLevelChange?.(level) }}>
           <TabsList>
             {typedKeys(geoLevels).map((key) => (
               <TabsTrigger key={key} value={key} className="text-xs md:text-sm">
@@ -176,6 +201,7 @@ export default function ChoroplethMap({
             ))}
           </TabsList>
         </Tabs>
+        {extraControls}
       </div>
 
       <DeckGL
@@ -184,7 +210,7 @@ export default function ChoroplethMap({
           if ('longitude' in vs) setViewState((prev) => ({ ...prev, ...vs }))
         }}
         controller={!controllerDisabled}
-        layers={[dataLayer, outlineLayer, ...extraLayers, locationLayer].filter(Boolean)}
+        layers={[...dataLayers, outlineLayer, ...extraLayers, locationLayer].filter(Boolean)}
         useDevicePixels={false}
         deviceProps={{ webgl: { preserveDrawingBuffer: true } }}
         getCursor={({ isDragging, isHovering }) => (isDragging ? 'grabbing' : isHovering && (drawerConfig || onMapClick) ? 'pointer' : 'grab')}
@@ -213,7 +239,7 @@ export default function ChoroplethMap({
 
       {/* Color scale legend */}
       <div className="pointer-events-none absolute bottom-2 right-2 z-10 md:bottom-4 md:right-4">
-        <ColorScale domain={config.domain} useMagma={useMagma} scheme={colorScheme} />
+        <ColorScale domain={domain} useMagma={useMagma} scheme={colorScheme} />
       </div>
 
       {/* Hover tooltip (desktop, fixed so it escapes overflow-hidden) */}
@@ -231,7 +257,7 @@ export default function ChoroplethMap({
           {isMobile && previewProps && (
             <BudgetMobileCard
               props={previewProps}
-              geoLevel={geoLevel}
+              geoLevel={geoLevel as string as LossGeoLevel}
               config={drawerConfig}
               onSeeMore={() => {
                 setSelectedProps(previewProps)
@@ -242,7 +268,7 @@ export default function ChoroplethMap({
           )}
           <BudgetDrawer
             props={selectedProps}
-            geoLevel={geoLevel}
+            geoLevel={geoLevel as string as LossGeoLevel}
             config={drawerConfig}
             onClose={() => setSelectedProps(null)}
           />

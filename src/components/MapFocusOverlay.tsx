@@ -37,10 +37,12 @@ export default function MapFocusOverlay() {
   if (!active) return null
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div
       ref={overlayRef}
+      role="button"
+      tabIndex={0}
       onClick={deactivate}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') deactivate() }}
       className="absolute inset-0 z-20 flex cursor-pointer items-center justify-center bg-black/5 transition-opacity"
     >
       <span className="rounded-lg bg-black/70 px-4 py-2 text-sm font-medium text-white shadow-lg">

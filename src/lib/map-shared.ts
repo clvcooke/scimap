@@ -19,6 +19,8 @@ export interface MapGeoConfig {
   uniqueIdProperty: string
   label: string
   domain: [number, number]
+  /** Optional alternate domain (e.g. per-capita). Used by baseline map. */
+  altDomain?: [number, number]
 }
 
 export type TileProps = Record<string, number | string>
