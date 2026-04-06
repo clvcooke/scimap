@@ -1,6 +1,7 @@
 import GRANT_LOSS_DATA from './terminated_grants.json'
 
 export interface GrantTermination {
+  [key: string]: unknown
   org_name: string
   lat: number
   lon: number

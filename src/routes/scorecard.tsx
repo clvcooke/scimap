@@ -3,8 +3,8 @@ import ReportCard from '@/components/ReportCard'
 import { getReportCardData } from '@/lib/report-card-data'
 
 interface ScorecardSearch {
-  stateCode?: string
-  districtId?: string
+  stateCode?: string | undefined
+  districtId?: string | undefined
 }
 
 export const Route = createFileRoute('/scorecard')({

@@ -130,7 +130,7 @@ function MiniMap({
   maxLat: number
   minLng: number
   maxLng: number
-  layers: ReturnType<typeof createMagmaLayer>[]
+  layers: MVTLayer[]
   showColorbar?: boolean
   colorbarDomain?: [number, number]
   className?: string
@@ -367,7 +367,7 @@ export default function ReportCard({ data }: { data: ReportCardData }) {
       <div className="mb-6 flex flex-col items-center gap-4 md:flex-row md:justify-between">
         <div className="flex items-center gap-3">
           <Link to="/" className="shrink-0">
-            <img src="/science.png" alt="SCIMaP" className="h-14 w-14 md:h-[76px] md:w-[76px]" />
+            <img src="/science.png" alt="SCIMaP" className="h-14 w-14 md:h-19 md:w-19" />
           </Link>
           <div className="text-center md:text-left">
             <h1 className="text-lg font-bold text-gray-900 md:text-xl">
@@ -419,7 +419,7 @@ export default function ReportCard({ data }: { data: ReportCardData }) {
           layers={districtLayers}
           showColorbar
           colorbarDomain={DISTRICTS_DOMAIN}
-          className="h-[400px]"
+          className="h-100"
         />
       </div>
 
@@ -433,7 +433,7 @@ export default function ReportCard({ data }: { data: ReportCardData }) {
             minLng={data.state_bounds.min_lng}
             maxLng={data.state_bounds.max_lng}
             layers={stateLayers}
-            className="min-h-[220px] flex-1"
+            className="min-h-55 flex-1"
           />
         </div>
         <MiniMap
@@ -444,7 +444,7 @@ export default function ReportCard({ data }: { data: ReportCardData }) {
           layers={districtLayers}
           showColorbar
           colorbarDomain={DISTRICTS_DOMAIN}
-          className="min-h-[500px]"
+          className="min-h-125"
         />
       </div>
 

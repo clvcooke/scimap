@@ -29,6 +29,10 @@ npm run lint:fix   # Auto-fix lint issues
 npm run format     # Prettier format all files
 ```
 
+### Type-checking caveat
+
+`tsc -b` uses incremental compilation and caches results in `node_modules/.tmp/`. This means locally it can skip rechecking files it thinks haven't changed, causing type errors to go unnoticed. **Always use `tsc -b --force`** (or delete the tsbuildinfo file) when verifying the build is clean before pushing. Cloudflare Pages builds from scratch with no cache, so it will catch errors that a cached local `tsc -b` misses.
+
 ## Project structure
 
 ```
