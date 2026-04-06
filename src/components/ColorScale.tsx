@@ -12,7 +12,7 @@ interface ColorScaleProps {
   domain: [number, number]
   buckets?: number
   useMagma?: boolean
-  scheme?: ColorScheme
+  scheme?: ColorScheme | undefined
 }
 
 export default function ColorScale({
