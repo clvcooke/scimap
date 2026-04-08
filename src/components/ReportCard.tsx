@@ -367,7 +367,7 @@ export default function ReportCard({ data }: { data: ReportCardData }) {
       <div className="mb-6 flex flex-col items-center gap-4 md:flex-row md:justify-between">
         <div className="flex items-center gap-3">
           <Link to="/" className="shrink-0">
-            <img src="/science.png" alt="SCIMaP" className="h-14 w-14 md:h-19 md:w-19" />
+            <img src="/logo_v3-01.png" alt="SCIMaP" className="h-14 w-14 md:h-19 md:w-19" />
           </Link>
           <div className="text-center md:text-left">
             <h1 className="text-lg font-bold text-gray-900 md:text-xl">

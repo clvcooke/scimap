@@ -234,6 +234,11 @@ export default function ChoroplethMap<K extends string>({
         />
       )}
 
+      {/* Logo watermark */}
+      <div className="absolute bottom-14 left-2 z-10 md:bottom-18 md:left-4">
+        <img src="/logo_v3_white-01.png" alt="SCIMaP" className="h-10 w-10 md:h-12 md:w-12" />
+      </div>
+
       <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} />
       <ShareMenu className="absolute top-2 right-2 z-10 md:top-4 md:right-4" />
 

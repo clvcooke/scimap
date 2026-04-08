@@ -246,7 +246,10 @@ export const Route = createRootRoute({
         <div className="mx-auto flex max-w-7xl flex-col space-y-3">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
             <div className="space-y-4">
-              <div className="text-lg font-bold tracking-tight">{FOOTER.site_name}</div>
+              <div className="flex items-center gap-3">
+                <img src="/logo_v3_white-01.png" alt="SCIMaP" className="h-12 w-12" />
+                <div className="text-lg font-bold tracking-tight">{FOOTER.site_name}</div>
+              </div>
               <p className="pr-8 text-sm leading-relaxed text-gray-300">{FOOTER.tagline}</p>
             </div>
 

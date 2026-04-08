@@ -2,7 +2,7 @@
 hero_title: "Methodology"
 hero_subtitle: "How we track and analyze the impact of science funding cuts"
 
-overview: "The Science & Community Impact Mapping Project (SCIMaP) employs rigorous, data-driven methodologies to quantify the economic and social impacts of federal science funding cuts. Our approach combines multiple data sources, economic models, and spatial analysis to provide accurate, transparent assessments of funding impacts at national, state, and local levels."
+overview: "The Science & Community Impacts Mapping Project (SCIMaP) employs rigorous, data-driven methodologies to quantify the economic and social impacts of federal science funding cuts. Our approach combines multiple data sources, economic models, and spatial analysis to provide accurate, transparent assessments of funding impacts at national, state, and local levels."
 
 data_sources_intro: "Our analysis draws from multiple authoritative public data sources:"
 data_sources:
