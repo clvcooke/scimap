@@ -8,6 +8,7 @@ import {
   getSenatorsList,
   formatPoliticianName,
 } from './legislature'
+import { stateName } from './constants'
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -111,15 +112,15 @@ export function buildTooltipHeader(
   props: TileProps,
   geoLevel: LossGeoLevel,
 ): { locationLine: string; politicianHtml: string } {
-  const state = props.state != null ? String(props.state) : ''
+  const stateRaw = props.state != null ? String(props.state) : ''
   const county = props.county != null ? String(props.county) : undefined
 
-  let locationLine = state
-  if (county) locationLine = `${county}, ${state}`
+  let locationLine = stateName(stateRaw)
+  if (county) locationLine = `${county}, ${stateRaw}`
   if (geoLevel === 'districts' && props.GEOID) {
     const num = String(props.GEOID).slice(-2)
     const distLabel = num === '00' ? 'At-Large' : `District ${parseInt(num, 10)}`
-    locationLine = `${state} (${distLabel})`
+    locationLine = `${stateRaw} (${distLabel})`
   }
 
   let html = ''

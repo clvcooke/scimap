@@ -1,4 +1,4 @@
-import reportCardData from '@/data/report_card_info.json'
+import reportCardDataFy26 from '@/data/report_card_info_fy26.json'
 import { getHouseRep, getSenatorsList, formatPoliticianName } from './legislature'
 
 interface Bounds {
@@ -38,12 +38,19 @@ export interface ReportCardData extends ReportCardDistrict {
   seniorSenator: string
 }
 
-const data = reportCardData as Record<string, ReportCardDistrict>
+export type FiscalYear = 'fy26' | 'fy27'
+
+const dataByFy: Record<FiscalYear, Record<string, ReportCardDistrict>> = {
+  fy26: reportCardDataFy26 as Record<string, ReportCardDistrict>,
+  fy27: {} as Record<string, ReportCardDistrict>, // TODO: import FY27 data when available
+}
 
 export function getReportCardData(
   stateCode: string,
   districtId: string,
+  fiscalYear: FiscalYear = 'fy26',
 ): ReportCardData | null {
+  const data = dataByFy[fiscalYear]
   const key = `${stateCode}-${districtId}`
   const district = data[key]
   if (!district) return null
@@ -63,7 +70,8 @@ export function getReportCardData(
   }
 }
 
-export function getAvailableDistricts(): Record<string, string[]> {
+export function getAvailableDistricts(fiscalYear: FiscalYear = 'fy26'): Record<string, string[]> {
+  const data = dataByFy[fiscalYear]
   const result: Record<string, string[]> = {}
   for (const [, v] of Object.entries(data)) {
     const state = v.state

@@ -28,7 +28,8 @@
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(list\\(d.keys\\(\\)\\)[:5]\\)\")",
       "Bash(node:*)",
       "Bash(find src/routes -type f -exec basename {} \\\\;)",
-      "Bash(head -20 data/baseline/*.json)"
+      "Bash(head -20 data/baseline/*.json)",
+      "Bash(python3 -m json.tool)"
     ]
   }
 }

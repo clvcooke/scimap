@@ -50,8 +50,8 @@ function ChoroplethPreview({
     [config, colorScale, colorProperty, lut, layerId],
   )
   const outlineLayer = useMemo(
-    () => createStateOutlineLayer(config.tileUrl),
-    [config],
+    () => createStateOutlineLayer(),
+    [],
   )
 
   return (
@@ -70,15 +70,15 @@ function ChoroplethPreview({
 }
 
 function BaselinePreview() {
-  const config = BASELINE_GEO_LEVELS.states
+  const config = BASELINE_GEO_LEVELS.counties
   const colorScale = useMemo(() => createColorScale(config, false), [config])
   const mapLayer = useMemo(
     () => createBaselineLayer(config, false, colorScale),
     [config, colorScale],
   )
   const outlineLayer = useMemo(
-    () => createStateOutlineLayer(config.tileUrl),
-    [config],
+    () => createStateOutlineLayer(),
+    [],
   )
 
   return (
@@ -107,7 +107,7 @@ const MAPS = [
     to: '/grants' as const,
     preview: () => (
       <ChoroplethPreview
-        config={GRANTS_GEO_LEVELS.states}
+        config={GRANTS_GEO_LEVELS.counties}
         colorProperty={GRANTS_COLOR_PROPERTY}
         lut={LUT_OR_RD}
         layerId="grants-preview"
@@ -119,7 +119,7 @@ const MAPS = [
     to: '/fy27' as const,
     preview: () => (
       <ChoroplethPreview
-        config={FY27_GEO_LEVELS.states}
+        config={FY27_GEO_LEVELS.counties}
         colorProperty={FY27_COLOR_PROPERTY}
         lut={LUT_MAGMA_INV}
         layerId="fy27-preview"

@@ -57,7 +57,7 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
     `<div class="font-semibold">${locationLine}</div>` +
     politicianHtml +
     `<div class="mt-1">Economic Loss: ${formatCurrency(econLoss)}/yr</div>` +
-    (jobLoss > 10 ? `<div>Jobs at Risk: ${jobLoss.toLocaleString()}</div>` : '') +
+    (jobLoss > 0 ? `<div>Jobs at Risk: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '') +
     `<div class="mt-1 text-[11px] text-gray-300">IDC Funding Loss: ${formatCurrency(idcLoss)}/yr</div>` +
     `<div class="mt-1 text-[11px] text-gray-400 italic">Click for details</div>`
   )
@@ -67,7 +67,7 @@ export default function IDCMap() {
   return (
     <ChoroplethMap
       geoLevels={IDC_GEO_LEVELS}
-      defaultLevel="states"
+      defaultLevel="counties"
       colorProperty={IDC_COLOR_PROPERTY}
       colorLUT={LUT_OR_RD}
       colorScheme="orrd"

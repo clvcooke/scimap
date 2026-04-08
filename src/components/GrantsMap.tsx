@@ -24,7 +24,7 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
     `<div class="font-semibold">${locationLine}</div>` +
     politicianHtml +
     `<div>Total Loss: ${formatCurrency(econLoss)}</div>` +
-    (jobLoss > 10 ? `<div>Jobs Lost: ${jobLoss.toLocaleString()}</div>` : '') +
+    (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '') +
     `<div class="mt-1 text-gray-300 text-[11px]">Current: ${formatCurrency(currentLoss)} · Future: ${formatCurrency(futureLoss)}/yr</div>`
   )
 }

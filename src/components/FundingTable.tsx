@@ -48,7 +48,7 @@ function formatValue(value: number, key: SortKey): string {
 }
 
 export default function FundingTable() {
-  const [geoLevel, setGeoLevel] = useState<GeoLevel>('states')
+  const [geoLevel, setGeoLevel] = useState<GeoLevel>('counties')
   const [sortKey, setSortKey] = useState<SortKey>('econ_impact')
   const [sortAsc, setSortAsc] = useState(false)
 

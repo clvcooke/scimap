@@ -115,9 +115,26 @@ function TakeActionPage() {
         >
           Share with Friends, Family, and Followers
         </SectionHeading>
-        <p className="mb-6 text-lg leading-relaxed text-gray-700">
+        <p className="mb-5 text-lg leading-relaxed text-gray-700">
           <InlineMarkdown>{a.share_intro}</InlineMarkdown>
         </p>
+        {a.organizations && (
+          <ul className="mb-6 space-y-2">
+            {(a.organizations as { name: string; url: string }[]).map((org) => (
+              <li key={org.name} className="flex items-start">
+                <span className="mr-3 mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-sky" />
+                <a
+                  href={org.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lg text-brand-blue underline hover:text-brand-sky"
+                >
+                  {org.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
         <ShareMenu className="flex justify-center" />
       </Section>
     </div>

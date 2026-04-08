@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
 import type { PickingInfo } from '@deck.gl/core'
 import type { MjolnirGestureEvent } from 'mjolnir.js'
-import { formatCurrency } from '@/lib/constants'
+import { formatCurrency, stateName } from '@/lib/constants'
 import type { GeoLevel } from '@/lib/constants'
 import {
   GEO_LEVELS,
@@ -47,7 +47,7 @@ function getBaselineDisplayName(tile: TileProperties, geoLevel: GeoLevel): strin
       return name ?? `City ${tile.CBSA_FIPS ?? ''}`
     }
     default:
-      return String(tile.state ?? '')
+      return stateName(String(tile.state ?? ''))
   }
 }
 
@@ -61,7 +61,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
 }) {
   const [selectedFeature, setSelectedFeature] = useState<SelectedFeature | null>(null)
   const [previewFeature, setPreviewFeature] = useState<SelectedFeature | null>(null)
-  const [currentGeoLevel, setCurrentGeoLevel] = useState<GeoLevel>('states')
+  const [currentGeoLevel, setCurrentGeoLevel] = useState<GeoLevel>('counties')
   const isMobile = useIsMobile()
 
   const renderTooltip = useCallback(
@@ -116,7 +116,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
   return (
     <ChoroplethMap<GeoLevel>
       geoLevels={BASELINE_GEO_LEVELS}
-      defaultLevel="states"
+      defaultLevel="counties"
       renderTooltip={renderTooltip}
       layers={layersFn}
       colorScaleDomain={activeDomain}

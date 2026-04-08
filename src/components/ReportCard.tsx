@@ -11,7 +11,7 @@ import { Share2, Download } from 'lucide-react'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 import { formatCurrency, formatNumber } from '@/lib/constants'
-import type { ReportCardData } from '@/lib/report-card-data'
+import type { ReportCardData, FiscalYear } from '@/lib/report-card-data'
 import ColorScale from './ColorScale'
 
 // ── Constants ──────────────────────────────────────────────────────
@@ -277,7 +277,9 @@ function InfoCard({ data }: { data: ReportCardData }) {
 
 // ── Main ReportCard ────────────────────────────────────────────────
 
-export default function ReportCard({ data }: { data: ReportCardData }) {
+export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: ReportCardData; fiscalYear?: FiscalYear }) {
+  const fyLabel = fiscalYear === 'fy27' ? 'FY27' : 'FY26'
+  const fyYear = fiscalYear === 'fy27' ? '2027' : '2026'
   const [shareOpen, setShareOpen] = useState(false)
 
   const districtName =
@@ -310,7 +312,7 @@ export default function ReportCard({ data }: { data: ReportCardData }) {
   const handleShare = async () => {
     const shareData = {
       title: `SCIMaP Scorecard: ${districtTitle}`,
-      text: `See the impact of the FY26 White House NIH Budget on ${districtTitle}`,
+      text: `See the impact of the ${fyLabel} White House NIH Budget on ${districtTitle}`,
       url: currentUrl,
     }
     if (navigator.share) {
@@ -371,13 +373,13 @@ export default function ReportCard({ data }: { data: ReportCardData }) {
           </Link>
           <div className="text-center md:text-left">
             <h1 className="text-lg font-bold text-gray-900 md:text-xl">
-              SCIMaP Scorecard: White House NIH FY26 Budget Proposal
+              SCIMaP Scorecard: White House NIH {fyLabel} Budget Proposal
             </h1>
             <h2 className="text-base font-medium text-gray-700 md:text-lg">
-              {districtTitle} — FY2026 NIH Budget Impact
+              {districtTitle} — FY{fyYear} NIH Budget Impact
             </h2>
             <p className="text-sm text-gray-500">
-              Projected district-level economic losses from cuts proposed in the White House FY26
+              Projected district-level economic losses from cuts proposed in the White House {fyLabel}
               NIH budget
             </p>
           </div>
@@ -450,9 +452,9 @@ export default function ReportCard({ data }: { data: ReportCardData }) {
 
       {/* Footer */}
       <div className="mt-6 text-center text-xs text-gray-500">
-        Funding losses are calculated by comparing the FY 2026{' '}
+        Funding losses are calculated by comparing the FY {fyYear}{' '}
         <a
-          href="https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf"
+          href={fiscalYear === 'fy27' ? '#' : 'https://officeofbudget.od.nih.gov/pdfs/FY26/br/Overview%20of%20FY%202026%20Supplementary%20Tables.pdf'}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-600 underline"

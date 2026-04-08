@@ -24,7 +24,7 @@ const PREVIEW_VIEW_STATE = {
  * Renders the real choropleth tiles at the default US-wide view.
  */
 export default function MapPreview() {
-  const config = FY27_GEO_LEVELS.states
+  const config = FY27_GEO_LEVELS.counties
   const colorScale = useMemo(() => createLogColorScale(config.domain), [config])
   const mapLayer = useMemo(
     () =>

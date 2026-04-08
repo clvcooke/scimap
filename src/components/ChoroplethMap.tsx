@@ -23,6 +23,7 @@ import MapControls from './MapControls'
 import ShareMenu from './ShareMenu'
 import ColorScale, { type ColorScheme } from './ColorScale'
 import BudgetDrawer, { type BudgetDrawerConfig } from './BudgetDrawer'
+import type { FiscalYear } from '@/lib/report-card-data'
 import BudgetMobileCard from './BudgetMobileCard'
 
 interface ChoroplethMapProps<K extends string> {
@@ -65,6 +66,8 @@ interface ChoroplethMapProps<K extends string> {
   displayLocation?: boolean
   /** Called when the user changes the geo level tab. */
   onGeoLevelChange?: (level: K) => void
+  /** Fiscal year for the scorecard link in the drawer. */
+  fiscalYear?: FiscalYear | undefined
 }
 
 export default function ChoroplethMap<K extends string>({
@@ -89,6 +92,7 @@ export default function ChoroplethMap<K extends string>({
   drawerConfig,
   displayLocation = true,
   onGeoLevelChange,
+  fiscalYear,
 }: ChoroplethMapProps<K>) {
   const [geoLevel, setGeoLevel] = useState<K>(defaultLevel)
   const [selectedProps, setSelectedProps] = useState<TileProps | null>(null)
@@ -276,6 +280,7 @@ export default function ChoroplethMap<K extends string>({
             geoLevel={geoLevel as string as LossGeoLevel}
             config={drawerConfig}
             onClose={() => setSelectedProps(null)}
+            fiscalYear={fiscalYear}
           />
         </>
       )}

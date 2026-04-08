@@ -74,7 +74,7 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
     `<div class="font-semibold">${locationLine}</div>` +
     politicianHtml +
     `<div class="mt-1">Total Economic Loss: ${formatCurrency(totalEcon)}</div>` +
-    (jobLoss > 10 ? `<div>Jobs Lost: ${jobLoss.toLocaleString()}</div>` : '') +
+    (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '') +
     `<div class="mt-1 text-[11px] text-gray-300">` +
     `NIH: ${formatCurrency(nihEcon)} · NSF: ${formatCurrency(nsfEcon)}` +
     `</div>` +
@@ -97,6 +97,7 @@ export default function FY27Map({ initialLat, initialLng, initialZoom }: {
       useMagma
       renderTooltip={renderTooltip}
       drawerConfig={drawerConfig}
+      fiscalYear="fy27"
       initialLat={initialLat}
       initialLng={initialLng}
       initialZoom={initialZoom}

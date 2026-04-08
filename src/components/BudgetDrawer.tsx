@@ -10,6 +10,8 @@ import {
   formatPoliticianName,
 } from '@/lib/legislature'
 import type { LossGeoLevel, TileProps } from '@/lib/map-shared'
+import type { FiscalYear } from '@/lib/report-card-data'
+import { stateName } from '@/lib/constants'
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -71,16 +73,16 @@ function formatStat(value: number, format: 'currency' | 'number') {
 }
 
 function locationLabel(props: TileProps, geoLevel: LossGeoLevel): string {
-  const state = props.state != null ? String(props.state) : ''
+  const stateRaw = props.state != null ? String(props.state) : ''
   const county = props.county != null ? String(props.county) : undefined
 
   if (geoLevel === 'districts' && props.GEOID) {
     const num = String(props.GEOID).slice(-2)
     const distLabel = num === '00' ? 'At-Large' : `District ${parseInt(num, 10)}`
-    return `${state} ${distLabel}`
+    return `${stateRaw} ${distLabel}`
   }
-  if (county) return `${county}, ${state}`
-  return props.state_name ? String(props.state_name) : state
+  if (county) return `${county}, ${stateRaw}`
+  return props.state_name ? String(props.state_name) : stateName(stateRaw)
 }
 
 function PoliticianInfo({ props, geoLevel }: { props: TileProps; geoLevel: LossGeoLevel }) {
@@ -117,10 +119,12 @@ function DrawerBody({
   props,
   geoLevel,
   config,
+  fiscalYear,
 }: {
   props: TileProps
   geoLevel: LossGeoLevel
   config: BudgetDrawerConfig
+  fiscalYear?: FiscalYear | undefined
 }) {
   const stats = config.stats(props)
   const sections = config.sections(props)
@@ -155,7 +159,7 @@ function DrawerBody({
             <Drawer.Close render={<span />}>
               <Link
                 to="/scorecard"
-                search={sc}
+                search={{ ...sc, fiscalYear }}
                 className="flex items-center gap-2 rounded-lg bg-brand-blue/10 px-3 py-2 text-sm font-medium text-brand-blue transition-colors hover:bg-brand-blue/20"
               >
                 <FileText className="size-4" />
@@ -234,11 +238,13 @@ export default function BudgetDrawer({
   geoLevel,
   config,
   onClose,
+  fiscalYear,
 }: {
   props: TileProps | null
   geoLevel: LossGeoLevel
   config: BudgetDrawerConfig
   onClose: () => void
+  fiscalYear?: FiscalYear | undefined
 }) {
   return (
     <Drawer.Root
@@ -254,7 +260,7 @@ export default function BudgetDrawer({
           <Drawer.Popup className="fixed inset-y-0 right-0 w-full transition-transform duration-300 ease-out data-ending-style:translate-x-full data-starting-style:translate-x-full sm:w-105 sm:max-w-[calc(100vw-48px)]">
             <Drawer.Content className="flex h-full w-full flex-col overflow-hidden rounded-l-xl bg-white shadow-2xl">
               {props && (
-                <DrawerBody props={props} geoLevel={geoLevel} config={config} />
+                <DrawerBody props={props} geoLevel={geoLevel} config={config} fiscalYear={fiscalYear} />
               )}
             </Drawer.Content>
           </Drawer.Popup>
