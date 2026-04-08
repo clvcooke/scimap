@@ -1,9 +1,10 @@
 ---
 hero_title: Mapping the Impacts of Science Funding Cuts
-hero_subtitle: The Science & Community Impacts Mapping Project (SCIMaP) maps the
-  local and national impacts of federal investment in science— and how science
-  funding cuts cause widespread losses that harm communities nationwide. Find
-  out how science funding impacts your local area, and how you can take action.
+hero_subtitle: The Science & Community Impacts Mapping Project (SCIMaP) reveals
+  the local and national impacts of federal investment in science— and how
+  science funding cuts cause widespread losses that harm communities nationwide.
+  Find out how science funding impacts **your local area**, and how you can take
+  action.
 hero_cta_primary: View Impact Maps
 hero_cta_secondary: Learn More
 stakes_heading: What's At Stake
