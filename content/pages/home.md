@@ -1,26 +1,12 @@
 ---
 hero_title: Mapping the Impact of Science Funding Cuts
 hero_subtitle: The Science & Community Impacts Mapping Project (SCIMaP) maps the
-  local and national impact of federal investment in science— and how science
+  local and national impacts of federal investment in science— and how science
   funding cuts cause widespread losses that harm communities nationwide. Find
   out how science funding impacts your local area, and how you can take action.
 hero_cta_primary: View Impact Maps
 hero_cta_secondary: Learn More
 stakes_heading: What's At Stake
-stakes_paragraphs:
-  - Federal investment in science and research drives innovation, creates jobs,
-    and supports critical infrastructure in communities across the United
-    States.
-  - The proposed **FY2027 Budget** cuts would reduce funding to the National
-    Institutes of Health (NIH), National Science Foundation (NSF), and other key
-    agencies by billions of dollars.
-  - >+
-    Additionally, cutting research infrastructure support costs for medical
-    research by more than 50% will restrict the ability of universities and
-    research institutions to maintain facilities and support staff, leading to
-    cancelled projects and hiring freezes.
-
-
 metrics_heading: Current Nationwide Impact of NIH Grant Terminations
 metrics:
   - value: $11B
@@ -32,7 +18,6 @@ metrics:
   - value: "50"
     label: States Affected
 local_heading: See Impacts in Your Local Area
-why_heading: Why This Matters
 why_paragraphs:
   - Federal investment in science drives innovation, creates jobs, saves lives,
     and improves quality of life for people across the country. Funding cuts
@@ -45,8 +30,24 @@ why_cta: IMPACT MAPS
 who_heading: Who We Serve
 hero_subheading: Discover how federal science funding impacts research, health,
   jobs, and economic activity across the U.S.
-local_description: Enter your ZIP code to explore how specific funding cuts will
-  affect jobs, research projects, and institutional resources in your community.
+stakes_paragraphs:
+  - Federal investment in science and research drives innovation, creates jobs,
+    improves health, and supports critical infrastructure in communities across
+    the United States.
+  - Currently, the proposed **FY2027 Budget** cuts would reduce funding to the
+    National Institutes of Health (NIH), National Science Foundation (NSF), and
+    other key agencies by billions of dollars.
+  - >+
+    Other threats to science include ongoing terminations of active research
+    grants and proposed cuts to funding for critical research infrastructure.
+    These current and proposed cuts will restrict the ability of universities
+    and research institutions to maintain facilities and essential personnel,
+    leading to cancelled projects, wasted funds, and hiring freezes.
+
+
+local_description: Enter your ZIP code to explore how the White House's FY2027
+  budget proposal will impact your local community.
+why_heading: Why This Matters
 who_items:
   - name: Policy Makers
     desc: Data-driven insights for informed decision making
