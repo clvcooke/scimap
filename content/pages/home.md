@@ -31,18 +31,23 @@ who_heading: Who We Serve
 hero_subheading: Discover how federal science funding impacts research, health,
   jobs, and economic activity across the U.S.
 stakes_paragraphs:
-  - Federal investment in science and research drives innovation, creates jobs,
-    improves health, and supports critical infrastructure in communities across
-    the United States.
+  - >-
+    The **National Institutes of Health** (NIH) and **National Science
+    Foundation** (NSF) fund scientific research that leads to major
+    breakthroughs for cancer, diabetes, brain health, heart disease, infectious
+    diseases, technology, education, and more.
+
+
+    The White House has ordered **major cuts to science funding** nationwide, which would take back funds promised to the states.
   - Currently, the proposed **FY2027 Budget** cuts would reduce funding to the
-    National Institutes of Health (NIH), National Science Foundation (NSF), and
-    other key agencies by billions of dollars.
+    NIH, NSF, and other key agencies by billions of dollars.
   - >+
-    Other threats to science include ongoing terminations of active research
-    grants and proposed cuts to funding for critical research infrastructure.
-    These current and proposed cuts will restrict the ability of universities
-    and research institutions to maintain facilities and essential personnel,
-    leading to cancelled projects, wasted funds, and hiring freezes.
+    Other threats to science include ongoing **terminations of active research
+    grants** and proposed **cuts to funding for research infrastructure**. These
+    current and proposed cuts will restrict the ability of universities and
+    research institutions to maintain facilities and essential personnel,
+    leading to cancelled projects and clinical trials, wasted funds, lost jobs,
+    and hiring freezes.
 
 
 local_description: Enter your ZIP code to explore how the White House's FY2027
