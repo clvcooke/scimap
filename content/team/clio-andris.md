@@ -1,6 +1,6 @@
 ---
 name: Clio Andris, PhD
-role: Associate Professor, Georgia Tech
+role: Lead GIS Analyst
 photo: /images/team/0.png
 order: 5
 ---
