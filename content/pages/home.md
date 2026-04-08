@@ -7,7 +7,7 @@ hero_subtitle: The Science & Community Impacts Mapping Project (SCIMaP) maps the
 hero_cta_primary: View Impact Maps
 hero_cta_secondary: Learn More
 stakes_heading: What's At Stake
-metrics_heading: Current Nationwide Impact of NIH Grant Terminations
+metrics_heading: Current Nationwide Impact of Grant Terminations
 metrics:
   - value: $11B
     label: Economic Loss
@@ -24,33 +24,29 @@ why_paragraphs:
     cuts harm research institutions, local economies, and people in red and blue
     states alike.
   - SCIMaP transforms science funding policy decisions into visible impacts to
-    increase awareness and inform evidence-driven action-taking in communities
+    increase awareness and inform evidence-driven action in communities
     nationwide.
 why_cta: IMPACT MAPS
 who_heading: Who We Serve
 hero_subheading: Discover how federal science funding impacts research, health,
   jobs, and economic activity across the U.S.
 stakes_paragraphs:
-  - >-
-    The **National Institutes of Health** (NIH) and **National Science
+  - The **National Institutes of Health** (NIH) and **National Science
     Foundation** (NSF) fund scientific research that leads to major
     breakthroughs for cancer, diabetes, brain health, heart disease, infectious
     diseases, technology, education, and more.
-
-
-    The White House has ordered **major cuts to science funding** nationwide, which would take back funds promised to the states.
+  - The White House has ordered **major cuts to science funding** nationwide,
+    which would take back funds promised to the states.
   - Currently, the proposed **FY2027 Budget** cuts would reduce funding to the
     NIH, NSF, and other key agencies by billions of dollars.
   - >+
     Other threats to science include ongoing **terminations of active research
     grants** and proposed **cuts to funding for research infrastructure**. These
-    current and proposed cuts will restrict the ability of universities and
-    research institutions to maintain facilities and essential personnel,
-    leading to cancelled projects and clinical trials, wasted funds, lost jobs,
-    and hiring freezes.
+    cuts will lead to cancelled projects and clinical trials, wasted funds, lost
+    jobs, and hiring freezes that harm people and local economies.
 
 
-local_description: Enter your ZIP code to explore how the White House's FY2027
+local_description: Enter your ZIP code to explore how the White House FY2027
   budget proposal will impact your local community.
 why_heading: Why This Matters
 who_items:
@@ -59,7 +55,7 @@ who_items:
   - name: Journalists
     desc: Local and national data and visualizations for reporting
   - name: Advocacy Groups
-    desc: Evidence-based resources for campaigns
+    desc: Evidence-based resources for advocacy campaigns
   - name: The Public
-    desc: Clear understanding of science funding's local impact
+    desc: Tools to explore the local impacts of science funding
 ---
