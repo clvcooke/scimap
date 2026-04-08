@@ -1,4 +1,5 @@
 import reportCardDataFy26 from '@/data/report_card_info_fy26.json'
+import reportCardDataFy27 from '@/data/report_card_info_fy27.json'
 import { getHouseRep, getSenatorsList, formatPoliticianName } from './legislature'
 
 interface Bounds {
@@ -42,7 +43,7 @@ export type FiscalYear = 'fy26' | 'fy27'
 
 const dataByFy: Record<FiscalYear, Record<string, ReportCardDistrict>> = {
   fy26: reportCardDataFy26 as Record<string, ReportCardDistrict>,
-  fy27: {} as Record<string, ReportCardDistrict>, // TODO: import FY27 data when available
+  fy27: reportCardDataFy27 as Record<string, ReportCardDistrict>,
 }
 
 export function getReportCardData(

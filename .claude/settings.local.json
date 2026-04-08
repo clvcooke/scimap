@@ -29,7 +29,9 @@
       "Bash(node:*)",
       "Bash(find src/routes -type f -exec basename {} \\\\;)",
       "Bash(head -20 data/baseline/*.json)",
-      "Bash(python3 -m json.tool)"
+      "Bash(python3 -m json.tool)",
+      "Bash(xargs grep:*)",
+      "Bash(grep:*)"
     ]
   }
 }

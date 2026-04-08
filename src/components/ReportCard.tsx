@@ -230,26 +230,28 @@ function InfoCard({ data }: { data: ReportCardData }) {
               {formatCurrency(data.budg_NIH_cuts_econ_loss)}
             </span>
           </div>
-          <div className="ml-2 space-y-0.5 text-xs">
-            <div className="flex justify-between gap-2">
-              <span className="text-gray-600">&bull; Aging Research:</span>
-              <span className="font-medium text-orange-700">
-                {formatCurrency(data.budg_NIA_cuts_econ_loss)}
-              </span>
+          {(data.budg_NIA_cuts_econ_loss > 0 || data.budg_NCI_cuts_econ_loss > 0 || data.budg_NIAID_cuts_econ_loss > 0) && (
+            <div className="ml-2 space-y-0.5 text-xs">
+              <div className="flex justify-between gap-2">
+                <span className="text-gray-600">&bull; Aging Research:</span>
+                <span className="font-medium text-orange-700">
+                  {formatCurrency(data.budg_NIA_cuts_econ_loss)}
+                </span>
+              </div>
+              <div className="flex justify-between gap-2">
+                <span className="text-gray-600">&bull; Cancer Research:</span>
+                <span className="font-medium text-orange-700">
+                  {formatCurrency(data.budg_NCI_cuts_econ_loss)}
+                </span>
+              </div>
+              <div className="flex justify-between gap-2">
+                <span className="text-gray-600">&bull; Infectious Disease Research:</span>
+                <span className="font-medium text-orange-700">
+                  {formatCurrency(data.budg_NIAID_cuts_econ_loss)}
+                </span>
+              </div>
             </div>
-            <div className="flex justify-between gap-2">
-              <span className="text-gray-600">&bull; Cancer Research:</span>
-              <span className="font-medium text-orange-700">
-                {formatCurrency(data.budg_NCI_cuts_econ_loss)}
-              </span>
-            </div>
-            <div className="flex justify-between gap-2">
-              <span className="text-gray-600">&bull; Infectious Disease Research:</span>
-              <span className="font-medium text-orange-700">
-                {formatCurrency(data.budg_NIAID_cuts_econ_loss)}
-              </span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -290,9 +292,12 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
     ? `https://scienceimpacts.org${window.location.pathname}${window.location.search}`
     : ''
 
+  const reportCardImageDir = fiscalYear === 'fy27' ? 'report-cards-fy27-v1' : 'report-cards-v6'
+  const hasDownloadableImage = fiscalYear !== 'fy27' // TODO: enable when FY27 images are uploaded
+
   const downloadImage = async () => {
-    const imageUrl = `${DOMAIN}/report-cards-v6/report-card-${data.state_code}-${data.CD119FP}.png`
-    const fileName = `fact-sheet-${data.state_code}-${data.CD119FP === '00' ? 'AL' : data.CD119FP}.png`
+    const imageUrl = `${DOMAIN}/${reportCardImageDir}/report-card-${data.state_code}-${data.CD119FP}.png`
+    const fileName = `fact-sheet-${fiscalYear}-${data.state_code}-${data.CD119FP === '00' ? 'AL' : data.CD119FP}.png`
     try {
       const response = await fetch(imageUrl)
       const blob = await response.blob()
@@ -400,13 +405,15 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
               </div>
             )}
           </div>
-          <button
-            onClick={() => void downloadImage()}
-            className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-            title="Download report card image"
-          >
-            <Download className="size-5" />
-          </button>
+          {hasDownloadableImage && (
+            <button
+              onClick={() => void downloadImage()}
+              className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+              title="Download report card image"
+            >
+              <Download className="size-5" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -488,8 +495,8 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
         >
           U.S. Census data
         </a>
-        . We also list losses specific to research funding for aging (NIA), cancer (NCI), and
-        infectious diseases (NIAID).
+        .{(data.budg_NIA_cuts_econ_loss > 0 || data.budg_NCI_cuts_econ_loss > 0 || data.budg_NIAID_cuts_econ_loss > 0) &&
+          ' We also list losses specific to research funding for aging (NIA), cancer (NCI), and infectious diseases (NIAID).'}
       </div>
     </div>
   )
