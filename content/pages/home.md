@@ -20,8 +20,8 @@ metrics:
 local_heading: See Impacts in Your Local Area
 why_paragraphs:
   - Federal investment in science drives innovation, creates jobs, saves lives,
-    and improves quality of life for people across the country. Funding cuts
-    harm research institutions, local economies, and people in red and blue
+    and improves quality of life for people like you across the country. Funding
+    cuts harm research institutions, local economies, and people in red and blue
     states alike.
   - SCIMaP transforms science funding policy decisions into visible impacts to
     increase awareness and inform evidence-driven action-taking in communities
