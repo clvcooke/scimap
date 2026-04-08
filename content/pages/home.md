@@ -26,7 +26,7 @@ why_paragraphs:
   - SCIMaP transforms science funding policy decisions into visible impacts to
     increase awareness and inform evidence-driven action in communities
     nationwide.
-why_cta: IMPACT MAPS
+why_cta: See Research Insights
 who_heading: Who We Serve
 hero_subheading: Discover how federal science funding impacts research, health,
   jobs, and economic activity across the U.S.
