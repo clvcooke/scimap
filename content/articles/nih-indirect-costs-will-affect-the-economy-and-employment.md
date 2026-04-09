@@ -1,0 +1,6 @@
+---
+title: NIH Indirect Costs will Affect the Economy and Employment
+url: https://www-nature-com.proxy-um.researchport.umd.edu/articles/s41562-025-02238-x
+order: 2
+---
+In a short Correspondence in [Nature Human Behaviour](https://www-nature-com.proxy-um.researchport.umd.edu/articles/s41562-025-02238-x), (June 2025) SCIMaP team members offered a data-driven take on how cutting funding for medical research affects economic activity and jobs. Federal investment in NIH research generates substantial economic returns, roughly $94 billion in economic activity and more than 400,000 jobs in 2024 alone. The SCIMaP research team built an interactive, data-driven map that traces the flow of NIH-funded research dollars into communities—accounting for where researchers and employees work and live—and displays county-level economic losses. More than 50,000 people visited the website in its first week, and many used it to share local data with their congressional representatives. The website also includes quizzes and action tools informed by behavioral science research on how localizing impacts can change beliefs and motivate action. Taken together, these cuts threaten the research enterprise, local economies, and workforce pipelines. Interactive tools can help make those otherwise invisible consequences visible to the public and policy makers.
