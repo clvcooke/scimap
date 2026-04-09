@@ -4,8 +4,8 @@ backend:
   identity_url: https://scimap.netlify.app/.netlify/identity
   gateway_url: https://scimap.netlify.app/.netlify/git
 
-media_folder: public/images/team
-public_folder: /images/team
+media_folder: public/images
+public_folder: /images
 
 collections:
   - name: team
@@ -33,6 +33,7 @@ collections:
       - { label: "Description", name: "description", widget: "text" }
       - { label: "Source", name: "source", widget: "string" }
       - { label: "URL", name: "url", widget: "string" }
+      - { label: "Image", name: "image", widget: "image", required: false, hint: "Optional image to display with the news item" }
       - { label: "Ongoing?", name: "is_ongoing", widget: "boolean", default: false }
 
   - name: press-releases
@@ -45,6 +46,7 @@ collections:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Date", name: "date", widget: "string", hint: "e.g. 'March 28, 2025'" }
       - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Image", name: "image", widget: "image", required: false, hint: "Optional image to display with the press release" }
       - { label: "URL", name: "url", widget: "string" }
 
   - name: articles

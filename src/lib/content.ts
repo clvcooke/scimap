@@ -49,6 +49,7 @@ export interface NewsItem {
   description: string
   source: string
   url: string
+  image?: string
   isOngoing: boolean
 }
 
@@ -68,6 +69,7 @@ export function getNewsItems(): NewsItem[] {
         description: attrs.description ?? '',
         source: attrs.source ?? '',
         url: attrs.url ?? '',
+        image: attrs.image ?? undefined,
         isOngoing: attrs.is_ongoing === true || attrs.is_ongoing === 'true',
       }
     })
@@ -83,6 +85,7 @@ export interface PressRelease {
   title: string
   date: string
   summary: string
+  image?: string
   url: string
 }
 
@@ -100,6 +103,7 @@ export function getPressReleases(): PressRelease[] {
         title: attrs.title ?? '',
         date: attrs.date ?? '',
         summary: attrs.summary ?? '',
+        image: attrs.image ?? undefined,
         url: attrs.url ?? '',
       }
     })

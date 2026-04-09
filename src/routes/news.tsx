@@ -65,26 +65,35 @@ function NewsPage() {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group block rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-brand-blue/30 hover:shadow-md"
+                    className="group block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:border-brand-blue/30 hover:shadow-md"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <span
-                        className={`text-xs font-medium ${
-                          item.isOngoing ? 'text-brand-blue' : 'text-gray-400'
-                        }`}
-                      >
-                        {item.date}
-                      </span>
-                      <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-500">
-                        {item.source}
-                      </span>
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt=""
+                        className="h-48 w-full object-cover"
+                      />
+                    )}
+                    <div className="p-5">
+                      <div className="flex items-start justify-between gap-3">
+                        <span
+                          className={`text-xs font-medium ${
+                            item.isOngoing ? 'text-brand-blue' : 'text-gray-400'
+                          }`}
+                        >
+                          {item.date}
+                        </span>
+                        <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-500">
+                          {item.source}
+                        </span>
+                      </div>
+                      <h3 className="mt-2 font-semibold text-gray-900 group-hover:text-brand-blue">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1.5 text-[15px] leading-relaxed text-gray-500">
+                        {item.description}
+                      </p>
                     </div>
-                    <h3 className="mt-2 font-semibold text-gray-900 group-hover:text-brand-blue">
-                      {item.title}
-                    </h3>
-                    <p className="mt-1.5 text-[15px] leading-relaxed text-gray-500">
-                      {item.description}
-                    </p>
                   </a>
                 ))}
               </div>
@@ -103,22 +112,31 @@ function NewsPage() {
                     href={pr.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group block rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-brand-blue/30 hover:shadow-md"
+                    className="group block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:border-brand-blue/30 hover:shadow-md"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <span className="text-xs font-medium text-gray-400">
-                          {pr.date}
-                        </span>
-                        <h3 className="mt-1 font-semibold text-gray-900 group-hover:text-brand-blue">
-                          {pr.title}
-                        </h3>
+                    {pr.image && (
+                      <img
+                        src={pr.image}
+                        alt=""
+                        className="h-48 w-full object-cover"
+                      />
+                    )}
+                    <div className="p-5">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <span className="text-xs font-medium text-gray-400">
+                            {pr.date}
+                          </span>
+                          <h3 className="mt-1 font-semibold text-gray-900 group-hover:text-brand-blue">
+                            {pr.title}
+                          </h3>
+                        </div>
+                        <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-gray-300 transition-colors group-hover:text-brand-blue" />
                       </div>
-                      <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-gray-300 transition-colors group-hover:text-brand-blue" />
+                      <p className="mt-2 text-[15px] leading-relaxed text-gray-500">
+                        {pr.summary}
+                      </p>
                     </div>
-                    <p className="mt-2 text-[15px] leading-relaxed text-gray-500">
-                      {pr.summary}
-                    </p>
                   </a>
                 ))}
               </div>
