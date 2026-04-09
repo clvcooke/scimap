@@ -10,5 +10,6 @@ description: The Federation of American Scientists urges the U.S. government to
   administrative overhead in science and technology.
 source: Federation of American Scientists
 url: https://fas.org/publication/funding-uncertainty-consequences/
+image: /images/screenshot-2026-04-09-at-8.54.37 am.png
 is_ongoing: false
 ---
