@@ -9,5 +9,6 @@ summary: >-
 
 
   SCIMaP — launched in March — is led by researchers from Penn, the University of Maryland, the University of Utah, Georgia Institute of Technology, and the University of Oregon. Using federal grant data and economic multipliers, the project models how recent changes to National Institutes of Health funding have affected the economy.
+image: /images/logo_v3-01-1-.png
 url: https://www.thedp.com/article/2025/09/penn-annenberg-mapping-project-award-tracking-funding-cuts
 ---
