@@ -1,9 +1,9 @@
 ---
-title: "The SCIMaP Project"
-video_url: "https://data.scienceimpacts.org/SCIMaP_NIH_cuts.mp4"
-video_heading: "See SCIMaP in Action"
+title: Science & Community Impacts Mapping Project
+video_url: https://data.scienceimpacts.org/SCIMaP_NIH_cuts.mp4
+video_heading: See SCIMaP in Action
 ---
-Our team tracks, analyzes, and visualizes the impact of federal science funding cuts across the United States. We create a clear picture of how policy decisions affect real people and places by combining public data on federal grants, federal budget proposals, economic indicators, Census data on commuter flows, and community-level statistics.
+Our team tracks, analyzes, and visualizes the impact of federal science funding cuts across the United States. We analyze how policy decisions affect people and places by combining public data on federal grants, federal budget proposals, economic indicators, US census data on commuter flows, and community-level statistics.
 
 Our research goes beyond numbers to tell the story of how science funding supports innovation, jobs, education, and economic growth in every state and territory — and what happens when funding gets cut.
 

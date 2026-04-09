@@ -1,44 +1,62 @@
 ---
-hero_title: "Mapping the Impact of Science Funding Cuts"
-hero_subtitle: "The Science & Community Impacts Mapping Project (SCIMaP) maps the local and national impact of federal investment in science— and how science funding cuts cause widespread losses that harm communities nationwide. Find out how science funding impacts your local area, and how you can take action."
-hero_subheading: "Discover how federal science funding impacts research, health, jobs, and economic activity across the U.S."
-hero_cta_primary: "View Impact Maps"
-hero_cta_secondary: "Learn More"
-
-stakes_heading: "What's At Stake"
-stakes_paragraphs:
-  - "Federal investment in science and research drives innovation, creates jobs, and supports critical infrastructure in communities across the United States."
-  - "The proposed **FY2026 Budget** cuts would reduce funding to the National Institutes of Health (NIH) and other key agencies by up to **22%**."
-  - "Additionally, caps on **Indirect Costs (15%)** will severely restrict the ability of universities and research institutions to maintain facilities and support staff, leading to cancelled projects and hiring freezes."
-
-metrics_heading: "Current Nationwide Impact of NIH Grant Terminations"
+hero_title: Mapping the Impacts of Science Funding Cuts
+hero_subtitle: The Science & Community Impacts Mapping Project (SCIMaP) reveals
+  the local and national impacts of federal investment in science— and how
+  science funding cuts cause widespread losses that harm communities nationwide.
+  Find out how science funding impacts **your local area**, and how you can take
+  action.
+hero_cta_primary: View Impact Maps
+hero_cta_secondary: Learn More
+stakes_heading: What's At Stake
+metrics_heading: Current Nationwide Impact of Grant Terminations
 metrics:
-  - value: "$11B"
-    label: "Economic Loss"
-  - value: "49K"
-    label: "Jobs at Risk"
-  - value: "2.5K"
-    label: "Grants Cancelled"
+  - value: $11B
+    label: Economic Loss
+  - value: 49K
+    label: Jobs at Risk
+  - value: 2.5K
+    label: Grants Cancelled
   - value: "50"
-    label: "States Affected"
-
-local_heading: "See Impacts in Your Local Area"
-local_description: "Enter your ZIP code to explore how specific funding cuts will affect jobs, research projects, and institutional resources in your community."
-
-why_heading: "Why This Matters"
+    label: States Affected
+local_heading: See Impacts in Your Local Area
 why_paragraphs:
-  - "Federal investment in science drives innovation, creates jobs, saves lives, and improves quality of life for people across the country. Funding cuts harm research institutions, local economies, and people in red and blue states alike."
-  - "SCIMaP transforms abstract policy decisions into visible community impacts that everyone can understand, so we can take action and make informed decisions to protect our communities."
-why_cta: "Read our Research Insights"
+  - Federal investment in science drives innovation, creates jobs, saves lives,
+    and improves quality of life for people like you across the country. Funding
+    cuts harm research institutions, local economies, and people in red and blue
+    states alike.
+  - SCIMaP transforms science funding policy decisions into visible impacts to
+    increase awareness and inform evidence-driven action in communities
+    nationwide.
+why_cta: See Research Insights
+who_heading: Who We Serve
+hero_subheading: Discover how federal science funding impacts research, health,
+  jobs, and economic activity across the U.S.
+stakes_paragraphs:
+  - The **National Institutes of Health** (NIH) and **National Science
+    Foundation** (NSF) fund scientific research that leads to major
+    breakthroughs for cancer, diabetes, brain health, heart disease, infectious
+    diseases, technology, education, and more.
+  - The White House has ordered **major cuts to science funding** nationwide,
+    which would take back funds promised to the states.
+  - Currently, the proposed **FY2027 budget cuts** would reduce funding to the
+    NIH, NSF, and other key agencies by billions of dollars.
+  - >+
+    Other threats to science include ongoing **terminations of active research
+    grants** and proposed **cuts to funding for research infrastructure**. These
+    cuts will lead to cancelled projects and clinical trials, wasted funds, lost
+    jobs, and hiring freezes that harm people and local economies.
 
-who_heading: "Who We Serve"
+
+local_description: Enter your ZIP code to explore how the White House FY2027
+  budget proposal will impact your local community.
+why_heading: Why This Matters
 who_items:
-  - name: "Policy Makers"
-    desc: "Data-driven insights for informed decision making"
-  - name: "Journalists"
-    desc: "Local and national data and visualizations for reporting"
-  - name: "Advocacy Groups"
-    desc: "Evidence-based resources for campaigns"
-  - name: "The Public"
-    desc: "Clear understanding of science funding's local impact"
+  - name: Policy Makers
+    desc: Data-driven insights for informed decision making
+  - name: Journalists
+    desc: Local and national data and visualizations for reporting
+  - name: Advocacy Groups
+    desc: Evidence-based resources for advocacy campaigns
+  - name: The Public
+    desc: Tools to explore the local impacts of science funding
 ---
