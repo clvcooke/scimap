@@ -5,5 +5,6 @@ summary: Researchers at the University of Maryland and the University of
   Pennsylvania are jointly leading efforts to communicate the science and
   community impacts of ongoing cuts to federal funding for science and medical
   research
+image: /images/logo_v3-01-1-.png
 url: https://cmns.umd.edu/news-events/news/open-philanthropy-award-joshua-weitz-scimap
 ---
