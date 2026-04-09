@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { getPage } from '@/lib/content'
+import ShareMenu from '@/components/ShareMenu'
 
 const FOOTER = getPage('footer').attrs
 
@@ -259,7 +260,13 @@ export const Route = createRootRoute({
                 <li>Press Inquiries: {FOOTER.press_email}</li>
                 <li>Other: {FOOTER.contact_email}</li>
               </ul>
-              <div className="flex gap-4 pt-4">
+              <div className="flex items-center gap-4 pt-4">
+                <ShareMenu
+                  shareUrl="https://scienceimpacts.org"
+                  shareTitle="SCIMaP — Science & Community Impacts Mapping Project"
+                  dropUp
+                  className="[&_button]:text-gray-300 [&_button]:hover:text-white [&_button]:bg-transparent [&_button]:shadow-none"
+                />
                 <a
                   href="https://bsky.app/profile/scienceimpacts.org"
                   className="text-gray-300 transition-colors hover:text-white"

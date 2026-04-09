@@ -7,6 +7,7 @@ import {
   TabsContent,
 } from '@/components/ui/tabs'
 import { getTeamMembers, getPage } from '@/lib/content'
+import { InlineMarkdown } from '@/components/InlineMarkdown'
 
 export const Route = createFileRoute('/about')({
   component: AboutPage,
@@ -50,8 +51,8 @@ function TeamCard({
           <p className="text-sm font-medium text-brand-blue">{member.role}</p>
         </div>
       </div>
-      <p className="mt-4 text-[15px] leading-relaxed text-gray-500">
-        {member.bio}
+      <p className="mt-4 text-[15px] leading-relaxed text-gray-500 [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-sky">
+        <InlineMarkdown>{member.bio}</InlineMarkdown>
       </p>
     </div>
   )
@@ -103,9 +104,9 @@ function AboutPage() {
                   {OVERVIEW.attrs.title}
                 </h2>
 
-                <div className="mt-4 space-y-4 leading-relaxed text-gray-600">
+                <div className="mt-4 space-y-4 leading-relaxed text-gray-600 [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-sky">
                   {OVERVIEW.body.split(/\n\n+/).map((paragraph, i) => (
-                    <p key={i}>{paragraph}</p>
+                    <p key={i}><InlineMarkdown>{paragraph}</InlineMarkdown></p>
                   ))}
                 </div>
               </div>

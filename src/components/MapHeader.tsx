@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router'
+import { LayoutGrid } from 'lucide-react'
 import type { PageContent } from '@/lib/content'
 
 export function MapHeader({ page }: { page: PageContent }) {
@@ -19,6 +21,13 @@ export function MapHeader({ page }: { page: PageContent }) {
             </p>
           </>
         )}
+        <Link
+          to="/maps"
+          className="ml-auto flex shrink-0 items-center gap-1.5 rounded-md bg-white/15 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-white/25 md:text-sm"
+        >
+          <LayoutGrid className="size-3.5 md:size-4" />
+          <span className="hidden sm:inline">All Maps</span>
+        </Link>
       </div>
     </div>
   )

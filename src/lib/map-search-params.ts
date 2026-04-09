@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 
 export interface MapSearchParams {
   lat?: number | undefined
@@ -17,18 +17,13 @@ export function validateMapSearch(search: Record<string, unknown>): MapSearchPar
 }
 
 /**
- * Returns a ref to attach to the map container div.
- * On mount, if lat/lng are present, scrolls the element into view
- * accounting for the sticky header.
+ * On mount, if lat/lng are present, scrolls to the top of the page
+ * so the header and explainer text are visible.
  */
-export function useScrollToMap(lat?: number, lng?: number) {
-  const ref = useRef<HTMLDivElement>(null)
-
+export function useScrollToTop(lat?: number, lng?: number) {
   useEffect(() => {
-    if (lat != null && lng != null && ref.current) {
-      ref.current.scrollIntoView({ behavior: 'instant' })
+    if (lat != null && lng != null) {
+      window.scrollTo({ top: 0, behavior: 'instant' })
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  return ref
 }

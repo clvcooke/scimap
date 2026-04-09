@@ -6,11 +6,16 @@ const btnBase =
 
 /** Reusable share button + dropdown. Renders a share icon that opens a menu
  *  with native share (on mobile), copy-link, and social sharing options.
- *  Designed to sit alongside MapControls or anywhere on the page. */
-export default function ShareMenu({ className }: { className?: string }) {
+ *  Designed to sit alongside MapControls or anywhere on the page.
+ *  @param dropUp — opens the menu above the button instead of below.
+ *  @param shareUrl — override the URL to share (defaults to current page URL).
+ *  @param shareTitle — override the share title (defaults to current page title). */
+export default function ShareMenu({ className, dropUp, shareUrl, shareTitle }: { className?: string; dropUp?: boolean; shareUrl?: string; shareTitle?: string }) {
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [pos, setPos] = useState<{ up: boolean; alignRight: boolean }>({ up: false, alignRight: true })
   const menuRef = useRef<HTMLDivElement>(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
 
   // close on outside click
   useEffect(() => {
@@ -24,8 +29,8 @@ export default function ShareMenu({ className }: { className?: string }) {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [open])
 
-  const pageUrl = window.location.href
-  const pageTitle = document.title
+  const pageUrl = shareUrl ?? window.location.href
+  const pageTitle = shareTitle ?? document.title
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(pageUrl)
@@ -89,7 +94,21 @@ export default function ShareMenu({ className }: { className?: string }) {
     <div className={className ?? ''}>
       <div ref={menuRef} className="relative inline-block">
       <button
-        onClick={() => setOpen((o) => !o)}
+        ref={btnRef}
+        onClick={() => {
+          setOpen((o) => {
+            if (!o && btnRef.current) {
+              const rect = btnRef.current.getBoundingClientRect()
+              const menuH = 280 // approximate menu height
+              const menuW = 192 // w-48 = 12rem = 192px
+              setPos({
+                up: (dropUp ?? false) || rect.bottom + menuH > window.innerHeight,
+                alignRight: rect.right >= menuW,
+              })
+            }
+            return !o
+          })
+        }}
         className={`${btnBase} rounded-lg`}
         aria-label="Share"
         aria-expanded={open}
@@ -98,7 +117,7 @@ export default function ShareMenu({ className }: { className?: string }) {
       </button>
 
       {open && (
-        <div className="absolute top-full right-0 mt-2 w-48 rounded-lg bg-white py-1 shadow-lg ring-1 ring-black/5">
+        <div className={`absolute w-48 rounded-lg bg-white py-1 shadow-lg ring-1 ring-black/5 ${pos.up ? 'bottom-full mb-2' : 'top-full mt-2'} ${pos.alignRight ? 'right-0' : 'left-0'}`}>
           {hasNativeShare && (
             <ShareItem icon={<Share2 className="size-4" />} label="Share..." onClick={() => void shareNative()} />
           )}

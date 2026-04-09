@@ -17,8 +17,19 @@ import ColorScale from './ColorScale'
 // ── Constants ──────────────────────────────────────────────────────
 
 const DOMAIN = 'https://data.scienceimpacts.org'
-const DISTRICT_TILES = `${DOMAIN}/tiles_districts_budget_119_v2/{z}/{x}/{y}.pbf`
-const STATE_TILES = `${DOMAIN}/tiles_states_budget_v1/{z}/{x}/{y}.pbf`
+
+const TILES_BY_FY = {
+  fy26: {
+    districts: `${DOMAIN}/tiles_districts_budget_119_v2/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget_v1/{z}/{x}/{y}.pbf`,
+    colorProperty: 'budg_NIH_cuts_econ_loss',
+  },
+  fy27: {
+    districts: `${DOMAIN}/tiles_districts_budget27_v1/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget27_v1/{z}/{x}/{y}.pbf`,
+    colorProperty: 'econ_budg_NIH_cuts',
+  },
+} as const
 
 const DISTRICTS_DOMAIN: [number, number] = [5_000_000, 500_000_000]
 const STATE_DOMAIN: [number, number] = [10_000_000, 5_000_000_000]
@@ -53,6 +64,7 @@ function createMagmaLayer(
   uniqueProperty: string,
   id: string,
   highlightId?: string | number,
+  colorProperty = 'budg_NIH_cuts_econ_loss',
 ) {
   const lower = domain[0] > 1 ? Math.log(domain[0]) : 0
   const upper = Math.log(domain[1])
@@ -68,7 +80,7 @@ function createMagmaLayer(
     getLineColor: [255, 255, 255, 60],
     lineWidthMinPixels: 1,
     getFillColor: (f: { properties: Record<string, number> }) => {
-      const v = f.properties.budg_NIH_cuts_econ_loss ?? 0
+      const v = f.properties[colorProperty] ?? 0
       const t = cs(v > 0 ? Math.log(v) : 0)
       const c = interpolateMagma(1 - t)
       const rgb = c.startsWith('rgb')
@@ -213,7 +225,7 @@ function InfoCard({ data }: { data: ReportCardData }) {
       {/* Projected losses */}
       <div className="mb-4">
         <h3 className="mb-2 text-center text-xs font-semibold uppercase tracking-wide text-gray-700">
-          Projected Losses from NIH Budget Cuts in {districtCode}
+          Projected Losses from Budget Cuts in {districtCode}
         </h3>
         <div className="space-y-1 text-sm">
           <div className="flex justify-between gap-2">
@@ -225,13 +237,30 @@ function InfoCard({ data }: { data: ReportCardData }) {
             </span>
           </div>
           <div className="flex justify-between gap-2">
-            <span className="font-medium text-gray-900">Total Economic Loss:</span>
+            <span className="font-medium text-gray-900">NIH Economic Loss:</span>
             <span className="font-semibold text-red-700">
               {formatCurrency(data.budg_NIH_cuts_econ_loss)}
             </span>
           </div>
+          {data.budg_NSF_cuts_econ_loss != null && data.budg_NSF_cuts_econ_loss > 0 && (
+            <div className="flex justify-between gap-2">
+              <span className="font-medium text-gray-900">NSF Economic Loss:</span>
+              <span className="font-semibold text-red-700">
+                {formatCurrency(data.budg_NSF_cuts_econ_loss)}
+              </span>
+            </div>
+          )}
+          {(data.budg_NSF_cuts_econ_loss != null && data.budg_NSF_cuts_econ_loss > 0) && (
+            <div className="flex justify-between gap-2 border-t pt-1">
+              <span className="font-bold text-gray-900">Total Economic Loss:</span>
+              <span className="font-bold text-red-700">
+                {formatCurrency(data.budg_NIH_cuts_econ_loss + (data.budg_NSF_cuts_econ_loss ?? 0))}
+              </span>
+            </div>
+          )}
           {(data.budg_NIA_cuts_econ_loss > 0 || data.budg_NCI_cuts_econ_loss > 0 || data.budg_NIAID_cuts_econ_loss > 0) && (
             <div className="ml-2 space-y-0.5 text-xs">
+              <div className="mb-0.5 text-xs font-medium text-gray-500">NIH Institute Breakdown:</div>
               <div className="flex justify-between gap-2">
                 <span className="text-gray-600">&bull; Aging Research:</span>
                 <span className="font-medium text-orange-700">
@@ -333,39 +362,43 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
     }
   }
 
+  const tiles = TILES_BY_FY[fiscalYear]
+
   // District map layers
   const districtLayers = useMemo(
     () => [
       createMagmaLayer(
-        DISTRICT_TILES,
+        tiles.districts,
         DISTRICTS_DOMAIN,
         'GEOID',
         'rc-district-fill',
         data.GEOID,
+        tiles.colorProperty,
       ),
-      createOutlineLayer(DISTRICT_TILES, 'GEOID', data.GEOID, 'rc-district-outline'),
+      createOutlineLayer(tiles.districts, 'GEOID', data.GEOID, 'rc-district-outline'),
     ],
-    [data.GEOID],
+    [data.GEOID, tiles],
   )
 
   // State overview map layers
   const stateLayers = useMemo(
     () => [
       createMagmaLayer(
-        STATE_TILES,
+        tiles.states,
         STATE_DOMAIN,
         'state_code',
         'rc-state-fill',
         data.state_code,
+        tiles.colorProperty,
       ),
       createOutlineLayer(
-        DISTRICT_TILES,
+        tiles.districts,
         'GEOID',
         data.GEOID,
         'rc-state-district-outline',
       ),
     ],
-    [data.state_code, data.GEOID],
+    [data.state_code, data.GEOID, tiles],
   )
 
   return (
@@ -378,14 +411,14 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
           </Link>
           <div className="text-center md:text-left">
             <h1 className="text-lg font-bold text-gray-900 md:text-xl">
-              SCIMaP Scorecard: White House NIH {fyLabel} Budget Proposal
+              SCIMaP Scorecard: White House {fyLabel} Budget Proposal
             </h1>
             <h2 className="text-base font-medium text-gray-700 md:text-lg">
-              {districtTitle} — FY{fyYear} NIH Budget Impact
+              {districtTitle} — FY{fyYear} Science Funding Impact
             </h2>
             <p className="text-sm text-gray-500">
               Projected district-level economic losses from cuts proposed in the White House {fyLabel}
-              NIH budget
+              budget for NIH{fiscalYear === 'fy27' ? ' and NSF' : ''}
             </p>
           </div>
         </div>

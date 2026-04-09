@@ -98,9 +98,9 @@ function TakeActionPage() {
       {/* Contact Your Representatives */}
       <Section bg="white">
         <SectionHeading icon={Megaphone}>
-          Contact Your Representatives
+          {a.contact_heading}
         </SectionHeading>
-        <p className="mb-5 text-lg leading-relaxed text-gray-700">
+        <p className="mb-5 text-lg leading-relaxed text-gray-700 [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-sky">
           <InlineMarkdown>{a.contact_intro}</InlineMarkdown>
         </p>
         <BulletList items={a.talking_points ?? []} />
@@ -113,11 +113,14 @@ function TakeActionPage() {
           iconBg="bg-brand-sky/15"
           iconColor="text-brand-sky"
         >
-          Share with Friends, Family, and Followers
+          {a.share_heading}
         </SectionHeading>
-        <p className="mb-5 text-lg leading-relaxed text-gray-700">
-          <InlineMarkdown>{a.share_intro}</InlineMarkdown>
-        </p>
+        <div className="mb-5 flex flex-wrap items-center gap-4">
+          <p className="text-lg leading-relaxed text-gray-700">
+            <InlineMarkdown>{a.share_intro}</InlineMarkdown>
+          </p>
+          <ShareMenu className="inline-flex" dropUp />
+        </div>
         {a.organizations && (
           <ul className="mb-6 space-y-2">
             {(a.organizations as { name: string; url: string }[]).map((org) => (
@@ -135,7 +138,6 @@ function TakeActionPage() {
             ))}
           </ul>
         )}
-        <ShareMenu className="flex justify-center" />
       </Section>
     </div>
   )
