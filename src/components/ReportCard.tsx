@@ -27,7 +27,7 @@ const TILES_BY_FY = {
   fy27: {
     districts: `${DOMAIN}/tiles_districts_budget27_v1/{z}/{x}/{y}.pbf`,
     states: `${DOMAIN}/tiles_states_budget27_v1/{z}/{x}/{y}.pbf`,
-    colorProperty: 'econ_budg_NIH_cuts',
+    colorProperty: 'econ_budg_total_cuts',
   },
 } as const
 
@@ -191,7 +191,7 @@ function MiniMap({
 
 // ── Info card (representatives + losses + top 5) ───────────────────
 
-function InfoCard({ data }: { data: ReportCardData }) {
+function InfoCard({ data, fiscalYear }: { data: ReportCardData; fiscalYear: FiscalYear }) {
   const districtCode =
     data.CD119FP === '00'
       ? `${data.state_code}-AL`
@@ -236,25 +236,36 @@ function InfoCard({ data }: { data: ReportCardData }) {
                 : formatNumber(data.budg_NIH_cuts_job_loss)}
             </span>
           </div>
-          <div className="flex justify-between gap-2">
-            <span className="font-medium text-gray-900">NIH Economic Loss:</span>
-            <span className="font-semibold text-red-700">
-              {formatCurrency(data.budg_NIH_cuts_econ_loss)}
-            </span>
-          </div>
-          {data.budg_NSF_cuts_econ_loss != null && data.budg_NSF_cuts_econ_loss > 0 && (
+          {fiscalYear === 'fy27' ? (
+            <>
+              <div className="flex justify-between gap-2 border-t pt-1">
+                <span className="font-bold text-gray-900">Total Economic Loss:</span>
+                <span className="font-bold text-red-700">
+                  {formatCurrency(data.budg_total_cuts_econ_loss ?? data.budg_NIH_cuts_econ_loss)}
+                </span>
+              </div>
+              <div className="ml-2 space-y-0.5 text-xs">
+                <div className="flex justify-between gap-2">
+                  <span className="text-gray-600">&bull; NIH:</span>
+                  <span className="font-medium text-orange-700">
+                    {formatCurrency(data.budg_NIH_cuts_econ_loss)}
+                  </span>
+                </div>
+                {(data.budg_NSF_cuts_econ_loss ?? 0) > 0 && (
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-600">&bull; NSF:</span>
+                    <span className="font-medium text-orange-700">
+                      {formatCurrency(data.budg_NSF_cuts_econ_loss!)}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
             <div className="flex justify-between gap-2">
-              <span className="font-medium text-gray-900">NSF Economic Loss:</span>
+              <span className="font-medium text-gray-900">NIH Economic Loss:</span>
               <span className="font-semibold text-red-700">
-                {formatCurrency(data.budg_NSF_cuts_econ_loss)}
-              </span>
-            </div>
-          )}
-          {(data.budg_NSF_cuts_econ_loss != null && data.budg_NSF_cuts_econ_loss > 0) && (
-            <div className="flex justify-between gap-2 border-t pt-1">
-              <span className="font-bold text-gray-900">Total Economic Loss:</span>
-              <span className="font-bold text-red-700">
-                {formatCurrency(data.budg_NIH_cuts_econ_loss + (data.budg_NSF_cuts_econ_loss ?? 0))}
+                {formatCurrency(data.budg_NIH_cuts_econ_loss)}
               </span>
             </div>
           )}
@@ -452,7 +463,7 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
 
       {/* Mobile: stack vertically */}
       <div className="flex flex-col gap-4 md:hidden">
-        <InfoCard data={data} />
+        <InfoCard data={data} fiscalYear={fiscalYear} />
         <MiniMap
           minLat={data.district_bounds.min_lat}
           maxLat={data.district_bounds.max_lat}
@@ -468,7 +479,7 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
       {/* Desktop: side-by-side */}
       <div className="hidden gap-4 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
         <div className="flex flex-col gap-4">
-          <InfoCard data={data} />
+          <InfoCard data={data} fiscalYear={fiscalYear} />
           <MiniMap
             minLat={data.state_bounds.min_lat}
             maxLat={data.state_bounds.max_lat}

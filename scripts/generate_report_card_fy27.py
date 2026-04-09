@@ -1,8 +1,9 @@
 """
-Generate report_card_info_fy27.json from FY27 NIH budget CSVs.
+Generate report_card_info_fy27.json from FY27 NIH + NSF budget CSVs.
 
 Uses:
-  - data/2027/FY2027 NIH Budget/NIH_budget27_cong.csv  (district-level totals)
+  - data/2027/FY2027 NIH Budget/NIH_budget27_cong.csv  (district-level NIH totals)
+  - data/2027/FY2027 NSF Budget/NSF_budget27_cong.csv  (district-level NSF totals)
   - data/2027/FY2027 NIH Budget/top5inst_budg27_cong.csv (top 5 institutions)
   - src/data/report_card_info_fy26.json (reuse district/state bounds)
 
@@ -16,7 +17,8 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA_27 = ROOT / "data" / "2027" / "FY2027 NIH Budget"
+NIH_DATA_27 = ROOT / "data" / "2027" / "FY2027 NIH Budget"
+NSF_DATA_27 = ROOT / "data" / "2027" / "FY2027 NSF Budget"
 FY26_JSON = ROOT / "src" / "data" / "report_card_info_fy26.json"
 OUTPUT = ROOT / "src" / "data" / "report_card_info_fy27.json"
 
@@ -55,9 +57,9 @@ def main():
     with open(FY26_JSON, encoding="utf-8") as f:
         fy26 = json.load(f)
 
-    # Load district-level totals
+    # Load district-level NIH totals
     districts = {}
-    with open(DATA_27 / "NIH_budget27_cong.csv", encoding="utf-8") as f:
+    with open(NIH_DATA_27 / "NIH_budget27_cong.csv", encoding="utf-8") as f:
         for row in csv.DictReader(f):
             key = geoid_to_key(row["GEOID"])
             if not key:
@@ -69,15 +71,29 @@ def main():
                 "CD119FP": row["GEOID"].zfill(4)[2:],
                 "budg_NIH_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
                 "budg_NIH_cuts_job_loss": float(row["jobs_budg_NIH_cuts"]),
+                "budg_NSF_cuts_econ_loss": 0.0,
+                "budg_total_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
                 # Institute breakdowns not yet available for FY27
                 "budg_NIA_cuts_econ_loss": 0,
                 "budg_NCI_cuts_econ_loss": 0,
                 "budg_NIAID_cuts_econ_loss": 0,
             }
 
+    # Load district-level NSF totals and merge
+    with open(NSF_DATA_27 / "NSF_budget27_cong.csv", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            key = geoid_to_key(row["GEOID"])
+            if not key or key not in districts:
+                continue
+            nsf_econ = float(row["econ_budg_NSF_cuts"])
+            districts[key]["budg_NSF_cuts_econ_loss"] = nsf_econ
+            districts[key]["budg_total_cuts_econ_loss"] = (
+                districts[key]["budg_NIH_cuts_econ_loss"] + nsf_econ
+            )
+
     # Load top 5 institutions per district
     top5_by_district: dict[str, list] = {}
-    with open(DATA_27 / "top5inst_budg27_cong.csv", encoding="utf-8") as f:
+    with open(NIH_DATA_27 / "top5inst_budg27_cong.csv", encoding="utf-8") as f:
         for row in csv.DictReader(f):
             key = geoid_to_key(row["GEOID"])
             if not key:

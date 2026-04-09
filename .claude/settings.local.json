@@ -31,7 +31,8 @@
       "Bash(head -20 data/baseline/*.json)",
       "Bash(python3 -m json.tool)",
       "Bash(xargs grep:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Read(//tmp/**)"
     ]
   }
 }
