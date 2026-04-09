@@ -1,8 +1,10 @@
 ---
-title: "NIH cuts would hurt Raleigh-Durham, Wake, and Orange counties"
-date: "April 11, 2025"
-description: "A regional analysis of how the Research Triangle area stands to lose research jobs and economic activity under proposed NIH budget reductions."
-source: "Axios Raleigh"
-url: "https://www.axios.com/local/raleigh/2025/04/11/nih-cuts-would-hurt-raleigh-durham-wake-orange"
+title: NIH cuts would hurt Raleigh-Durham, Wake, and Orange counties
+date: April 11, 2025
+description: A regional analysis of how the Research Triangle area stands to
+  lose research jobs and economic activity under proposed NIH budget reductions.
+source: Axios Raleigh
+url: https://www.axios.com/local/raleigh/2025/04/11/nih-cuts-would-hurt-raleigh-durham-wake-orange
+image: /images/screenshot-2026-04-09-at-8.47.24 am.png
 is_ongoing: false
 ---
