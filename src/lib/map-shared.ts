@@ -119,7 +119,7 @@ export function buildTooltipHeader(
   if (county) locationLine = `${county}, ${stateRaw}`
   if (geoLevel === 'districts' && props.GEOID) {
     const num = String(props.GEOID).slice(-2)
-    const distLabel = num === '00' ? 'At-Large' : `District ${parseInt(num, 10)}`
+    const distLabel = num === '00' ? 'At-Large' : num === '98' && stateRaw === 'DC' ? 'No District' : `District ${parseInt(num, 10)}`
     locationLine = `${stateRaw} (${distLabel})`
   }
 

@@ -39,7 +39,7 @@ function getBaselineDisplayName(tile: TileProperties, geoLevel: GeoLevel): strin
       const state = tile.state as unknown as string | undefined
       const geoid = String(tile.GEOID ?? '')
       const num = geoid.slice(-2)
-      const distLabel = num === '00' ? 'At-Large' : `District ${parseInt(num, 10)}`
+      const distLabel = num === '00' ? 'At-Large' : num === '98' && state === 'DC' ? 'No District' : `District ${parseInt(num, 10)}`
       return state ? `${state} ${distLabel}` : `District ${geoid}`
     }
     case 'cities': {

@@ -15,6 +15,7 @@ import type { MapGeoConfig } from '@/lib/map-shared'
 import { GEO_LEVELS as BASELINE_GEO_LEVELS, createColorScale, createBaselineLayer } from '@/lib/map-config'
 import { GRANTS_GEO_LEVELS, GRANTS_COLOR_PROPERTY } from '@/lib/grants-map-config'
 import { FY27_GEO_LEVELS, FY27_COLOR_PROPERTY } from '@/lib/fy27-map-config'
+import { IDC_GEO_LEVELS, IDC_COLOR_PROPERTY } from '@/lib/idc-map-config'
 
 export const Route = createFileRoute('/maps')({
   component: MapsRoute,
@@ -126,6 +127,18 @@ const MAPS = [
       />
     ),
   },
+  {
+    slug: 'map-idc',
+    to: '/idc' as const,
+    preview: () => (
+      <ChoroplethPreview
+        config={IDC_GEO_LEVELS.counties}
+        colorProperty={IDC_COLOR_PROPERTY}
+        lut={LUT_OR_RD}
+        layerId="idc-preview"
+      />
+    ),
+  },
 ]
 
 function MapCard({
@@ -134,7 +147,7 @@ function MapCard({
   preview: Preview,
 }: {
   slug: string
-  to: '/map' | '/grants' | '/fy27'
+  to: '/map' | '/grants' | '/fy27' | '/idc'
   preview: () => React.JSX.Element
 }) {
   const page = getPage(slug)

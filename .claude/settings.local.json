@@ -32,7 +32,9 @@
       "Bash(python3 -m json.tool)",
       "Bash(xargs grep:*)",
       "Bash(grep:*)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(npm run lint:*)",
+      "Bash(find:*)"
     ]
   }
 }

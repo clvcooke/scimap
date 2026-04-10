@@ -15,17 +15,14 @@ import GrantsOverlay from './GrantsOverlay'
 
 const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
   const { locationLine, politicianHtml } = buildTooltipHeader(p, geoLevel)
-  const econLoss = Number(p.combined_econ_loss ?? 0)
-  const jobLoss = Number(p.combined_job_loss ?? 0)
-  const currentLoss = Number(p.terminated_econ_loss ?? 0)
-  const futureLoss = Number(p.IDC_econ_loss ?? 0)
+  const econLoss = Number(p.terminated_econ_loss ?? 0)
+  const jobLoss = Number(p.terminated_job_loss ?? 0)
 
   return (
     `<div class="font-semibold">${locationLine}</div>` +
     politicianHtml +
-    `<div>Total Loss: ${formatCurrency(econLoss)}</div>` +
-    (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '') +
-    `<div class="mt-1 text-gray-300 text-[11px]">Current: ${formatCurrency(currentLoss)} · Future: ${formatCurrency(futureLoss)}/yr</div>`
+    `<div>Economic Loss: ${formatCurrency(econLoss)}</div>` +
+    (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '')
   )
 }
 

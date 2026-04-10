@@ -27,4 +27,4 @@ export const GRANTS_GEO_LEVELS: Record<LossGeoLevel, MapGeoConfig> = {
   },
 }
 
-export const GRANTS_COLOR_PROPERTY = 'combined_econ_loss'
+export const GRANTS_COLOR_PROPERTY = 'terminated_econ_loss'

@@ -64,6 +64,13 @@ function MapsDropdown() {
           >
             FY27 Budget Impact
           </Link>
+          <Link
+            to="/idc"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            onClick={() => setOpen(false)}
+          >
+            IDC
+          </Link>
         </div>
       )}
     </div>
@@ -169,6 +176,14 @@ function Header() {
             onClick={() => setMenuOpen(false)}
           >
             FY27 Budget Impact
+          </Link>
+          <Link
+            to="/idc"
+            className="pl-3 text-left transition-colors hover:text-brand-blue-light"
+            activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            IDC
           </Link>
 
           <Link

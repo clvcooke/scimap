@@ -16,6 +16,7 @@ import { Route as MethodologyRouteImport } from './routes/methodology'
 import { Route as MapsRouteImport } from './routes/maps'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as IdcRouteImport } from './routes/idc'
 import { Route as GrantsRouteImport } from './routes/grants'
 import { Route as Fy27RouteImport } from './routes/fy27'
 import { Route as Fy26RouteImport } from './routes/fy26'
@@ -57,6 +58,11 @@ const MapRoute = MapRouteImport.update({
 const InsightsRoute = InsightsRouteImport.update({
   id: '/insights',
   path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IdcRoute = IdcRouteImport.update({
+  id: '/idc',
+  path: '/idc',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GrantsRoute = GrantsRouteImport.update({
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/fy26': typeof Fy26Route
   '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
+  '/idc': typeof IdcRoute
   '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
   '/maps': typeof MapsRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/fy26': typeof Fy26Route
   '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
+  '/idc': typeof IdcRoute
   '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
   '/maps': typeof MapsRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/fy26': typeof Fy26Route
   '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
+  '/idc': typeof IdcRoute
   '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
   '/maps': typeof MapsRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/fy26'
     | '/fy27'
     | '/grants'
+    | '/idc'
     | '/insights'
     | '/map'
     | '/maps'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/fy26'
     | '/fy27'
     | '/grants'
+    | '/idc'
     | '/insights'
     | '/map'
     | '/maps'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/fy26'
     | '/fy27'
     | '/grants'
+    | '/idc'
     | '/insights'
     | '/map'
     | '/maps'
@@ -203,6 +215,7 @@ export interface RootRouteChildren {
   Fy26Route: typeof Fy26Route
   Fy27Route: typeof Fy27Route
   GrantsRoute: typeof GrantsRoute
+  IdcRoute: typeof IdcRoute
   InsightsRoute: typeof InsightsRoute
   MapRoute: typeof MapRoute
   MapsRoute: typeof MapsRoute
@@ -261,6 +274,13 @@ declare module '@tanstack/react-router' {
       path: '/insights'
       fullPath: '/insights'
       preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/idc': {
+      id: '/idc'
+      path: '/idc'
+      fullPath: '/idc'
+      preLoaderRoute: typeof IdcRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/grants': {
@@ -323,6 +343,7 @@ const rootRouteChildren: RootRouteChildren = {
   Fy26Route: Fy26Route,
   Fy27Route: Fy27Route,
   GrantsRoute: GrantsRoute,
+  IdcRoute: IdcRoute,
   InsightsRoute: InsightsRoute,
   MapRoute: MapRoute,
   MapsRoute: MapsRoute,

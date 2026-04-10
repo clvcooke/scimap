@@ -325,7 +325,7 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
   const [shareOpen, setShareOpen] = useState(false)
 
   const districtName =
-    data.CD119FP === '00' ? 'At Large' : `District ${parseInt(data.CD119FP, 10)}`
+    data.CD119FP === '00' ? 'At Large' : data.CD119FP === '98' && data.state === 'DC' ? 'No District' : `District ${parseInt(data.CD119FP, 10)}`
   const districtTitle = `${data.state} ${districtName}`
 
   const currentUrl = typeof window !== 'undefined'

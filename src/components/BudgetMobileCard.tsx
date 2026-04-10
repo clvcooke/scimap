@@ -23,7 +23,7 @@ export default function BudgetMobileCard({
   let label = stateName(stateRaw)
   if (geoLevel === 'districts' && props.GEOID) {
     const num = String(props.GEOID).slice(-2)
-    const distLabel = num === '00' ? 'At-Large' : `District ${parseInt(num, 10)}`
+    const distLabel = num === '00' ? 'At-Large' : num === '98' && stateRaw === 'DC' ? 'No District' : `District ${parseInt(num, 10)}`
     label = `${stateRaw} ${distLabel}`
   } else if (county) {
     label = `${county}, ${stateRaw}`
