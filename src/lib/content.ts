@@ -116,6 +116,7 @@ export interface Article {
   url: string
   order: number
   blurb: string
+  date?: string
 }
 
 const articleFiles = import.meta.glob<string>('/content/articles/*.md', {
@@ -133,6 +134,7 @@ export function getArticles(): Article[] {
         url: attrs.url ?? '#',
         order: Number(attrs.order) || 99,
         blurb: body,
+        date: attrs.date ?? undefined,
       }
     })
     .sort((a, b) => a.order - b.order)

@@ -9,6 +9,16 @@ export function InlineMarkdown({ children }: { children: string }) {
     <Markdown
       components={{
         p: ({ children: c }) => <>{c}</>,
+        a: ({ href, children: c }) => (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-blue underline underline-offset-2 hover:text-brand-blue-light"
+          >
+            {c}
+          </a>
+        ),
       }}
     >
       {children}

@@ -7,10 +7,14 @@ const btnBase =
 /** Reusable share button + dropdown. Renders a share icon that opens a menu
  *  with native share (on mobile), copy-link, and social sharing options.
  *  Designed to sit alongside MapControls or anywhere on the page.
+ *  @param className
+ *  @param className
  *  @param dropUp — opens the menu above the button instead of below.
  *  @param shareUrl — override the URL to share (defaults to current page URL).
+ * @param variant
+ * @param variant
  *  @param shareTitle — override the share title (defaults to current page title). */
-export default function ShareMenu({ className, dropUp, shareUrl, shareTitle }: { className?: string; dropUp?: boolean; shareUrl?: string; shareTitle?: string }) {
+export default function ShareMenu({ className, dropUp, shareUrl, shareTitle, variant = 'icon' }: { className?: string; dropUp?: boolean; shareUrl?: string; shareTitle?: string; variant?: 'icon' | 'full' }) {
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [pos, setPos] = useState<{ up: boolean; alignRight: boolean }>({ up: false, alignRight: true })
@@ -109,11 +113,12 @@ export default function ShareMenu({ className, dropUp, shareUrl, shareTitle }: {
             return !o
           })
         }}
-        className={`${btnBase} rounded-lg`}
+        className={variant === 'full' ? `${btnBase} rounded-lg gap-2 px-4 !w-auto` : `${btnBase} rounded-lg`}
         aria-label="Share"
         aria-expanded={open}
       >
         <Share2 className="size-4" />
+        {variant === 'full' && <span className="text-sm font-medium">Share</span>}
       </button>
 
       {open && (

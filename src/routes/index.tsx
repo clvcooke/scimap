@@ -66,7 +66,7 @@ function Index() {
               {a.hero_subheading}
             </p>
             <p className="max-w-2xl text-lg leading-relaxed text-gray-200 md:text-xl">
-              {a.hero_subtitle}
+              <InlineMarkdown>{a.hero_subtitle}</InlineMarkdown>
             </p>
             <div className="flex flex-col gap-4 pt-4 sm:flex-row">
               <Link

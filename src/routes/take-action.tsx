@@ -119,7 +119,7 @@ function TakeActionPage() {
           <p className="text-lg leading-relaxed text-gray-700">
             <InlineMarkdown>{a.share_intro}</InlineMarkdown>
           </p>
-          <ShareMenu className="inline-flex" dropUp />
+          <ShareMenu className="inline-flex" dropUp variant="full" />
         </div>
         {a.organizations && (
           <ul className="mb-6 space-y-2">

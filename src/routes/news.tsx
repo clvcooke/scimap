@@ -65,13 +65,13 @@ function NewsPage() {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:border-brand-blue/30 hover:shadow-md"
+                     className="group flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:border-brand-blue/30 hover:shadow-md"
                   >
                     {item.image && (
                       <img
                         src={item.image}
                         alt=""
-                        className="h-48 w-full object-cover"
+                        className="hidden w-36 shrink-0 bg-white object-contain p-2 sm:block"
                       />
                     )}
                     <div className="p-5">
@@ -112,13 +112,13 @@ function NewsPage() {
                     href={pr.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:border-brand-blue/30 hover:shadow-md"
+                    className="group flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:border-brand-blue/30 hover:shadow-md"
                   >
                     {pr.image && (
                       <img
                         src={pr.image}
                         alt=""
-                        className="h-48 w-full object-cover"
+                        className="hidden w-36 shrink-0 bg-white object-contain p-2 sm:block"
                       />
                     )}
                     <div className="p-5">
