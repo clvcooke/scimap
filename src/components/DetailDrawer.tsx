@@ -7,6 +7,8 @@ import { METRICS, INSTITUTES, formatMetricValue } from '@/lib/constants'
 import type { Metric } from '@/lib/constants'
 import type { SelectedFeature } from '@/lib/map-config'
 
+const OTHER_KEY = 'Other'
+
 // --- Drawer content (institute breakdown) ---
 
 function DrawerBody({
@@ -21,11 +23,24 @@ function DrawerBody({
   const population = props.pop_2024 ?? 0
 
   const rows = useMemo(() => {
-    return INSTITUTES.map((inst) => {
+    const allRows = INSTITUTES.map((inst) => {
       let value = props[`${inst.key}_${metric}`] ?? 0
       if (perCapita && population > 0) value = value / population
       return { ...inst, value }
     }).sort((a, b) => b.value - a.value)
+
+    const threshold = metric === 'jobs' ? 1 : 1_000
+    const significant = allRows.filter((r) => Math.abs(r.value) >= threshold)
+    const small = allRows.filter((r) => Math.abs(r.value) < threshold && r.value !== 0)
+
+    if (small.length > 0) {
+      const otherValue = small.reduce((sum, r) => sum + r.value, 0)
+      return [
+        ...significant,
+        { key: OTHER_KEY, name: OTHER_KEY, value: otherValue },
+      ]
+    }
+    return significant
   }, [props, metric, perCapita, population])
 
   const maxValue = rows[0]?.value ?? 1
@@ -98,7 +113,7 @@ function DrawerBody({
               <div key={row.key}>
                 <div className="flex items-baseline justify-between gap-2 text-sm">
                   <span className="font-medium text-gray-700">
-                    {row.name} ({row.key})
+                    {row.key === OTHER_KEY ? OTHER_KEY : `${row.name} (${row.key})`}
                   </span>
                   <span className="shrink-0 text-xs tabular-nums text-gray-500">
                     {formatMetricValue(row.value, metric)}

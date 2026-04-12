@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback, type ReactNode } from 'react'
+import { useState, useRef, useMemo, useCallback, useEffect, type ReactNode } from 'react'
 import { Map } from 'react-map-gl/maplibre'
 import DeckGL from '@deck.gl/react'
 import type { Layer, PickingInfo } from '@deck.gl/core'
@@ -19,12 +19,20 @@ import {
   type LossGeoLevel,
 } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { Info, X } from 'lucide-react'
+import { InlineMarkdown } from './InlineMarkdown'
 import MapControls from './MapControls'
 import ShareMenu from './ShareMenu'
 import ColorScale, { type ColorScheme } from './ColorScale'
 import BudgetDrawer, { type BudgetDrawerConfig } from './BudgetDrawer'
 import type { FiscalYear } from '@/lib/report-card-data'
 import BudgetMobileCard from './BudgetMobileCard'
+
+export interface MapAboutContent {
+  heading?: string
+  description?: string
+  dataSources?: string[]
+}
 
 interface ChoroplethMapProps<K extends string> {
   geoLevels: Record<K, MapGeoConfig>
@@ -68,6 +76,8 @@ interface ChoroplethMapProps<K extends string> {
   onGeoLevelChange?: (level: K) => void
   /** Fiscal year for the scorecard link in the drawer. */
   fiscalYear?: FiscalYear | undefined
+  /** Content for the "About this map" info panel. */
+  aboutContent?: MapAboutContent | undefined
 }
 
 export default function ChoroplethMap<K extends string>({
@@ -93,6 +103,7 @@ export default function ChoroplethMap<K extends string>({
   displayLocation = true,
   onGeoLevelChange,
   fiscalYear,
+  aboutContent,
 }: ChoroplethMapProps<K>) {
   const [geoLevel, setGeoLevel] = useState<K>(defaultLevel)
   const [selectedProps, setSelectedProps] = useState<TileProps | null>(null)
@@ -106,9 +117,23 @@ export default function ChoroplethMap<K extends string>({
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     displayLocation && initialLat != null && initialLng != null ? [initialLng, initialLat] : null,
   )
+  const [showAbout, setShowAbout] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
+  const aboutPanelRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
+
+  // Close about panel when clicking outside
+  useEffect(() => {
+    if (!showAbout) return
+    function handleClick(e: MouseEvent) {
+      if (aboutPanelRef.current && !aboutPanelRef.current.contains(e.target as Node)) {
+        setShowAbout(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [showAbout])
   const labelsStyle = useLabelsStyle()
 
   const config = geoLevels[geoLevel]
@@ -194,18 +219,59 @@ export default function ChoroplethMap<K extends string>({
 
   return (
     <div ref={containerRef} className="absolute inset-x-4 inset-y-2 overflow-hidden rounded-xl shadow-lg md:inset-x-16 md:inset-y-8">
-      {/* Control panel */}
-      <div className="absolute left-2 top-2 z-10 flex flex-col gap-2 rounded-lg bg-white/90 p-2 shadow-md backdrop-blur-sm md:left-4 md:top-4 md:gap-3 md:p-3">
-        <Tabs value={geoLevel} onValueChange={(v: string) => { const level = v as K; setGeoLevel(level); onGeoLevelChange?.(level) }}>
-          <TabsList>
-            {typedKeys(geoLevels).map((key) => (
-              <TabsTrigger key={key} value={key} className="text-xs md:text-sm">
-                {geoLevels[key].label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-        {extraControls}
+      {/* Top bar: region selector (left) + info/share (right) */}
+      <div className="absolute left-2 right-2 top-2 z-10 flex items-center justify-between md:left-4 md:right-4 md:top-4">
+        <div className="flex flex-col gap-2 md:rounded-lg md:bg-white/90 md:p-3 md:shadow-md md:backdrop-blur-sm">
+          <Tabs value={geoLevel} onValueChange={(v: string) => { const level = v as K; setGeoLevel(level); onGeoLevelChange?.(level) }}>
+            <TabsList className="shadow md:shadow-none">
+              {typedKeys(geoLevels).map((key) => (
+                <TabsTrigger key={key} value={key} className="text-xs md:text-sm">
+                  {geoLevels[key].label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+          {extraControls}
+        </div>
+
+        {/* Info + share buttons */}
+        <div className="flex items-start gap-2">
+          {aboutContent?.description && (
+            <div ref={aboutPanelRef} className="relative">
+              <button
+                onClick={() => setShowAbout((v) => !v)}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-colors hover:bg-white md:h-9 md:w-9"
+                aria-label="About this map"
+              >
+                <Info className="h-4 w-4 text-gray-600 md:h-5 md:w-5" />
+              </button>
+              {showAbout && (
+                <div className="absolute right-0 top-full mt-2 w-72 rounded-lg bg-white/95 p-4 shadow-lg backdrop-blur-sm md:w-80">
+                  <div className="mb-2 flex items-start justify-between">
+                    <h4 className="text-sm font-semibold text-gray-900">{aboutContent.heading ?? 'About This Map'}</h4>
+                    <button onClick={() => setShowAbout(false)} className="ml-2 rounded p-0.5 text-gray-400 hover:text-gray-600">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <p className="text-xs leading-relaxed text-gray-600">
+                    <InlineMarkdown>{aboutContent.description}</InlineMarkdown>
+                  </p>
+                  {aboutContent.dataSources && aboutContent.dataSources.length > 0 && (
+                    <div className="mt-3 border-t border-gray-200 pt-2">
+                      <span className="text-[11px] font-medium text-gray-400">Data Sources</span>
+                      <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-[11px] text-gray-500">
+                        {aboutContent.dataSources.map((s) => (
+                          <span key={s}><InlineMarkdown>{s}</InlineMarkdown></span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+          <ShareMenu />
+        </div>
       </div>
 
       <DeckGL
@@ -238,13 +304,7 @@ export default function ChoroplethMap<K extends string>({
         />
       )}
 
-      {/* Logo watermark */}
-      <div className="absolute bottom-14 left-2 z-10 md:bottom-18 md:left-4">
-        <img src="/logo_v3_white-01.png" alt="SCIMaP" className="h-10 w-10 md:h-12 md:w-12" />
-      </div>
-
       <MapControls setViewState={setViewState} onGeolocate={handleGeolocate} />
-      <ShareMenu className="absolute top-2 right-2 z-10 md:top-4 md:right-4" />
 
       {/* Color scale legend */}
       <div className="pointer-events-none absolute bottom-2 right-2 z-10 md:bottom-4 md:right-4">

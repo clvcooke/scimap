@@ -60,14 +60,14 @@ export const GEO_LEVELS: Record<GeoLevel, GeoConfig> = {
     totalDomain: [10_000_000, 3_000_000_000],
     perCapitaDomain: [10, 5_000],
   },
-  cities: {
-    tileUrl: `${DOMAIN}/tiles_cities_baseline_${TILE_VERSION}/{z}/{x}/{y}.pbf`,
-    maxZoom: 9,
-    uniqueIdProperty: 'CBSA_FIPS',
-    label: 'Cities',
-    totalDomain: [10_000, 10_000_000_000],
-    perCapitaDomain: [1, 10_000],
-  },
+  // cities: {
+  //   tileUrl: `${DOMAIN}/tiles_cities_baseline_${TILE_VERSION}/{z}/{x}/{y}.pbf`,
+  //   maxZoom: 9,
+  //   uniqueIdProperty: 'CBSA_FIPS',
+  //   label: 'Cities',
+  //   totalDomain: [10_000, 10_000_000_000],
+  //   perCapitaDomain: [1, 10_000],
+  // },
 }
 
 // --- Layer factory ---

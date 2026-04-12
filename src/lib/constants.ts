@@ -1,4 +1,4 @@
-export type GeoLevel = 'states' | 'counties' | 'districts' | 'cities'
+export type GeoLevel = 'states' | 'counties' | 'districts' // | 'cities'
 
 export type Metric = 'econ_impact' | 'raw_funding' | 'jobs'
 
@@ -72,7 +72,7 @@ export function formatCurrency(value: number): string {
 
 const COMPACT_NUM = new Intl.NumberFormat('en-US', {
   notation: 'compact',
-  maximumFractionDigits: 1,
+  maximumFractionDigits: 0,
 })
 
 export function formatNumber(value: number): string {

@@ -8,7 +8,7 @@ import { typedKeys } from '@/lib/utils'
 import statesData from '@/data/table_states.json'
 import countiesData from '@/data/table_counties.json'
 import districtsData from '@/data/table_districts.json'
-import citiesData from '@/data/table_cities.json'
+// import citiesData from '@/data/table_cities.json'
 
 // --- Types ---
 
@@ -27,7 +27,7 @@ const GEO_TABLE: Record<GeoLevel, { label: string; data: RegionRow[] }> = {
   states: { label: 'State', data: statesData },
   counties: { label: 'County', data: countiesData },
   districts: { label: 'District', data: districtsData },
-  cities: { label: 'City', data: citiesData },
+  // cities: { label: 'City', data: citiesData },
 }
 
 // --- Component ---

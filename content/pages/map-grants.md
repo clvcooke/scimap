@@ -13,6 +13,6 @@ description: Many active NIH and NSF grants have been **terminated or frozen**,
   time.
 data_sources:
   - "[Grant Witness](https://grant-witness.us)"
-  - NIH RePORTER
-  - NSF Awards Database
+  - "[NIH RePORTER](https://reporter.nih.gov)"
+  - "[NSF Awards Database](https://www.nsf.gov/awardsearch/)"
 ---

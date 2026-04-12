@@ -7,7 +7,7 @@ import {
   type TileProps,
 } from '@/lib/map-shared'
 import type { BudgetDrawerConfig } from './BudgetDrawer'
-import ChoroplethMap from './ChoroplethMap'
+import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
 
 const drawerConfig: BudgetDrawerConfig = {
   stats: (p) => [
@@ -63,7 +63,7 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
   )
 }
 
-export default function IDCMap() {
+export default function IDCMap({ aboutContent }: { aboutContent?: MapAboutContent }) {
   return (
     <ChoroplethMap
       geoLevels={IDC_GEO_LEVELS}
@@ -74,6 +74,7 @@ export default function IDCMap() {
       layerId="idc-mvt"
       renderTooltip={renderTooltip}
       drawerConfig={drawerConfig}
+      aboutContent={aboutContent}
     />
   )
 }

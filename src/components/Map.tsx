@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
 import type { PickingInfo } from '@deck.gl/core'
 import type { MjolnirGestureEvent } from 'mjolnir.js'
-import { formatCurrency, stateName } from '@/lib/constants'
+import { formatCurrency, formatNumber, stateName } from '@/lib/constants'
 import type { GeoLevel } from '@/lib/constants'
 import {
   GEO_LEVELS,
@@ -11,7 +11,7 @@ import {
 import type { TileProperties, SelectedFeature } from '@/lib/map-config'
 import type { MapGeoConfig, TileProps } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
-import ChoroplethMap from './ChoroplethMap'
+import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
 import DetailDrawer from './DetailDrawer'
 import MobileInfoCard from './MobileInfoCard'
 
@@ -42,10 +42,10 @@ function getBaselineDisplayName(tile: TileProperties, geoLevel: GeoLevel): strin
       const distLabel = num === '00' ? 'At-Large' : num === '98' && state === 'DC' ? 'No District' : `District ${parseInt(num, 10)}`
       return state ? `${state} ${distLabel}` : `District ${geoid}`
     }
-    case 'cities': {
-      const name = tile.CBSA_NAME as unknown as string | undefined
-      return name ?? `City ${tile.CBSA_FIPS ?? ''}`
-    }
+    // case 'cities': {
+    //   const name = tile.CBSA_NAME as unknown as string | undefined
+    //   return name ?? `City ${tile.CBSA_FIPS ?? ''}`
+    // }
     default:
       return stateName(String(tile.state ?? ''))
   }
@@ -53,11 +53,12 @@ function getBaselineDisplayName(tile: TileProperties, geoLevel: GeoLevel): strin
 
 // --- Component ---
 
-export default function SCIMap({ initialLat, initialLng, initialZoom, displayLocation = true }: {
+export default function SCIMap({ initialLat, initialLng, initialZoom, displayLocation = true, aboutContent }: {
   initialLat?: number | undefined
   initialLng?: number | undefined
   initialZoom?: number | undefined
   displayLocation?: boolean
+  aboutContent?: MapAboutContent
 }) {
   const [selectedFeature, setSelectedFeature] = useState<SelectedFeature | null>(null)
   const [previewFeature, setPreviewFeature] = useState<SelectedFeature | null>(null)
@@ -68,12 +69,15 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
     (p: TileProps, geoLevel: GeoLevel) => {
       const tile = p as TileProperties
       const impact = tile.NIH_tot_econ_impact ?? 0
+      const jobs = tile.NIH_tot_jobs ?? 0
       const pop = tile.pop_2024 ?? 0
       const displayName = getBaselineDisplayName(tile, geoLevel)
       return (
         `<div class="font-semibold">${displayName}</div>` +
         `<div>Economic Impact: ${formatCurrency(impact)}</div>` +
-        `<div>Population: ${pop.toLocaleString()}</div>`
+        (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
+        `<div>Population: ${pop.toLocaleString()}</div>` +
+        `<div class="text-xs mt-1 opacity-75">Click for details</div>`
       )
     },
     [],
@@ -126,6 +130,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
       initialZoom={initialZoom}
       displayLocation={displayLocation}
       onGeoLevelChange={setCurrentGeoLevel}
+      aboutContent={aboutContent}
     >
       {isMobile && previewFeature && (
         <MobileInfoCard

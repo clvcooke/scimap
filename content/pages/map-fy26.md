@@ -7,7 +7,7 @@ description: The White House has proposed a **FY2027 budget** that could cut
   shows the projected **economic losses** that would result from these budget
   cuts across counties, states, cities, and congressional districts.
 data_sources:
-  - Office of Management and Budget (OMB)
-  - NIH RePORTER
-  - NSF Award Database
+  - "[Office of Management and Budget (OMB)](https://www.whitehouse.gov/omb/)"
+  - "[NIH RePORTER](https://reporter.nih.gov)"
+  - "[NSF Award Database](https://www.nsf.gov/awardsearch/)"
 ---

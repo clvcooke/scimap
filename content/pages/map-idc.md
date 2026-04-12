@@ -9,6 +9,6 @@ description: The federal government has proposed **capping indirect cost (IDC)
   facilities, administration, and other research infrastructure costs. This map
   shows the projected **annual economic losses** from these proposed changes.
 data_sources:
-  - NIH RePORTER
-  - NSF Awards Database
+  - "[NIH RePORTER](https://reporter.nih.gov)"
+  - "[NSF Awards Database](https://www.nsf.gov/awardsearch/)"
 ---

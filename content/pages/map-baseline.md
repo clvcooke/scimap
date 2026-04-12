@@ -9,7 +9,7 @@ description: Federal investment in science generates **new economic activity**
   federal research funding before recent funding cuts (years 2020-2024),
   demonstrating how science funding benefits communities.
 data_sources:
-  - NIH RePORTER
-  - NSF Awards Database
-  - USASpending.gov
+  - "[NIH RePORTER](https://reporter.nih.gov)"
+  - "[NSF Awards Database](https://www.nsf.gov/awardsearch/)"
+  - "[USASpending.gov](https://www.usaspending.gov)"
 ---

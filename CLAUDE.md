@@ -110,7 +110,7 @@ Markdown files in `/content` use YAML frontmatter. Loaded eagerly at build time 
 - **Path alias:** `@/` maps to `src/` (e.g., `import { cn } from "@/lib/utils"`)
 - **Styling:** Tailwind utility classes inline; `cn()` for conditional composition; CVA for component variants
 - **Responsive:** Mobile breakpoint at `md:` (768px). Use `useIsMobile()` hook for JS logic.
-- **Formatting:** Numbers use `formatCurrency()`, `formatNumber()`, `formatMetricValue()` from `lib/constants.ts`
+- **Formatting:** All dollar amounts and numeric values displayed to users must use `formatCurrency()`, `formatNumber()`, or `formatMetricValue()` from `lib/constants.ts`. These use `Intl.NumberFormat` compact notation (e.g. `$240.1K`, `$1.2M`). Never render raw numbers with `toLocaleString()` or manual formatting for currency/metrics. Values under $10K display as `<$10K`.
 - **No unused code:** ESLint enforces no unused locals/parameters
 - **Zero lint warnings:** `npm run lint` with `--max-warnings 0`
 - **Route file = page:** Each file in `src/routes/` is a page; `routeTree.gen.ts` is auto-generated (do not edit)

@@ -7,7 +7,7 @@ import {
   type TileProps,
 } from '@/lib/map-shared'
 import type { BudgetDrawerConfig } from './BudgetDrawer'
-import ChoroplethMap from './ChoroplethMap'
+import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
 
 const NSF_DIRECTORATES = [
   { key: 'BIO', name: 'Biological Sciences' },
@@ -82,10 +82,11 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
   )
 }
 
-export default function FY27Map({ initialLat, initialLng, initialZoom }: {
+export default function FY27Map({ initialLat, initialLng, initialZoom, aboutContent }: {
   initialLat?: number | undefined
   initialLng?: number | undefined
   initialZoom?: number | undefined
+  aboutContent?: MapAboutContent
 }) {
   return (
     <ChoroplethMap
@@ -101,6 +102,7 @@ export default function FY27Map({ initialLat, initialLng, initialZoom }: {
       initialLat={initialLat}
       initialLng={initialLng}
       initialZoom={initialZoom}
+      aboutContent={aboutContent}
     />
   )
 }
