@@ -51,8 +51,9 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
         id: 'icon-cluster',
         sizeScale: 40,
         pickable: true,
+        visible: showBubbles,
       }),
-    [],
+    [showBubbles],
   )
 
   const onClick = useCallback(
@@ -80,7 +81,7 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
       initialLat={initialLat}
       initialLng={initialLng}
       initialZoom={initialZoom}
-      extraLayers={showBubbles ? [clusterLayer] : []}
+      extraLayers={[clusterLayer]}
       onMapClick={showBubbles ? onClick : null}
       controllerDisabled={showOverlay}
       colorScheme="orrd"

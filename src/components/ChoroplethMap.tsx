@@ -117,11 +117,11 @@ export default function ChoroplethMap<K extends string>({
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     displayLocation && initialLat != null && initialLng != null ? [initialLng, initialLat] : null,
   )
-  const [showAbout, setShowAbout] = useState(false)
+  const isMobile = useIsMobile()
+  const [showAbout, setShowAbout] = useState(!isMobile)
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const aboutPanelRef = useRef<HTMLDivElement>(null)
-  const isMobile = useIsMobile()
 
   // Close about panel when clicking outside
   useEffect(() => {
