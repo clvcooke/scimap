@@ -57,20 +57,28 @@ export function stateName(abbr: string): string {
   return STATE_NAMES[abbr] ?? abbr
 }
 
+const COMPACT_USD = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  notation: 'compact',
+  maximumFractionDigits: 1,
+})
+
 export function formatCurrency(value: number): string {
-  if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(1)}B`
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`
-  if (value >= 1) return `$${Math.round(value).toLocaleString()}`
-  if (value > 0) return '<$1'
   if (value === 0) return '$0'
-  return `$${Math.round(value).toLocaleString()}`
+  if (Math.abs(value) < 1_000) return '<$1K'
+  return COMPACT_USD.format(value)
 }
 
+const COMPACT_NUM = new Intl.NumberFormat('en-US', {
+  notation: 'compact',
+  maximumFractionDigits: 1,
+})
+
 export function formatNumber(value: number): string {
-  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`
-  if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`
+  if (value === 0) return '0'
   if (value > 0 && value < 10) return '<10'
-  return value.toFixed(0)
+  return COMPACT_NUM.format(value)
 }
 
 export function formatMetricValue(value: number, metric: Metric): string {

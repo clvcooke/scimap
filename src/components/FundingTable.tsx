@@ -24,10 +24,10 @@ interface RegionRow {
 type SortKey = 'econ_impact' | 'raw_funding' | 'jobs' | 'pop_2024'
 
 const GEO_TABLE: Record<GeoLevel, { label: string; data: RegionRow[] }> = {
-  states: { label: 'States', data: statesData },
-  counties: { label: 'Counties', data: countiesData },
-  districts: { label: 'Districts', data: districtsData },
-  cities: { label: 'Cities', data: citiesData },
+  states: { label: 'State', data: statesData },
+  counties: { label: 'County', data: countiesData },
+  districts: { label: 'District', data: districtsData },
+  cities: { label: 'City', data: citiesData },
 }
 
 // --- Component ---
