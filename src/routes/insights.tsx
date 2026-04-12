@@ -107,34 +107,50 @@ function InsightsPage() {
                 {ARTICLES.map((article) => (
                   <div
                     key={article.title}
-                    className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm"
+                    className="flex gap-5 rounded-lg border border-gray-200 bg-white p-5 shadow-sm"
                   >
-                    <div className="flex items-start justify-between gap-3">
+                    {article.image && (
                       <a
                         href={article.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-semibold text-gray-900 hover:text-brand-blue"
+                        className="hidden shrink-0 sm:block"
                       >
-                        {article.title}
+                        <img
+                          src={article.image}
+                          alt=""
+                          className="h-28 w-28 rounded-md object-cover"
+                        />
                       </a>
-                      <a
-                        href={article.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-0.5 shrink-0"
-                      >
-                        <ExternalLink className="h-4 w-4 text-gray-300 transition-colors hover:text-brand-blue" />
-                      </a>
-                    </div>
-                    {article.date && (
-                      <p className="mt-1 text-sm text-gray-400">
-                        {new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                      </p>
                     )}
-                    <p className="mt-2 text-[15px] leading-relaxed text-gray-500">
-                      <InlineMarkdown>{article.blurb}</InlineMarkdown>
-                    </p>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-3">
+                        <a
+                          href={article.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold text-gray-900 hover:text-brand-blue"
+                        >
+                          {article.title}
+                        </a>
+                        <a
+                          href={article.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-0.5 shrink-0"
+                        >
+                          <ExternalLink className="h-4 w-4 text-gray-300 transition-colors hover:text-brand-blue" />
+                        </a>
+                      </div>
+                      {article.date && (
+                        <p className="mt-1 text-sm text-gray-400">
+                          {new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        </p>
+                      )}
+                      <p className="mt-2 text-[15px] leading-relaxed text-gray-500">
+                        <InlineMarkdown>{article.blurb}</InlineMarkdown>
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
