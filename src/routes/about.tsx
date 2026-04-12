@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Info, Users } from 'lucide-react'
+import { Info, Users, BarChart3, Database } from 'lucide-react'
+import Markdown from 'react-markdown'
 import {
   Tabs,
   TabsList,
@@ -17,6 +18,8 @@ export const Route = createFileRoute('/about')({
 
 const TEAM = getTeamMembers()
 const OVERVIEW = getPage('about-overview')
+const DETAILED_ANALYTICS = getPage('about-detailed-analytics')
+const SOURCE_DATA = getPage('about-source-data')
 
 /* ── Components ────────────────────────────────────────────────────── */
 
@@ -62,8 +65,8 @@ function TeamCard({
 
 function AboutPage() {
   return (
-    <div className="flex w-full flex-col bg-neutral-50">
-      <Tabs defaultValue="overview" className="w-full gap-0">
+    <div className="flex w-full flex-1 flex-col bg-neutral-50">
+      <Tabs defaultValue="overview" className="flex w-full flex-1 flex-col gap-0">
         <div className="w-full bg-white px-6 pt-6">
           <div className="mx-auto max-w-4xl">
             <h1 className="text-2xl font-bold text-brand-blue">About</h1>
@@ -78,16 +81,30 @@ function AboutPage() {
               >
                 <TabsTrigger
                   value="overview"
-                  className="h-10 gap-2 rounded-none px-4 text-sm font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
                 >
-                  <Info className="h-4 w-4" />
+                  <Info className="hidden h-4 w-4 sm:block" />
                   Overview
                 </TabsTrigger>
                 <TabsTrigger
-                  value="team"
-                  className="h-10 gap-2 rounded-none px-4 text-sm font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue"
+                  value="detailed-analytics"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
                 >
-                  <Users className="h-4 w-4" />
+                  <BarChart3 className="hidden h-4 w-4 sm:block" />
+                  Detailed Analytics
+                </TabsTrigger>
+                <TabsTrigger
+                  value="source-data"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
+                >
+                  <Database className="hidden h-4 w-4 sm:block" />
+                  Source Data
+                </TabsTrigger>
+                <TabsTrigger
+                  value="team"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
+                >
+                  <Users className="hidden h-4 w-4 sm:block" />
                   The Team
                 </TabsTrigger>
               </TabsList>
@@ -96,7 +113,7 @@ function AboutPage() {
         </div>
 
         {/* ── Overview ─────────────────────────────────────────────── */}
-        <TabsContent value="overview" className="text-base">
+        <TabsContent value="overview" className="flex-1 text-base">
           <div className="w-full px-6 py-8 md:py-10">
             <div className="mx-auto max-w-4xl">
               <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm md:p-8">
@@ -134,8 +151,42 @@ function AboutPage() {
           </div>
         </TabsContent>
 
+        {/* ── Detailed Analytics ─────────────────────────────────── */}
+        <TabsContent value="detailed-analytics" className="flex-1 text-base">
+          <div className="w-full px-6 py-8 md:py-10">
+            <div className="mx-auto max-w-4xl">
+              <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm md:p-8">
+                <h2 className="text-xl font-bold text-gray-900">
+                  {DETAILED_ANALYTICS.attrs.title}
+                </h2>
+
+                <div className="prose prose-gray mt-4 max-w-none leading-relaxed [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-blue-light [&_img]:rounded-lg [&_img]:border [&_img]:border-gray-200">
+                  <Markdown>{DETAILED_ANALYTICS.body}</Markdown>
+                </div>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* ── Source Data ──────────────────────────────────────────── */}
+        <TabsContent value="source-data" className="flex-1 text-base">
+          <div className="w-full px-6 py-8 md:py-10">
+            <div className="mx-auto max-w-4xl">
+              <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm md:p-8">
+                <h2 className="text-xl font-bold text-gray-900">
+                  {SOURCE_DATA.attrs.title}
+                </h2>
+
+                <div className="prose prose-gray mt-4 max-w-none leading-relaxed [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-blue-light">
+                  <Markdown>{SOURCE_DATA.body}</Markdown>
+                </div>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
         {/* ── The Team ─────────────────────────────────────────────── */}
-        <TabsContent value="team" className="text-base">
+        <TabsContent value="team" className="flex-1 text-base">
           <div className="w-full px-6 py-8 md:py-10">
             <div className="mx-auto max-w-4xl space-y-4">
               {TEAM.map((member) => (
