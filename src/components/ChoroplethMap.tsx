@@ -246,20 +246,20 @@ export default function ChoroplethMap<K extends string>({
                 <Info className="h-4 w-4 text-gray-600 md:h-5 md:w-5" />
               </button>
               {showAbout && (
-                <div className="absolute right-0 top-full mt-2 w-72 rounded-lg bg-white/95 p-4 shadow-lg backdrop-blur-sm md:w-80">
-                  <div className="mb-2 flex items-start justify-between">
-                    <h4 className="text-sm font-semibold text-gray-900">{aboutContent.heading ?? 'About This Map'}</h4>
+                <div className="absolute right-0 top-full mt-2 w-72 rounded-lg bg-white/95 p-4 shadow-lg backdrop-blur-sm md:w-96 md:p-5">
+                  <div className="mb-2 flex items-start justify-between md:mb-3">
+                    <h4 className="text-sm font-semibold text-gray-900 md:text-base">{aboutContent.heading ?? 'About This Map'}</h4>
                     <button onClick={() => setShowAbout(false)} className="ml-2 rounded p-0.5 text-gray-400 hover:text-gray-600">
                       <X className="h-4 w-4" />
                     </button>
                   </div>
-                  <p className="text-xs leading-relaxed text-gray-600">
+                  <p className="text-xs leading-relaxed text-gray-600 md:text-sm md:leading-relaxed">
                     <InlineMarkdown>{aboutContent.description}</InlineMarkdown>
                   </p>
                   {aboutContent.dataSources && aboutContent.dataSources.length > 0 && (
-                    <div className="mt-3 border-t border-gray-200 pt-2">
-                      <span className="text-[11px] font-medium text-gray-400">Data Sources</span>
-                      <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-[11px] text-gray-500">
+                    <div className="mt-3 border-t border-gray-200 pt-2 md:mt-4 md:pt-3">
+                      <span className="text-[11px] font-medium text-gray-400 md:text-xs">Data Sources</span>
+                      <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-[11px] text-gray-500 md:gap-x-3 md:gap-y-1 md:text-xs">
                         {aboutContent.dataSources.map((s) => (
                           <span key={s}><InlineMarkdown>{s}</InlineMarkdown></span>
                         ))}
