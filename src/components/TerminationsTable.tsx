@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { ChevronUp, ChevronDown } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { formatCurrency, formatNumber } from '@/lib/constants'
+import { formatCurrency, formatNumber, countyDisplayName } from '@/lib/constants'
 import type { GeoLevel } from '@/lib/constants'
 import { typedKeys } from '@/lib/utils'
 
@@ -216,7 +216,7 @@ export default function TerminationsTable() {
                     {i + 1}
                   </td>
                   <td className="max-w-30 truncate px-2 py-2 font-medium text-gray-900 md:max-w-none md:px-4 md:py-2.5">
-                    {row.name}
+                    {geoLevel === 'counties' ? countyDisplayName(row.name, row.id) : row.name}
                   </td>
                   {SORT_COLUMNS.map((col, idx) => {
                     const style = GROUP_STYLES[col.group]
