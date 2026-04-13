@@ -1,7 +1,7 @@
 import type { LossGeoLevel, MapGeoConfig } from './map-shared'
 
 const DOMAIN = 'https://data.scienceimpacts.org'
-const TILE_VERSION = '2026-04-12'
+const TILE_VERSION = '2026-04-12c'
 
 export const GRANTS_GEO_LEVELS: Record<LossGeoLevel, MapGeoConfig> = {
   counties: {

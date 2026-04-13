@@ -8,7 +8,7 @@ import {
   getSenatorsList,
   formatPoliticianName,
 } from './legislature'
-import { stateName } from './constants'
+import { stateName, FIPS_TO_STATE } from './constants'
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -112,24 +112,39 @@ export function buildTooltipHeader(
   props: TileProps,
   geoLevel: LossGeoLevel,
 ): { locationLine: string; politicianHtml: string } {
-  const stateRaw = props.state != null ? String(props.state) : ''
+  // Derive state abbreviation from explicit props or from FIPS/GEOID prefix
+  let stateAbbr = props.state != null ? String(props.state) : ''
+  if (!stateAbbr && props.FIPS) {
+    stateAbbr = FIPS_TO_STATE[String(props.FIPS).padStart(5, '0').slice(0, 2)] ?? ''
+  }
+  if (!stateAbbr && props.GEOID) {
+    stateAbbr = FIPS_TO_STATE[String(props.GEOID).padStart(4, '0').slice(0, 2)] ?? ''
+  }
+
+  // Derive state_code (abbreviation used for legislator lookups)
+  const stateCode = props.state_code != null ? String(props.state_code) : stateAbbr
+
   const county = props.county != null ? String(props.county) : undefined
 
-  let locationLine = stateName(stateRaw)
-  if (county) locationLine = `${county}, ${stateRaw}`
+  let locationLine = stateName(stateAbbr)
+  if (county) locationLine = `${county}, ${stateAbbr}`
   if (geoLevel === 'districts' && props.GEOID) {
-    const num = String(props.GEOID).slice(-2)
-    const distLabel = num === '00' ? 'At-Large' : num === '98' && stateRaw === 'DC' ? 'No District' : `District ${parseInt(num, 10)}`
-    locationLine = `${stateRaw} (${distLabel})`
+    const geoid = String(props.GEOID).padStart(4, '0')
+    const num = geoid.slice(-2)
+    const distLabel = num === '00' ? 'At-Large' : num === '98' && stateAbbr === 'DC' ? 'No District' : `District ${parseInt(num, 10)}`
+    locationLine = `${stateAbbr} (${distLabel})`
   }
 
+  // Derive CD119FP from explicit prop or last 2 digits of GEOID
+  const cdFp = props.CD119FP != null ? String(props.CD119FP) : (props.GEOID ? String(props.GEOID).padStart(4, '0').slice(-2) : '')
+
   let html = ''
-  if (geoLevel === 'districts' && props.state_code && props.CD119FP) {
-    const rep = getHouseRep(`${props.state_code}-${props.CD119FP}`)
+  if (geoLevel === 'districts' && stateCode && cdFp) {
+    const rep = getHouseRep(`${stateCode}-${cdFp}`)
     if (rep) html += `<div>Rep: ${formatPoliticianName(rep.name, rep.party)}</div>`
   }
-  if ((geoLevel === 'districts' || geoLevel === 'states') && props.state_code) {
-    html += getSenatorsList(String(props.state_code))
+  if ((geoLevel === 'districts' || geoLevel === 'states') && stateCode) {
+    html += getSenatorsList(stateCode)
       .map((s) => `<div>Sen: ${formatPoliticianName(s.name, s.party)}</div>`)
       .join('')
   }
