@@ -8,48 +8,147 @@ import { typedKeys } from '@/lib/utils'
 import statesData from '@/data/table_states.json'
 import countiesData from '@/data/table_counties.json'
 import districtsData from '@/data/table_districts.json'
-// import citiesData from '@/data/table_cities.json'
 
 // --- Types ---
 
 interface RegionRow {
   id: string
   name: string
-  econ_impact: number
-  raw_funding: number
-  jobs: number
+  nih_econ_impact: number
+  nih_raw_funding: number
+  nih_jobs: number
+  nsf_econ_impact: number
+  nsf_raw_funding: number
+  total_econ_impact: number
+  total_raw_funding: number
   pop_2024: number
 }
 
-type SortKey = 'econ_impact' | 'raw_funding' | 'jobs' | 'pop_2024'
+type SortKey = keyof Omit<RegionRow, 'id' | 'name'>
 
 const GEO_TABLE: Record<GeoLevel, { label: string; data: RegionRow[] }> = {
-  states: { label: 'State', data: statesData },
-  counties: { label: 'County', data: countiesData },
-  districts: { label: 'District', data: districtsData },
-  // cities: { label: 'City', data: citiesData },
+  states: { label: 'State', data: statesData as RegionRow[] },
+  counties: { label: 'County', data: countiesData as RegionRow[] },
+  districts: { label: 'District', data: districtsData as RegionRow[] },
 }
 
-// --- Component ---
+// --- Column config ---
 
 const popFormatter = new Intl.NumberFormat('en-US')
 
-const SORT_COLUMNS: { key: SortKey; label: string; hideOnMobile?: boolean }[] = [
-  { key: 'econ_impact', label: 'Economic Impact' },
-  { key: 'raw_funding', label: 'Funding', hideOnMobile: true },
-  { key: 'jobs', label: 'Jobs', hideOnMobile: true },
-  { key: 'pop_2024', label: 'Population' },
+type GroupId = 'total' | 'nih' | 'nsf' | 'pop'
+
+interface ColumnDef {
+  key: SortKey
+  label: string
+  group: GroupId
+  hideOnMobile?: boolean
+}
+
+const GROUP_STYLES: Record<
+  GroupId,
+  { label: string; bg: string; headerBg: string; border: string }
+> = {
+  total: {
+    label: 'Total',
+    bg: 'bg-blue-50/50',
+    headerBg: 'bg-blue-50',
+    border: '',
+  },
+  nih: {
+    label: 'NIH',
+    bg: 'bg-emerald-50/40',
+    headerBg: 'bg-emerald-50',
+    border: '',
+  },
+  nsf: {
+    label: 'NSF',
+    bg: 'bg-amber-50/40',
+    headerBg: 'bg-amber-50',
+    border: '',
+  },
+  pop: {
+    label: '',
+    bg: '',
+    headerBg: '',
+    border: '',
+  },
+}
+
+const SORT_COLUMNS: ColumnDef[] = [
+  { key: 'total_econ_impact', label: 'Economic Impact', group: 'total' },
+  {
+    key: 'total_raw_funding',
+    label: 'Funding',
+    group: 'total',
+    hideOnMobile: true,
+  },
+  {
+    key: 'nih_econ_impact',
+    label: 'Economic Impact',
+    group: 'nih',
+    hideOnMobile: true,
+  },
+  {
+    key: 'nih_raw_funding',
+    label: 'Funding',
+    group: 'nih',
+    hideOnMobile: true,
+  },
+  { key: 'nih_jobs', label: 'Jobs', group: 'nih', hideOnMobile: true },
+  {
+    key: 'nsf_econ_impact',
+    label: 'Economic Impact',
+    group: 'nsf',
+    hideOnMobile: true,
+  },
+  {
+    key: 'nsf_raw_funding',
+    label: 'Funding',
+    group: 'nsf',
+    hideOnMobile: true,
+  },
+  { key: 'pop_2024', label: 'Population', group: 'pop' },
 ]
 
+// Build column groups for the two-row header
+const COLUMN_GROUPS = (() => {
+  const groups: { id: GroupId; span: number; visibleSpan: number }[] = []
+  for (const col of SORT_COLUMNS) {
+    const last = groups[groups.length - 1]
+    if (last?.id === col.group) {
+      last.span++
+      if (!col.hideOnMobile) last.visibleSpan++
+    } else {
+      groups.push({
+        id: col.group,
+        span: 1,
+        visibleSpan: col.hideOnMobile ? 0 : 1,
+      })
+    }
+  }
+  return groups
+})()
+
+/** Returns the border class if this column is the first in its group. */
+function firstInGroup(col: ColumnDef, idx: number): string {
+  if (idx === 0) return GROUP_STYLES[col.group].border
+  if (SORT_COLUMNS[idx - 1].group !== col.group)
+    return GROUP_STYLES[col.group].border
+  return ''
+}
+
 function formatValue(value: number, key: SortKey): string {
-  if (key === 'jobs') return formatNumber(value)
+  if (key === 'nih_jobs') return formatNumber(value)
   if (key === 'pop_2024') return popFormatter.format(Math.round(value))
   return formatCurrency(value)
 }
 
+// --- Component ---
+
 export default function FundingTable() {
   const [geoLevel, setGeoLevel] = useState<GeoLevel>('counties')
-  const [sortKey, setSortKey] = useState<SortKey>('econ_impact')
+  const [sortKey, setSortKey] = useState<SortKey>('total_econ_impact')
   const [sortAsc, setSortAsc] = useState(false)
 
   const config = GEO_TABLE[geoLevel]
@@ -94,38 +193,79 @@ export default function FundingTable() {
 
         <div className="overflow-auto rounded-lg border border-gray-200 max-h-150">
           <table className="w-full text-left text-sm">
-            <thead className="sticky top-0 z-10 bg-gray-50">
+            <thead className="sticky top-0 z-10">
+              {/* Row 1: group headers */}
+              <tr className="bg-gray-50">
+                <th
+                  rowSpan={2}
+                  className="w-10 bg-gray-50 px-2 py-2 md:w-12 md:px-4"
+                />
+                <th rowSpan={2} className="bg-gray-50 px-2 py-2 md:px-4" />
+                {COLUMN_GROUPS.map((g) => {
+                  const style = GROUP_STYLES[g.id]
+                  return style.label ? (
+                    <th
+                      key={g.id}
+                      colSpan={g.span}
+                      className={`px-2 py-2 text-center text-xs font-bold uppercase tracking-wider md:px-4 ${style.headerBg} ${style.border} ${g.visibleSpan === 0 ? 'hidden md:table-cell' : ''}`}
+                    >
+                      {style.label}
+                    </th>
+                  ) : (
+                    <th
+                      key="pop"
+                      rowSpan={2}
+                      className={`cursor-pointer select-none bg-gray-50 px-2 py-2 text-right font-semibold text-gray-600 hover:text-gray-900 md:px-4 ${style.border}`}
+                      onClick={() => handleSort('pop_2024')}
+                    >
+                      <span className="inline-flex items-center gap-1">
+                        Population
+                        {sortKey === 'pop_2024' &&
+                          (sortAsc ? (
+                            <ChevronUp className="size-3.5" />
+                          ) : (
+                            <ChevronDown className="size-3.5" />
+                          ))}
+                      </span>
+                    </th>
+                  )
+                })}
+              </tr>
+              {/* Row 2: sub-column headers */}
               <tr className="border-b border-gray-200">
-                <th className="w-10 px-2 py-3 font-semibold text-gray-600 md:w-12 md:px-4">
-                  #
-                </th>
-                <th className="px-2 py-3 font-semibold text-gray-600 md:px-4">
-                  {config.label.replace(/s$/, '')}
-                </th>
-                {SORT_COLUMNS.map((col) => (
-                  <th
-                    key={col.key}
-                    className={`cursor-pointer select-none px-2 py-3 text-right font-semibold text-gray-600 hover:text-gray-900 md:px-4 ${col.hideOnMobile ? 'hidden md:table-cell' : ''}`}
-                    onClick={() => handleSort(col.key)}
-                  >
-                    <span className="inline-flex items-center gap-1">
-                      {col.label}
-                      {sortKey === col.key &&
-                        (sortAsc ? (
-                          <ChevronUp className="size-3.5" />
-                        ) : (
-                          <ChevronDown className="size-3.5" />
-                        ))}
-                    </span>
-                  </th>
-                ))}
+                {SORT_COLUMNS.filter((col) => col.group !== 'pop').map(
+                  (col, idx) => {
+                    const style = GROUP_STYLES[col.group]
+                    const border = firstInGroup(
+                      col,
+                      SORT_COLUMNS.indexOf(col),
+                    )
+                    return (
+                      <th
+                        key={col.key}
+                        className={`cursor-pointer select-none px-2 py-2 text-right text-xs font-semibold text-gray-600 hover:text-gray-900 md:px-4 ${style.headerBg} ${idx === 0 ? border : border} ${col.hideOnMobile ? 'hidden md:table-cell' : ''}`}
+                        onClick={() => handleSort(col.key)}
+                      >
+                        <span className="inline-flex items-center gap-1">
+                          {col.label}
+                          {sortKey === col.key &&
+                            (sortAsc ? (
+                              <ChevronUp className="size-3.5" />
+                            ) : (
+                              <ChevronDown className="size-3.5" />
+                            ))}
+                        </span>
+                      </th>
+                    )
+                  },
+                )}
               </tr>
             </thead>
             <tbody>
               {sortedRows.map((row, i) => (
                 <tr
                   key={row.id}
-                  className="border-b border-gray-100 transition-colors hover:bg-gray-50"
+                  className="border-b border-gray-100 transition-colors hover:bg-gray-100/50"
                 >
                   <td className="px-2 py-2 tabular-nums text-gray-400 md:px-4 md:py-2.5">
                     {i + 1}
@@ -133,14 +273,18 @@ export default function FundingTable() {
                   <td className="max-w-30 truncate px-2 py-2 font-medium text-gray-900 md:max-w-none md:px-4 md:py-2.5">
                     {row.name}
                   </td>
-                  {SORT_COLUMNS.map((col) => (
-                    <td
-                      key={col.key}
-                      className={`px-2 py-2 text-right tabular-nums text-gray-700 md:px-4 md:py-2.5 ${col.hideOnMobile ? 'hidden md:table-cell' : ''}`}
-                    >
-                      {formatValue(row[col.key], col.key)}
-                    </td>
-                  ))}
+                  {SORT_COLUMNS.map((col, idx) => {
+                    const style = GROUP_STYLES[col.group]
+                    const border = firstInGroup(col, idx)
+                    return (
+                      <td
+                        key={col.key}
+                        className={`px-2 py-2 text-right tabular-nums text-gray-700 md:px-4 md:py-2.5 ${style.bg} ${border} ${col.hideOnMobile ? 'hidden md:table-cell' : ''}`}
+                      >
+                        {formatValue(row[col.key], col.key)}
+                      </td>
+                    )
+                  })}
                 </tr>
               ))}
             </tbody>

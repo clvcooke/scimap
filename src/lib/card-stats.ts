@@ -11,18 +11,19 @@ import type { InfoSlot } from './export-map'
 
 // ── Baseline (computed from state-level JSON) ─────────────────────────
 
-const baseline = (statesData as { econ_impact: number; raw_funding: number; jobs: number }[]).reduce(
+const baseline = (statesData as { total_econ_impact: number; nih_raw_funding: number; nih_jobs: number; total_raw_funding: number }[]).reduce(
   (acc, s) => ({
-    econImpact: acc.econImpact + s.econ_impact,
-    funding: acc.funding + s.raw_funding,
-    jobs: acc.jobs + s.jobs,
+    econImpact: acc.econImpact + s.total_econ_impact,
+    nihFunding: acc.nihFunding + s.nih_raw_funding,
+    totalFunding: acc.totalFunding + s.total_raw_funding,
+    jobs: acc.jobs + s.nih_jobs,
   }),
-  { econImpact: 0, funding: 0, jobs: 0 },
+  { econImpact: 0, nihFunding: 0, totalFunding: 0, jobs: 0 },
 )
 
 export const BASELINE_SLOTS: InfoSlot[] = [
   { label: 'Total Economic Impact', value: formatCurrency(baseline.econImpact) },
-  { label: 'NIH Funding', value: formatCurrency(baseline.funding) },
+  { label: 'Total Funding (NIH + NSF)', value: formatCurrency(baseline.totalFunding) },
   { label: 'Jobs Supported', value: formatNumber(baseline.jobs) },
 ]
 
@@ -39,14 +40,14 @@ export const GRANTS_SLOTS: InfoSlot[] = [
 export const FY26_SLOTS: InfoSlot[] = [
   { label: 'Proposed NIH Cut', value: '22%' },
   { label: 'HHS Budget Cuts', value: '$31B' },
-  { label: 'NIH Funding at Stake', value: formatCurrency(baseline.funding) },
+  { label: 'NIH Funding at Stake', value: formatCurrency(baseline.nihFunding) },
 ]
 
 // ── FY27 Budget (proposed NIH + NSF cuts) ────────────────────────────
 
 export const FY27_SLOTS: InfoSlot[] = [
   { label: 'Agencies Affected', value: 'NIH + NSF' },
-  { label: 'NIH Funding at Stake', value: formatCurrency(baseline.funding) },
+  { label: 'NIH Funding at Stake', value: formatCurrency(baseline.nihFunding) },
   { label: 'Jobs Supported', value: formatNumber(baseline.jobs) },
 ]
 

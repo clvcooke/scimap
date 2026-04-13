@@ -34,7 +34,8 @@
       "Bash(grep:*)",
       "Read(//tmp/**)",
       "Bash(npm run lint:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(powershell.exe -Command \"cd 'C:\\\\Users\\\\clvco\\\\Documents\\\\code\\\\scimap'; npx tsc -b --force --noEmit 2>&1; npm run lint 2>&1\")"
     ]
   }
 }
