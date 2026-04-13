@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import GrantsMap from '../components/GrantsMap'
+import TerminationsTable from '../components/TerminationsTable'
 import { validateMapSearch, useScrollToTop } from '@/lib/map-search-params'
 import { getPage } from '@/lib/content'
 import { MapHeader } from '@/components/MapHeader'
@@ -31,6 +32,7 @@ function GrantsRoute() {
       </div>
       <MapZipSearch mapRoute="/grants" />
       <MapAttribution />
+      <TerminationsTable />
     </>
   )
 }

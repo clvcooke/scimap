@@ -1,7 +1,7 @@
 import type { LossGeoLevel, MapGeoConfig } from './map-shared'
 
 const DOMAIN = 'https://data.scienceimpacts.org'
-const TILE_VERSION = '2026-03-16'
+const TILE_VERSION = '2026-04-12'
 
 export const GRANTS_GEO_LEVELS: Record<LossGeoLevel, MapGeoConfig> = {
   counties: {
@@ -12,7 +12,7 @@ export const GRANTS_GEO_LEVELS: Record<LossGeoLevel, MapGeoConfig> = {
     domain: [0, 25_000_000],
   },
   districts: {
-    tileUrl: `${DOMAIN}/tiles_congs_total_v${TILE_VERSION}-v2/{z}/{x}/{y}.pbf`,
+    tileUrl: `${DOMAIN}/tiles_districts_total_v${TILE_VERSION}-v2/{z}/{x}/{y}.pbf`,
     maxZoom: 7,
     uniqueIdProperty: 'GEOID',
     label: 'Districts',
