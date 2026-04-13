@@ -34,7 +34,6 @@ const GEO_TABLE: Record<GeoLevel, { label: string; data: RegionRow[] }> = {
 
 // --- Column config ---
 
-const popFormatter = new Intl.NumberFormat('en-US')
 
 type GroupId = 'total' | 'nih' | 'nsf' | 'pop'
 
@@ -140,7 +139,7 @@ function firstInGroup(col: ColumnDef, idx: number): string {
 
 function formatValue(value: number, key: SortKey): string {
   if (key === 'nih_jobs') return formatNumber(value)
-  if (key === 'pop_2024') return popFormatter.format(Math.round(value))
+  if (key === 'pop_2024') return formatNumber(value)
   return formatCurrency(value)
 }
 
