@@ -41,7 +41,7 @@ export const GEO_LEVELS: Record<GeoLevel, GeoConfig> = {
     maxZoom: 7,
     uniqueIdProperty: 'state',
     label: 'States',
-    totalDomain: [50_000_000, 15_000_000_000],
+    totalDomain: [10_000, 2_500_000_000],
     perCapitaDomain: [50, 5_000],
   },
   counties: {
@@ -49,7 +49,7 @@ export const GEO_LEVELS: Record<GeoLevel, GeoConfig> = {
     maxZoom: 9,
     uniqueIdProperty: 'FIPS',
     label: 'Counties',
-    totalDomain: [1, 4_000_000_000],
+    totalDomain: [0, 25_000_000],
     perCapitaDomain: [0.01, 50_000],
   },
   districts: {
@@ -57,7 +57,7 @@ export const GEO_LEVELS: Record<GeoLevel, GeoConfig> = {
     maxZoom: 9,
     uniqueIdProperty: 'GEOID',
     label: 'Districts',
-    totalDomain: [10_000_000, 3_000_000_000],
+    totalDomain: [250_000, 50_000_000],
     perCapitaDomain: [10, 5_000],
   },
   // cities: {
