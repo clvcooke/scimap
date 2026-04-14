@@ -3,8 +3,12 @@ import type { LucideIcon } from 'lucide-react'
 import {
   Database,
   TrendingUp,
-  Users,
   MapPin,
+  Train,
+  BarChart3,
+  Scissors,
+  AlertTriangle,
+  Building,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { getPage } from '@/lib/content'
@@ -59,44 +63,23 @@ function SectionHeading({
   )
 }
 
-function Intro({ children }: { children: ReactNode }) {
+function Prose({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-5 text-lg leading-relaxed text-gray-700">{children}</p>
+    <div className="space-y-4 text-lg leading-relaxed text-gray-700">
+      {children}
+    </div>
   )
 }
 
-function BulletList({
-  items,
-  dotColor = 'bg-brand-orange',
-  textColor = 'text-gray-700',
-}: {
-  items: (string | { name: string; desc: string })[]
-  dotColor?: string
-  textColor?: string
-}) {
+function ProseBlock({ items }: { items: string[] }) {
   return (
-    <ul className="space-y-3">
-      {items.map((item) => {
-        const key = typeof item === 'string' ? item : item.name
-        return (
-          <li key={key} className="flex items-start">
-            <span
-              className={`mr-3 mt-1.5 h-2 w-2 shrink-0 rounded-full ${dotColor}`}
-            />
-            <p className={textColor}>
-              {typeof item === 'string' ? (
-                item
-              ) : (
-                <>
-                  <strong className="text-brand-blue">{item.name}:</strong>{' '}
-                  {item.desc}
-                </>
-              )}
-            </p>
-          </li>
-        )
-      })}
-    </ul>
+    <Prose>
+      {items.map((item, i) => (
+        <p key={i}>
+          <InlineMarkdown>{item}</InlineMarkdown>
+        </p>
+      ))}
+    </Prose>
   )
 }
 
@@ -126,79 +109,93 @@ function MethodologyPage() {
       <Section bg="white">
         <h2 className="text-2xl font-bold text-brand-blue">Overview</h2>
         <p className="mt-3 text-lg leading-relaxed text-gray-700">
-          {a.overview}
+          <InlineMarkdown>{a.overview}</InlineMarkdown>
         </p>
       </Section>
 
-      {/* Data Sources */}
+      {/* Geolocating Grants */}
       <Section bg="neutral">
-        <SectionHeading icon={Database}>Data Sources</SectionHeading>
-        <Intro>{a.data_sources_intro}</Intro>
-        <BulletList items={a.data_sources ?? []} />
+        <SectionHeading icon={MapPin}>Geolocating Grants</SectionHeading>
+        <p className="mb-4 text-lg leading-relaxed text-gray-700">
+          <InlineMarkdown>{a.geolocating_intro}</InlineMarkdown>
+        </p>
+        <ProseBlock items={a.geolocating_details ?? []} />
       </Section>
 
-      {/* Economic Impact Modeling */}
+      {/* Economic Multiplier */}
       <Section bg="white">
-        <SectionHeading icon={TrendingUp}>
-          Economic Impact Modeling
-        </SectionHeading>
-        <Intro>{a.economic_intro}</Intro>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {(a.economic_effects ?? []).map(
-            (item: { title: string; desc: string }) => (
-              <div
-                key={item.title}
-                className="rounded-xl border border-gray-200 bg-neutral-50 p-5"
-              >
-                <h3 className="font-bold text-brand-blue">{item.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-gray-600">
-                  {item.desc}
-                </p>
-              </div>
+        <SectionHeading icon={TrendingUp}>Economic Multiplier</SectionHeading>
+        <p className="mb-4 text-lg leading-relaxed text-gray-700">
+          <InlineMarkdown>{a.economic_multiplier_intro}</InlineMarkdown>
+        </p>
+        <ProseBlock items={a.economic_multiplier_details ?? []} />
+      </Section>
+
+      {/* Commuter Flows */}
+      <Section bg="neutral">
+        <SectionHeading icon={Train}>Commuter Flows</SectionHeading>
+        <p className="mb-4 text-lg leading-relaxed text-gray-700">
+          <InlineMarkdown>{a.commuter_flows_intro}</InlineMarkdown>
+        </p>
+        <ProseBlock items={a.commuter_flows_details ?? []} />
+      </Section>
+
+      {/* Baseline */}
+      <Section bg="white">
+        <SectionHeading icon={BarChart3}>Baseline</SectionHeading>
+        <p className="mb-4 text-lg leading-relaxed text-gray-700">
+          <InlineMarkdown>{a.baseline_intro}</InlineMarkdown>
+        </p>
+        <ProseBlock items={a.baseline_details ?? []} />
+      </Section>
+
+      {/* FY2027 Budget Cuts */}
+      <Section bg="neutral">
+        <SectionHeading icon={Scissors}>FY2027 Budget Cuts</SectionHeading>
+        <p className="mb-4 text-lg leading-relaxed text-gray-700">
+          <InlineMarkdown>{a.fy2027_intro}</InlineMarkdown>
+        </p>
+        <ProseBlock items={a.fy2027_details ?? []} />
+      </Section>
+
+      {/* Disrupted Grants */}
+      <Section bg="white">
+        <SectionHeading icon={AlertTriangle}>Disrupted Grants</SectionHeading>
+        <p className="mb-4 text-lg leading-relaxed text-gray-700">
+          <InlineMarkdown>{a.disrupted_intro}</InlineMarkdown>
+        </p>
+        <ProseBlock items={a.disrupted_details ?? []} />
+      </Section>
+
+      {/* Indirect Costs */}
+      <Section bg="neutral">
+        <SectionHeading icon={Building}>Indirect Costs</SectionHeading>
+        <p className="mb-4 text-lg leading-relaxed text-gray-700">
+          <InlineMarkdown>{a.indirect_costs_intro}</InlineMarkdown>
+        </p>
+        <ProseBlock items={a.indirect_costs_details ?? []} />
+      </Section>
+
+      {/* Data Sources */}
+      <Section bg="white">
+        <SectionHeading icon={Database}>Data Sources</SectionHeading>
+        <ul className="space-y-3">
+          {(a.data_sources ?? []).map(
+            (source: { name: string; url: string }) => (
+              <li key={source.name} className="flex items-start">
+                <span className="mr-3 mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-orange" />
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lg text-brand-blue underline decoration-brand-blue/30 hover:decoration-brand-blue"
+                >
+                  {source.name}
+                </a>
+              </li>
             ),
           )}
-        </div>
-        {a.economic_callout && (
-          <div className="mt-5 rounded-lg border-l-4 border-brand-sky bg-brand-sky/10 px-5 py-3">
-            <p className="text-gray-700">
-              <InlineMarkdown>{a.economic_callout}</InlineMarkdown>
-            </p>
-          </div>
-        )}
-      </Section>
-
-      {/* Job Impact Calculations */}
-      <Section bg="neutral">
-        <SectionHeading icon={Users}>Job Impact Calculations</SectionHeading>
-        <Intro>{a.jobs_intro}</Intro>
-        <BulletList items={a.job_impacts ?? []} />
-      </Section>
-
-      {/* Spatial Analysis */}
-      <Section bg="white">
-        <SectionHeading icon={MapPin}>
-          Spatial Analysis &amp; Geographic Mapping
-        </SectionHeading>
-        <Intro>{a.spatial_intro}</Intro>
-        <BulletList items={a.spatial_items ?? []} />
-      </Section>
-
-
-      {/* Limitations */}
-      <Section bg="neutral">
-          <div className="mb-4 flex items-center gap-3">
-            <h2 className="text-2xl font-bold text-amber-900">
-              Limitations &amp; Considerations
-            </h2>
-          </div>
-          <p className="mb-5 leading-relaxed text-amber-800">
-            {a.limitations_intro}
-          </p>
-          <BulletList
-            items={a.limitations ?? []}
-            dotColor="bg-amber-400"
-            textColor="text-amber-900"
-          />
+        </ul>
       </Section>
     </div>
   )
