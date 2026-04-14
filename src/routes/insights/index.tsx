@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
-import { BookOpen, ExternalLink, Newspaper, Archive, ChevronDown } from 'lucide-react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { BookOpen, ExternalLink, Newspaper, Archive, ChevronDown, PenLine } from 'lucide-react'
 import MapAttribution from '@/components/MapAttribution'
 import { InlineMarkdown } from '@/components/InlineMarkdown'
 import {
@@ -9,18 +9,28 @@ import {
   TabsTrigger,
   TabsContent,
 } from '@/components/ui/tabs'
-import { getArticles, getPage } from '@/lib/content'
+import { getArticles, getBlogPosts, getPage } from '@/lib/content'
 
 const IDCMap = lazy(() => import('@/components/IDCMap'))
 const FY26Map = lazy(() => import('@/components/FY26Map'))
 
-export const Route = createFileRoute('/insights')({
+const VALID_TABS = ['research', 'blog', 'substack', 'archived'] as const
+type Tab = (typeof VALID_TABS)[number]
+
+export const Route = createFileRoute('/insights/')({
   component: InsightsPage,
+  validateSearch: (search: Record<string, unknown>): { tab?: Tab } => {
+    const tab = VALID_TABS.includes(search.tab as Tab)
+      ? (search.tab as Tab)
+      : undefined
+    return tab !== undefined ? { tab } : {}
+  },
 })
 
 /* ── Data ──────────────────────────────────────────────────────────── */
 
 const ARTICLES = getArticles()
+const BLOG_POSTS = getBlogPosts()
 const PAGE = getPage('insights')
 
 /* ── Collapsible section ───────────────────────────────────────────── */
@@ -53,10 +63,20 @@ function CollapsibleSection({
 
 function InsightsPage() {
   const a = PAGE.attrs
+  const { tab } = Route.useSearch()
+  const navigate = Route.useNavigate()
+  const activeTab = tab ?? 'research'
+
   return (
     <div className="flex w-full flex-col bg-neutral-50">
       {/* Compact page header + tab bar — single band */}
-      <Tabs defaultValue="research" className="w-full gap-0">
+      <Tabs
+        value={activeTab}
+        onValueChange={(v) => {
+          void navigate({ search: { tab: v as Tab }, replace: true })
+        }}
+        className="w-full gap-0"
+      >
         <div className="w-full bg-white px-6 pt-6">
           <div className="mx-auto max-w-4xl">
             <h1 className="text-2xl font-bold text-brand-blue">Insights</h1>
@@ -75,6 +95,13 @@ function InsightsPage() {
                 >
                   <BookOpen className="hidden h-4 w-4 sm:block" />
                   Research
+                </TabsTrigger>
+                <TabsTrigger
+                  value="blog"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
+                >
+                  <PenLine className="hidden h-4 w-4 sm:block" />
+                  Blog
                 </TabsTrigger>
                 <TabsTrigger
                   value="substack"
@@ -152,6 +179,61 @@ function InsightsPage() {
                       </p>
                     </div>
                   </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* ── Blog ─────────────────────────────────────────────────── */}
+        <TabsContent value="blog" className="text-base">
+          <div className="w-full px-6 py-8 md:py-10">
+            <div className="mx-auto max-w-4xl">
+              <p className="mb-6 leading-relaxed text-gray-600">
+                Analysis, commentary, and deeper dives from the SCIMaP team.
+              </p>
+
+              <div className="space-y-4">
+                {BLOG_POSTS.map((post) => (
+                  <Link
+                    key={post.slug}
+                    to="/insights/$slug"
+                    params={{ slug: post.slug }}
+                    className="group flex gap-5 rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition-colors hover:border-brand-blue/30"
+                  >
+                    {post.image && (
+                      <div className="hidden shrink-0 sm:block">
+                        <img
+                          src={post.image}
+                          alt=""
+                          className="h-28 w-28 rounded-md object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold text-gray-900 group-hover:text-brand-blue">
+                        {post.title}
+                      </h3>
+                      <div className="mt-1 flex items-center gap-3 text-sm text-gray-400">
+                        <span>
+                          {new Date(post.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
+                        </span>
+                        {post.author && (
+                          <>
+                            <span className="text-gray-300">|</span>
+                            <span>{post.author}</span>
+                          </>
+                        )}
+                      </div>
+                      <p className="mt-2 text-[15px] leading-relaxed text-gray-500">
+                        {post.summary}
+                      </p>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </div>

@@ -15,7 +15,6 @@ import { Route as NewsRouteImport } from './routes/news'
 import { Route as MethodologyRouteImport } from './routes/methodology'
 import { Route as MapsRouteImport } from './routes/maps'
 import { Route as MapRouteImport } from './routes/map'
-import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as IdcRouteImport } from './routes/idc'
 import { Route as GrantsRouteImport } from './routes/grants'
 import { Route as Fy27RouteImport } from './routes/fy27'
@@ -24,6 +23,8 @@ import { Route as ExportPreviewRouteImport } from './routes/export-preview'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InsightsIndexRouteImport } from './routes/insights/index'
+import { Route as InsightsSlugRouteImport } from './routes/insights/$slug'
 
 const TakeActionRoute = TakeActionRouteImport.update({
   id: '/take-action',
@@ -53,11 +54,6 @@ const MapsRoute = MapsRouteImport.update({
 const MapRoute = MapRouteImport.update({
   id: '/map',
   path: '/map',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InsightsRoute = InsightsRouteImport.update({
-  id: '/insights',
-  path: '/insights',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IdcRoute = IdcRouteImport.update({
@@ -100,6 +96,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InsightsIndexRoute = InsightsIndexRouteImport.update({
+  id: '/insights/',
+  path: '/insights/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightsSlugRoute = InsightsSlugRouteImport.update({
+  id: '/insights/$slug',
+  path: '/insights/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -110,13 +116,14 @@ export interface FileRoutesByFullPath {
   '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
   '/idc': typeof IdcRoute
-  '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
   '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
   '/scorecard': typeof ScorecardRoute
   '/take-action': typeof TakeActionRoute
+  '/insights/$slug': typeof InsightsSlugRoute
+  '/insights/': typeof InsightsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -127,13 +134,14 @@ export interface FileRoutesByTo {
   '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
   '/idc': typeof IdcRoute
-  '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
   '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
   '/scorecard': typeof ScorecardRoute
   '/take-action': typeof TakeActionRoute
+  '/insights/$slug': typeof InsightsSlugRoute
+  '/insights': typeof InsightsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -145,13 +153,14 @@ export interface FileRoutesById {
   '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
   '/idc': typeof IdcRoute
-  '/insights': typeof InsightsRoute
   '/map': typeof MapRoute
   '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
   '/scorecard': typeof ScorecardRoute
   '/take-action': typeof TakeActionRoute
+  '/insights/$slug': typeof InsightsSlugRoute
+  '/insights/': typeof InsightsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -164,13 +173,14 @@ export interface FileRouteTypes {
     | '/fy27'
     | '/grants'
     | '/idc'
-    | '/insights'
     | '/map'
     | '/maps'
     | '/methodology'
     | '/news'
     | '/scorecard'
     | '/take-action'
+    | '/insights/$slug'
+    | '/insights/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -181,13 +191,14 @@ export interface FileRouteTypes {
     | '/fy27'
     | '/grants'
     | '/idc'
-    | '/insights'
     | '/map'
     | '/maps'
     | '/methodology'
     | '/news'
     | '/scorecard'
     | '/take-action'
+    | '/insights/$slug'
+    | '/insights'
   id:
     | '__root__'
     | '/'
@@ -198,13 +209,14 @@ export interface FileRouteTypes {
     | '/fy27'
     | '/grants'
     | '/idc'
-    | '/insights'
     | '/map'
     | '/maps'
     | '/methodology'
     | '/news'
     | '/scorecard'
     | '/take-action'
+    | '/insights/$slug'
+    | '/insights/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -216,13 +228,14 @@ export interface RootRouteChildren {
   Fy27Route: typeof Fy27Route
   GrantsRoute: typeof GrantsRoute
   IdcRoute: typeof IdcRoute
-  InsightsRoute: typeof InsightsRoute
   MapRoute: typeof MapRoute
   MapsRoute: typeof MapsRoute
   MethodologyRoute: typeof MethodologyRoute
   NewsRoute: typeof NewsRoute
   ScorecardRoute: typeof ScorecardRoute
   TakeActionRoute: typeof TakeActionRoute
+  InsightsSlugRoute: typeof InsightsSlugRoute
+  InsightsIndexRoute: typeof InsightsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -267,13 +280,6 @@ declare module '@tanstack/react-router' {
       path: '/map'
       fullPath: '/map'
       preLoaderRoute: typeof MapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/insights': {
-      id: '/insights'
-      path: '/insights'
-      fullPath: '/insights'
-      preLoaderRoute: typeof InsightsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/idc': {
@@ -332,6 +338,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/insights/': {
+      id: '/insights/'
+      path: '/insights'
+      fullPath: '/insights/'
+      preLoaderRoute: typeof InsightsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insights/$slug': {
+      id: '/insights/$slug'
+      path: '/insights/$slug'
+      fullPath: '/insights/$slug'
+      preLoaderRoute: typeof InsightsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -344,13 +364,14 @@ const rootRouteChildren: RootRouteChildren = {
   Fy27Route: Fy27Route,
   GrantsRoute: GrantsRoute,
   IdcRoute: IdcRoute,
-  InsightsRoute: InsightsRoute,
   MapRoute: MapRoute,
   MapsRoute: MapsRoute,
   MethodologyRoute: MethodologyRoute,
   NewsRoute: NewsRoute,
   ScorecardRoute: ScorecardRoute,
   TakeActionRoute: TakeActionRoute,
+  InsightsSlugRoute: InsightsSlugRoute,
+  InsightsIndexRoute: InsightsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

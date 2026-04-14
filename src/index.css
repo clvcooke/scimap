@@ -5,6 +5,8 @@
 @import '@fontsource/libre-baskerville/400.css';
 @import '@fontsource/libre-baskerville/700.css';
 
+@plugin '@tailwindcss/typography';
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

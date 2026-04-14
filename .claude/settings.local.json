@@ -40,7 +40,8 @@
       "Bash(powershell.exe -Command '& '\\\\''C:\\\\Users\\\\clvco\\\\miniconda3\\\\python.exe'\\\\'' -c \":*)",
       "Bash(powershell.exe -Command \"Get-Command python* | Select-Object Source\")",
       "Bash(powershell.exe -Command \"where.exe python\")",
-      "Bash(powershell.exe:*)"
+      "Bash(powershell.exe:*)",
+      "Bash(npm view:*)"
     ]
   }
 }

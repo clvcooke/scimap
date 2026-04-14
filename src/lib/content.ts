@@ -142,6 +142,53 @@ export function getArticles(): Article[] {
     .sort((a, b) => a.order - b.order)
 }
 
+/** Load all blog posts from content/insights/*.md */
+export interface BlogPost {
+  title: string
+  slug: string
+  date: string
+  author: string
+  summary: string
+  image?: string
+  tags: string[]
+  downloadable?: string
+  downloadable_title?: string
+  body: string
+}
+
+const insightFiles = import.meta.glob<string>('/content/insights/*.md', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+})
+
+export function getBlogPosts(): BlogPost[] {
+  return Object.values(insightFiles)
+    .map((raw) => {
+      const { attrs, body } = parseFrontmatter(raw)
+      return {
+        title: attrs.title ?? '',
+        slug: attrs.slug ?? '',
+        date: attrs.date ?? '',
+        author: attrs.author ?? '',
+        summary: attrs.summary ?? '',
+        image: attrs.image ?? undefined,
+        tags: Array.isArray(attrs.tags) ? attrs.tags : [],
+        downloadable: attrs.downloadable ?? undefined,
+        downloadable_title: attrs.downloadable_title ?? undefined,
+        body,
+      }
+    })
+    .sort(
+      (a, b) =>
+        new Date(String(b.date)).getTime() - new Date(String(a.date)).getTime(),
+    )
+}
+
+export function getBlogPost(slug: string): BlogPost | undefined {
+  return getBlogPosts().find((p) => p.slug === slug)
+}
+
 /** Load all team members from content/team/*.md (uses Vite's import.meta.glob). */
 const teamFiles = import.meta.glob<string>('/content/team/*.md', {
   query: '?raw',
