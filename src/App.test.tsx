@@ -37,6 +37,6 @@ describe('App routing', () => {
     })
 
     // Verify hero section
-    expect(screen.getByText('Read the Report')).toBeInTheDocument()
+    expect(screen.getByText('View Impact Maps')).toBeInTheDocument()
   })
 })
