@@ -1,5 +1,5 @@
 ---
-title: "SCIMaP 2025 Annual Report: Results, Challenges and What Comes Next"
+title: SCIMaP 2025 Annual Report
 url: "#"
 order: 1
 ---
