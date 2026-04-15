@@ -49,6 +49,24 @@ collections:
       - { label: "Image", name: "image", widget: "image", required: false, hint: "Optional image to display with the press release" }
       - { label: "URL", name: "url", widget: "string" }
 
+  - name: insights
+    label: Blog Posts
+    folder: content/insights
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["date", "title"]
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", hint: "URL-friendly identifier, e.g. 'my-post-2026-04-14'" }
+      - { label: "Date", name: "date", widget: "string", hint: "e.g. '2026-04-14'" }
+      - { label: "Author", name: "author", widget: "string" }
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Tags", name: "tags", widget: "list" }
+      - { label: "Downloadable URL", name: "downloadable", widget: "string", required: false, hint: "Link to a downloadable file (e.g. PDF)" }
+      - { label: "Downloadable Title", name: "downloadable_title", widget: "string", required: false, hint: "Button text for the download link" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
   - name: articles
     label: Research Articles
     folder: content/articles
