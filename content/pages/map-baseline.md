@@ -6,7 +6,7 @@ blurb: Explore the geographic distribution of federal research funding across
 heading: About This Map
 description: Federal investment in science generates **new economic activity**
   in communities nationwide. This map shows the **baseline positive impact** of
-  federal research funding before recent funding cuts (years 2020-2024),
+  federal research funding between 2020-2024 (before recent funding cuts),
   demonstrating how science funding benefits communities.
 data_sources:
   - "[NIH RePORTER](https://reporter.nih.gov)"
