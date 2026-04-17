@@ -6,11 +6,11 @@ blurb: Track the economic fallout of cancelled and frozen NIH grants across the
 heading: About This Map
 description: Many active NIH and NSF grants have been **terminated or frozen**,
   leading to cancelled projects and wasted taxpayer funds. This map displays the
-  **economic losses** that would result from these grant terminations and
-  details about grants by institution. The map shows grants that are currently
+  **economic losses** that result from these grant terminations and more details
+  about grants by institution. The map shows grants that are currently
   terminated or frozen (not including restored grants). Loss estimates are for
-  the current funding period of each grant, underestimating total impact over
-  time.
+  the current funding period of each grant -- actual multi-year impacts are even
+  higher.
 data_sources:
   - "[Grant Witness](https://grant-witness.us)"
   - "[NIH RePORTER](https://reporter.nih.gov)"
