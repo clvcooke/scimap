@@ -12,7 +12,7 @@ import {
   getNsfEconImpact,
 } from '@/lib/map-config'
 import type { TileProperties, SelectedFeature } from '@/lib/map-config'
-import { type AgencyFilter, type MapGeoConfig, type TileProps } from '@/lib/map-shared'
+import { DEFAULT_AGENCY_FILTER, type AgencyFilter, type MapGeoConfig, type TileProps } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
 import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
 import AgencyFilterControl from './AgencyFilterControl'
@@ -67,7 +67,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
   const [selectedFeature, setSelectedFeature] = useState<SelectedFeature | null>(null)
   const [previewFeature, setPreviewFeature] = useState<SelectedFeature | null>(null)
   const [currentGeoLevel, setCurrentGeoLevel] = useState<GeoLevel>('counties')
-  const [agencyFilter, setAgencyFilter] = useState<AgencyFilter>('nih')
+  const [agencyFilter, setAgencyFilter] = useState<AgencyFilter>(DEFAULT_AGENCY_FILTER)
   const isMobile = useIsMobile()
 
   const renderTooltip = useCallback(

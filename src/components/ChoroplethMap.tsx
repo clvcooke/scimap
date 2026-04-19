@@ -220,7 +220,7 @@ export default function ChoroplethMap<K extends string>({
   return (
     <div ref={containerRef} className="absolute inset-x-4 inset-y-2 overflow-hidden rounded-xl shadow-lg md:inset-x-16 md:inset-y-8">
       {/* Top bar: region selector (left) + info/share (right) */}
-      <div className="absolute left-2 right-2 top-2 z-10 flex items-center justify-between md:left-4 md:right-4 md:top-4">
+      <div className="absolute left-2 right-2 top-2 z-10 flex items-start justify-between md:left-4 md:right-4 md:top-4">
         <div className="flex flex-col gap-2 md:rounded-lg md:bg-white/90 md:p-3 md:shadow-md md:backdrop-blur-sm">
           <Tabs value={geoLevel} onValueChange={(v: string) => { const level = v as K; setGeoLevel(level); onGeoLevelChange?.(level) }}>
             <TabsList className="shadow md:shadow-none">

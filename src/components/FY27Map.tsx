@@ -5,6 +5,7 @@ import {
   LUT_MAGMA_INV,
   NSF_DIRECTORATES,
   buildTooltipHeader,
+  DEFAULT_AGENCY_FILTER,
   type AgencyFilter,
   type LossGeoLevel,
   type TileProps,
@@ -118,7 +119,7 @@ export default function FY27Map({ initialLat, initialLng, initialZoom, aboutCont
   initialZoom?: number | undefined
   aboutContent?: MapAboutContent
 }) {
-  const [agencyFilter, setAgencyFilter] = useState<AgencyFilter>('nih')
+  const [agencyFilter, setAgencyFilter] = useState<AgencyFilter>(DEFAULT_AGENCY_FILTER)
   const [geoLevel, setGeoLevel] = useState<LossGeoLevel>('districts')
 
   const colorProperty = FY27_COLOR_PROPERTIES[agencyFilter]

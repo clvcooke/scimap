@@ -5,6 +5,7 @@ import { GRANTS_GEO_LEVELS, GRANTS_COLOR_PROPERTIES, GRANTS_JOB_PROPERTIES, GRAN
 import {
   LUT_OR_RD,
   buildTooltipHeader,
+  DEFAULT_AGENCY_FILTER,
   type AgencyFilter,
   type LossGeoLevel,
   type TileProps,
@@ -50,7 +51,7 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
   const [overlayGrants, setOverlayGrants] = useState<GrantTermination[]>([])
   const [showOverlay, setShowOverlay] = useState(false)
   const [showBubbles, setShowBubbles] = useState(true)
-  const [agencyFilter, setAgencyFilter] = useState<AgencyFilter>('nih')
+  const [agencyFilter, setAgencyFilter] = useState<AgencyFilter>(DEFAULT_AGENCY_FILTER)
   const [geoLevel, setGeoLevel] = useState<LossGeoLevel>('counties')
 
   const colorProperty = GRANTS_COLOR_PROPERTIES[agencyFilter]

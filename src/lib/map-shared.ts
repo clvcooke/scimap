@@ -16,6 +16,8 @@ export type LossGeoLevel = 'counties' | 'districts' | 'states'
 
 export type AgencyFilter = 'both' | 'nih' | 'nsf'
 
+export const DEFAULT_AGENCY_FILTER: AgencyFilter = 'both'
+
 // ── NSF Directorates ──────────────────────────────────────────────
 
 export const NSF_DIRECTORATES = [
