@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { X } from 'lucide-react'
 import type { GrantTermination } from '@/data/grant-losses'
+import type { AgencyFilter } from '@/lib/map-shared'
 
 const currencyFmt = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -8,13 +9,20 @@ const currencyFmt = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 })
 
+const OVERLAY_TITLES: Record<AgencyFilter, string> = {
+  nih: 'Cancelled & Frozen NIH Grants',
+  nsf: 'Cancelled & Frozen NSF Grants',
+  both: 'Cancelled & Frozen Grants',
+}
+
 interface GrantsOverlayProps {
   grants: GrantTermination[]
   open: boolean
   onClose: () => void
+  agencyFilter?: AgencyFilter
 }
 
-export default function GrantsOverlay({ grants, open, onClose }: GrantsOverlayProps) {
+export default function GrantsOverlay({ grants, open, onClose, agencyFilter = 'nih' }: GrantsOverlayProps) {
   const grouped = useMemo(() => {
     const map: Record<string, GrantTermination[]> = {}
     grants?.forEach((g) => {
@@ -37,7 +45,7 @@ export default function GrantsOverlay({ grants, open, onClose }: GrantsOverlayPr
         {/* Header */}
         <div className="flex items-center justify-between border-b px-5 py-4">
           <h2 className="text-lg font-semibold text-gray-900">
-            Cancelled &amp; Frozen NIH Grants
+            {OVERLAY_TITLES[agencyFilter]}
           </h2>
           <button
             onClick={onClose}
@@ -48,9 +56,11 @@ export default function GrantsOverlay({ grants, open, onClose }: GrantsOverlayPr
           </button>
         </div>
 
-        <p className="px-5 pt-3 text-sm italic text-gray-500">
-          Note: This does not include canceled and frozen grants from other federal agencies
-        </p>
+        {agencyFilter !== 'both' && (
+          <p className="px-5 pt-3 text-sm italic text-gray-500">
+            Note: Showing only {agencyFilter === 'nih' ? 'NIH' : 'NSF'} grants. Switch to &quot;Combined&quot; to see all agencies.
+          </p>
+        )}
 
         {/* Scrollable list */}
         <div className="flex-1 overflow-y-auto px-5 py-3">

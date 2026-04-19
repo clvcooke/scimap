@@ -9,9 +9,10 @@ export interface GrantTermination {
   terminated_num: number
   terminated_loss_noself: number
   terminated_num_noself?: number
+  agency?: 'nih' | 'nsf' | 'both'
 }
 
-const raw: GrantTermination[] = GRANT_LOSS_DATA.GRANT_LOSSES
+const raw = GRANT_LOSS_DATA.GRANT_LOSSES as unknown as GrantTermination[]
 
 export const GRANT_LOSSES: GrantTermination[] = raw.flatMap((grant) => {
   if (grant.terminated_num > 1) {

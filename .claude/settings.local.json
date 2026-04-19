@@ -49,7 +49,12 @@
       "Bash(brew list:*)",
       "Bash(rclone listremotes:*)",
       "Bash(git -C /Users/colincooke/code/scimap log --oneline --all)",
-      "Bash(git -C /Users/colincooke/code/scimap branch:*)"
+      "Bash(git -C /Users/colincooke/code/scimap branch:*)",
+      "Bash(rclone ls:*)",
+      "Bash(npm run build:*)",
+      "Bash(jq:*)",
+      "Bash(git -C /Users/colincooke/code/scimap status)",
+      "Bash(git -C /Users/colincooke/code/scimap log --oneline -5)"
     ]
   }
 }

@@ -1,10 +1,11 @@
 import { useState, useMemo, useCallback } from 'react'
 import type { PickingInfo, Position } from '@deck.gl/core'
 import { formatCurrency } from '@/lib/constants'
-import { GRANTS_GEO_LEVELS, GRANTS_COLOR_PROPERTY } from '@/lib/grants-map-config'
+import { GRANTS_GEO_LEVELS, GRANTS_COLOR_PROPERTIES, GRANTS_JOB_PROPERTIES, GRANTS_AGENCY_DOMAINS } from '@/lib/grants-map-config'
 import {
   LUT_OR_RD,
   buildTooltipHeader,
+  type AgencyFilter,
   type LossGeoLevel,
   type TileProps,
 } from '@/lib/map-shared'
@@ -13,18 +14,29 @@ import { GRANT_LOSSES, type GrantTermination } from '@/data/grant-losses'
 import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
 import GrantsOverlay from './GrantsOverlay'
 import { Switch } from '@/components/ui/switch'
+import AgencyFilterControl from './AgencyFilterControl'
 
-const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
-  const { locationLine, politicianHtml } = buildTooltipHeader(p, geoLevel)
-  const econLoss = Number(p.terminated_econ_loss ?? 0)
-  const jobLoss = Number(p.terminated_job_loss ?? 0)
+const AGENCY_LABELS: Record<AgencyFilter, string> = {
+  both: 'Economic Loss',
+  nih: 'NIH Economic Loss',
+  nsf: 'NSF Economic Loss',
+}
 
-  return (
-    `<div class="font-semibold">${locationLine}</div>` +
-    politicianHtml +
-    `<div>Economic Loss: ${formatCurrency(econLoss)}</div>` +
-    (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '')
-  )
+function buildRenderTooltip(agencyFilter: AgencyFilter) {
+  const econProp = GRANTS_COLOR_PROPERTIES[agencyFilter]
+  const jobProp = GRANTS_JOB_PROPERTIES[agencyFilter]
+  return (p: TileProps, geoLevel: LossGeoLevel) => {
+    const { locationLine, politicianHtml } = buildTooltipHeader(p, geoLevel)
+    const econLoss = Number(p[econProp] ?? 0)
+    const jobLoss = Number(p[jobProp] ?? 0)
+
+    return (
+      `<div class="font-semibold">${locationLine}</div>` +
+      politicianHtml +
+      `<div>${AGENCY_LABELS[agencyFilter]}: ${formatCurrency(econLoss)}</div>` +
+      (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '')
+    )
+  }
 }
 
 const getGrantPosition = (d: GrantTermination): Position => [d.lon, d.lat, 0]
@@ -38,11 +50,22 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
   const [overlayGrants, setOverlayGrants] = useState<GrantTermination[]>([])
   const [showOverlay, setShowOverlay] = useState(false)
   const [showBubbles, setShowBubbles] = useState(true)
+  const [agencyFilter, setAgencyFilter] = useState<AgencyFilter>('nih')
+  const [geoLevel, setGeoLevel] = useState<LossGeoLevel>('counties')
+
+  const colorProperty = GRANTS_COLOR_PROPERTIES[agencyFilter]
+  const colorScaleDomain = GRANTS_AGENCY_DOMAINS[agencyFilter][geoLevel]
+  const renderTooltip = useMemo(() => buildRenderTooltip(agencyFilter), [agencyFilter])
+
+  const filteredGrants = useMemo(() => {
+    if (agencyFilter === 'both') return GRANT_LOSSES
+    return GRANT_LOSSES.filter((g) => g.agency === agencyFilter || g.agency === 'both')
+  }, [agencyFilter])
 
   const clusterLayer = useMemo(
     () =>
       new IconClusterLayer<GrantTermination>({
-        data: GRANT_LOSSES,
+        data: filteredGrants,
         getPosition: getGrantPosition,
         getSize: 50,
         iconAtlas: '/location-icon-atlas-v7.png',
@@ -53,7 +76,7 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
         pickable: true,
         visible: showBubbles,
       }),
-    [showBubbles],
+    [showBubbles, filteredGrants],
   )
 
   const onClick = useCallback(
@@ -74,7 +97,8 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
     <ChoroplethMap
       geoLevels={GRANTS_GEO_LEVELS}
       defaultLevel="counties"
-      colorProperty={GRANTS_COLOR_PROPERTY}
+      colorProperty={colorProperty}
+      colorScaleDomain={colorScaleDomain}
       colorLUT={LUT_OR_RD}
       layerId="grants-mvt"
       renderTooltip={renderTooltip}
@@ -86,10 +110,14 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
       controllerDisabled={showOverlay}
       colorScheme="orrd"
       aboutContent={aboutContent}
+      onGeoLevelChange={setGeoLevel as (level: string) => void}
       extraControls={
-        <div className="flex items-center gap-2">
-          <Switch id="show-grants" checked={showBubbles} onCheckedChange={setShowBubbles} />
-          <label htmlFor="show-grants" className="text-xs font-medium text-gray-700 cursor-pointer">Show grants</label>
+        <div className="flex flex-col gap-2">
+          <AgencyFilterControl value={agencyFilter} onValueChange={setAgencyFilter} />
+          <div className="flex items-center gap-2">
+            <Switch id="show-grants" checked={showBubbles} onCheckedChange={setShowBubbles} />
+            <label htmlFor="show-grants" className="text-xs font-medium text-gray-700 cursor-pointer">Show grants</label>
+          </div>
         </div>
       }
     >
@@ -97,6 +125,7 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
         grants={overlayGrants}
         open={showOverlay}
         onClose={() => setShowOverlay(false)}
+        agencyFilter={agencyFilter}
       />
     </ChoroplethMap>
   )

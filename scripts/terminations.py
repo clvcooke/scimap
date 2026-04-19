@@ -562,11 +562,17 @@ def generate_terminated_grants():
 
     frames = []
     if len(both) > 0:
-        frames.append(combined.loc[both])
+        df_both = combined.loc[both].copy()
+        df_both["agency"] = "both"
+        frames.append(df_both)
     if len(nih_only) > 0:
-        frames.append(nih_orgs.loc[nih_only, val_cols])
+        df_nih = nih_orgs.loc[nih_only, val_cols].copy()
+        df_nih["agency"] = "nih"
+        frames.append(df_nih)
     if len(nsf_only) > 0:
-        frames.append(nsf_orgs.loc[nsf_only, val_cols])
+        df_nsf = nsf_orgs.loc[nsf_only, val_cols].copy()
+        df_nsf["agency"] = "nsf"
+        frames.append(df_nsf)
 
     all_orgs = pd.concat(frames).reset_index()
     print(f"  Combined orgs: {len(all_orgs)}")
@@ -594,6 +600,7 @@ def generate_terminated_grants():
             "terminated_loss": loss,
             "terminated_num": 1,  # No grant count in new data
             "terminated_loss_noself": loss,
+            "agency": row.get("agency", "nih"),
         })
 
     print(f"  Geocoded: {geocoded}/{len(all_orgs)} orgs")

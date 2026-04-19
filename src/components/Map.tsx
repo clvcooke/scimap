@@ -1,17 +1,21 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import type { PickingInfo } from '@deck.gl/core'
 import type { MjolnirGestureEvent } from 'mjolnir.js'
 import { formatCurrency, formatNumber, stateName } from '@/lib/constants'
 import type { GeoLevel } from '@/lib/constants'
 import {
   GEO_LEVELS,
+  BASELINE_AGENCY_DOMAINS,
   createBaselineLayer,
   createColorScale,
+  getBaselineValue,
+  getNsfEconImpact,
 } from '@/lib/map-config'
 import type { TileProperties, SelectedFeature } from '@/lib/map-config'
-import type { MapGeoConfig, TileProps } from '@/lib/map-shared'
+import { type AgencyFilter, type MapGeoConfig, type TileProps } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
 import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
+import AgencyFilterControl from './AgencyFilterControl'
 import DetailDrawer from './DetailDrawer'
 import MobileInfoCard from './MobileInfoCard'
 
@@ -63,39 +67,65 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
   const [selectedFeature, setSelectedFeature] = useState<SelectedFeature | null>(null)
   const [previewFeature, setPreviewFeature] = useState<SelectedFeature | null>(null)
   const [currentGeoLevel, setCurrentGeoLevel] = useState<GeoLevel>('counties')
+  const [agencyFilter, setAgencyFilter] = useState<AgencyFilter>('nih')
   const isMobile = useIsMobile()
 
   const renderTooltip = useCallback(
     (p: TileProps, geoLevel: GeoLevel) => {
       const tile = p as TileProperties
-      const impact = tile.NIH_tot_econ_impact ?? 0
-      const jobs = tile.NIH_tot_jobs ?? 0
       const pop = tile.pop_2024 ?? 0
       const displayName = getBaselineDisplayName(tile, geoLevel)
+
+      if (agencyFilter === 'nih') {
+        const impact = tile.NIH_tot_econ_impact ?? 0
+        const jobs = tile.NIH_tot_jobs ?? 0
+        return (
+          `<div class="font-semibold">${displayName}</div>` +
+          `<div>NIH Economic Impact: ${formatCurrency(impact)}</div>` +
+          (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
+          `<div>Population: ${pop.toLocaleString()}</div>` +
+          `<div class="text-xs mt-1 opacity-75">Click for details</div>`
+        )
+      }
+
+      if (agencyFilter === 'nsf') {
+        const impact = getNsfEconImpact(tile)
+        return (
+          `<div class="font-semibold">${displayName}</div>` +
+          `<div>NSF Economic Impact: ${formatCurrency(impact)}</div>` +
+          `<div>Population: ${pop.toLocaleString()}</div>` +
+          `<div class="text-xs mt-1 opacity-75">Click for details</div>`
+        )
+      }
+
+      const impact = getBaselineValue(tile, 'both')
+      const nihImpact = tile.NIH_tot_econ_impact ?? 0
+      const nsfImpact = getNsfEconImpact(tile)
+      const jobs = tile.NIH_tot_jobs ?? 0
       return (
         `<div class="font-semibold">${displayName}</div>` +
-        `<div>Economic Impact: ${formatCurrency(impact)}</div>` +
+        `<div>Total Economic Impact: ${formatCurrency(impact)}</div>` +
         (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
         `<div>Population: ${pop.toLocaleString()}</div>` +
+        `<div class="mt-1 text-[11px] text-gray-300">` +
+        `NIH: ${formatCurrency(nihImpact)} · NSF: ${formatCurrency(nsfImpact)}` +
+        `</div>` +
         `<div class="text-xs mt-1 opacity-75">Click for details</div>`
       )
     },
-    [],
+    [agencyFilter],
   )
+
+  const activeDomain = BASELINE_AGENCY_DOMAINS[agencyFilter][currentGeoLevel]
 
   const layersFn = useCallback(
     (config: MapGeoConfig) => {
       const geoConfig = Object.values(GEO_LEVELS).find((g) => g.tileUrl === config.tileUrl) ?? GEO_LEVELS.states
-      const colorScale = createColorScale(geoConfig, false)
-      return [createBaselineLayer(geoConfig, false, colorScale)]
+      const colorScale = createColorScale(geoConfig, false, activeDomain)
+      return [createBaselineLayer(geoConfig, false, colorScale, agencyFilter)]
     },
-    [],
+    [agencyFilter, activeDomain],
   )
-
-  const activeDomain = useMemo(() => {
-    const cfg = BASELINE_GEO_LEVELS[currentGeoLevel]
-    return cfg.domain
-  }, [currentGeoLevel])
 
   const handleClick = useCallback(
     (info: PickingInfo, _event: MjolnirGestureEvent) => {
@@ -131,12 +161,16 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
       displayLocation={displayLocation}
       onGeoLevelChange={setCurrentGeoLevel}
       aboutContent={aboutContent}
+      extraControls={
+        <AgencyFilterControl value={agencyFilter} onValueChange={setAgencyFilter} />
+      }
     >
       {isMobile && previewFeature && (
         <MobileInfoCard
           feature={previewFeature}
           geoLabel={BASELINE_GEO_LEVELS[currentGeoLevel].label.replace(/s$/, '')}
           perCapita={false}
+          agencyFilter={agencyFilter}
           onSeeMore={() => {
             setSelectedFeature(previewFeature)
             setPreviewFeature(null)
@@ -147,6 +181,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
       <DetailDrawer
         feature={selectedFeature}
         perCapita={false}
+        agencyFilter={agencyFilter}
         onClose={() => setSelectedFeature(null)}
       />
     </ChoroplethMap>

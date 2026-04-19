@@ -1,21 +1,31 @@
 import { X } from 'lucide-react'
 import { formatCurrency } from '@/lib/constants'
+import { getBaselineValue } from '@/lib/map-config'
 import type { SelectedFeature } from '@/lib/map-config'
+import type { AgencyFilter } from '@/lib/map-shared'
+
+const AGENCY_LABELS: Record<AgencyFilter, string> = {
+  both: 'Impact',
+  nih: 'NIH Impact',
+  nsf: 'NSF Impact',
+}
 
 export default function MobileInfoCard({
   feature,
   perCapita,
+  agencyFilter = 'both',
   onSeeMore,
   onClose,
 }: {
   feature: SelectedFeature
   geoLabel: string
   perCapita: boolean
+  agencyFilter?: AgencyFilter
   onSeeMore: () => void
   onClose: () => void
 }) {
   const props = feature.properties
-  const impact = props.NIH_tot_econ_impact ?? 0
+  const impact = getBaselineValue(props, agencyFilter)
   const pop = props.pop_2024 ?? 0
 
   const pc = pop > 0 ? impact / pop : 0
@@ -28,7 +38,7 @@ export default function MobileInfoCard({
             {feature.id}
           </div>
           <div className="mt-0.5 text-xs text-gray-500">
-            <span>Impact: {formatCurrency(impact)}</span>
+            <span>{AGENCY_LABELS[agencyFilter]}: {formatCurrency(impact)}</span>
             <span className="mx-1.5 text-gray-300">&middot;</span>
             <span>Pop: {pop.toLocaleString()}</span>
             {perCapita && (

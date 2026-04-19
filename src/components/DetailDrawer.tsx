@@ -6,47 +6,114 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { METRICS, INSTITUTES, formatMetricValue } from '@/lib/constants'
 import type { Metric } from '@/lib/constants'
 import type { SelectedFeature } from '@/lib/map-config'
+import { NSF_DIRECTORATES, type AgencyFilter } from '@/lib/map-shared'
 
 const OTHER_KEY = 'Other'
 
 // --- Drawer content (institute breakdown) ---
 
+function getNsfMetricTotal(props: Record<string, number>, metric: Metric): number {
+  if (metric === 'jobs') return 0 // NSF has no jobs data in tiles
+  let sum = 0
+  for (const d of NSF_DIRECTORATES) {
+    sum += props[`NSF_${d.key}_${metric}`] ?? 0
+  }
+  return sum
+}
+
+function getSummaryCards(
+  props: Record<string, number>,
+  agencyFilter: AgencyFilter,
+  perCapita: boolean,
+  population: number,
+): { key: string; label: string; value: number }[] {
+  const adjust = (v: number) => (perCapita && population > 0 ? v / population : v)
+
+  if (agencyFilter === 'nih') {
+    return METRICS.map((m) => ({
+      key: m.key,
+      label: m.label,
+      value: adjust(props[`NIH_tot_${m.key}`] ?? 0),
+    }))
+  }
+
+  if (agencyFilter === 'nsf') {
+    // NSF has no jobs data — only show econ_impact and raw_funding
+    return METRICS.filter((m) => m.key !== 'jobs').map((m) => ({
+      key: m.key,
+      label: m.label,
+      value: adjust(getNsfMetricTotal(props, m.key)),
+    }))
+  }
+
+  // both: NIH + NSF totals
+  return METRICS.map((m) => {
+    const nih = props[`NIH_tot_${m.key}`] ?? 0
+    const nsf = getNsfMetricTotal(props, m.key)
+    return { key: m.key, label: m.label, value: adjust(nih + nsf) }
+  })
+}
+
 function DrawerBody({
   feature,
   perCapita,
+  agencyFilter = 'both',
 }: {
   feature: SelectedFeature
   perCapita: boolean
+  agencyFilter?: AgencyFilter
 }) {
   const [metric, setMetric] = useState<Metric>('econ_impact')
   const props = feature.properties
   const population = props.pop_2024 ?? 0
 
-  const rows = useMemo(() => {
+  // Available metrics for tabs — hide Jobs when NSF-only (no jobs data)
+  const availableMetrics = useMemo(
+    () => (agencyFilter === 'nsf' ? METRICS.filter((m) => m.key !== 'jobs') : METRICS),
+    [agencyFilter],
+  )
+
+  // Reset metric if current is unavailable
+  const activeMetric = availableMetrics.some((m) => m.key === metric) ? metric : availableMetrics[0].key
+
+  // NIH institute rows
+  const nihRows = useMemo(() => {
+    if (agencyFilter === 'nsf') return []
     const allRows = INSTITUTES.map((inst) => {
-      let value = props[`${inst.key}_${metric}`] ?? 0
+      let value = props[`${inst.key}_${activeMetric}`] ?? 0
       if (perCapita && population > 0) value = value / population
       return { ...inst, value }
     }).sort((a, b) => b.value - a.value)
 
-    const threshold = metric === 'jobs' ? 1 : 1_000
+    const threshold = activeMetric === 'jobs' ? 1 : 1_000
     const significant = allRows.filter((r) => Math.abs(r.value) >= threshold)
     const small = allRows.filter((r) => Math.abs(r.value) < threshold && r.value !== 0)
 
     if (small.length > 0) {
       const otherValue = small.reduce((sum, r) => sum + r.value, 0)
-      return [
-        ...significant,
-        { key: OTHER_KEY, name: OTHER_KEY, value: otherValue },
-      ]
+      return [...significant, { key: OTHER_KEY, name: OTHER_KEY, value: otherValue }]
     }
     return significant
-  }, [props, metric, perCapita, population])
+  }, [props, activeMetric, perCapita, population, agencyFilter])
 
-  const maxValue = rows[0]?.value ?? 1
+  // NSF directorate rows
+  const nsfRows = useMemo(() => {
+    if (agencyFilter === 'nih') return []
+    if (activeMetric === 'jobs') return [] // NSF has no jobs data
+    return NSF_DIRECTORATES
+      .map((d) => {
+        let value = props[`NSF_${d.key}_${activeMetric}`] ?? 0
+        if (perCapita && population > 0) value = value / population
+        return { key: d.key, name: d.name, value }
+      })
+      .filter((r) => r.value > 0)
+      .sort((a, b) => b.value - a.value)
+  }, [props, activeMetric, perCapita, population, agencyFilter])
 
-  let nihTotal = props[`NIH_tot_${metric}`] ?? 0
-  if (perCapita && population > 0) nihTotal = nihTotal / population
+  const summaryCards = useMemo(
+    () => getSummaryCards(props, agencyFilter, perCapita, population),
+    [props, agencyFilter, perCapita, population],
+  )
 
   return (
     <>
@@ -67,25 +134,21 @@ function DrawerBody({
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 gap-2 border-b px-4 py-3 sm:grid-cols-3 sm:gap-3 sm:px-5 sm:py-4">
-        {METRICS.map((m) => {
-          let val = props[`NIH_tot_${m.key}`] ?? 0
-          if (perCapita && population > 0) val = val / population
-          return (
-            <div key={m.key} className="rounded-lg bg-gray-50 px-3 py-2">
-              <div className="text-xs font-medium text-gray-500">{m.label}</div>
-              <div className="mt-0.5 text-sm font-semibold text-gray-900">
-                {formatMetricValue(val, m.key)}
-              </div>
+        {summaryCards.map((card) => (
+          <div key={card.key} className="rounded-lg bg-gray-50 px-3 py-2">
+            <div className="text-xs font-medium text-gray-500">{card.label}</div>
+            <div className="mt-0.5 text-sm font-semibold text-gray-900">
+              {formatMetricValue(card.value, card.key as Metric)}
             </div>
-          )
-        })}
+          </div>
+        ))}
       </div>
 
       {/* Metric tabs */}
       <div className="border-b px-5 py-3">
-        <Tabs value={metric} onValueChange={(val: string) => setMetric(val as Metric)}>
+        <Tabs value={activeMetric} onValueChange={(val: string) => setMetric(val as Metric)}>
           <TabsList>
-            {METRICS.map((m) => (
+            {availableMetrics.map((m) => (
               <TabsTrigger key={m.key} value={m.key}>
                 {m.label}
               </TabsTrigger>
@@ -94,46 +157,77 @@ function DrawerBody({
         </Tabs>
       </div>
 
-      {/* Institute breakdown */}
+      {/* Breakdown sections */}
       <div className="flex-1 overflow-y-auto px-5 py-3">
-        <div className="mb-2 flex items-baseline justify-between">
-          <span className="text-xs font-medium uppercase tracking-wide text-gray-400">
-            Institute Breakdown
-          </span>
-          <span className="text-xs text-gray-400">
-            Total: {formatMetricValue(nihTotal, metric)}
-            {perCapita ? ' per capita' : ''}
-          </span>
-        </div>
-        <div className="space-y-3">
-          {rows.map((row) => {
-            const pct = maxValue > 0 ? (row.value / maxValue) * 100 : 0
-            const t = maxValue > 0 ? row.value / maxValue : 0
-            return (
-              <div key={row.key}>
-                <div className="flex items-baseline justify-between gap-2 text-sm">
-                  <span className="font-medium text-gray-700">
-                    {row.key === OTHER_KEY ? OTHER_KEY : `${row.name} (${row.key})`}
-                  </span>
-                  <span className="shrink-0 text-xs tabular-nums text-gray-500">
-                    {formatMetricValue(row.value, metric)}
-                  </span>
-                </div>
-                <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-100">
-                  <div
-                    className="h-full rounded-full transition-all duration-300"
-                    style={{
-                      width: `${pct}%`,
-                      backgroundColor: interpolateBlues(0.3 + t * 0.7),
-                    }}
-                  />
-                </div>
-              </div>
-            )
-          })}
-        </div>
+        {nihRows.length > 0 && (
+          <BreakdownSection
+            title={agencyFilter === 'both' ? 'NIH Institutes' : 'Institute Breakdown'}
+            rows={nihRows}
+            metric={activeMetric}
+          />
+        )}
+        {nsfRows.length > 0 && (
+          <BreakdownSection
+            title={agencyFilter === 'both' ? 'NSF Directorates' : 'Directorate Breakdown'}
+            rows={nsfRows}
+            metric={activeMetric}
+          />
+        )}
       </div>
     </>
+  )
+}
+
+function BreakdownSection({
+  title,
+  rows,
+  metric,
+}: {
+  title: string
+  rows: { key: string; name: string; value: number }[]
+  metric: Metric
+}) {
+  const maxValue = rows[0]?.value ?? 1
+  const total = rows.reduce((sum, r) => sum + r.value, 0)
+
+  return (
+    <div className="mb-5 last:mb-0">
+      <div className="mb-2 flex items-baseline justify-between">
+        <span className="text-xs font-medium uppercase tracking-wide text-gray-400">
+          {title}
+        </span>
+        <span className="text-xs text-gray-400">
+          Total: {formatMetricValue(total, metric)}
+        </span>
+      </div>
+      <div className="space-y-3">
+        {rows.map((row) => {
+          const pct = maxValue > 0 ? (row.value / maxValue) * 100 : 0
+          const t = maxValue > 0 ? row.value / maxValue : 0
+          return (
+            <div key={row.key}>
+              <div className="flex items-baseline justify-between gap-2 text-sm">
+                <span className="font-medium text-gray-700">
+                  {row.key === OTHER_KEY ? OTHER_KEY : `${row.name} (${row.key})`}
+                </span>
+                <span className="shrink-0 text-xs tabular-nums text-gray-500">
+                  {formatMetricValue(row.value, metric)}
+                </span>
+              </div>
+              <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                <div
+                  className="h-full rounded-full transition-all duration-300"
+                  style={{
+                    width: `${pct}%`,
+                    backgroundColor: interpolateBlues(0.3 + t * 0.7),
+                  }}
+                />
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 
@@ -142,10 +236,12 @@ function DrawerBody({
 export default function DetailDrawer({
   feature,
   perCapita,
+  agencyFilter = 'both',
   onClose,
 }: {
   feature: SelectedFeature | null
   perCapita: boolean
+  agencyFilter?: AgencyFilter
   onClose: () => void
 }) {
   return (
@@ -162,7 +258,7 @@ export default function DetailDrawer({
           <Drawer.Popup className="fixed inset-y-0 right-0 w-full transition-transform duration-300 ease-out data-ending-style:translate-x-full data-starting-style:translate-x-full sm:w-105 sm:max-w-[calc(100vw-48px)]">
             <Drawer.Content className="flex h-full w-full flex-col overflow-hidden rounded-l-xl bg-white shadow-2xl">
               {feature && (
-                <DrawerBody feature={feature}  perCapita={perCapita} />
+                <DrawerBody feature={feature} perCapita={perCapita} agencyFilter={agencyFilter} />
               )}
             </Drawer.Content>
           </Drawer.Popup>
