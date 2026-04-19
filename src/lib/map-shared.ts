@@ -124,7 +124,8 @@ export function buildTooltipHeader(
   // Derive state_code (abbreviation used for legislator lookups)
   const stateCode = props.state_code != null ? String(props.state_code) : stateAbbr
 
-  const county = props.county != null ? String(props.county) : undefined
+  const countyRaw = props.county != null ? String(props.county) : undefined
+  const county = countyRaw && countyRaw !== 'NA' ? countyRaw : undefined
 
   let locationLine = stateName(stateAbbr)
   if (county) locationLine = `${county}, ${stateAbbr}`

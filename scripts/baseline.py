@@ -227,13 +227,20 @@ def run_wsl(cmd):
     return result.returncode
 
 
+def native_path(path):
+    """Return a WSL path on Windows, native path otherwise."""
+    if platform.system() == "Windows":
+        return to_wsl_path(path)
+    return os.path.abspath(path)
+
+
 def generate_tiles(geojson_path, tile_output_dir, zoom):
-    wsl_geojson = to_wsl_path(geojson_path)
-    wsl_tile_dir = to_wsl_path(tile_output_dir)
+    geojson_p = native_path(geojson_path)
+    tile_p = native_path(tile_output_dir)
     cmd = (
-        f"tippecanoe -z{zoom} -e {wsl_tile_dir} "
+        f"tippecanoe -z{zoom} -e {tile_p} "
         f"--drop-densest-as-needed --no-tile-size-limit --no-tile-compression "
-        f"{wsl_geojson}"
+        f"{geojson_p}"
         " --force"
     )
     rc = run_wsl(cmd)
@@ -243,8 +250,8 @@ def generate_tiles(geojson_path, tile_output_dir, zoom):
 
 
 def upload_tiles(tile_output_dir, remote_path):
-    wsl_tile_dir = to_wsl_path(tile_output_dir)
-    cmd = f"rclone copy {wsl_tile_dir}/ r2:scimap-data/{remote_path}/ --transfers 32"
+    tile_p = native_path(tile_output_dir)
+    cmd = f"rclone copy {tile_p}/ r2:scimap-data/{remote_path}/ --transfers 32"
     rc = run_wsl(cmd)
     if rc != 0:
         raise RuntimeError(f"rclone upload failed with exit code {rc}")

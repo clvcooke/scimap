@@ -98,5 +98,6 @@ export const FIPS_TO_STATE: Record<string, string> = {
 
 export function countyDisplayName(name: string, fipsId: string): string {
   const stateCode = FIPS_TO_STATE[fipsId.slice(0, 2).padStart(2, '0')]
-  return stateCode ? `${name}, ${stateCode}` : name
+  const displayName = name && name !== 'NA' ? name : `County ${fipsId}`
+  return stateCode ? `${displayName}, ${stateCode}` : displayName
 }

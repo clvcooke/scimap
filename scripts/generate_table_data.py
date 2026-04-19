@@ -74,9 +74,10 @@ def aggregate_csv(csv_path, id_col, name_col, state_col, sum_fields, prefix):
                 continue
 
             if rid not in regions:
-                # Derive name
-                if name_col and row.get(name_col):
-                    name = row[name_col]
+                # Derive name (treat "NA" as missing)
+                raw_name = row.get(name_col) if name_col else None
+                if raw_name and raw_name != "NA":
+                    name = raw_name
                 elif state_col and row.get(state_col):
                     name = f"{row[state_col]}-{rid[-2:]}"
                 else:
@@ -110,9 +111,15 @@ def merge_and_total(nih_regions, nsf_regions):
         nih = nih_regions.get(rid, {})
         nsf = nsf_regions.get(rid, {})
 
+        nih_name = nih.get("name")
+        nsf_name = nsf.get("name")
+        # Prefer whichever source has a real name (not "NA")
+        name = (nih_name if nih_name and nih_name != "NA" else None) or \
+               (nsf_name if nsf_name and nsf_name != "NA" else None) or rid
+
         entry = {
             "id": nih.get("id", nsf.get("id", rid)),
-            "name": nih.get("name", nsf.get("name", rid)),
+            "name": name,
             "pop_2024": nih.get("pop_2024", nsf.get("pop_2024", 0)),
             # NIH fields
             "nih_econ_impact": round(nih.get("nih_econ_impact", 0), 2),

@@ -31,8 +31,8 @@ function getBaselineDisplayName(tile: TileProperties, geoLevel: GeoLevel): strin
     case 'counties': {
       const name = tile.name as unknown as string | undefined
       const state = tile.state as unknown as string | undefined
-      if (name && state) return `${name}, ${state}`
-      if (name) return name
+      if (name && name !== 'NA' && state) return `${name}, ${state}`
+      if (name && name !== 'NA') return name
       return `County ${tile.FIPS ?? ''}`
     }
     case 'districts': {

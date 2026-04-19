@@ -101,9 +101,14 @@ For performance, color scales are pre-computed into `Uint8Array` lookup tables (
 
 Map pages persist viewport state (`lat`, `lng`, `zoom`, `showLocation`) in URL search params for shareable links. Validated at route level via `map-search-params.ts`.
 
-### Content management
+### Content management (NocapCMS)
 
-Markdown files in `/content` use YAML frontmatter. Loaded eagerly at build time by `src/lib/content.ts` using Vite's `import.meta.glob`. Content types: pages, news, articles, team bios, press releases.
+Content is managed through **NocapCMS**, a git-based headless CMS that commits directly to the repo (on the `cms` branch, merged to `main`). Non-technical team members edit content and upload images through the CMS UI — they do not edit code.
+
+- Markdown files in `/content` use YAML frontmatter. Loaded eagerly at build time by `src/lib/content.ts` using Vite's `import.meta.glob`. Content types: pages, news, articles, team bios, press releases.
+- **Images are uploaded through the CMS** — e.g., team photos (`photo` field), page images (`image` field). Image paths in frontmatter point to files in `public/images/` that the CMS commits.
+- When adding new content-managed fields (especially images), use YAML frontmatter attributes so the CMS can manage them. Do NOT put images inline in the markdown body — use a frontmatter field and render it in the component. Follow the pattern used by team member `photo` fields.
+- CMS commits follow the pattern: `Update Pages "slug"`, `Update Blog Posts "slug"`, etc.
 
 ## Conventions
 
