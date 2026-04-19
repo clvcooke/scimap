@@ -14,6 +14,23 @@ import { stateName, FIPS_TO_STATE } from './constants'
 
 export type LossGeoLevel = 'counties' | 'districts' | 'states'
 
+export type AgencyFilter = 'both' | 'nih' | 'nsf'
+
+// ── NSF Directorates ──────────────────────────────────────────────
+
+export const NSF_DIRECTORATES = [
+  { key: 'BIO', name: 'Biological Sciences' },
+  { key: 'CSE', name: 'Computer & Information Science' },
+  { key: 'EDU', name: 'STEM Education' },
+  { key: 'ENG', name: 'Engineering' },
+  { key: 'GEO', name: 'Geosciences' },
+  { key: 'MPS', name: 'Math & Physical Sciences' },
+  { key: 'OIA', name: 'Integrative Activities' },
+  { key: 'OISE', name: 'International Science & Engineering' },
+  { key: 'SBE', name: 'Social, Behavioral & Economic Sciences' },
+  { key: 'TIP', name: 'Technology, Innovation & Partnerships' },
+] as const
+
 export interface MapGeoConfig {
   tileUrl: string
   maxZoom: number

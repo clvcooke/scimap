@@ -64,7 +64,8 @@ function formatStat(value: number, format: 'currency' | 'number') {
 
 function locationLabel(props: TileProps, geoLevel: LossGeoLevel): string {
   const stateRaw = props.state != null ? String(props.state) : ''
-  const county = props.county != null ? String(props.county) : undefined
+  const countyRaw = props.county != null ? String(props.county) : undefined
+  const county = countyRaw && countyRaw !== 'NA' ? countyRaw : undefined
 
   if (geoLevel === 'districts' && props.GEOID) {
     const num = String(props.GEOID).slice(-2)

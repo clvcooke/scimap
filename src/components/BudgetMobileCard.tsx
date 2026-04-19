@@ -18,7 +18,8 @@ export default function BudgetMobileCard({
   onClose: () => void
 }) {
   const stateRaw = props.state != null ? String(props.state) : ''
-  const county = props.county != null ? String(props.county) : undefined
+  const countyRaw = props.county != null ? String(props.county) : undefined
+  const county = countyRaw && countyRaw !== 'NA' ? countyRaw : undefined
 
   let label = stateName(stateRaw)
   if (geoLevel === 'districts' && props.GEOID) {
