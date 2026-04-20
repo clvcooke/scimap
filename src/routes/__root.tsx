@@ -69,7 +69,7 @@ function MapsDropdown() {
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => setOpen(false)}
           >
-            Indirect Costs
+            Research Infrastructure
           </Link>
         </div>
       )}
@@ -183,7 +183,7 @@ function Header() {
             activeProps={{ className: 'pl-3 text-left border-l-2 border-brand-orange' }}
             onClick={() => setMenuOpen(false)}
           >
-            Indirect Costs
+            Research Infrastructure
           </Link>
 
           <Link

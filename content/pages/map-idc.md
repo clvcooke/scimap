@@ -1,5 +1,5 @@
 ---
-title: IDC
+title: Research Infrastructure Map
 blurb: See how proposed cuts to indirect cost recovery rates would affect research
   institutions and local economies across the country.
 heading: About This Map
