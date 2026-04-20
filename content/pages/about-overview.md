@@ -9,4 +9,6 @@ Our research explores how science funding supports innovation, jobs, education, 
 
 Through interactive data visualizations and actionable insights, we strive to make the consequence of complex policy decisions understandable to the public and policy makers.
 
-The team consists of experts from around the country, including researchers at the University of Maryland, the University of Pennsylvania, the University of Utah, the Georgia Institute of Technology, and the University of Oregon. The interdisciplinary team has expertise across a variety of areas including biology, data analytics, behavioural sciences, communication, and geographic information science.
+The team consists of experts from around the country, including researchers at the University of Maryland, the University of Pennsylvania, the University of Utah, the Georgia Institute of Technology, and the University of Oregon. The interdisciplinary team has expertise across a variety of areas including biology, data analytics, behavioral sciences, communication, and geographic information science.
+
+To learn more about our work, review the SCIMaP 2025 Annual Report.
