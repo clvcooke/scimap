@@ -9,7 +9,7 @@ description: Many active NIH and NSF grants have been **terminated or frozen**,
   **economic losses** that result from these grant terminations and more details
   about grants by institution. The map shows grants that are currently
   terminated or frozen (not including restored grants). Loss estimates are for
-  the current funding period of each grant -- actual multi-year impacts are even
+  the current funding period of each grant—actual multi-year impacts are even
   higher.
 data_sources:
   - "[Grant Witness](https://grant-witness.us)"
