@@ -109,6 +109,7 @@ Content is managed through **NocapCMS**, a git-based headless CMS that commits d
 - **Images are uploaded through the CMS** — e.g., team photos (`photo` field), page images (`image` field). Image paths in frontmatter point to files in `public/images/` that the CMS commits.
 - When adding new content-managed fields (especially images), use YAML frontmatter attributes so the CMS can manage them. Do NOT put images inline in the markdown body — use a frontmatter field and render it in the component. Follow the pattern used by team member `photo` fields.
 - CMS commits follow the pattern: `Update Pages "slug"`, `Update Blog Posts "slug"`, etc.
+- **Whenever you rejig content structure** (rename/add/remove frontmatter fields, change list item shapes, restructure a page, or add a new page under `content/pages/`), verify that `public/admin/config.yml` is updated to match. The CMS config and the actual frontmatter schemas must stay in sync — otherwise CMS editors see fields that don't render, or can't edit fields that do. Check both directions: every frontmatter field has a matching CMS field, and every CMS field corresponds to something the component actually reads.
 
 ## Conventions
 

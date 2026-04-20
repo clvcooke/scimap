@@ -140,48 +140,69 @@ collections:
           - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
           - { label: "Overview", name: "overview", widget: "text" }
 
-          - { label: "Data Sources Intro", name: "data_sources_intro", widget: "string" }
+          - { label: "Geolocating Grants — Intro", name: "geolocating_intro", widget: "text" }
+          - label: "Geolocating Grants — Details"
+            name: "geolocating_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Economic Multiplier — Intro", name: "economic_multiplier_intro", widget: "text" }
+          - label: "Economic Multiplier — Details"
+            name: "economic_multiplier_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Commuter Flows — Intro", name: "commuter_flows_intro", widget: "text" }
+          - label: "Commuter Flows — Details"
+            name: "commuter_flows_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Baseline — Intro", name: "baseline_intro", widget: "text" }
+          - label: "Baseline — Details"
+            name: "baseline_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "FY2027 Budget Cuts — Intro", name: "fy2027_intro", widget: "text" }
+          - label: "FY2027 Budget Cuts — Details"
+            name: "fy2027_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Disrupted Grants — Intro", name: "disrupted_intro", widget: "text" }
+          - label: "Disrupted Grants — Details"
+            name: "disrupted_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Indirect Costs — Intro", name: "indirect_costs_intro", widget: "text" }
+          - label: "Indirect Costs — Details"
+            name: "indirect_costs_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
           - label: "Data Sources"
             name: "data_sources"
             widget: "list"
             fields:
               - { label: "Name", name: "name", widget: "string" }
-              - { label: "Description", name: "desc", widget: "text" }
+              - { label: "URL", name: "url", widget: "string" }
 
-          - { label: "Economic Modeling Intro", name: "economic_intro", widget: "string" }
-          - label: "Economic Effects"
-            name: "economic_effects"
-            widget: "list"
-            fields:
-              - { label: "Title", name: "title", widget: "string" }
-              - { label: "Description", name: "desc", widget: "text" }
-          - { label: "Economic Callout", name: "economic_callout", widget: "string", required: false }
+      - name: about-detailed-analytics
+        label: "Methodology — Detailed Analytics Tab"
+        file: content/pages/about-detailed-analytics.md
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Image", name: "image", widget: "image", required: false }
+          - { label: "Body", name: "body", widget: "markdown" }
 
-          - { label: "Jobs Intro", name: "jobs_intro", widget: "string" }
-          - label: "Job Impacts"
-            name: "job_impacts"
-            widget: "list"
-            fields:
-              - { label: "Name", name: "name", widget: "string" }
-              - { label: "Description", name: "desc", widget: "text" }
-
-          - { label: "Spatial Analysis Intro", name: "spatial_intro", widget: "string" }
-          - label: "Spatial Analysis Items"
-            name: "spatial_items"
-            widget: "list"
-            field: { label: "Item", name: "item", widget: "string" }
-
-          - { label: "Transparency Intro", name: "transparency_intro", widget: "string" }
-          - label: "Transparency Items"
-            name: "transparency_items"
-            widget: "list"
-            field: { label: "Item", name: "item", widget: "string" }
-
-          - { label: "Limitations Intro", name: "limitations_intro", widget: "string" }
-          - label: "Limitations"
-            name: "limitations"
-            widget: "list"
-            field: { label: "Item", name: "item", widget: "string" }
+      - name: about-source-data
+        label: "Methodology — Source Data Tab"
+        file: content/pages/about-source-data.md
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Body", name: "body", widget: "markdown" }
 
       - name: insights
         label: "Insights"
@@ -213,34 +234,73 @@ collections:
         label: "Map — Baseline Funding"
         file: content/pages/map-baseline.md
         fields:
-          - { label: "Heading", name: "heading", widget: "string" }
-          - { label: "Description", name: "description", widget: "text" }
-          - label: "Data Sources"
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
             name: "data_sources"
             widget: "list"
-            field: { label: "Source", name: "source", widget: "string" }
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
 
       - name: map-fy26
         label: "Map — FY26 Budget"
         file: content/pages/map-fy26.md
         fields:
-          - { label: "Heading", name: "heading", widget: "string" }
-          - { label: "Description", name: "description", widget: "text" }
-          - label: "Data Sources"
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
             name: "data_sources"
             widget: "list"
-            field: { label: "Source", name: "source", widget: "string" }
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: map-fy27
+        label: "Map — FY27 Budget"
+        file: content/pages/map-fy27.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
 
       - name: map-grants
-        label: "Map — Grant Disruptions"
+        label: "Map — Grant Terminations"
         file: content/pages/map-grants.md
         fields:
-          - { label: "Heading", name: "heading", widget: "string" }
-          - { label: "Description", name: "description", widget: "text" }
-          - label: "Data Sources"
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
             name: "data_sources"
             widget: "list"
-            field: { label: "Source", name: "source", widget: "string" }
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: map-idc
+        label: "Map — Research Infrastructure (IDC)"
+        file: content/pages/map-idc.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: maps-index
+        label: "Maps — Gallery Index"
+        file: content/pages/maps-index.md
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
 
       - name: footer
         label: "Footer"
