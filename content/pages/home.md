@@ -8,29 +8,6 @@ hero_subtitle: The Science & Community Impacts Mapping Project (SCIMaP) reveals
 hero_cta_primary: View Impact Maps
 hero_cta_secondary: Learn More
 stakes_heading: What's At Stake
-metrics_heading: Current Nationwide Impact of Grant Terminations
-metrics:
-  - value: $11B
-    label: Economic Loss
-  - value: 49K
-    label: Jobs at Risk
-  - value: 2.5K
-    label: Grants Cancelled
-  - value: "50"
-    label: States Affected
-local_heading: See Impacts in Your Local Area
-why_paragraphs:
-  - Federal investment in science drives innovation, creates jobs, saves lives,
-    and improves quality of life for people like you across the country. Funding
-    cuts harm research institutions, local economies, and people in red and blue
-    states alike.
-  - SCIMaP transforms science funding policy decisions into visible impacts to
-    increase awareness and inform evidence-driven action in communities
-    nationwide.
-why_cta: See Research Insights
-who_heading: Who We Serve
-hero_subheading: Discover how federal science funding impacts research, health,
-  jobs, and economic activity across the U.S.
 stakes_paragraphs:
   - The **National Institutes of Health** (NIH) and **National Science
     Foundation** (NSF) fund scientific research that leads to major
@@ -47,9 +24,31 @@ stakes_paragraphs:
     jobs, and hiring freezes that harm people and local economies.
 
 
+metrics_heading: Current Nationwide Impact of Grant Terminations
+metrics:
+  - value: $11B
+    label: Economic Loss
+  - value: 49K
+    label: Jobs at Risk
+  - value: 2.5K
+    label: Grants Cancelled
+  - value: "50"
+    label: States Affected
+local_heading: See Impacts in Your Local Area
+why_heading: Why This Matters
+why_paragraphs:
+  - Federal investment in science drives innovation, creates jobs, saves lives,
+    and improves the quality of life. Funding cuts harm research institutions,
+    local economies, and people in red, purple, and blue districts.
+  - SCIMaP transforms science funding policy decisions into visible impacts to
+    increase awareness and inform evidence-driven action in communities
+    nationwide.
+why_cta: See Research Insights
+who_heading: Who We Serve
+hero_subheading: Discover how federal science funding impacts research, health,
+  jobs, and economic activity across the U.S.
 local_description: Enter your ZIP code to explore how the White House FY2027
   budget proposal will impact your local community.
-why_heading: Why This Matters
 who_items:
   - name: Policy Makers
     desc: Data-driven insights for informed decision making
