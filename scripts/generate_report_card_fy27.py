@@ -9,9 +9,11 @@ Sources:
   - data/2027/FY2027 NIH Budget/NIH_budget27_cong.csv  (district NIH)
   - data/2027/FY2027 NSF Budget/NSF_budget27_cong.csv  (district NSF)
   - data/2027/FY2027 NIH Budget/top5inst_budg27_cong.csv
+  - data/2027/FY2027 NSF Budget/NSF_budget27_cong_top5inst.csv
   - data/2027/FY2027 NIH Budget/NIH_budget27_state.csv  (state NIH)
   - data/2027/FY2027 NSF Budget/NSF_budget27_state.csv  (state NSF)
   - data/2027/FY2027 NIH Budget/top5inst_budg27_state.csv
+  - data/2027/FY2027 NSF Budget/NSF_budget27_state_top5inst.csv
   - src/data/report_card_info_fy26.json (reuse district/state bounds)
 
 Institute-level breakdowns (NIA, NCI, NIAID) are not yet available for FY27,
@@ -29,6 +31,70 @@ NSF_DATA_27 = ROOT / "data" / "2027" / "FY2027 NSF Budget"
 FY26_JSON = ROOT / "src" / "data" / "report_card_info_fy26.json"
 OUTPUT = ROOT / "src" / "data" / "report_card_info_fy27.json"
 STATE_OUTPUT = ROOT / "src" / "data" / "state_report_card_info_fy27.json"
+
+
+TOP_N = 3
+
+
+def _load_top_insts_by_district(
+    path: Path,
+    *,
+    name_col: str,
+    econ_col: str,
+    jobs_col: str,
+    econ_out: str,
+    jobs_out: str,
+) -> dict[str, list]:
+    """Aggregate institutions per district by name, sort by econ loss, take top N."""
+    buckets: dict[str, dict[str, dict]] = {}
+    with open(path, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            key = geoid_to_key(row["GEOID"])
+            if not key:
+                continue
+            name = row[name_col]
+            bucket = buckets.setdefault(key, {})
+            entry = bucket.setdefault(name, {"name": name, "econ": 0.0, "jobs": 0.0})
+            entry["econ"] += float(row[econ_col])
+            entry["jobs"] += float(row[jobs_col])
+    result: dict[str, list] = {}
+    for key, bucket in buckets.items():
+        ranked = sorted(bucket.values(), key=lambda e: e["econ"], reverse=True)[:TOP_N]
+        result[key] = [
+            {"org_name": e["name"], econ_out: e["econ"], jobs_out: e["jobs"]}
+            for e in ranked
+        ]
+    return result
+
+
+def _load_top_insts_by_state(
+    path: Path,
+    *,
+    state_col: str,
+    name_col: str,
+    econ_col: str,
+    jobs_col: str,
+    econ_out: str,
+    jobs_out: str,
+) -> dict[str, list]:
+    """Aggregate institutions per state by name, sort by econ loss, take top N."""
+    buckets: dict[str, dict[str, dict]] = {}
+    with open(path, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            code = row[state_col]
+            name = row[name_col]
+            bucket = buckets.setdefault(code, {})
+            entry = bucket.setdefault(name, {"name": name, "econ": 0.0, "jobs": 0.0})
+            entry["econ"] += float(row[econ_col])
+            entry["jobs"] += float(row[jobs_col])
+    result: dict[str, list] = {}
+    for code, bucket in buckets.items():
+        ranked = sorted(bucket.values(), key=lambda e: e["econ"], reverse=True)[:TOP_N]
+        result[code] = [
+            {"org_name": e["name"], econ_out: e["econ"], jobs_out: e["jobs"]}
+            for e in ranked
+        ]
+    return result
 
 
 def geoid_to_key(geoid_str: str) -> str:
@@ -106,24 +172,25 @@ def main():
                 districts[key]["budg_NIH_cuts_job_loss"] + nsf_jobs
             )
 
-    # Load top 5 institutions per district
-    top5_by_district: dict[str, list] = {}
-    with open(NIH_DATA_27 / "top5inst_budg27_cong.csv", encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            key = geoid_to_key(row["GEOID"])
-            if not key:
-                continue
-            if key not in top5_by_district:
-                top5_by_district[key] = []
-            top5_by_district[key].append({
-                "org_name": row["org_name"],
-                "budg_NIH_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
-                "budg_NIH_cuts_job_loss": float(row["jobs_budg_NIH_cuts"]),
-                # Institute breakdowns not yet available
-                "budg_NIA_cuts_econ_loss": 0,
-                "budg_NCI_cuts_econ_loss": 0,
-                "budg_NIAID_cuts_econ_loss": 0,
-            })
+    # Load top NIH institutions per district (top 3 after aggregating any dupes)
+    top_nih_by_district = _load_top_insts_by_district(
+        NIH_DATA_27 / "top5inst_budg27_cong.csv",
+        name_col="org_name",
+        econ_col="econ_budg_NIH_cuts",
+        jobs_col="jobs_budg_NIH_cuts",
+        econ_out="budg_NIH_cuts_econ_loss",
+        jobs_out="budg_NIH_cuts_job_loss",
+    )
+
+    # Load top NSF institutions per district
+    top_nsf_by_district = _load_top_insts_by_district(
+        NSF_DATA_27 / "NSF_budget27_cong_top5inst.csv",
+        name_col="inst_name",
+        econ_col="econ_budg_NSF_cuts",
+        jobs_col="jobs_budg_NSF_cuts",
+        econ_out="budg_NSF_cuts_econ_loss",
+        jobs_out="budg_NSF_cuts_job_loss",
+    )
 
     # Combine everything
     result = {}
@@ -137,7 +204,8 @@ def main():
         entry = {
             "district_bounds": fy26_entry["district_bounds"],
             "state_bounds": fy26_entry["state_bounds"],
-            "top_five_impact": top5_by_district.get(key, []),
+            "top_nih_impact": top_nih_by_district.get(key, []),
+            "top_nsf_impact": top_nsf_by_district.get(key, []),
             **district,
         }
         result[key] = entry
@@ -184,7 +252,8 @@ def build_state_result(districts: dict) -> dict:
                 "budg_NIA_cuts_econ_loss": 0,
                 "budg_NCI_cuts_econ_loss": 0,
                 "budg_NIAID_cuts_econ_loss": 0,
-                "top_five_impact": [],
+                "top_nih_impact": [],
+                "top_nsf_impact": [],
             }
 
     with open(NSF_DATA_27 / "NSF_budget27_state.csv", encoding="utf-8") as f:
@@ -203,21 +272,44 @@ def build_state_result(districts: dict) -> dict:
                 states[code]["budg_NIH_cuts_job_loss"] + nsf_jobs
             )
 
-    # top5 per state is keyed by full state_name, not state code
+    # NIH top institutions: file is keyed by full state_name, not state code.
     code_by_name = {v: k for k, v in name_by_code.items()}
+    nih_buckets: dict[str, dict[str, dict]] = {}
     with open(NIH_DATA_27 / "top5inst_budg27_state.csv", encoding="utf-8") as f:
         for row in csv.DictReader(f):
             code = code_by_name.get(row["state_name"])
             if code is None or code not in states:
                 continue
-            states[code]["top_five_impact"].append({
-                "org_name": row["org_name"],
-                "budg_NIH_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
-                "budg_NIH_cuts_job_loss": float(row["jobs_budg_NIH_cuts"]),
-                "budg_NIA_cuts_econ_loss": 0,
-                "budg_NCI_cuts_econ_loss": 0,
-                "budg_NIAID_cuts_econ_loss": 0,
-            })
+            bucket = nih_buckets.setdefault(code, {})
+            name = row["org_name"]
+            entry = bucket.setdefault(name, {"name": name, "econ": 0.0, "jobs": 0.0})
+            entry["econ"] += float(row["econ_budg_NIH_cuts"])
+            entry["jobs"] += float(row["jobs_budg_NIH_cuts"])
+    for code, bucket in nih_buckets.items():
+        ranked = sorted(bucket.values(), key=lambda e: e["econ"], reverse=True)[:TOP_N]
+        states[code]["top_nih_impact"] = [
+            {
+                "org_name": e["name"],
+                "budg_NIH_cuts_econ_loss": e["econ"],
+                "budg_NIH_cuts_job_loss": e["jobs"],
+            }
+            for e in ranked
+        ]
+
+    # NSF top institutions per state. The CSV lists rows per (state, district)
+    # so the same institution can appear multiple times — aggregate by name.
+    nsf_top_by_state = _load_top_insts_by_state(
+        NSF_DATA_27 / "NSF_budget27_state_top5inst.csv",
+        state_col="state",
+        name_col="inst_name",
+        econ_col="econ_budg_NSF_cuts",
+        jobs_col="jobs_budg_NSF_cuts",
+        econ_out="budg_NSF_cuts_econ_loss",
+        jobs_out="budg_NSF_cuts_job_loss",
+    )
+    for code, items in nsf_top_by_state.items():
+        if code in states:
+            states[code]["top_nsf_impact"] = items
 
     return states
 

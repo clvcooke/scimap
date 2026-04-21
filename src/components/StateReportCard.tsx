@@ -206,17 +206,35 @@ function InfoCard({ data }: { data: StateReportCardData }) {
         </div>
       </div>
 
-      {data.top_five_impact.length > 0 && (
-        <div>
+      {data.top_nih_impact.length > 0 && (
+        <div className="mb-4">
           <h3 className="mb-2 text-center text-xs font-semibold uppercase tracking-wide text-gray-700">
-            Top 5 Institutions Driving {data.state} Economic Loss
+            Top 3 NIH-Funded Institutions Driving {data.state} Economic Loss
           </h3>
           <div className="space-y-1 text-sm">
-            {data.top_five_impact.slice(0, 5).map((inst, i) => (
+            {data.top_nih_impact.slice(0, 3).map((inst, i) => (
               <div key={i} className="flex justify-between gap-2">
                 <span className="min-w-0 flex-1 text-gray-900">{inst.org_name}</span>
                 <span className="shrink-0 font-semibold text-red-700">
                   {formatCurrency(inst.budg_NIH_cuts_econ_loss)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {data.top_nsf_impact.length > 0 && (
+        <div>
+          <h3 className="mb-2 text-center text-xs font-semibold uppercase tracking-wide text-gray-700">
+            Top 3 NSF-Funded Institutions Driving {data.state} Economic Loss
+          </h3>
+          <div className="space-y-1 text-sm">
+            {data.top_nsf_impact.slice(0, 3).map((inst, i) => (
+              <div key={i} className="flex justify-between gap-2">
+                <span className="min-w-0 flex-1 text-gray-900">{inst.org_name}</span>
+                <span className="shrink-0 font-semibold text-red-700">
+                  {formatCurrency(inst.budg_NSF_cuts_econ_loss)}
                 </span>
               </div>
             ))}

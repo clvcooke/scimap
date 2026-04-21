@@ -3,13 +3,13 @@ import { DrawerPreview as Drawer } from '@base-ui/react/drawer'
 import { Link } from '@tanstack/react-router'
 import { interpolateOrRd } from 'd3-scale-chromatic'
 import { X, FileText } from 'lucide-react'
-import { formatCurrency, formatNumber, FIPS_TO_STATE } from '@/lib/constants'
+import { formatCurrency, formatNumber } from '@/lib/constants'
 import {
   getHouseRep,
   getSenatorsList,
   formatPoliticianName,
 } from '@/lib/legislature'
-import type { LossGeoLevel, TileProps } from '@/lib/map-shared'
+import { getLegislatorKeys, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
 import type { FiscalYear } from '@/lib/report-card-data'
 import { stateName } from '@/lib/constants'
 
@@ -43,18 +43,18 @@ export interface BudgetDrawerConfig {
 // ── Helpers ─────────────────────────────────────────────────────────
 
 
-/** Extract stateCode + districtId from tile props, deriving from GEOID if needed. */
-function getScorecardParams(props: TileProps): { stateCode: string; districtId: string } | null {
-  if (props.state_code && props.CD119FP) {
-    return { stateCode: String(props.state_code), districtId: String(props.CD119FP) }
+/** Extract scorecard search params from tile props for a given geo level. */
+function getScorecardParams(
+  props: TileProps,
+  geoLevel: LossGeoLevel,
+): { stateCode: string; districtId?: string } | null {
+  const { stateCode, cdFp } = getLegislatorKeys(props)
+  if (!stateCode) return null
+  if (geoLevel === 'districts') {
+    if (!cdFp) return null
+    return { stateCode, districtId: cdFp }
   }
-  if (props.GEOID) {
-    const geoid = String(props.GEOID).padStart(4, '0')
-    const fips = geoid.slice(0, 2)
-    const dist = geoid.slice(2)
-    const sc = FIPS_TO_STATE[fips]
-    if (sc) return { stateCode: sc, districtId: dist }
-  }
+  if (geoLevel === 'states') return { stateCode }
   return null
 }
 
@@ -78,9 +78,10 @@ function locationLabel(props: TileProps, geoLevel: LossGeoLevel): string {
 
 function PoliticianInfo({ props, geoLevel }: { props: TileProps; geoLevel: LossGeoLevel }) {
   const lines: ReactNode[] = []
+  const { stateCode, cdFp } = getLegislatorKeys(props)
 
-  if (geoLevel === 'districts' && props.state_code && props.CD119FP) {
-    const rep = getHouseRep(`${props.state_code}-${props.CD119FP}`)
+  if (geoLevel === 'districts' && stateCode && cdFp) {
+    const rep = getHouseRep(`${stateCode}-${cdFp}`)
     if (rep) {
       lines.push(
         <div key="rep" className="text-sm text-gray-500">
@@ -90,8 +91,8 @@ function PoliticianInfo({ props, geoLevel }: { props: TileProps; geoLevel: LossG
     }
   }
 
-  if ((geoLevel === 'districts' || geoLevel === 'states') && props.state_code) {
-    for (const s of getSenatorsList(String(props.state_code))) {
+  if ((geoLevel === 'districts' || geoLevel === 'states') && stateCode) {
+    for (const s of getSenatorsList(stateCode)) {
       lines.push(
         <div key={`sen-${s.name}`} className="text-sm text-gray-500">
           Sen: {formatPoliticianName(s.name, s.party)}
@@ -141,9 +142,9 @@ function DrawerBody({
         </Drawer.Close>
       </div>
 
-      {/* Scorecard link (districts only) */}
-      {geoLevel === 'districts' && (() => {
-        const sc = getScorecardParams(props)
+      {/* Scorecard link: districts always; states only on FY27 (only FY with state-level scorecards) */}
+      {(geoLevel === 'districts' || (geoLevel === 'states' && fiscalYear === 'fy27')) && (() => {
+        const sc = getScorecardParams(props, geoLevel)
         if (!sc) return null
         return (
           <div className="border-b px-5 py-2">

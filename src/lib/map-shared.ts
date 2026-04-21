@@ -124,14 +124,11 @@ export function positionTooltip(el: HTMLElement, x: number, y: number, container
 }
 
 /**
- * Build the common location + politician header HTML for a tooltip.
- * Returns `{ locationLine, politicianHtml }`.
+ * Derive the state code and congressional district keys used for legislator
+ * lookups, falling back to parsing FIPS/GEOID when tiles don't carry explicit
+ * `state_code` / `CD119FP` fields.
  */
-export function buildTooltipHeader(
-  props: TileProps,
-  geoLevel: LossGeoLevel,
-): { locationLine: string; politicianHtml: string } {
-  // Derive state abbreviation from explicit props or from FIPS/GEOID prefix
+export function getLegislatorKeys(props: TileProps): { stateCode: string; cdFp: string } {
   let stateAbbr = props.state != null ? String(props.state) : ''
   if (!stateAbbr && props.FIPS) {
     stateAbbr = FIPS_TO_STATE[String(props.FIPS).padStart(5, '0').slice(0, 2)] ?? ''
@@ -139,9 +136,23 @@ export function buildTooltipHeader(
   if (!stateAbbr && props.GEOID) {
     stateAbbr = FIPS_TO_STATE[String(props.GEOID).padStart(4, '0').slice(0, 2)] ?? ''
   }
-
-  // Derive state_code (abbreviation used for legislator lookups)
   const stateCode = props.state_code != null ? String(props.state_code) : stateAbbr
+  const cdFp = props.CD119FP != null
+    ? String(props.CD119FP)
+    : (props.GEOID ? String(props.GEOID).padStart(4, '0').slice(-2) : '')
+  return { stateCode, cdFp }
+}
+
+/**
+ * Build the common location + politician header HTML for a tooltip.
+ * Returns `{ locationLine, politicianHtml }`.
+ */
+export function buildTooltipHeader(
+  props: TileProps,
+  geoLevel: LossGeoLevel,
+): { locationLine: string; politicianHtml: string } {
+  const { stateCode, cdFp } = getLegislatorKeys(props)
+  const stateAbbr = props.state != null ? String(props.state) : stateCode
 
   const countyRaw = props.county != null ? String(props.county) : undefined
   const county = countyRaw && countyRaw !== 'NA' ? countyRaw : undefined
@@ -154,9 +165,6 @@ export function buildTooltipHeader(
     const distLabel = num === '00' ? 'At-Large' : num === '98' && stateAbbr === 'DC' ? 'No District' : `District ${parseInt(num, 10)}`
     locationLine = `${stateAbbr} (${distLabel})`
   }
-
-  // Derive CD119FP from explicit prop or last 2 digits of GEOID
-  const cdFp = props.CD119FP != null ? String(props.CD119FP) : (props.GEOID ? String(props.GEOID).padStart(4, '0').slice(-2) : '')
 
   let html = ''
   if (geoLevel === 'districts' && stateCode && cdFp) {

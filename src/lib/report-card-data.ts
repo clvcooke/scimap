@@ -10,19 +10,27 @@ interface Bounds {
   max_lat: number
 }
 
-export interface TopImpact {
+export interface TopNIHImpact {
   org_name: string
   budg_NIH_cuts_econ_loss: number
   budg_NIH_cuts_job_loss: number
-  budg_NIA_cuts_econ_loss: number
-  budg_NCI_cuts_econ_loss: number
-  budg_NIAID_cuts_econ_loss: number
+  // Only present on FY26 institution data
+  budg_NIA_cuts_econ_loss?: number
+  budg_NCI_cuts_econ_loss?: number
+  budg_NIAID_cuts_econ_loss?: number
+}
+
+export interface TopNSFImpact {
+  org_name: string
+  budg_NSF_cuts_econ_loss: number
+  budg_NSF_cuts_job_loss: number
 }
 
 export interface ReportCardDistrict {
   district_bounds: Bounds
   state_bounds: Bounds
-  top_five_impact: TopImpact[]
+  top_nih_impact: TopNIHImpact[]
+  top_nsf_impact: TopNSFImpact[]
   state: string
   state_code: string
   GEOID: number
@@ -38,6 +46,11 @@ export interface ReportCardDistrict {
   budg_NIAID_cuts_econ_loss: number
 }
 
+// FY26 JSON still uses `top_five_impact`; normalize on load.
+interface Fy26RawDistrict extends Omit<ReportCardDistrict, 'top_nih_impact' | 'top_nsf_impact'> {
+  top_five_impact: TopNIHImpact[]
+}
+
 export interface ReportCardData extends ReportCardDistrict {
   representativeName: string | null
   juniorSenator: string
@@ -46,9 +59,18 @@ export interface ReportCardData extends ReportCardDistrict {
 
 export type FiscalYear = 'fy26' | 'fy27'
 
+function normalizeFy26(raw: Record<string, Fy26RawDistrict>): Record<string, ReportCardDistrict> {
+  const out: Record<string, ReportCardDistrict> = {}
+  for (const [k, v] of Object.entries(raw)) {
+    const { top_five_impact, ...rest } = v
+    out[k] = { ...rest, top_nih_impact: top_five_impact ?? [], top_nsf_impact: [] }
+  }
+  return out
+}
+
 const dataByFy: Record<FiscalYear, Record<string, ReportCardDistrict>> = {
-  fy26: reportCardDataFy26 as Record<string, ReportCardDistrict>,
-  fy27: reportCardDataFy27 as Record<string, ReportCardDistrict>,
+  fy26: normalizeFy26(reportCardDataFy26 as unknown as Record<string, Fy26RawDistrict>),
+  fy27: reportCardDataFy27 as unknown as Record<string, ReportCardDistrict>,
 }
 
 export function getReportCardData(
@@ -102,7 +124,8 @@ export interface StateReportCardEntry {
   budg_NIA_cuts_econ_loss: number
   budg_NCI_cuts_econ_loss: number
   budg_NIAID_cuts_econ_loss: number
-  top_five_impact: TopImpact[]
+  top_nih_impact: TopNIHImpact[]
+  top_nsf_impact: TopNSFImpact[]
 }
 
 export interface StateReportCardData extends StateReportCardEntry {

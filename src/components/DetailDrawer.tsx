@@ -11,7 +11,6 @@ import { NSF_DIRECTORATES, type AgencyFilter } from '@/lib/map-shared'
 // --- Drawer content (agency breakdown) ---
 
 function getNsfMetricTotal(props: Record<string, number>, metric: Metric): number {
-  if (metric === 'jobs') return 0 // NSF has no jobs data in tiles
   let sum = 0
   for (const d of NSF_DIRECTORATES) {
     sum += props[`NSF_${d.key}_${metric}`] ?? 0
@@ -36,8 +35,7 @@ function getSummaryCards(
   }
 
   if (agencyFilter === 'nsf') {
-    // NSF has no jobs data — only show econ_impact and raw_funding
-    return METRICS.filter((m) => m.key !== 'jobs').map((m) => ({
+    return METRICS.map((m) => ({
       key: m.key,
       label: m.label,
       value: adjust(getNsfMetricTotal(props, m.key)),
@@ -65,20 +63,14 @@ function DrawerBody({
   const props = feature.properties
   const population = props.pop_2024 ?? 0
 
-  // Available metrics for tabs — hide Jobs when NSF-only (no jobs data)
-  const availableMetrics = useMemo(
-    () => (agencyFilter === 'nsf' ? METRICS.filter((m) => m.key !== 'jobs') : METRICS),
-    [agencyFilter],
-  )
-
-  // Reset metric if current is unavailable
-  const activeMetric = availableMetrics.some((m) => m.key === metric) ? metric : availableMetrics[0].key
+  const availableMetrics = METRICS
+  const activeMetric = metric
 
   // Agency breakdown rows (Total, NIH, NSF)
   const breakdownRows = useMemo(() => {
     const adjust = (v: number) => (perCapita && population > 0 ? v / population : v)
     const nih = adjust(props[`NIH_tot_${activeMetric}`] ?? 0)
-    const nsf = activeMetric === 'jobs' ? 0 : adjust(getNsfMetricTotal(props, activeMetric))
+    const nsf = adjust(getNsfMetricTotal(props, activeMetric))
 
     if (agencyFilter === 'nih') {
       return [{ key: 'NIH', name: 'National Institutes of Health', value: nih }]

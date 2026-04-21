@@ -25,7 +25,7 @@ export interface GeoConfig {
 // --- Tile configuration ---
 
 const DOMAIN = 'https://data.scienceimpacts.org'
-const TILE_VERSION = 'baseline-v4'
+const TILE_VERSION = 'baseline-v5'
 export const INITIAL_VIEW_STATE = {
   longitude: -98.5795,
   latitude: 39.8283,
@@ -100,13 +100,21 @@ function getNsfEconImpact(props: TileProperties): number {
   return sum
 }
 
+function getNsfJobs(props: TileProperties): number {
+  let sum = 0
+  for (const d of NSF_DIRECTORATES) {
+    sum += props[`NSF_${d.key}_jobs`] ?? 0
+  }
+  return sum
+}
+
 function getBaselineValue(props: TileProperties, agencyFilter: AgencyFilter): number {
   if (agencyFilter === 'nih') return props.NIH_tot_econ_impact ?? 0
   if (agencyFilter === 'nsf') return getNsfEconImpact(props)
   return (props.NIH_tot_econ_impact ?? 0) + getNsfEconImpact(props)
 }
 
-export { getNsfEconImpact, getBaselineValue }
+export { getNsfEconImpact, getNsfJobs, getBaselineValue }
 
 export function createBaselineLayer(
   config: GeoConfig,

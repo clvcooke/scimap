@@ -10,6 +10,7 @@ import {
   createColorScale,
   getBaselineValue,
   getNsfEconImpact,
+  getNsfJobs,
 } from '@/lib/map-config'
 import type { TileProperties, SelectedFeature } from '@/lib/map-config'
 import { DEFAULT_AGENCY_FILTER, type AgencyFilter, type MapGeoConfig, type TileProps } from '@/lib/map-shared'
@@ -90,9 +91,11 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
 
       if (agencyFilter === 'nsf') {
         const impact = getNsfEconImpact(tile)
+        const jobs = getNsfJobs(tile)
         return (
           `<div class="font-semibold">${displayName}</div>` +
           `<div>NSF Economic Impact: ${formatCurrency(impact)}</div>` +
+          (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
           `<div>Population: ${pop.toLocaleString()}</div>` +
           `<div class="text-xs mt-1 opacity-75">Click for details</div>`
         )
@@ -101,7 +104,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
       const impact = getBaselineValue(tile, 'both')
       const nihImpact = tile.NIH_tot_econ_impact ?? 0
       const nsfImpact = getNsfEconImpact(tile)
-      const jobs = tile.NIH_tot_jobs ?? 0
+      const jobs = (tile.NIH_tot_jobs ?? 0) + getNsfJobs(tile)
       return (
         `<div class="font-semibold">${displayName}</div>` +
         `<div>Total Economic Impact: ${formatCurrency(impact)}</div>` +
