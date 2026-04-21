@@ -12,6 +12,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 
 import { formatCurrency, formatNumber } from '@/lib/constants'
 import type { ReportCardData, FiscalYear } from '@/lib/report-card-data'
+import { FILL_ALPHA } from '@/lib/color-lut'
 import ColorScale from './ColorScale'
 
 // ── Constants ──────────────────────────────────────────────────────
@@ -25,8 +26,8 @@ const TILES_BY_FY = {
     colorProperty: 'budg_NIH_cuts_econ_loss',
   },
   fy27: {
-    districts: `${DOMAIN}/tiles_districts_budget27_v1/{z}/{x}/{y}.pbf`,
-    states: `${DOMAIN}/tiles_states_budget27_v1/{z}/{x}/{y}.pbf`,
+    districts: `${DOMAIN}/tiles_districts_budget27_v2/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget27_v2/{z}/{x}/{y}.pbf`,
     colorProperty: 'econ_budg_total_cuts',
   },
 } as const
@@ -77,8 +78,11 @@ function createMagmaLayer(
     pickable: false,
     uniqueIdProperty: uniqueProperty,
     maxZoom: 7,
-    getLineColor: [255, 255, 255, 60],
+    getLineColor: [255, 255, 255, FILL_ALPHA / 3],
+    getLineWidth: (f: { properties: Record<string, number | string> }) =>
+      highlightId != null && f.properties[uniqueProperty] == highlightId ? 2.5 : 1,
     lineWidthMinPixels: 1,
+    lineWidthUnits: 'pixels' as const,
     getFillColor: (f: { properties: Record<string, number> }) => {
       const v = f.properties[colorProperty] ?? 0
       const t = cs(v > 0 ? Math.log(v) : 0)
@@ -90,12 +94,11 @@ function createMagmaLayer(
             parseInt(c.slice(3, 5), 16),
             parseInt(c.slice(5, 7), 16),
           ]
-      const alpha =
-        highlightId != null && highlightId !== f.properties[uniqueProperty]
-          ? 160
-          : 200
-      return [rgb[0], rgb[1], rgb[2], alpha]
+      const isSelected =
+        highlightId != null && highlightId == f.properties[uniqueProperty]
+      return [rgb[0], rgb[1], rgb[2], isSelected ? FILL_ALPHA : 70]
     },
+    updateTriggers: { getFillColor: [highlightId], getLineWidth: [highlightId] },
   })
 }
 
@@ -375,7 +378,7 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
 
   const tiles = TILES_BY_FY[fiscalYear]
 
-  // District map layers
+  // District map layers — magma layer handles selection border directly.
   const districtLayers = useMemo(
     () => [
       createMagmaLayer(
@@ -386,7 +389,6 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
         data.GEOID,
         tiles.colorProperty,
       ),
-      createOutlineLayer(tiles.districts, 'GEOID', data.GEOID, 'rc-district-outline'),
     ],
     [data.GEOID, tiles],
   )
@@ -397,7 +399,7 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
       createMagmaLayer(
         tiles.states,
         STATE_DOMAIN,
-        'state_code',
+        'state',
         'rc-state-fill',
         data.state_code,
         tiles.colorProperty,

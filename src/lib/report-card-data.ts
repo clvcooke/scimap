@@ -1,5 +1,6 @@
 import reportCardDataFy26 from '@/data/report_card_info_fy26.json'
 import reportCardDataFy27 from '@/data/report_card_info_fy27.json'
+import stateReportCardDataFy27 from '@/data/state_report_card_info_fy27.json'
 import { getHouseRep, getSenatorsList, formatPoliticianName } from './legislature'
 
 interface Bounds {
@@ -82,4 +83,50 @@ export function getAvailableDistricts(fiscalYear: FiscalYear = 'fy26'): Record<s
     result[state].push(v.CD119FP)
   }
   return result
+}
+
+// ── State-level report cards ──────────────────────────────────────────
+
+export interface StateReportCardEntry {
+  state: string
+  state_code: string
+  state_bounds: Bounds
+  budg_NIH_cuts_econ_loss: number
+  budg_NIH_cuts_job_loss: number
+  budg_NSF_cuts_econ_loss: number
+  budg_total_cuts_econ_loss: number
+  budg_NIA_cuts_econ_loss: number
+  budg_NCI_cuts_econ_loss: number
+  budg_NIAID_cuts_econ_loss: number
+  top_five_impact: TopImpact[]
+}
+
+export interface StateReportCardData extends StateReportCardEntry {
+  juniorSenator: string
+  seniorSenator: string
+}
+
+// FY26 state data isn't generated yet; only FY27 has state-level cards.
+const stateDataByFy: Partial<Record<FiscalYear, Record<string, StateReportCardEntry>>> = {
+  fy27: stateReportCardDataFy27 as Record<string, StateReportCardEntry>,
+}
+
+export function getStateReportCardData(
+  stateCode: string,
+  fiscalYear: FiscalYear = 'fy27',
+): StateReportCardData | null {
+  const data = stateDataByFy[fiscalYear]
+  const entry = data?.[stateCode]
+  if (!entry) return null
+
+  const senators = getSenatorsList(stateCode)
+  return {
+    ...entry,
+    juniorSenator: senators[0]
+      ? formatPoliticianName(senators[0].name, senators[0].party)
+      : 'N/A',
+    seniorSenator: senators[1]
+      ? formatPoliticianName(senators[1].name, senators[1].party)
+      : 'N/A',
+  }
 }

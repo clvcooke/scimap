@@ -1,5 +1,15 @@
 import { useState, useRef, useEffect } from 'react'
 import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
+
+function useChromeless(): boolean {
+  // Subscribe to location changes so this re-evaluates on navigation.
+  // Read from window.location directly because TanStack Router parses
+  // search values as JSON (so `chromeless=true` becomes boolean `true`,
+  // and unvalidated params can be stripped).
+  useLocation()
+  if (typeof window === 'undefined') return false
+  return new URLSearchParams(window.location.search).get('chromeless') === 'true'
+}
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { getPage } from '@/lib/content'
 import ShareMenu from '@/components/ShareMenu'
@@ -248,11 +258,12 @@ function ScrollToTop() {
   return null
 }
 
-export const Route = createRootRoute({
-  component: () => (
+function RootLayout() {
+  const chromeless = useChromeless()
+  return (
     <div className="flex min-h-screen w-full flex-col bg-white">
       <ScrollToTop />
-      <Header />
+      {!chromeless && <Header />}
 
       <main className="relative flex w-full flex-1 flex-col">
         <Outlet />
@@ -331,5 +342,9 @@ export const Route = createRootRoute({
         </div>
       </footer>
     </div>
-  ),
+  )
+}
+
+export const Route = createRootRoute({
+  component: RootLayout,
 })

@@ -1,10 +1,17 @@
 """
-Generate report_card_info_fy27.json from FY27 NIH + NSF budget CSVs.
+Generate FY27 report card JSONs from NIH + NSF budget CSVs.
 
-Uses:
-  - data/2027/FY2027 NIH Budget/NIH_budget27_cong.csv  (district-level NIH totals)
-  - data/2027/FY2027 NSF Budget/NSF_budget27_cong.csv  (district-level NSF totals)
-  - data/2027/FY2027 NIH Budget/top5inst_budg27_cong.csv (top 5 institutions)
+Writes two files:
+  - src/data/report_card_info_fy27.json       (district-keyed, e.g. "AL-01")
+  - src/data/state_report_card_info_fy27.json (state-keyed, e.g. "AL")
+
+Sources:
+  - data/2027/FY2027 NIH Budget/NIH_budget27_cong.csv  (district NIH)
+  - data/2027/FY2027 NSF Budget/NSF_budget27_cong.csv  (district NSF)
+  - data/2027/FY2027 NIH Budget/top5inst_budg27_cong.csv
+  - data/2027/FY2027 NIH Budget/NIH_budget27_state.csv  (state NIH)
+  - data/2027/FY2027 NSF Budget/NSF_budget27_state.csv  (state NSF)
+  - data/2027/FY2027 NIH Budget/top5inst_budg27_state.csv
   - src/data/report_card_info_fy26.json (reuse district/state bounds)
 
 Institute-level breakdowns (NIA, NCI, NIAID) are not yet available for FY27,
@@ -21,6 +28,7 @@ NIH_DATA_27 = ROOT / "data" / "2027" / "FY2027 NIH Budget"
 NSF_DATA_27 = ROOT / "data" / "2027" / "FY2027 NSF Budget"
 FY26_JSON = ROOT / "src" / "data" / "report_card_info_fy26.json"
 OUTPUT = ROOT / "src" / "data" / "report_card_info_fy27.json"
+STATE_OUTPUT = ROOT / "src" / "data" / "state_report_card_info_fy27.json"
 
 
 def geoid_to_key(geoid_str: str) -> str:
@@ -131,6 +139,73 @@ def main():
         json.dump(result, f)
 
     print(f"Generated {OUTPUT} with {len(result)} districts")
+
+    state_result = build_state_result(result)
+    with open(STATE_OUTPUT, "w", encoding="utf-8") as f:
+        json.dump(state_result, f)
+    print(f"Generated {STATE_OUTPUT} with {len(state_result)} states")
+
+
+def build_state_result(districts: dict) -> dict:
+    """Assemble state-level entries from state CSVs + reused bounds."""
+    # state_bounds are identical across districts in the same state — grab
+    # one per state from whatever district we already built.
+    bounds_by_state: dict[str, dict] = {}
+    name_by_code: dict[str, str] = {}
+    for entry in districts.values():
+        code = entry["state_code"]
+        bounds_by_state.setdefault(code, entry["state_bounds"])
+        name_by_code.setdefault(code, entry["state"])
+
+    states: dict[str, dict] = {}
+
+    with open(NIH_DATA_27 / "NIH_budget27_state.csv", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            code = row["state"]
+            if code not in bounds_by_state:
+                continue
+            states[code] = {
+                "state": row["state_name"],
+                "state_code": code,
+                "state_bounds": bounds_by_state[code],
+                "budg_NIH_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
+                "budg_NIH_cuts_job_loss": float(row["jobs_budg_NIH_cuts"]),
+                "budg_NSF_cuts_econ_loss": 0.0,
+                "budg_total_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
+                "budg_NIA_cuts_econ_loss": 0,
+                "budg_NCI_cuts_econ_loss": 0,
+                "budg_NIAID_cuts_econ_loss": 0,
+                "top_five_impact": [],
+            }
+
+    with open(NSF_DATA_27 / "NSF_budget27_state.csv", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            code = row["state"]
+            if code not in states:
+                continue
+            nsf_econ = float(row["econ_budg_NSF_cuts"])
+            states[code]["budg_NSF_cuts_econ_loss"] = nsf_econ
+            states[code]["budg_total_cuts_econ_loss"] = (
+                states[code]["budg_NIH_cuts_econ_loss"] + nsf_econ
+            )
+
+    # top5 per state is keyed by full state_name, not state code
+    code_by_name = {v: k for k, v in name_by_code.items()}
+    with open(NIH_DATA_27 / "top5inst_budg27_state.csv", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            code = code_by_name.get(row["state_name"])
+            if code is None or code not in states:
+                continue
+            states[code]["top_five_impact"].append({
+                "org_name": row["org_name"],
+                "budg_NIH_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
+                "budg_NIH_cuts_job_loss": float(row["jobs_budg_NIH_cuts"]),
+                "budg_NIA_cuts_econ_loss": 0,
+                "budg_NCI_cuts_econ_loss": 0,
+                "budg_NIAID_cuts_econ_loss": 0,
+            })
+
+    return states
 
 
 if __name__ == "__main__":

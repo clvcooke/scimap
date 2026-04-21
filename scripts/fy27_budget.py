@@ -25,7 +25,7 @@ NIH_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NIH Budget")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NSF Budget")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "v1"
+TILE_VERSION = "v2"
 
 # ── Remote geo-reference data (Cloudflare R2) ────────────────────────
 R2_BASE = "https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data"
@@ -227,6 +227,8 @@ def save_geojson(geojson_data, output_path):
 
 def to_wsl_path(windows_path):
     abs_path = os.path.abspath(windows_path)
+    if platform.system() != "Windows":
+        return abs_path
     drive = abs_path[0].lower()
     rest = abs_path[2:].replace("\\", "/")
     return f"/mnt/{drive}{rest}"
