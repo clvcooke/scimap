@@ -61,5 +61,5 @@ who_items:
   - name: Advocacy Groups
     desc: Evidence-based resources for advocacy campaigns
   - name: The Public
-    desc: Tools to explore the local impacts of science funding
+    desc: Tools to explore the impacts on your local area
 ---
