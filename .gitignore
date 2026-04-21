@@ -24,4 +24,4 @@ outputs
 *.sln
 *.sw?
 test-results
-/data/
+/data/*
