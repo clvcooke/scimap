@@ -12,6 +12,6 @@ idc_intro: This is an archived analysis of 2025 proposed policies to reduce NIH
   funding for research infrastructure (Indirect Costs, IDC). This interactive
   map shows the economic impact of the proposed cuts across research
   institutions and communities nationwide. For a current analysis with 2026
-  policy proposals, see the current [Research Infrastructure
-  map](https://scienceimpacts.org/idc).
+  policy proposals, see the Research Infrastructure map under the Impact Maps
+  tab above.
 ---
