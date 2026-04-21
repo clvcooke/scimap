@@ -40,12 +40,9 @@ summary: >+
 
   About the Analysis: SCIMaP connects federal grant records to local economic activity when accounting for the downstream effects of federal R&D spending. In brief, SCIMaP uses NIH and NSF reporting data on grants and budgets to establish inflation-adjusted baseline support for science and medical research, including information on the geographic distribution of funds and the multiplier effect of R&D. This baseline support informs our analysis of the expected economic loss in local communities when accounting for where people work and live. We integrate these economic impact estimates with Census data on commuter flows to show the broader impacts on communities beyond research institutions. The project’s full technical documentation and underlying data are publicly available at scienceimpacts.org. 
 
+                                                                                 ###
 
-  To learn more about the data and how to use the maps, join us for a SCIMaP Webinar on May 7, 2026 at 12:00pm eastern time. Register here.
-
-
-  *About SCIMaP: The Science and Community Impacts Mapping Project analyzes the economic effects of federal policy changes to science and medical research funding on U.S. communities. Based in College Park, Maryland, SCIMaP was launched in March 2025 and brings together an interdisciplinary team of researchers from the University of Maryland, University of Pennsylvania, Georgia Tech, University of Utah, and University of Oregon, supported, in part, by grants from Coefficient Giving and the Burroughs Wellcome Fund.*
-                                                                                ###
+  *About SCIMaP: The Science and Community Impacts Mapping Project analyzes the economic effects of federal policy changes to science and medical research funding on U.S. communities. Based in College Park, Maryland, SCIMaP was launched in March 2025 and brings together an interdisciplinary team of researchers from the University of Maryland, University of Pennsylvania, Georgia Tech, University of Utah, and University of Oregon, supported, in part, by grants from Coefficient Giving and the Burroughs Wellcome Fund.*                                                                               
 
 image: /images/lvsfy-combined-economic-impacts-from-nih-and-nsf-losses-at-the-state-level-2-.png
 url: scienceimpacts.org
