@@ -24,16 +24,16 @@ stakes_paragraphs:
     jobs, and hiring freezes that harm people and local economies.
 
 
-metrics_heading: Current Nationwide Impact of Grant Terminations
+metrics_heading: Current Nationwide Impacts
 metrics:
-  - value: $11B
-    label: Economic Loss
-  - value: 49K
-    label: Jobs at Risk
-  - value: 2.5K
-    label: Grants Cancelled
-  - value: "50"
-    label: States Affected
+  - value: $31.8B
+    label: Combined NIH/NSF Economic Loss from Budget
+  - value: 140K
+    label: Combined NIH/NSF Jobs Lost from Budget
+  - value: 7,165
+    label: "Cumulative # of Grants Cancelled"
+  - value: $19.7B
+    label: Cumulative Economic Loss from Terminated or Frozen Grants
 local_heading: See Impacts in Your Local Area
 why_heading: Why This Matters
 why_paragraphs:
