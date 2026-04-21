@@ -79,8 +79,11 @@ collections:
       - { label: "Display Order", name: "order", widget: "number", value_type: "int" }
       - { label: "Blurb", name: "body", widget: "markdown" }
 
-  - name: pages
-    label: Pages
+  # ─────────────────────────────────────────────────────────────────
+  # Site Pages — home, about, contact, take-action, insights landing, footer
+  # ─────────────────────────────────────────────────────────────────
+  - name: site-pages
+    label: "Site Pages"
     files:
       - name: home
         label: "Home Page"
@@ -124,7 +127,7 @@ collections:
               - { label: "Description", name: "desc", widget: "text" }
 
       - name: about-overview
-        label: "About — Overview"
+        label: "About Page"
         file: content/pages/about-overview.md
         fields:
           - { label: "Title", name: "title", widget: "string" }
@@ -132,8 +135,151 @@ collections:
           - { label: "Video Heading", name: "video_heading", widget: "string", required: false }
           - { label: "Body", name: "body", widget: "markdown" }
 
+      - name: insights-landing
+        label: "Insights Landing Page"
+        file: content/pages/insights.md
+        fields:
+          - { label: "Research Intro", name: "research_intro", widget: "text" }
+          - { label: "Substack Heading", name: "substack_heading", widget: "string" }
+          - { label: "Substack Description", name: "substack_description", widget: "text" }
+          - { label: "Substack URL", name: "substack_url", widget: "string" }
+          - { label: "Substack Button Text", name: "substack_button_text", widget: "string" }
+          - { label: "IDC Intro", name: "idc_intro", widget: "text" }
+
+      - name: contact
+        label: "Contact Page"
+        file: content/pages/contact.md
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
+          - label: "Contact Cards"
+            name: "contacts"
+            widget: "list"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Icon", name: "icon", widget: "select", options: ["mail", "newspaper"], default: "mail" }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Email", name: "email", widget: "string" }
+
+      - name: take-action
+        label: "Take Action Page"
+        file: content/pages/take-action.md
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "text" }
+          - { label: "Contact Heading", name: "contact_heading", widget: "string" }
+          - { label: "Contact Intro", name: "contact_intro", widget: "text", hint: "Supports inline markdown" }
+          - { label: "Contact Link URL", name: "contact_link", widget: "string" }
+          - { label: "Contact Link Text", name: "contact_link_text", widget: "string" }
+          - label: "Talking Points"
+            name: "talking_points"
+            widget: "list"
+            field: { label: "Point", name: "point", widget: "text", hint: "Supports inline markdown" }
+          - { label: "Share Heading", name: "share_heading", widget: "string" }
+          - { label: "Share Intro", name: "share_intro", widget: "text" }
+          - label: "Partner Organizations"
+            name: "organizations"
+            widget: "list"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "URL", name: "url", widget: "string" }
+
+      - name: footer
+        label: "Site Footer"
+        file: content/pages/footer.md
+        fields:
+          - { label: "Site Name", name: "site_name", widget: "string" }
+          - { label: "Tagline", name: "tagline", widget: "text" }
+          - { label: "Press Email", name: "press_email", widget: "string" }
+          - { label: "Contact Email", name: "contact_email", widget: "string" }
+          - { label: "Organization Line", name: "org_line", widget: "text" }
+
+  # ─────────────────────────────────────────────────────────────────
+  # Map Pages — one entry per map, plus the maps gallery index
+  # ─────────────────────────────────────────────────────────────────
+  - name: map-pages
+    label: "Map Pages"
+    files:
+      - name: maps-index
+        label: "Maps Gallery (Index)"
+        file: content/pages/maps-index.md
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+
+      - name: map-baseline
+        label: "Baseline Funding Map"
+        file: content/pages/map-baseline.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: map-fy26
+        label: "FY26 Budget Impact Map"
+        file: content/pages/map-fy26.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: map-fy27
+        label: "FY27 Budget Impact Map"
+        file: content/pages/map-fy27.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: map-grants
+        label: "Grant Terminations Map"
+        file: content/pages/map-grants.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: map-idc
+        label: "Research Infrastructure (IDC) Map"
+        file: content/pages/map-idc.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+  # ─────────────────────────────────────────────────────────────────
+  # Methodology Pages — the main methodology page + its two tabs
+  # ─────────────────────────────────────────────────────────────────
+  - name: methodology-pages
+    label: "Methodology Pages"
+    files:
       - name: methodology
-        label: Methodology
+        label: "Methodology (Main)"
         file: content/pages/methodology.md
         fields:
           - { label: "Hero Title", name: "hero_title", widget: "string" }
@@ -190,7 +336,7 @@ collections:
               - { label: "URL", name: "url", widget: "string" }
 
       - name: about-detailed-analytics
-        label: "Methodology — Detailed Analytics Tab"
+        label: "Detailed Analytics Tab"
         file: content/pages/about-detailed-analytics.md
         fields:
           - { label: "Title", name: "title", widget: "string" }
@@ -198,116 +344,8 @@ collections:
           - { label: "Body", name: "body", widget: "markdown" }
 
       - name: about-source-data
-        label: "Methodology — Source Data Tab"
+        label: "Source Data Tab"
         file: content/pages/about-source-data.md
         fields:
           - { label: "Title", name: "title", widget: "string" }
           - { label: "Body", name: "body", widget: "markdown" }
-
-      - name: insights
-        label: "Insights"
-        file: content/pages/insights.md
-        fields:
-          - { label: "Research Intro", name: "research_intro", widget: "text" }
-          - { label: "Substack Heading", name: "substack_heading", widget: "string" }
-          - { label: "Substack Description", name: "substack_description", widget: "text" }
-          - { label: "Substack URL", name: "substack_url", widget: "string" }
-          - { label: "Substack Button Text", name: "substack_button_text", widget: "string" }
-          - { label: "IDC Intro", name: "idc_intro", widget: "text" }
-
-      - name: contact
-        label: "Contact"
-        file: content/pages/contact.md
-        fields:
-          - { label: "Hero Title", name: "hero_title", widget: "string" }
-          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
-          - label: "Contact Cards"
-            name: "contacts"
-            widget: "list"
-            fields:
-              - { label: "Heading", name: "heading", widget: "string" }
-              - { label: "Icon", name: "icon", widget: "select", options: ["mail", "newspaper"], default: "mail" }
-              - { label: "Description", name: "description", widget: "text" }
-              - { label: "Email", name: "email", widget: "string" }
-
-      - name: map-baseline
-        label: "Map — Baseline Funding"
-        file: content/pages/map-baseline.md
-        fields:
-          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
-          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
-          - { label: "About Popup — Heading", name: "heading", widget: "string" }
-          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
-          - label: "About Popup — Data Sources"
-            name: "data_sources"
-            widget: "list"
-            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
-
-      - name: map-fy26
-        label: "Map — FY26 Budget"
-        file: content/pages/map-fy26.md
-        fields:
-          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
-          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
-          - { label: "About Popup — Heading", name: "heading", widget: "string" }
-          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
-          - label: "About Popup — Data Sources"
-            name: "data_sources"
-            widget: "list"
-            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
-
-      - name: map-fy27
-        label: "Map — FY27 Budget"
-        file: content/pages/map-fy27.md
-        fields:
-          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
-          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
-          - { label: "About Popup — Heading", name: "heading", widget: "string" }
-          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
-          - label: "About Popup — Data Sources"
-            name: "data_sources"
-            widget: "list"
-            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
-
-      - name: map-grants
-        label: "Map — Grant Terminations"
-        file: content/pages/map-grants.md
-        fields:
-          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
-          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
-          - { label: "About Popup — Heading", name: "heading", widget: "string" }
-          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
-          - label: "About Popup — Data Sources"
-            name: "data_sources"
-            widget: "list"
-            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
-
-      - name: map-idc
-        label: "Map — Research Infrastructure (IDC)"
-        file: content/pages/map-idc.md
-        fields:
-          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
-          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
-          - { label: "About Popup — Heading", name: "heading", widget: "string" }
-          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
-          - label: "About Popup — Data Sources"
-            name: "data_sources"
-            widget: "list"
-            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
-
-      - name: maps-index
-        label: "Maps — Gallery Index"
-        file: content/pages/maps-index.md
-        fields:
-          - { label: "Title", name: "title", widget: "string" }
-          - { label: "Description", name: "description", widget: "text" }
-
-      - name: footer
-        label: "Footer"
-        file: content/pages/footer.md
-        fields:
-          - { label: "Site Name", name: "site_name", widget: "string" }
-          - { label: "Tagline", name: "tagline", widget: "text" }
-          - { label: "Press Email", name: "press_email", widget: "string" }
-          - { label: "Contact Email", name: "contact_email", widget: "string" }
-          - { label: "Organization Line", name: "org_line", widget: "text" }
