@@ -31,9 +31,9 @@ metrics:
   - value: 150K
     label: Combined NIH/NSF Jobs Lost from FY2027 White House Budget Proposal
   - value: 7,165
-    label: "Cumulative # of Grants Cancelled"
+    label: "Cumulative # of NIH & NSF Grants Cancelled"
   - value: $19.7B
-    label: Cumulative Economic Loss from Terminated or Frozen Grants
+    label: Cumulative Economic Impact from Terminated or Frozen Grants
 local_heading: See Impacts in Your Local Area
 why_heading: Why This Matters
 why_paragraphs:
