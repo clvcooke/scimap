@@ -73,6 +73,12 @@ def aggregate_csv(csv_path, id_col, name_col, state_col, sum_fields, prefix):
             if not rid:
                 continue
 
+            # NIH CSVs contain per-IC rows (NCI, NEI, …) plus an aggregate
+            # `NIH_tot` row that already sums them — skip it or every metric
+            # gets counted twice.
+            if row.get("funding_ics") == "NIH_tot":
+                continue
+
             if rid not in regions:
                 # Derive name (treat "NA" as missing)
                 raw_name = row.get(name_col) if name_col else None
