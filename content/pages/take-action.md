@@ -16,15 +16,18 @@ talking_points:
     big impact.
   - Federally funded scientific and medical research improves health, drives
     innovation, creates jobs, and grows the economy.
-  - Every dollar invested in scientific research through NIH produces, on
-    average, $2.57 of economic activity in return – **over a 250% gain**.
+  - Investing in science generates over **250% in gains** economically. On
+    average, $1,000 invested in scientific research through NIH produces $2,570
+    of new economic activity in return. Similarly, every $1,000 invested in NSF
+    produces, on average, $2,640 of economic activity.
   - NIH research supports over 400,000 jobs across the U.S.
   - Reducing research infrastructure funding (15% indirect cost rate) would
     undermine the ability of universities, hospitals, and research institutes to
-    conduct life saving, medical research.
-  - Cancelling or freezing grants wastes funds by interrupting ongoing research
-    projects, including active clinical trials, at institutions across the
-    country.
+    conduct life saving medical research and make scientific discoveries that
+    better the lives of all Americans.
+  - Cancelling or freezing research grants wastes taxpayer dollars by
+    interrupting ongoing research projects, including active clinical trials, at
+    institutions across the country.
 share_heading: Share with Friends, Family, and Followers
 share_intro: "We encourage you to share the SCIMaP website with friends, family,
   and followers. You can learn more about science impacts in your community from
