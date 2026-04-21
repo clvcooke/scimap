@@ -90,8 +90,9 @@ fy2027_details:
     to funding in the form of grant freezes and terminations). We report the
     total economic losses across Offices and Directorates.
   - We proceed similarly for NIH, comparing the proposed FY2027 research budget
-    to the FY2020-FY2024 budget without disaggregating by Institutes and
-    Centers. All dollar values are inflation-adjusted to 2026.
+    to the FY2020-FY2024 budget for extramural research (research and training
+    grants) disaggregating by Institutes and Centers. All dollar values are
+    inflation-adjusted to 2026.
 disrupted_intro: Many NIH and NSF grants for biomedical and scientific research
   have already been cancelled (formally terminated) or frozen (funds withheld
   without justification), interrupting ongoing studies and clinical trials.
