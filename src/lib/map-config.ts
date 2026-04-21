@@ -37,14 +37,6 @@ export const INITIAL_VIEW_STATE = {
 }
 
 export const GEO_LEVELS: Record<GeoLevel, GeoConfig> = {
-  states: {
-    tileUrl: `${DOMAIN}/tiles_states_baseline_${TILE_VERSION}/{z}/{x}/{y}.pbf`,
-    maxZoom: 7,
-    uniqueIdProperty: 'state',
-    label: 'States',
-    totalDomain: [10_000, 2_500_000_000],
-    perCapitaDomain: [50, 5_000],
-  },
   counties: {
     tileUrl: `${DOMAIN}/tiles_counties_baseline_${TILE_VERSION}/{z}/{x}/{y}.pbf`,
     maxZoom: 9,
@@ -60,6 +52,14 @@ export const GEO_LEVELS: Record<GeoLevel, GeoConfig> = {
     label: 'Districts',
     totalDomain: [250_000, 50_000_000],
     perCapitaDomain: [10, 5_000],
+  },
+  states: {
+    tileUrl: `${DOMAIN}/tiles_states_baseline_${TILE_VERSION}/{z}/{x}/{y}.pbf`,
+    maxZoom: 7,
+    uniqueIdProperty: 'state',
+    label: 'States',
+    totalDomain: [10_000, 2_500_000_000],
+    perCapitaDomain: [50, 5_000],
   },
   // cities: {
   //   tileUrl: `${DOMAIN}/tiles_cities_baseline_${TILE_VERSION}/{z}/{x}/{y}.pbf`,

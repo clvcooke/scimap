@@ -9,7 +9,7 @@ import MapFocusOverlay from '@/components/MapFocusOverlay'
 import MapZipSearch from '@/components/MapZipSearch'
 import type { MapAboutContent } from '@/components/ChoroplethMap'
 
-export const Route = createFileRoute('/map')({
+export const Route = createFileRoute('/baseline')({
   component: MapRoute,
   validateSearch: validateMapSearch,
 })
@@ -30,7 +30,7 @@ function MapRoute() {
           <MapFocusOverlay />
         </div>
       </div>
-      <MapZipSearch mapRoute="/map" />
+      <MapZipSearch mapRoute="/baseline" />
       <MapAttribution />
       <FundingTable />
     </>

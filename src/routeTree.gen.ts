@@ -14,13 +14,13 @@ import { Route as ScorecardRouteImport } from './routes/scorecard'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as MethodologyRouteImport } from './routes/methodology'
 import { Route as MapsRouteImport } from './routes/maps'
-import { Route as MapRouteImport } from './routes/map'
 import { Route as IdcRouteImport } from './routes/idc'
 import { Route as GrantsRouteImport } from './routes/grants'
 import { Route as Fy27RouteImport } from './routes/fy27'
 import { Route as Fy26RouteImport } from './routes/fy26'
 import { Route as ExportPreviewRouteImport } from './routes/export-preview'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BaselineRouteImport } from './routes/baseline'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InsightsIndexRouteImport } from './routes/insights/index'
@@ -49,11 +49,6 @@ const MethodologyRoute = MethodologyRouteImport.update({
 const MapsRoute = MapsRouteImport.update({
   id: '/maps',
   path: '/maps',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MapRoute = MapRouteImport.update({
-  id: '/map',
-  path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IdcRoute = IdcRouteImport.update({
@@ -86,6 +81,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BaselineRoute = BaselineRouteImport.update({
+  id: '/baseline',
+  path: '/baseline',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -110,13 +110,13 @@ const InsightsSlugRoute = InsightsSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/baseline': typeof BaselineRoute
   '/contact': typeof ContactRoute
   '/export-preview': typeof ExportPreviewRoute
   '/fy26': typeof Fy26Route
   '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
   '/idc': typeof IdcRoute
-  '/map': typeof MapRoute
   '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
@@ -128,13 +128,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/baseline': typeof BaselineRoute
   '/contact': typeof ContactRoute
   '/export-preview': typeof ExportPreviewRoute
   '/fy26': typeof Fy26Route
   '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
   '/idc': typeof IdcRoute
-  '/map': typeof MapRoute
   '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
@@ -147,13 +147,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/baseline': typeof BaselineRoute
   '/contact': typeof ContactRoute
   '/export-preview': typeof ExportPreviewRoute
   '/fy26': typeof Fy26Route
   '/fy27': typeof Fy27Route
   '/grants': typeof GrantsRoute
   '/idc': typeof IdcRoute
-  '/map': typeof MapRoute
   '/maps': typeof MapsRoute
   '/methodology': typeof MethodologyRoute
   '/news': typeof NewsRoute
@@ -167,13 +167,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/baseline'
     | '/contact'
     | '/export-preview'
     | '/fy26'
     | '/fy27'
     | '/grants'
     | '/idc'
-    | '/map'
     | '/maps'
     | '/methodology'
     | '/news'
@@ -185,13 +185,13 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/baseline'
     | '/contact'
     | '/export-preview'
     | '/fy26'
     | '/fy27'
     | '/grants'
     | '/idc'
-    | '/map'
     | '/maps'
     | '/methodology'
     | '/news'
@@ -203,13 +203,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/baseline'
     | '/contact'
     | '/export-preview'
     | '/fy26'
     | '/fy27'
     | '/grants'
     | '/idc'
-    | '/map'
     | '/maps'
     | '/methodology'
     | '/news'
@@ -222,13 +222,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BaselineRoute: typeof BaselineRoute
   ContactRoute: typeof ContactRoute
   ExportPreviewRoute: typeof ExportPreviewRoute
   Fy26Route: typeof Fy26Route
   Fy27Route: typeof Fy27Route
   GrantsRoute: typeof GrantsRoute
   IdcRoute: typeof IdcRoute
-  MapRoute: typeof MapRoute
   MapsRoute: typeof MapsRoute
   MethodologyRoute: typeof MethodologyRoute
   NewsRoute: typeof NewsRoute
@@ -275,13 +275,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MapsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/map': {
-      id: '/map'
-      path: '/map'
-      fullPath: '/map'
-      preLoaderRoute: typeof MapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/idc': {
       id: '/idc'
       path: '/idc'
@@ -324,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/baseline': {
+      id: '/baseline'
+      path: '/baseline'
+      fullPath: '/baseline'
+      preLoaderRoute: typeof BaselineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -358,13 +358,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BaselineRoute: BaselineRoute,
   ContactRoute: ContactRoute,
   ExportPreviewRoute: ExportPreviewRoute,
   Fy26Route: Fy26Route,
   Fy27Route: Fy27Route,
   GrantsRoute: GrantsRoute,
   IdcRoute: IdcRoute,
-  MapRoute: MapRoute,
   MapsRoute: MapsRoute,
   MethodologyRoute: MethodologyRoute,
   NewsRoute: NewsRoute,

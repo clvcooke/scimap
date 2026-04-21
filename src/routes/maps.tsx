@@ -16,6 +16,9 @@ import { GEO_LEVELS as BASELINE_GEO_LEVELS, createColorScale, createBaselineLaye
 import { GRANTS_GEO_LEVELS, GRANTS_COLOR_PROPERTY } from '@/lib/grants-map-config'
 import { FY27_GEO_LEVELS, FY27_COLOR_PROPERTY } from '@/lib/fy27-map-config'
 import { IDC_GEO_LEVELS, IDC_COLOR_PROPERTY } from '@/lib/idc-map-config'
+import IconClusterLayer from '@/layers/icon-cluster-layer'
+import { GRANT_LOSSES, type GrantTermination } from '@/data/grant-losses'
+import type { Position } from '@deck.gl/core'
 
 export const Route = createFileRoute('/maps')({
   component: MapsRoute,
@@ -70,6 +73,47 @@ function ChoroplethPreview({
   )
 }
 
+const getGrantPosition = (d: GrantTermination): Position => [d.lon, d.lat, 0]
+
+function GrantsPreview() {
+  const config = GRANTS_GEO_LEVELS.counties
+  const colorScale = useMemo(() => createLogColorScale(config.domain), [config])
+  const mapLayer = useMemo(
+    () => createChoroplethLayer(config, colorScale, GRANTS_COLOR_PROPERTY, LUT_OR_RD, 'grants-preview'),
+    [config, colorScale],
+  )
+  const outlineLayer = useMemo(() => createStateOutlineLayer(), [])
+  const clusterLayer = useMemo(
+    () =>
+      new IconClusterLayer<GrantTermination>({
+        data: GRANT_LOSSES,
+        getPosition: getGrantPosition,
+        getSize: 50,
+        iconAtlas: '/location-icon-atlas-v7.png',
+        iconMapping: '/location-icon-mapping.json',
+        getColor: () => [0, 255, 0, 100],
+        id: 'grants-preview-cluster',
+        sizeScale: 40,
+        pickable: false,
+      }),
+    [],
+  )
+
+  return (
+    <div className="pointer-events-none absolute inset-0">
+      <DeckGL
+        viewState={PREVIEW_VIEW_STATE}
+        controller={false}
+        layers={[mapLayer, outlineLayer, clusterLayer]}
+        useDevicePixels={false}
+        getCursor={() => 'pointer'}
+      >
+        <Map mapStyle={BASE_MAP_STYLE} attributionControl={false} />
+      </DeckGL>
+    </div>
+  )
+}
+
 function BaselinePreview() {
   const config = BASELINE_GEO_LEVELS.counties
   const colorScale = useMemo(() => createColorScale(config, false), [config])
@@ -100,20 +144,13 @@ function BaselinePreview() {
 const MAPS = [
   {
     slug: 'map-baseline',
-    to: '/map' as const,
+    to: '/baseline' as const,
     preview: () => <BaselinePreview />,
   },
   {
     slug: 'map-grants',
     to: '/grants' as const,
-    preview: () => (
-      <ChoroplethPreview
-        config={GRANTS_GEO_LEVELS.counties}
-        colorProperty={GRANTS_COLOR_PROPERTY}
-        lut={LUT_OR_RD}
-        layerId="grants-preview"
-      />
-    ),
+    preview: () => <GrantsPreview />,
   },
   {
     slug: 'map-fy27',
@@ -147,7 +184,7 @@ function MapCard({
   preview: Preview,
 }: {
   slug: string
-  to: '/map' | '/grants' | '/fy27' | '/idc'
+  to: '/baseline' | '/grants' | '/fy27' | '/idc'
   preview: () => React.JSX.Element
 }) {
   const page = getPage(slug)
