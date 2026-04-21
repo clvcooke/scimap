@@ -75,7 +75,7 @@ collections:
     sortable_fields: ["order", "title"]
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "URL", name: "url", widget: "string" }
+      - { label: "URL", name: "url", widget: "string", required: false }
       - { label: "Display Order", name: "order", widget: "number", value_type: "int" }
       - { label: "Blurb", name: "body", widget: "markdown" }
 

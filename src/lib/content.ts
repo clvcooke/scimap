@@ -113,7 +113,7 @@ export function getPressReleases(): PressRelease[] {
 /** Load all research articles from content/articles/*.md */
 export interface Article {
   title: string
-  url: string
+  url?: string
   order: number
   blurb: string
   date?: string
@@ -132,7 +132,7 @@ export function getArticles(): Article[] {
       const { attrs, body } = parseFrontmatter(raw)
       return {
         title: attrs.title ?? '',
-        url: attrs.url ?? '#',
+        url: attrs.url ?? undefined,
         order: Number(attrs.order) || 99,
         blurb: body,
         date: attrs.date ?? undefined,
