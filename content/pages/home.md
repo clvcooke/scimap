@@ -39,13 +39,13 @@ why_heading: Why This Matters
 why_paragraphs:
   - Federal investment in science drives innovation, creates jobs, saves lives,
     and improves the quality of life. Funding cuts harm research institutions,
-    local economies, and people in red, purple, and blue districts.
+    local economies, and people in **red, purple, and blue districts** alike.
   - Over 75% of adults in the U.S. suffer from at least one chronic health
     condition. That means that **you and people you care about** may directly
     benefit from federally-funded research that makes daily life better for
     people like you.
   - SCIMaP transforms science funding policy decisions into visible impacts to
-    increase awareness and inform evidence-driven action in communities
+    **increase awareness** and inform **evidence-driven action** in communities
     nationwide.
 why_cta: See Research Insights
 who_heading: Who We Serve
