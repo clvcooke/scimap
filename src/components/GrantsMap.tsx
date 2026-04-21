@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react'
 import type { PickingInfo, Position } from '@deck.gl/core'
-import { formatCurrency } from '@/lib/constants'
+import { formatCurrency, formatNumber } from '@/lib/constants'
 import { GRANTS_GEO_LEVELS, GRANTS_COLOR_PROPERTIES, GRANTS_JOB_PROPERTIES, GRANTS_AGENCY_DOMAINS } from '@/lib/grants-map-config'
 import {
   LUT_OR_RD,
@@ -35,7 +35,7 @@ function buildRenderTooltip(agencyFilter: AgencyFilter) {
       `<div class="font-semibold">${locationLine}</div>` +
       politicianHtml +
       `<div>${AGENCY_LABELS[agencyFilter]}: ${formatCurrency(econLoss)}</div>` +
-      (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '')
+      `<div>Jobs Lost: ${formatNumber(jobLoss)}</div>`
     )
   }
 }

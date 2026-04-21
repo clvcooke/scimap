@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { formatCurrency } from '@/lib/constants'
+import { formatCurrency, formatNumber } from '@/lib/constants'
 import { FY27_GEO_LEVELS, FY27_COLOR_PROPERTIES, FY27_AGENCY_DOMAINS } from '@/lib/fy27-map-config'
 import {
   LUT_MAGMA_INV,
@@ -79,7 +79,7 @@ function buildRenderTooltip(agencyFilter: AgencyFilter) {
         `<div class="font-semibold">${locationLine}</div>` +
         politicianHtml +
         `<div class="mt-1">NIH Economic Loss: ${formatCurrency(nihEcon)}</div>` +
-        (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '') +
+        `<div>Jobs Lost: ${formatNumber(jobLoss)}</div>` +
         `<div class="mt-1 text-[11px] text-gray-400 italic">Click for details</div>`
       )
     }
@@ -91,7 +91,7 @@ function buildRenderTooltip(agencyFilter: AgencyFilter) {
         `<div class="font-semibold">${locationLine}</div>` +
         politicianHtml +
         `<div class="mt-1">NSF Economic Loss: ${formatCurrency(nsfEcon)}</div>` +
-        (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '') +
+        `<div>Jobs Lost: ${formatNumber(jobLoss)}</div>` +
         `<div class="mt-1 text-[11px] text-gray-400 italic">Click for details</div>`
       )
     }
@@ -104,7 +104,7 @@ function buildRenderTooltip(agencyFilter: AgencyFilter) {
       `<div class="font-semibold">${locationLine}</div>` +
       politicianHtml +
       `<div class="mt-1">Total Economic Loss: ${formatCurrency(totalEcon)}</div>` +
-      (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '') +
+      `<div>Jobs Lost: ${formatNumber(jobLoss)}</div>` +
       `<div class="mt-1 text-[11px] text-gray-300">` +
       `NIH: ${formatCurrency(nihEcon)} · NSF: ${formatCurrency(nsfEcon)}` +
       `</div>` +

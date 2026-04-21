@@ -1,4 +1,4 @@
-import { formatCurrency } from '@/lib/constants'
+import { formatCurrency, formatNumber } from '@/lib/constants'
 import { FY26_GEO_LEVELS, FY26_COLOR_PROPERTY } from '@/lib/fy26-map-config'
 import {
   LUT_MAGMA_INV,
@@ -69,7 +69,7 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
     `<div class="font-semibold">${locationLine}</div>` +
     politicianHtml +
     `<div class="mt-1">Total Economic Loss: ${formatCurrency(econLoss)}</div>` +
-    (jobLoss > 0 ? `<div>Jobs Lost: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '') +
+    `<div>Jobs Lost: ${formatNumber(jobLoss)}</div>` +
     `<div class="mt-1 text-[11px] text-gray-300">` +
     `Aging: ${formatCurrency(agingLoss)} · Cancer: ${formatCurrency(cancerLoss)} · Infectious Disease: ${formatCurrency(infectLoss)}` +
     `</div>` +

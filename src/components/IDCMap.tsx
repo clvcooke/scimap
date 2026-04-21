@@ -1,4 +1,4 @@
-import { formatCurrency } from '@/lib/constants'
+import { formatCurrency, formatNumber } from '@/lib/constants'
 import { IDC_GEO_LEVELS, IDC_COLOR_PROPERTY } from '@/lib/idc-map-config'
 import {
   LUT_OR_RD,
@@ -57,7 +57,7 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
     `<div class="font-semibold">${locationLine}</div>` +
     politicianHtml +
     `<div class="mt-1">Economic Loss: ${formatCurrency(econLoss)}/yr</div>` +
-    (jobLoss > 0 ? `<div>Jobs at Risk: ${jobLoss < 10 ? '&lt;10' : jobLoss.toLocaleString()}</div>` : '') +
+    `<div>Jobs at Risk: ${formatNumber(jobLoss)}</div>` +
     `<div class="mt-1 text-[11px] text-gray-300">IDC Funding Loss: ${formatCurrency(idcLoss)}/yr</div>` +
     `<div class="mt-1 text-[11px] text-gray-400 italic">Click for details</div>`
   )

@@ -82,7 +82,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
         return (
           `<div class="font-semibold">${displayName}</div>` +
           `<div>NIH Economic Impact: ${formatCurrency(impact)}</div>` +
-          (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
+          `<div>Jobs Supported: ${formatNumber(jobs)}</div>` +
           `<div>Population: ${pop.toLocaleString()}</div>` +
           `<div class="text-xs mt-1 opacity-75">Click for details</div>`
         )

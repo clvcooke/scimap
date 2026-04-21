@@ -76,8 +76,7 @@ const COMPACT_NUM = new Intl.NumberFormat('en-US', {
 })
 
 export function formatNumber(value: number): string {
-  if (value === 0) return '0'
-  if (value > 0 && value < 10) return '<10'
+  if (value >= 0 && value < 10) return '<10'
   return COMPACT_NUM.format(value)
 }
 
