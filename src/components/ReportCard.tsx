@@ -336,7 +336,7 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
     : ''
 
   const reportCardImageDir = fiscalYear === 'fy27' ? 'report-cards-fy27-v1' : 'report-cards-v6'
-  const hasDownloadableImage = fiscalYear !== 'fy27' // TODO: enable when FY27 images are uploaded
+  const hasDownloadableImage = true
 
   const downloadImage = async () => {
     const imageUrl = `${DOMAIN}/${reportCardImageDir}/report-card-${data.state_code}-${data.CD119FP}.png`

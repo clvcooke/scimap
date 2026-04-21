@@ -64,7 +64,7 @@ function createMagmaStateLayer(
     maxZoom: 7,
     getLineColor: [255, 255, 255, FILL_ALPHA / 3],
     getLineWidth: (f: { properties: Record<string, number | string> }) =>
-      f.properties['state'] === highlightId ? 2.5 : 1,
+      f.properties.state === highlightId ? 2.5 : 1,
     lineWidthMinPixels: 1,
     lineWidthUnits: 'pixels' as const,
     getFillColor: (f: { properties: Record<string, number | string> }) => {
@@ -78,7 +78,7 @@ function createMagmaStateLayer(
             parseInt(c.slice(3, 5), 16),
             parseInt(c.slice(5, 7), 16),
           ]
-      const alpha = f.properties['state'] === highlightId ? FILL_ALPHA : 70
+      const alpha = f.properties.state === highlightId ? FILL_ALPHA : 70
       return [rgb[0], rgb[1], rgb[2], alpha]
     },
     updateTriggers: { getFillColor: [highlightId], getLineWidth: [highlightId] },
@@ -240,7 +240,7 @@ export default function StateReportCard({
       ? `https://scienceimpacts.org${window.location.pathname}${window.location.search}`
       : ''
 
-  const hasDownloadableImage = false // flip on once FY27 state PNGs are uploaded
+  const hasDownloadableImage = true
 
   const downloadImage = async () => {
     const imageUrl = `${DOMAIN}/report-cards-${fiscalYear}-v1/report-card-${data.state_code}.png`
