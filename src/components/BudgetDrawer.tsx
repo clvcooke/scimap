@@ -9,7 +9,7 @@ import {
   getSenatorsList,
   formatPoliticianName,
 } from '@/lib/legislature'
-import { getLegislatorKeys, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
+import { getCountyName, getLegislatorKeys, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
 import type { FiscalYear } from '@/lib/report-card-data'
 import { stateName } from '@/lib/constants'
 
@@ -64,15 +64,16 @@ function formatStat(value: number, format: 'currency' | 'number') {
 
 function locationLabel(props: TileProps, geoLevel: LossGeoLevel): string {
   const stateRaw = props.state != null ? String(props.state) : ''
-  const countyRaw = props.county != null ? String(props.county) : undefined
-  const county = countyRaw && countyRaw !== 'NA' ? countyRaw : undefined
 
   if (geoLevel === 'districts' && props.GEOID) {
     const num = String(props.GEOID).slice(-2)
     const distLabel = num === '00' ? 'At-Large' : num === '98' && stateRaw === 'DC' ? 'No District' : `District ${parseInt(num, 10)}`
     return `${stateRaw} ${distLabel}`
   }
-  if (county) return `${county}, ${stateRaw}`
+  if (geoLevel === 'counties') {
+    const county = getCountyName(props)
+    if (county) return `${county}, ${stateRaw}`
+  }
   return props.state_name ? String(props.state_name) : stateName(stateRaw)
 }
 

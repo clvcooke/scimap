@@ -144,6 +144,18 @@ export function getLegislatorKeys(props: TileProps): { stateCode: string; cdFp: 
 }
 
 /**
+ * Read the county display name from tile properties. Some tile schemas expose it
+ * as `county` (terminations/grants); others merge it through from the source CSV
+ * as `name` (FY27 budget).
+ */
+export function getCountyName(props: TileProps): string | undefined {
+  const raw = props.county ?? props.name
+  if (raw == null) return undefined
+  const str = String(raw)
+  return str && str !== 'NA' ? str : undefined
+}
+
+/**
  * Build the common location + politician header HTML for a tooltip.
  * Returns `{ locationLine, politicianHtml }`.
  */
@@ -154,8 +166,7 @@ export function buildTooltipHeader(
   const { stateCode, cdFp } = getLegislatorKeys(props)
   const stateAbbr = props.state != null ? String(props.state) : stateCode
 
-  const countyRaw = props.county != null ? String(props.county) : undefined
-  const county = countyRaw && countyRaw !== 'NA' ? countyRaw : undefined
+  const county = geoLevel === 'counties' ? getCountyName(props) : undefined
 
   let locationLine = stateName(stateAbbr)
   if (county) locationLine = `${county}, ${stateAbbr}`
