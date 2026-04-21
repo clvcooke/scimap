@@ -56,6 +56,16 @@ def load_name_lookup(level_name):
     return {row["id"]: row["name"] for row in rows}
 
 
+def parse_week(w):
+    """NIH weeks are integers-as-strings ("1", "2", ..., "51"); NSF weeks are
+    ISO date strings ("2025-02-28"). Parse NIH as int so "51" > "9"; NSF dates
+    sort correctly as strings."""
+    try:
+        return int(w)
+    except (ValueError, TypeError):
+        return w
+
+
 def load_latest_week(csv_path, id_col):
     """Load a terminations CSV, return only the latest week's data per region."""
     regions = {}
@@ -67,7 +77,7 @@ def load_latest_week(csv_path, id_col):
             if not rid:
                 continue
 
-            week = row["week"]
+            week = parse_week(row["week"])
 
             if rid not in regions or week > regions[rid]["_week"]:
                 entry = {"_week": week}
