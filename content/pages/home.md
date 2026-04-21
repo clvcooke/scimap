@@ -27,9 +27,9 @@ stakes_paragraphs:
 metrics_heading: Current Nationwide Impacts
 metrics:
   - value: $35B
-    label: Combined NIH/NSF Economic Loss from Budget
+    label: Combined NIH/NSF Economic Loss from FY2027 White House Budget Proposal
   - value: 150K
-    label: Combined NIH/NSF Jobs Lost from Budget
+    label: Combined NIH/NSF Jobs Lost from FY2027 White House Budget Proposal
   - value: 7,165
     label: "Cumulative # of Grants Cancelled"
   - value: $19.7B
