@@ -24,7 +24,7 @@ const baseline = (statesData as { total_econ_impact: number; nih_raw_funding: nu
 export const BASELINE_SLOTS: InfoSlot[] = [
   { label: 'Total Economic Impact', value: formatCurrency(baseline.econImpact) },
   { label: 'Total Funding (NIH + NSF)', value: formatCurrency(baseline.totalFunding) },
-  { label: 'Jobs Supported', value: formatNumber(baseline.jobs) },
+  { label: 'NIH Jobs Supported', value: formatNumber(baseline.jobs) },
 ]
 
 // ── Grants (homepage headline metrics) ────────────────────────────────
@@ -41,14 +41,6 @@ export const FY26_SLOTS: InfoSlot[] = [
   { label: 'Proposed NIH Cut', value: '22%' },
   { label: 'HHS Budget Cuts', value: '$31B' },
   { label: 'NIH Funding at Stake', value: formatCurrency(baseline.nihFunding) },
-]
-
-// ── FY27 Budget (proposed NIH + NSF cuts) ────────────────────────────
-
-export const FY27_SLOTS: InfoSlot[] = [
-  { label: 'Agencies Affected', value: 'NIH + NSF' },
-  { label: 'NIH Funding at Stake', value: formatCurrency(baseline.nihFunding) },
-  { label: 'Jobs Supported', value: formatNumber(baseline.jobs) },
 ]
 
 // ── IDC (indirect cost cap policy) ────────────────────────────────────

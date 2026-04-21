@@ -25,7 +25,7 @@ NIH_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NIH Budget")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NSF Budget")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "v2"
+TILE_VERSION = "v3"
 
 # ── Remote geo-reference data (Cloudflare R2) ────────────────────────
 R2_BASE = "https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data"
@@ -180,7 +180,7 @@ def merge_nih_nsf(nih_csv, nsf_csv, csv_key):
 
     merged["econ_budg_total_cuts"] = safe_col(merged, "econ_budg_NIH_cuts") + safe_col(merged, "econ_budg_NSF_cuts")
     merged["budg_total_cuts"] = safe_col(merged, "budg_NIH_cuts") + safe_col(merged, "budg_NSF_cuts")
-    merged["jobs_budg_total_cuts"] = safe_col(merged, "jobs_budg_NIH_cuts")
+    merged["jobs_budg_total_cuts"] = safe_col(merged, "jobs_budg_NIH_cuts") + safe_col(merged, "jobs_budg_NSF_cuts")
 
     return merged
 

@@ -80,7 +80,9 @@ def main():
                 "budg_NIH_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
                 "budg_NIH_cuts_job_loss": float(row["jobs_budg_NIH_cuts"]),
                 "budg_NSF_cuts_econ_loss": 0.0,
+                "budg_NSF_cuts_job_loss": 0.0,
                 "budg_total_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
+                "budg_total_cuts_job_loss": float(row["jobs_budg_NIH_cuts"]),
                 # Institute breakdowns not yet available for FY27
                 "budg_NIA_cuts_econ_loss": 0,
                 "budg_NCI_cuts_econ_loss": 0,
@@ -94,9 +96,14 @@ def main():
             if not key or key not in districts:
                 continue
             nsf_econ = float(row["econ_budg_NSF_cuts"])
+            nsf_jobs = float(row["jobs_budg_NSF_cuts"])
             districts[key]["budg_NSF_cuts_econ_loss"] = nsf_econ
+            districts[key]["budg_NSF_cuts_job_loss"] = nsf_jobs
             districts[key]["budg_total_cuts_econ_loss"] = (
                 districts[key]["budg_NIH_cuts_econ_loss"] + nsf_econ
+            )
+            districts[key]["budg_total_cuts_job_loss"] = (
+                districts[key]["budg_NIH_cuts_job_loss"] + nsf_jobs
             )
 
     # Load top 5 institutions per district
@@ -171,7 +178,9 @@ def build_state_result(districts: dict) -> dict:
                 "budg_NIH_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
                 "budg_NIH_cuts_job_loss": float(row["jobs_budg_NIH_cuts"]),
                 "budg_NSF_cuts_econ_loss": 0.0,
+                "budg_NSF_cuts_job_loss": 0.0,
                 "budg_total_cuts_econ_loss": float(row["econ_budg_NIH_cuts"]),
+                "budg_total_cuts_job_loss": float(row["jobs_budg_NIH_cuts"]),
                 "budg_NIA_cuts_econ_loss": 0,
                 "budg_NCI_cuts_econ_loss": 0,
                 "budg_NIAID_cuts_econ_loss": 0,
@@ -184,9 +193,14 @@ def build_state_result(districts: dict) -> dict:
             if code not in states:
                 continue
             nsf_econ = float(row["econ_budg_NSF_cuts"])
+            nsf_jobs = float(row["jobs_budg_NSF_cuts"])
             states[code]["budg_NSF_cuts_econ_loss"] = nsf_econ
+            states[code]["budg_NSF_cuts_job_loss"] = nsf_jobs
             states[code]["budg_total_cuts_econ_loss"] = (
                 states[code]["budg_NIH_cuts_econ_loss"] + nsf_econ
+            )
+            states[code]["budg_total_cuts_job_loss"] = (
+                states[code]["budg_NIH_cuts_job_loss"] + nsf_jobs
             )
 
     # top5 per state is keyed by full state_name, not state code

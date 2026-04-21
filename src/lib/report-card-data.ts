@@ -30,7 +30,9 @@ export interface ReportCardDistrict {
   budg_NIH_cuts_econ_loss: number
   budg_NIH_cuts_job_loss: number
   budg_NSF_cuts_econ_loss?: number
+  budg_NSF_cuts_job_loss?: number
   budg_total_cuts_econ_loss?: number
+  budg_total_cuts_job_loss?: number
   budg_NIA_cuts_econ_loss: number
   budg_NCI_cuts_econ_loss: number
   budg_NIAID_cuts_econ_loss: number
@@ -94,7 +96,9 @@ export interface StateReportCardEntry {
   budg_NIH_cuts_econ_loss: number
   budg_NIH_cuts_job_loss: number
   budg_NSF_cuts_econ_loss: number
+  budg_NSF_cuts_job_loss: number
   budg_total_cuts_econ_loss: number
+  budg_total_cuts_job_loss: number
   budg_NIA_cuts_econ_loss: number
   budg_NCI_cuts_econ_loss: number
   budg_NIAID_cuts_econ_loss: number

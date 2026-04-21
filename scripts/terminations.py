@@ -4,7 +4,7 @@ Process terminated-grants data from data/terminations/ into:
   2. src/data/terminated_grants.json  (scatter-plot / cluster-layer data)
   3. src/data/state_total_losses.json (state-level summary)
 
-Input data lives in data/terminations/{nih,nsf}/ with weekly time-series CSVs
+Input data lives in data/terminations/Terminations {NIH,NSF}/ with weekly CSVs
 at each geographic level plus org-level detail.
 
 Methodology mirrors baseline.py: download geo-reference files, merge data with
@@ -28,8 +28,8 @@ PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 REACT_DATA_DIR = os.path.join(PROJECT_ROOT, "src", "data")
 OUTPUT_DIR = os.path.join(SCRIPT_DIR, "outputs")
 
-NIH_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "nih")
-NSF_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "nsf")
+NIH_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NIH")
+NSF_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NSF")
 
 TILE_VERSION = datetime.now().strftime("%Y-%m-%d") + "c"
 
@@ -316,6 +316,8 @@ def save_geojson(geojson_data, output_path):
 
 def to_wsl_path(windows_path):
     abs_path = os.path.abspath(windows_path)
+    if platform.system() != "Windows":
+        return abs_path
     drive = abs_path[0].lower()
     rest = abs_path[2:].replace("\\", "/")
     return f"/mnt/{drive}{rest}"

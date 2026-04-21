@@ -288,6 +288,9 @@ def main():
     parser.add_argument("--limit", type=int, help="Cap N of each kind (debugging)")
     parser.add_argument("--no-dev-server", action="store_true",
                         help="Assume dev server is already running; don't start one")
+    parser.add_argument("--version", default="v1",
+                        help="R2 version suffix for the upload path (e.g. v2). Must match "
+                             "`reportCardImageDir` in src/components/ReportCard.tsx.")
     args = parser.parse_args()
 
     dev_proc = None
@@ -306,7 +309,7 @@ def main():
     if missing:
         sys.exit(1)
 
-    r2_path = f"report-cards-{args.fiscal_year}-v1"
+    r2_path = f"report-cards-{args.fiscal_year}-{args.version}"
     print(f"\n🎉 Done. To upload:")
     print(f"  rclone copy {output_dir}/ r2:scimap-data/{r2_path}/ --transfers 32")
 

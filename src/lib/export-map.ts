@@ -32,15 +32,6 @@ export interface CardRenderOptions {
   scale?: number
 }
 
-export interface ExportCardOptions {
-  container: HTMLElement
-  title: string
-  subtitle: string
-  stats: InfoSlot[]
-  meta: string
-  filename?: string
-}
-
 // ── Layout constants (at scale = 1) ───────────────────────────────────
 const HEADER_BASE = 80
 const FOOTER_BASE = 76
@@ -159,46 +150,6 @@ export function renderCard({
   ctx.fillText(urlText, totalW - pad - urlW, footerY + footerH * 0.65)
 
   return canvas
-}
-
-/**
- * Composites map canvases into a branded card and triggers a PNG download.
- */
-export async function exportMapCard({
-  container,
-  title,
-  subtitle,
-  stats,
-  meta,
-  filename = 'scimap.png',
-}: ExportCardOptions) {
-  await document.fonts.ready
-
-  const canvases = container.querySelectorAll('canvas')
-  if (canvases.length === 0) return
-
-  const first = canvases[0]
-  const mapW = first.width
-  const mapH = first.height
-  const scale = mapW / (container.clientWidth || mapW)
-
-  const card = renderCard({
-    title,
-    subtitle,
-    stats,
-    meta,
-    mapWidth: mapW,
-    mapHeight: mapH,
-    scale,
-    drawMap(ctx, y) {
-      canvases.forEach((c) => ctx.drawImage(c, 0, y))
-    },
-  })
-
-  const link = document.createElement('a')
-  link.download = filename
-  link.href = card.toDataURL('image/png')
-  link.click()
 }
 
 /** Current month + year string, e.g. "April 2026" */

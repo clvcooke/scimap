@@ -19,7 +19,7 @@ const DOMAIN = 'https://data.scienceimpacts.org'
 
 const TILES_BY_FY = {
   fy27: {
-    states: `${DOMAIN}/tiles_states_budget27_v2/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget27_v3/{z}/{x}/{y}.pbf`,
     colorProperty: 'econ_budg_total_cuts',
   },
 } as const
@@ -170,14 +170,17 @@ function InfoCard({ data }: { data: StateReportCardData }) {
           Projected Losses from Budget Cuts in {data.state}
         </h3>
         <div className="space-y-1 text-sm">
-          <div className="flex justify-between gap-2">
-            <span className="font-medium text-gray-900">Job Loss:</span>
-            <span className="font-semibold text-red-700">
-              {data.budg_NIH_cuts_job_loss < 10
-                ? '<10'
-                : formatNumber(data.budg_NIH_cuts_job_loss)}
-            </span>
-          </div>
+          {(() => {
+            const jobLoss = data.budg_total_cuts_job_loss ?? data.budg_NIH_cuts_job_loss
+            return (
+              <div className="flex justify-between gap-2">
+                <span className="font-medium text-gray-900">Job Loss:</span>
+                <span className="font-semibold text-red-700">
+                  {jobLoss < 10 ? '<10' : formatNumber(jobLoss)}
+                </span>
+              </div>
+            )
+          })()}
           <div className="flex justify-between gap-2 border-t pt-1">
             <span className="font-bold text-gray-900">Total Economic Loss:</span>
             <span className="font-bold text-red-700">
@@ -243,7 +246,7 @@ export default function StateReportCard({
   const hasDownloadableImage = true
 
   const downloadImage = async () => {
-    const imageUrl = `${DOMAIN}/report-cards-${fiscalYear}-v1/report-card-${data.state_code}.png`
+    const imageUrl = `${DOMAIN}/report-cards-${fiscalYear}-v2/report-card-${data.state_code}.png`
     const fileName = `fact-sheet-${fiscalYear}-${data.state_code}.png`
     try {
       const response = await fetch(imageUrl)

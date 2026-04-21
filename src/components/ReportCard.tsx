@@ -26,8 +26,8 @@ const TILES_BY_FY = {
     colorProperty: 'budg_NIH_cuts_econ_loss',
   },
   fy27: {
-    districts: `${DOMAIN}/tiles_districts_budget27_v2/{z}/{x}/{y}.pbf`,
-    states: `${DOMAIN}/tiles_states_budget27_v2/{z}/{x}/{y}.pbf`,
+    districts: `${DOMAIN}/tiles_districts_budget27_v3/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget27_v3/{z}/{x}/{y}.pbf`,
     colorProperty: 'econ_budg_total_cuts',
   },
 } as const
@@ -231,14 +231,17 @@ function InfoCard({ data, fiscalYear }: { data: ReportCardData; fiscalYear: Fisc
           Projected Losses from Budget Cuts in {districtCode}
         </h3>
         <div className="space-y-1 text-sm">
-          <div className="flex justify-between gap-2">
-            <span className="font-medium text-gray-900">Job Loss:</span>
-            <span className="font-semibold text-red-700">
-              {data.budg_NIH_cuts_job_loss < 10
-                ? '<10'
-                : formatNumber(data.budg_NIH_cuts_job_loss)}
-            </span>
-          </div>
+          {(() => {
+            const jobLoss = data.budg_total_cuts_job_loss ?? data.budg_NIH_cuts_job_loss
+            return (
+              <div className="flex justify-between gap-2">
+                <span className="font-medium text-gray-900">Job Loss:</span>
+                <span className="font-semibold text-red-700">
+                  {jobLoss < 10 ? '<10' : formatNumber(jobLoss)}
+                </span>
+              </div>
+            )
+          })()}
           {fiscalYear === 'fy27' ? (
             <>
               <div className="flex justify-between gap-2 border-t pt-1">
@@ -335,7 +338,7 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
     ? `https://scienceimpacts.org${window.location.pathname}${window.location.search}`
     : ''
 
-  const reportCardImageDir = fiscalYear === 'fy27' ? 'report-cards-fy27-v1' : 'report-cards-v6'
+  const reportCardImageDir = fiscalYear === 'fy27' ? 'report-cards-fy27-v2' : 'report-cards-v6'
   const hasDownloadableImage = true
 
   const downloadImage = async () => {

@@ -61,7 +61,10 @@
       "Bash(awk -F',' 'NR>1 && $1==\"CA\" && $2==\"9\" {print \"week 9:\", $8, $9, $10}' /Users/colincooke/code/scimap/data/terminations/nih/terminations_state.csv)",
       "Bash(awk -F',' 'NR>1 && $1==\"CA\" && $2==\"51\" {print \"week 51:\", $8, $9, $10}' /Users/colincooke/code/scimap/data/terminations/nih/terminations_state.csv)",
       "Bash(git ls-tree *)",
-      "Bash(tee /tmp/report-card-gen.log)"
+      "Bash(tee /tmp/report-card-gen.log)",
+      "Bash(tee /tmp/terminations_tiles.log)",
+      "Bash(tee /tmp/report_cards.log)",
+      "Bash(tee /tmp/report_cards_retry.log)"
     ]
   }
 }
