@@ -31,15 +31,19 @@ metrics:
   - value: 150K
     label: Combined NIH/NSF Jobs Lost from FY2027 White House Budget Proposal
   - value: 7,165
-    label: "Cumulative # of NIH & NSF Grants Cancelled"
+    label: "Cumulative # of NIH & NSF Grants Terminated or Frozen"
   - value: $19.7B
-    label: Cumulative Economic Impact from Terminated or Frozen Grants
+    label: Cumulative Economic Loss from NIH & NSF Grants Terminated or Frozen
 local_heading: See Impacts in Your Local Area
 why_heading: Why This Matters
 why_paragraphs:
   - Federal investment in science drives innovation, creates jobs, saves lives,
     and improves the quality of life. Funding cuts harm research institutions,
     local economies, and people in red, purple, and blue districts.
+  - Over 75% of adults in the U.S. suffer from at least one chronic health
+    condition. That means that **you and people you care about** may directly
+    benefit from federally-funded research that makes daily life better for
+    people like you.
   - SCIMaP transforms science funding policy decisions into visible impacts to
     increase awareness and inform evidence-driven action in communities
     nationwide.
