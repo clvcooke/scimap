@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react'
-import { ChevronUp, ChevronDown } from 'lucide-react'
+import { ChevronUp, ChevronDown, Download } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Button } from '@/components/ui/button'
 import { formatCurrency, formatNumber, countyDisplayName } from '@/lib/constants'
 import type { GeoLevel } from '@/lib/constants'
 import { typedKeys } from '@/lib/utils'
+import { toCsv, downloadCsv } from '@/lib/csv'
 
 import statesData from '@/data/table_terminations_states.json'
 import countiesData from '@/data/table_terminations_counties.json'
@@ -111,6 +113,20 @@ function formatValue(value: number, key: SortKey): string {
   return formatCurrency(value)
 }
 
+function buildCsv(rows: RegionRow[], regionLabel: string): string {
+  const header = [
+    'id',
+    regionLabel,
+    ...SORT_COLUMNS.map((c) => `${GROUP_STYLES[c.group].label} ${c.label}`),
+  ]
+  const dataRows = rows.map((row) => [
+    row.id,
+    row.name,
+    ...SORT_COLUMNS.map((col) => row[col.key]),
+  ])
+  return toCsv([header, ...dataRows])
+}
+
 // --- Component ---
 
 export default function TerminationsTable() {
@@ -138,6 +154,11 @@ export default function TerminationsTable() {
     }
   }
 
+  function handleExport() {
+    const csv = buildCsv(sortedRows, config.label)
+    downloadCsv(csv, `grant_terminations_${geoLevel}.csv`)
+  }
+
   return (
     <section className="w-full bg-white px-3 py-6 md:px-6 md:py-8">
       <div className="mx-auto max-w-7xl">
@@ -145,18 +166,25 @@ export default function TerminationsTable() {
           Grant Terminations by Region
         </h2>
 
-        <Tabs
-          value={geoLevel}
-          onValueChange={(v: string) => setGeoLevel(v as GeoLevel)}
-        >
-          <TabsList className="mb-4">
-            {typedKeys(GEO_TABLE).map((key) => (
-              <TabsTrigger key={key} value={key}>
-                {GEO_TABLE[key].label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+        <div className="mb-4 flex items-center justify-between gap-2">
+          <Tabs
+            value={geoLevel}
+            onValueChange={(v: string) => setGeoLevel(v as GeoLevel)}
+          >
+            <TabsList>
+              {typedKeys(GEO_TABLE).map((key) => (
+                <TabsTrigger key={key} value={key}>
+                  {GEO_TABLE[key].label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+          <Button variant="outline" size="sm" onClick={handleExport}>
+            <Download data-icon="inline-start" />
+            <span className="hidden sm:inline">Download CSV</span>
+            <span className="sm:hidden">CSV</span>
+          </Button>
+        </div>
 
         <div className="overflow-auto rounded-lg border border-gray-200 max-h-150">
           <table className="w-full text-left text-sm">

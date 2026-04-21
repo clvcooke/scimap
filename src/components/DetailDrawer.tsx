@@ -3,14 +3,12 @@ import { DrawerPreview as Drawer } from '@base-ui/react/drawer'
 import { interpolateBlues } from 'd3-scale-chromatic'
 import { X } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { METRICS, INSTITUTES, formatMetricValue } from '@/lib/constants'
+import { METRICS, formatMetricValue } from '@/lib/constants'
 import type { Metric } from '@/lib/constants'
 import type { SelectedFeature } from '@/lib/map-config'
 import { NSF_DIRECTORATES, type AgencyFilter } from '@/lib/map-shared'
 
-const OTHER_KEY = 'Other'
-
-// --- Drawer content (institute breakdown) ---
+// --- Drawer content (agency breakdown) ---
 
 function getNsfMetricTotal(props: Record<string, number>, metric: Metric): number {
   if (metric === 'jobs') return 0 // NSF has no jobs data in tiles
@@ -76,38 +74,23 @@ function DrawerBody({
   // Reset metric if current is unavailable
   const activeMetric = availableMetrics.some((m) => m.key === metric) ? metric : availableMetrics[0].key
 
-  // NIH institute rows
-  const nihRows = useMemo(() => {
-    if (agencyFilter === 'nsf') return []
-    const allRows = INSTITUTES.map((inst) => {
-      let value = props[`${inst.key}_${activeMetric}`] ?? 0
-      if (perCapita && population > 0) value = value / population
-      return { ...inst, value }
-    }).sort((a, b) => b.value - a.value)
+  // Agency breakdown rows (Total, NIH, NSF)
+  const breakdownRows = useMemo(() => {
+    const adjust = (v: number) => (perCapita && population > 0 ? v / population : v)
+    const nih = adjust(props[`NIH_tot_${activeMetric}`] ?? 0)
+    const nsf = activeMetric === 'jobs' ? 0 : adjust(getNsfMetricTotal(props, activeMetric))
 
-    const threshold = activeMetric === 'jobs' ? 1 : 1_000
-    const significant = allRows.filter((r) => Math.abs(r.value) >= threshold)
-    const small = allRows.filter((r) => Math.abs(r.value) < threshold && r.value !== 0)
-
-    if (small.length > 0) {
-      const otherValue = small.reduce((sum, r) => sum + r.value, 0)
-      return [...significant, { key: OTHER_KEY, name: OTHER_KEY, value: otherValue }]
+    if (agencyFilter === 'nih') {
+      return [{ key: 'NIH', name: 'National Institutes of Health', value: nih }]
     }
-    return significant
-  }, [props, activeMetric, perCapita, population, agencyFilter])
-
-  // NSF directorate rows
-  const nsfRows = useMemo(() => {
-    if (agencyFilter === 'nih') return []
-    if (activeMetric === 'jobs') return [] // NSF has no jobs data
-    return NSF_DIRECTORATES
-      .map((d) => {
-        let value = props[`NSF_${d.key}_${activeMetric}`] ?? 0
-        if (perCapita && population > 0) value = value / population
-        return { key: d.key, name: d.name, value }
-      })
-      .filter((r) => r.value > 0)
-      .sort((a, b) => b.value - a.value)
+    if (agencyFilter === 'nsf') {
+      return [{ key: 'NSF', name: 'National Science Foundation', value: nsf }]
+    }
+    return [
+      { key: 'Total', name: 'Combined Total', value: nih + nsf },
+      { key: 'NIH', name: 'National Institutes of Health', value: nih },
+      { key: 'NSF', name: 'National Science Foundation', value: nsf },
+    ]
   }, [props, activeMetric, perCapita, population, agencyFilter])
 
   const summaryCards = useMemo(
@@ -157,19 +140,12 @@ function DrawerBody({
         </Tabs>
       </div>
 
-      {/* Breakdown sections */}
+      {/* Breakdown section */}
       <div className="flex-1 overflow-y-auto px-5 py-3">
-        {nihRows.length > 0 && (
+        {breakdownRows.length > 0 && (
           <BreakdownSection
-            title={agencyFilter === 'both' ? 'NIH Institutes' : 'Institute Breakdown'}
-            rows={nihRows}
-            metric={activeMetric}
-          />
-        )}
-        {nsfRows.length > 0 && (
-          <BreakdownSection
-            title={agencyFilter === 'both' ? 'NSF Directorates' : 'Directorate Breakdown'}
-            rows={nsfRows}
+            title="Agency Breakdown"
+            rows={breakdownRows}
             metric={activeMetric}
           />
         )}
@@ -187,17 +163,13 @@ function BreakdownSection({
   rows: { key: string; name: string; value: number }[]
   metric: Metric
 }) {
-  const maxValue = rows[0]?.value ?? 1
-  const total = rows.reduce((sum, r) => sum + r.value, 0)
+  const maxValue = Math.max(...rows.map((r) => r.value), 0) || 1
 
   return (
     <div className="mb-5 last:mb-0">
       <div className="mb-2 flex items-baseline justify-between">
         <span className="text-xs font-medium uppercase tracking-wide text-gray-400">
           {title}
-        </span>
-        <span className="text-xs text-gray-400">
-          Total: {formatMetricValue(total, metric)}
         </span>
       </div>
       <div className="space-y-3">
@@ -207,9 +179,7 @@ function BreakdownSection({
           return (
             <div key={row.key}>
               <div className="flex items-baseline justify-between gap-2 text-sm">
-                <span className="font-medium text-gray-700">
-                  {row.key === OTHER_KEY ? OTHER_KEY : `${row.name} (${row.key})`}
-                </span>
+                <span className="font-medium text-gray-700">{row.name}</span>
                 <span className="shrink-0 text-xs tabular-nums text-gray-500">
                   {formatMetricValue(row.value, metric)}
                 </span>

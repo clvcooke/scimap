@@ -3,7 +3,6 @@ import { formatCurrency, formatNumber } from '@/lib/constants'
 import { FY27_GEO_LEVELS, FY27_COLOR_PROPERTIES, FY27_AGENCY_DOMAINS } from '@/lib/fy27-map-config'
 import {
   LUT_MAGMA_INV,
-  NSF_DIRECTORATES,
   buildTooltipHeader,
   DEFAULT_AGENCY_FILTER,
   type AgencyFilter,
@@ -46,20 +45,6 @@ function buildDrawerConfig(agencyFilter: AgencyFilter): BudgetDrawerConfig {
               { key: 'NSF', name: 'National Science Foundation', value: nsfVal, format: 'currency' as const },
             ],
           })
-        }
-      }
-
-      if (agencyFilter !== 'nih') {
-        const nsfRows = NSF_DIRECTORATES
-          .map((d) => ({
-            key: d.key,
-            name: d.name,
-            value: Number(p[`econ_budg_${d.key}_cuts`] ?? 0),
-            format: 'currency' as const,
-          }))
-          .filter((r) => r.value > 0)
-        if (nsfRows.length > 0) {
-          sections.push({ title: 'NSF Directorate Breakdown', rows: nsfRows })
         }
       }
 
