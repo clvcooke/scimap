@@ -26,9 +26,9 @@ stakes_paragraphs:
 
 metrics_heading: Current Nationwide Impacts
 metrics:
-  - value: $31.8B
+  - value: $35B
     label: Combined NIH/NSF Economic Loss from Budget
-  - value: 140K
+  - value: 150K
     label: Combined NIH/NSF Jobs Lost from Budget
   - value: 7,165
     label: "Cumulative # of Grants Cancelled"
