@@ -3,8 +3,6 @@ title: Source Data
 ---
 We integrate data from multiple sources to estimate the downstream economic impacts of science funding cuts on communities nationwide.
 
-## Data Sources
-
 **[NIH RePORTER:](https://reporter.nih.gov/)** Public database of NIH grants
 
 **[NSF Awards Simple Search:](https://www.nsf.gov/awardsearch/)** Public database of NSF grants
