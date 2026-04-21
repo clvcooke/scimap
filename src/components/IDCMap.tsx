@@ -11,34 +11,30 @@ import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
 
 const drawerConfig: BudgetDrawerConfig = {
   stats: (p) => [
-    { label: 'IDC Economic Loss', value: Number(p.IDC_econ_loss ?? 0), format: 'currency' },
-    { label: 'IDC Funding Loss', value: Number(p.IDC_loss ?? 0), format: 'currency' },
+    { label: 'Economic Loss', value: Number(p.IDC_econ_loss ?? 0), format: 'currency' },
+    { label: 'Funding Loss', value: Number(p.IDC_loss ?? 0), format: 'currency' },
     { label: 'Jobs at Risk', value: Number(p.IDC_job_loss ?? 0), format: 'number' },
   ],
   sections: (p) => {
     const idcEcon = Number(p.IDC_econ_loss ?? 0)
-    const termEcon = Number(p.terminated_econ_loss ?? 0)
+    const idcJobs = Number(p.IDC_job_loss ?? 0)
 
     const sections = []
 
-    if (idcEcon > 0 || termEcon > 0) {
+    if (idcEcon > 0) {
       sections.push({
         title: 'Impact Breakdown',
         rows: [
-          { key: 'IDC', name: 'Indirect Cost Recovery Loss (recurring, annual)', value: idcEcon, format: 'currency' as const },
-          { key: 'Terminated', name: 'Terminated Grant Economic Loss', value: termEcon, format: 'currency' as const },
+          { key: 'Annual', name: 'Economic Loss', value: idcEcon, format: 'currency' as const },
         ],
       })
     }
 
-    const idcJobs = Number(p.IDC_job_loss ?? 0)
-    const termJobs = Number(p.terminated_job_loss ?? 0)
-    if (idcJobs > 0 || termJobs > 0) {
+    if (idcJobs > 0) {
       sections.push({
         title: 'Jobs at Risk',
         rows: [
-          { key: 'IDC', name: 'Jobs at risk from IDC changes', value: idcJobs, format: 'number' as const },
-          { key: 'Terminated', name: 'Jobs lost from terminated grants', value: termJobs, format: 'number' as const },
+          { key: 'Annual', name: 'Job Loss', value: idcJobs, format: 'number' as const },
         ],
       })
     }
@@ -58,7 +54,7 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
     politicianHtml +
     `<div class="mt-1">Economic Loss: ${formatCurrency(econLoss)}/yr</div>` +
     `<div>Jobs at Risk: ${formatNumber(jobLoss)}</div>` +
-    `<div class="mt-1 text-[11px] text-gray-300">IDC Funding Loss: ${formatCurrency(idcLoss)}/yr</div>` +
+    `<div class="mt-1 text-[11px] text-gray-300">Funding Loss: ${formatCurrency(idcLoss)}/yr</div>` +
     `<div class="mt-1 text-[11px] text-gray-400 italic">Click for details</div>`
   )
 }

@@ -12,7 +12,7 @@ talking_points:
   - "Federally funded scientific and medical research improves health, drives innovation, creates jobs, and grows the economy."
   - "Every dollar invested in scientific research through NIH produces, on average, $2.56 of economic activity in return – **over a 250% gain**."
   - "NIH research supports over 400,000 jobs across the U.S."
-  - "Reducing indirect cost rates to 15% would undermine the ability of universities, hospitals, and research institutes to conduct life saving, medical research."
+  - "Reducing research infrastructure funding (15% indirect cost rate) would undermine the ability of universities, hospitals, and research institutes to conduct life saving, medical research."
   - "Cancelling or freezing grants wastes funds by interrupting ongoing research projects, including active clinical trials, at institutions across the country."
 
 share_heading: "Share with Friends, Family, and Followers"

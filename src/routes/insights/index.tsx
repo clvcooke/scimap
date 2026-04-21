@@ -269,7 +269,7 @@ function InsightsPage() {
         <TabsContent value="archived" className="text-base">
           <div className="w-full px-6 py-8 md:py-10">
             <div className="mx-auto max-w-4xl space-y-4">
-              <CollapsibleSection title="Analysis of Indirect Costs, 2025">
+              <CollapsibleSection title="Analysis of Research Infrastructure Funding, 2025">
                 <p className="mb-6 leading-relaxed text-gray-600">
                   {a.idc_intro}
                 </p>

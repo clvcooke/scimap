@@ -335,14 +335,6 @@ collections:
               - { label: "Name", name: "name", widget: "string" }
               - { label: "URL", name: "url", widget: "string" }
 
-      - name: about-detailed-analytics
-        label: "Detailed Analytics Tab"
-        file: content/pages/about-detailed-analytics.md
-        fields:
-          - { label: "Title", name: "title", widget: "string" }
-          - { label: "Image", name: "image", widget: "image", required: false }
-          - { label: "Body", name: "body", widget: "markdown" }
-
       - name: about-source-data
         label: "Source Data Tab"
         file: content/pages/about-source-data.md

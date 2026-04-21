@@ -1,7 +1,7 @@
 ---
 title: Grant Terminations Map
 blurb: Track the economic fallout of cancelled and frozen NIH grants across the
-  country. See how terminated grants and indirect cost rate cuts are impacting
+  country. See how terminated grants are impacting
   research institutions and local economies in your area.
 heading: About This Map
 description: Many active NIH and NSF grants have been **terminated or frozen**,

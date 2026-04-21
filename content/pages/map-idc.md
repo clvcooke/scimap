@@ -1,7 +1,7 @@
 ---
-title: Research Infrastructure Map
-blurb: See how proposed cuts to indirect cost recovery rates would affect research
-  institutions and local economies across the country.
+title: Research Infrastructure Funding Cuts
+blurb: See how proposed cuts to NIH funding for research infrastructure will lead
+  to economic losses nationwide.
 heading: About This Map
 description: The federal government has proposed **capping indirect cost (IDC)
   recovery rates** for research grants, which would reduce funding to

@@ -42,8 +42,8 @@ const CARDS: CardDef[] = [
     mapColor: '#d5d0e8',
   },
   {
-    title: 'IDC Rate Analysis',
-    subtitle: 'Indirect Cost Recovery Impact on Research Funding',
+    title: 'Research Infrastructure Funding Cuts',
+    subtitle: 'Impact of proposed cuts to NIH research infrastructure',
     stats: IDC_SLOTS,
     meta: `States  ·  ${currentDateLabel()}`,
     filename: 'scimap-idc-analysis.png',

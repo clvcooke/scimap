@@ -39,7 +39,7 @@ disrupted_details:
   - "For a subset of multi-year supplements and subawards, only the budget for the current year is reported, leading us to underestimate the actual amount of funding lost."
   - "Cancelled and frozen grants from adjacent divisions within the same institution (e.g., the main campus and medical school of the same university) are combined under one broader institution label (e.g., \"Columbia University\")."
 
-indirect_costs_intro: "Research grants include funding for indirect costs, which are critical research infrastructure such as facilities and safety checks. While NIH and NSF grants both include indirect costs, we focus only on NIH for this analysis."
+indirect_costs_intro: "Research grants include funding for research infrastructure (also known as indirect costs), which covers critical support such as facilities and safety checks. While NIH and NSF grants both include this funding, we focus only on NIH for this analysis."
 indirect_costs_details:
   - "Indirect costs are calculated as some proportion of that grant's value, determined through negotiations between each institution and the NIH."
   - "A proposed change would have capped the indirect cost rate at 15%, well below current realized levels of approximately 45% of direct costs. That policy is currently blocked following an injunction by a federal judge."

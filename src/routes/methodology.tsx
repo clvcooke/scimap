@@ -28,7 +28,6 @@ export const Route = createFileRoute('/methodology')({
 /* ── Data ──────────────────────────────────────────────────────────── */
 
 const M = getPage('methodology')
-const DETAILED_ANALYTICS = getPage('about-detailed-analytics')
 const SOURCE_DATA = getPage('about-source-data')
 
 /* ── Tiny helpers ────────────────────────────────────────────────── */
@@ -130,13 +129,6 @@ function MethodologyPage() {
                   Methodology
                 </TabsTrigger>
                 <TabsTrigger
-                  value="detailed-analytics"
-                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
-                >
-                  <BarChart3 className="hidden h-4 w-4 sm:block" />
-                  Detailed Analytics
-                </TabsTrigger>
-                <TabsTrigger
                   value="source-data"
                   className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
                 >
@@ -212,9 +204,9 @@ function MethodologyPage() {
             <ProseBlock items={a.disrupted_details ?? []} />
           </Section>
 
-          {/* Indirect Costs */}
+          {/* Research Infrastructure (Indirect Costs) */}
           <Section bg="neutral">
-            <SectionHeading icon={Building}>Indirect Costs</SectionHeading>
+            <SectionHeading icon={Building}>Research Infrastructure (Indirect Costs)</SectionHeading>
             <p className="mb-4 text-lg leading-relaxed text-gray-700">
               <InlineMarkdown>{a.indirect_costs_intro}</InlineMarkdown>
             </p>
@@ -242,31 +234,6 @@ function MethodologyPage() {
               )}
             </ul>
           </Section>
-        </TabsContent>
-
-        {/* ── Detailed Analytics ───────────────────────────────────── */}
-        <TabsContent value="detailed-analytics" className="flex-1 text-base">
-          <div className="w-full px-6 py-8 md:py-10">
-            <div className="mx-auto max-w-4xl">
-              <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm md:p-8">
-                <h2 className="text-xl font-bold text-gray-900">
-                  {DETAILED_ANALYTICS.attrs.title}
-                </h2>
-
-                <div className="prose prose-gray mt-4 max-w-none leading-relaxed [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-blue-light">
-                  <Markdown>{DETAILED_ANALYTICS.body}</Markdown>
-                </div>
-
-                {DETAILED_ANALYTICS.attrs.image && (
-                  <img
-                    src={DETAILED_ANALYTICS.attrs.image}
-                    alt={DETAILED_ANALYTICS.attrs.title}
-                    className="mt-6 w-full rounded-lg border border-gray-200"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
         </TabsContent>
 
         {/* ── Source Data ──────────────────────────────────────────── */}
