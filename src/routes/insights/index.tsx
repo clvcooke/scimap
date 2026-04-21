@@ -269,7 +269,7 @@ function InsightsPage() {
         <TabsContent value="archived" className="text-base">
           <div className="w-full px-6 py-8 md:py-10">
             <div className="mx-auto max-w-4xl space-y-4">
-              <CollapsibleSection title="IDC Analysis">
+              <CollapsibleSection title="Analysis of Indirect Costs, 2025">
                 <p className="mb-6 leading-relaxed text-gray-600">
                   {a.idc_intro}
                 </p>
@@ -281,7 +281,7 @@ function InsightsPage() {
                 <MapAttribution />
               </CollapsibleSection>
 
-              <CollapsibleSection title="FY26 Budget Impact">
+              <CollapsibleSection title="Analysis of White House FY26 Budget Proposal">
                 <div className="relative h-125 md:h-150">
                   <Suspense fallback={<div className="flex h-full items-center justify-center text-gray-400">Loading map…</div>}>
                     <FY26Map />
