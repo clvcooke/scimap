@@ -28,6 +28,14 @@ talking_points:
   - Cancelling or freezing research grants wastes taxpayer dollars by
     interrupting ongoing research projects, including active clinical trials, at
     institutions across the country.
+  - Over 75% of adults in the U.S. suffer from at least one chronic health
+    condition. That means that **you and people you care about** may directly
+    benefit from NIH-funded health research that makes daily life better for
+    people like you.
+  - NIH and NSF funding plays a critical role in national defense and security.
+    Researchers advance technology and security, and protect our nation from
+    terrorist attacks, biological and chemical warfare, and emerging infectious
+    diseases.
 share_heading: Share with Friends, Family, and Followers
 share_intro: "We encourage you to share the SCIMaP website with friends, family,
   and followers. You can learn more about science impacts in your community from
