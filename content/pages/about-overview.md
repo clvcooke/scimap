@@ -11,4 +11,4 @@ Through interactive data visualizations and actionable insights, we strive to ma
 
 The team consists of experts from around the country, including researchers at the University of Maryland, the University of Pennsylvania, the University of Utah, the Georgia Institute of Technology, and the University of Oregon. The interdisciplinary team has expertise across a variety of areas including biology, data analytics, behavioral sciences, communication, and geographic information science.
 
-To learn more about our work, review the [SCIMaP 2025 Annual Report.](https://scienceimpacts.org/insights/scimap-2025-annual-report-2026-04-10)
+To learn more about our work, review the [SCIMaP 2025 Annual Report.](https://scienceimpacts.org/insights/scimap-2025-annual-report-2026-04-14)
