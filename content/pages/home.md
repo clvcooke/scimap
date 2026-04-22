@@ -15,12 +15,14 @@ stakes_paragraphs:
     diseases, technology, education, and more.
   - The White House has ordered **major cuts to science funding** nationwide,
     which would take back funds promised to the states.
-  - Currently, the proposed **FY2027 budget cuts** would reduce funding to the
-    NIH, NSF, and other key agencies by billions of dollars.
+  - Currently, the proposed **[FY2027 budget
+    cuts](https://scienceimpacts.org/fy27)** would reduce funding to the NIH,
+    NSF, and other key agencies by billions of dollars.
   - >+
-    Other threats to science include ongoing **terminations of active research
-    grants** and proposed **cuts to funding for research infrastructure**. These
-    cuts will lead to cancelled projects and clinical trials, wasted funds, lost
+    Other threats to science include ongoing **[terminations of research
+    grants](https://scienceimpacts.org/grants)* and proposed cuts to funding for
+    **[research infrastructure](https://scienceimpacts.org/idc)**. These cuts
+    will lead to cancelled projects and clinical trials, wasted funds, lost
     jobs, and hiring freezes that harm people and local economies.
 
 
