@@ -9,8 +9,8 @@ We integrate data from multiple sources to estimate the downstream economic impa
 
 **[United for Medical Research:](https://unitedformedicalresearch.org/)** Economic analyses of the impact of NIH funding
 
-**[NSF Economic Impacts:](https://www.nsf.gov/evaluation/reports)** Literature Review: Economic analyses of the impact of NSF funding
+**[NSF Economic Impacts:](https://nsf-gov-resources.nsf.gov/files/NSF-Economic-Impacts-Literature-Review.pdf)** Literature Review: Economic analyses of the impact of NSF funding
 
 **[US Census - LODES:](https://lehd.ces.census.gov/data/)** Data on commuter flows showing where Americans live and work
 
-**[Grant Witness:](https://grantwitness.org/)** Database tracking terminated, frozen, and restored NIH and NSF grants
+**[Grant Witness:](https://grant-witness.us/)** Database tracking terminated, frozen, and restored NIH and NSF grants

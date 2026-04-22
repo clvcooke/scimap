@@ -4,7 +4,7 @@ hero_subtitle: How we track and analyze the impact of science funding cuts
 overview: We source data on historical grants and budgets for fiscal years
   2020-2024 to construct baseline spending, budget proposal, and indirect cost
   cap maps. Data on disrupted grants are retrieved from [Grant
-  Witness](https://grantwitness.org/). We apply economic and job multipliers
+  Witness](https://grant-witness.us/). We apply economic and job multipliers
   estimated for research spending to project the economic impacts of research
   spending and proposed cuts. We redistribute the impacts of research spending
   based on commuter flows to reflect how investment in scientific research
@@ -16,7 +16,7 @@ geolocating_intro: We source data on historical grants (active between Fiscal
   RePORTER](https://reporter.nih.gov/) and [NSF Awards Simple
   Search](https://www.nsf.gov/awardsearch/) respectively. We rescale obligations
   to reflect the inflation-adjusted budget annually. Data on terminated grants
-  are from [Grant Witness](https://grantwitness.org/). We map grant data based
+  are from [Grant Witness](https://grant-witness.us/). We map grant data based
   on institutional coordinates provided by NIH (latitude, longitude) and
   institution name provided by NSF geolocated using the Google API and
   OpenStreetMap, assigning grants to census tracts using QGIS and ArcPro.
@@ -45,8 +45,9 @@ economic_multiplier_details:
   - For NSF, we apply a uniform national multiplier of $2.64 in new economic
     activity generated per dollar spent and $72,000 spent per job supported
     based on median estimates from a March 2026
-    [report](https://www.nsf.gov/evaluation/reports) from the Evaluation and
-    Assessment Capability of the National Science Foundation.
+    [report](https://nsf-gov-resources.nsf.gov/files/NSF-Economic-Impacts-Literature-Review.pdf)
+    from the Evaluation and Assessment Capability of the National Science
+    Foundation.
 commuter_flows_intro: We redistribute losses across geographic units (e.g.,
   counties and congressional districts) based on the number of commuters who
   live in a given unit and work in the census tract containing the point of the
@@ -98,7 +99,7 @@ disrupted_intro: Many NIH and NSF grants for biomedical and scientific research
   without justification), interrupting ongoing studies and clinical trials.
 disrupted_details:
   - To track cancelled and frozen grants, we use the [Grant
-    Witness](https://grantwitness.org/) database, which is based on reports from
+    Witness](https://grant-witness.us/) database, which is based on reports from
     government sources and researchers. For cancelled and frozen grants, we
     assume that losses are equivalent to the remaining grant funds that were not
     spent at the time of cancellation.
@@ -128,6 +129,8 @@ indirect_costs_details:
   - A proposed change would have capped the indirect cost rate at 15%, well
     below current realized levels of approximately 45% of direct costs. That
     policy is currently blocked following an injunction by a federal judge.
+    However, the policy has been proposed again in the FY2027 White House Budget
+    Proposal.
   - To estimate decreases in funding due to the proposed cap on indirect costs,
     we calculate the difference between funding for indirect costs across grants
     active in fiscal year 2024 and proposed funding with a 15% maximum.
@@ -139,9 +142,9 @@ data_sources:
   - name: United for Medical Research
     url: https://unitedformedicalresearch.org/
   - name: "NSF Economic Impacts: Literature Review"
-    url: https://www.nsf.gov/evaluation/reports
+    url: https://nsf-gov-resources.nsf.gov/files/NSF-Economic-Impacts-Literature-Review.pdf
   - name: US Census - LODES
     url: https://lehd.ces.census.gov/data/
   - name: Grant Witness
-    url: https://grantwitness.org/
+    url: https://grant-witness.us/
 ---
