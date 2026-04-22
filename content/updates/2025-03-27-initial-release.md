@@ -1,6 +1,6 @@
 ---
 date: March 27, 2025
-title: Initial release
+title: SCIMaP Launched
 ---
 
 Initial release.
