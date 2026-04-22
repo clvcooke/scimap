@@ -129,6 +129,8 @@ indirect_costs_details:
   - A proposed change would have capped the indirect cost rate at 15%, well
     below current realized levels of approximately 45% of direct costs. That
     policy is currently blocked following an injunction by a federal judge.
+    However, the policy has been proposed again in the FY2027 White House Budget
+    Proposal.
   - To estimate decreases in funding due to the proposed cap on indirect costs,
     we calculate the difference between funding for indirect costs across grants
     active in fiscal year 2024 and proposed funding with a 15% maximum.
