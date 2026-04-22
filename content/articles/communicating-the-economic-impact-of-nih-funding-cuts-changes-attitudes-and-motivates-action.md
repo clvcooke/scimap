@@ -2,7 +2,7 @@
 title: Communicating the Economic Impact of NIH Funding Cuts Changes Attitudes
   and Motivates Action
 url: https://osf.io/preprints/psyarxiv/bj857_v3
-order: 5
+order: 6
 ---
 In a SCIMaP preprint, Dr. Sinclair and colleagues tested whether information about federal funding cuts changes public attitudes and motivates action. The team ran two pre-registered online behavioral experiments with more than 5,000 participants using text, quizzes, and maps showing economic losses from NIH cuts, and also analyzed real-world sharing behavior and survey responses from over 22,000 SCIMaP website visitors. 
 
