@@ -45,8 +45,9 @@ economic_multiplier_details:
   - For NSF, we apply a uniform national multiplier of $2.64 in new economic
     activity generated per dollar spent and $72,000 spent per job supported
     based on median estimates from a March 2026
-    [report](https://www.nsf.gov/evaluation/reports) from the Evaluation and
-    Assessment Capability of the National Science Foundation.
+    [report](https://nsf-gov-resources.nsf.gov/files/NSF-Economic-Impacts-Literature-Review.pdf)
+    from the Evaluation and Assessment Capability of the National Science
+    Foundation.
 commuter_flows_intro: We redistribute losses across geographic units (e.g.,
   counties and congressional districts) based on the number of commuters who
   live in a given unit and work in the census tract containing the point of the
