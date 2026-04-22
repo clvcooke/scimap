@@ -1,7 +1,7 @@
 ---
 title: "SCIMaP 2025 Annual Report: Results, Challenges and What Comes Next"
-slug: scimap-2025-annual-report-2026-04-10
-date: 2026-04-10
+slug: scimap-2025-annual-report-2026-04-14
+date: 2026-04-14
 author: SCIMaP Team
 summary: The Science & Community Impact Mapping Project has released its 2025
   Annual Report, documenting a year of evidence-based analysis at the
