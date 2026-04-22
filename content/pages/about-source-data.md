@@ -13,4 +13,4 @@ We integrate data from multiple sources to estimate the downstream economic impa
 
 **[US Census - LODES:](https://lehd.ces.census.gov/data/)** Data on commuter flows showing where Americans live and work
 
-**[Grant Witness:](https://grantwitness.org/)** Database tracking terminated, frozen, and restored NIH and NSF grants
+**[Grant Witness:](https://grant-witness.us/)** Database tracking terminated, frozen, and restored NIH and NSF grants
