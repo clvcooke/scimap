@@ -1,6 +1,6 @@
 ---
 name: Aroon Chande, PhD
-role: Technical Consultant
+role: Data Engineer
 photo: /images/team/0-1-.png
 order: 7
 ---
