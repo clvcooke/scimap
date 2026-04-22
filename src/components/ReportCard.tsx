@@ -13,6 +13,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { formatCurrency, formatNumber } from '@/lib/constants'
 import type { ReportCardData, FiscalYear } from '@/lib/report-card-data'
 import { FILL_ALPHA } from '@/lib/color-lut'
+import { useIsMobile } from '@/hooks/use-mobile'
 import ColorScale from './ColorScale'
 import { Events, track, setPersonProperties, repParty, senatorPartyMix } from '@/lib/analytics'
 
@@ -349,6 +350,7 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
   const fyLabel = fiscalYear === 'fy27' ? 'FY27' : 'FY26'
   const fyYear = fiscalYear === 'fy27' ? '2027' : '2026'
   const [shareOpen, setShareOpen] = useState(false)
+  const isMobile = useIsMobile()
 
   const districtName =
     data.CD119FP === '00' ? 'At Large' : data.CD119FP === '98' && data.state === 'DC' ? 'No District' : `District ${parseInt(data.CD119FP, 10)}`
@@ -526,45 +528,45 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
         </div>
       </div>
 
-      {/* Mobile: stack vertically */}
-      <div className="flex flex-col gap-4 md:hidden">
-        <InfoCard data={data} fiscalYear={fiscalYear} />
-        <MiniMap
-          minLat={data.district_bounds.min_lat}
-          maxLat={data.district_bounds.max_lat}
-          minLng={data.district_bounds.min_lng}
-          maxLng={data.district_bounds.max_lng}
-          layers={districtLayers}
-          showColorbar
-          colorbarDomain={DISTRICTS_DOMAIN}
-          className="h-100"
-        />
-      </div>
-
-      {/* Desktop: side-by-side */}
-      <div className="hidden gap-4 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+      {isMobile ? (
         <div className="flex flex-col gap-4">
           <InfoCard data={data} fiscalYear={fiscalYear} />
           <MiniMap
-            minLat={data.state_bounds.min_lat}
-            maxLat={data.state_bounds.max_lat}
-            minLng={data.state_bounds.min_lng}
-            maxLng={data.state_bounds.max_lng}
-            layers={stateLayers}
-            className="min-h-55 flex-1"
+            minLat={data.district_bounds.min_lat}
+            maxLat={data.district_bounds.max_lat}
+            minLng={data.district_bounds.min_lng}
+            maxLng={data.district_bounds.max_lng}
+            layers={districtLayers}
+            showColorbar
+            colorbarDomain={DISTRICTS_DOMAIN}
+            className="h-100"
           />
         </div>
-        <MiniMap
-          minLat={data.district_bounds.min_lat}
-          maxLat={data.district_bounds.max_lat}
-          minLng={data.district_bounds.min_lng}
-          maxLng={data.district_bounds.max_lng}
-          layers={districtLayers}
-          showColorbar
-          colorbarDomain={DISTRICTS_DOMAIN}
-          className="min-h-125"
-        />
-      </div>
+      ) : (
+        <div className="grid gap-4 grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <div className="flex flex-col gap-4">
+            <InfoCard data={data} fiscalYear={fiscalYear} />
+            <MiniMap
+              minLat={data.state_bounds.min_lat}
+              maxLat={data.state_bounds.max_lat}
+              minLng={data.state_bounds.min_lng}
+              maxLng={data.state_bounds.max_lng}
+              layers={stateLayers}
+              className="min-h-55 flex-1"
+            />
+          </div>
+          <MiniMap
+            minLat={data.district_bounds.min_lat}
+            maxLat={data.district_bounds.max_lat}
+            minLng={data.district_bounds.min_lng}
+            maxLng={data.district_bounds.max_lng}
+            layers={districtLayers}
+            showColorbar
+            colorbarDomain={DISTRICTS_DOMAIN}
+            className="min-h-125"
+          />
+        </div>
+      )}
 
       {/* Footer */}
       <div className="mt-6 text-center text-xs text-gray-500">

@@ -1,11 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 /**
  * Overlay that blocks map interaction until the user clicks on it.
  * Lets page scroll pass through the map area instead of being captured for zoom.
  * Deactivates on click inside, reactivates on Escape or click outside.
+ * Desktop only — mobile uses native touch conventions for map panning.
  */
 export default function MapFocusOverlay() {
+  const isMobile = useIsMobile()
   const [active, setActive] = useState(true)
   const overlayRef = useRef<HTMLDivElement>(null)
 
@@ -34,7 +37,7 @@ export default function MapFocusOverlay() {
     }
   }, [active, activate])
 
-  if (!active) return null
+  if (isMobile || !active) return null
 
   return (
     <div

@@ -13,6 +13,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { formatCurrency, formatNumber } from '@/lib/constants'
 import type { StateReportCardData, FiscalYear } from '@/lib/report-card-data'
 import { FILL_ALPHA } from '@/lib/color-lut'
+import { useIsMobile } from '@/hooks/use-mobile'
 import ColorScale from './ColorScale'
 import { Events, track, setPersonProperties, senatorPartyMix } from '@/lib/analytics'
 
@@ -256,6 +257,7 @@ export default function StateReportCard({
   const fyLabel = 'FY27'
   const fyYear = '2027'
   const [shareOpen, setShareOpen] = useState(false)
+  const isMobile = useIsMobile()
 
   const currentUrl =
     typeof window !== 'undefined'
@@ -388,33 +390,35 @@ export default function StateReportCard({
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 md:hidden">
-        <InfoCard data={data} />
-        <MiniMap
-          minLat={data.state_bounds.min_lat}
-          maxLat={data.state_bounds.max_lat}
-          minLng={data.state_bounds.min_lng}
-          maxLng={data.state_bounds.max_lng}
-          layers={stateLayers}
-          showColorbar
-          colorbarDomain={STATE_DOMAIN}
-          className="h-100"
-        />
-      </div>
-
-      <div className="hidden gap-4 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-        <InfoCard data={data} />
-        <MiniMap
-          minLat={data.state_bounds.min_lat}
-          maxLat={data.state_bounds.max_lat}
-          minLng={data.state_bounds.min_lng}
-          maxLng={data.state_bounds.max_lng}
-          layers={stateLayers}
-          showColorbar
-          colorbarDomain={STATE_DOMAIN}
-          className="min-h-125"
-        />
-      </div>
+      {isMobile ? (
+        <div className="flex flex-col gap-4">
+          <InfoCard data={data} />
+          <MiniMap
+            minLat={data.state_bounds.min_lat}
+            maxLat={data.state_bounds.max_lat}
+            minLng={data.state_bounds.min_lng}
+            maxLng={data.state_bounds.max_lng}
+            layers={stateLayers}
+            showColorbar
+            colorbarDomain={STATE_DOMAIN}
+            className="h-100"
+          />
+        </div>
+      ) : (
+        <div className="grid gap-4 grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <InfoCard data={data} />
+          <MiniMap
+            minLat={data.state_bounds.min_lat}
+            maxLat={data.state_bounds.max_lat}
+            minLng={data.state_bounds.min_lng}
+            maxLng={data.state_bounds.max_lng}
+            layers={stateLayers}
+            showColorbar
+            colorbarDomain={STATE_DOMAIN}
+            className="min-h-125"
+          />
+        </div>
+      )}
 
       <div className="mt-6 text-center text-xs text-gray-500">
         Funding losses are calculated by comparing the FY {fyYear} proposed NIH and NSF budgets with

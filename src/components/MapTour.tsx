@@ -4,7 +4,11 @@ import 'intro.js/introjs.css'
 
 const TOUR_SEEN_KEY = 'scimap:map-tour-seen'
 
-export default function MapTour() {
+interface MapTourProps {
+  onTourActiveChange?: (active: boolean) => void
+}
+
+export default function MapTour({ onTourActiveChange }: MapTourProps = {}) {
   useEffect(() => {
     if (typeof window === 'undefined') return
     if (localStorage.getItem(TOUR_SEEN_KEY)) return
@@ -31,7 +35,7 @@ export default function MapTour() {
             element: toggles as HTMLElement,
             title: 'Switch geography and filters',
             intro:
-              'Toggle between states, counties, congressional districts, and cities — plus any map-specific filters shown here.',
+              'Toggle between states, counties, congressional districts, and cities — plus any map-specific data filters shown here.',
           },
           {
             element: locate as HTMLElement,
@@ -42,25 +46,30 @@ export default function MapTour() {
             element: canvas as HTMLElement,
             title: 'Open region details',
             intro:
-              'Click any region on the map to open a detailed breakdown of projected funding cuts, jobs lost, and economic impact.',
+              'Click any region on the map to open a detailed breakdown of projected impacts on local economies and jobs.',
           },
           {
             element: share as HTMLElement,
             title: 'Share what you find',
             intro:
-              'Copy the link or post to social — the URL preserves your current view so others land on the same spot.',
+              'Copy the link or post to social media.',
           },
         ],
       })
 
       const markSeen = () => localStorage.setItem(TOUR_SEEN_KEY, '1')
-      intro.oncomplete(markSeen)
-      intro.onexit(markSeen)
+      const finish = () => {
+        markSeen()
+        onTourActiveChange?.(false)
+      }
+      intro.oncomplete(finish)
+      intro.onexit(finish)
+      onTourActiveChange?.(true)
       void intro.start()
     }, 500)
 
     return () => window.clearTimeout(timer)
-  }, [])
+  }, [onTourActiveChange])
 
   return null
 }

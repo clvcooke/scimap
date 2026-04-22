@@ -89,10 +89,6 @@ function GrantsPreview() {
       new IconClusterLayer<GrantTermination>({
         data: GRANT_LOSSES,
         getPosition: getGrantPosition,
-        getSize: 50,
-        iconAtlas: '/location-icon-atlas-v7.png',
-        iconMapping: '/location-icon-mapping.json',
-        getColor: () => [0, 255, 0, 100],
         id: 'grants-preview-cluster',
         sizeScale: 40,
         pickable: false,

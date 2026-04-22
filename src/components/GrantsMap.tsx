@@ -69,10 +69,6 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
       new IconClusterLayer<GrantTermination>({
         data: filteredGrants,
         getPosition: getGrantPosition,
-        getSize: 50,
-        iconAtlas: '/location-icon-atlas-v7.png',
-        iconMapping: '/location-icon-mapping.json',
-        getColor: () => [0, 255, 0, 100],
         id: 'icon-cluster',
         sizeScale: 40,
         pickable: true,

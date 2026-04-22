@@ -138,6 +138,7 @@ export default function ChoroplethMap<K extends string>({
   const [geoLevel, setGeoLevel] = useState<K>(defaultLevel)
   const [selectedProps, setSelectedProps] = useState<TileProps | null>(null)
   const [previewProps, setPreviewProps] = useState<TileProps | null>(null)
+  const [mobileTooltipProps, setMobileTooltipProps] = useState<TileProps | null>(null)
   const [viewState, setViewState] = useState(() => ({
     ...INITIAL_VIEW_STATE,
     ...(initialLat != null && initialLng != null
@@ -149,13 +150,15 @@ export default function ChoroplethMap<K extends string>({
   )
   const isMobile = useIsMobile()
   const [showAbout, setShowAbout] = useState(!isMobile)
+  const [tourActive, setTourActive] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const aboutPanelRef = useRef<HTMLDivElement>(null)
 
-  // Close about panel when clicking outside
+  // Close about panel when clicking outside (but not while the tour is running —
+  // intro.js overlay clicks would otherwise dismiss it).
   useEffect(() => {
-    if (!showAbout) return
+    if (!showAbout || tourActive) return
     function handleClick(e: MouseEvent) {
       if (aboutPanelRef.current && !aboutPanelRef.current.contains(e.target as Node)) {
         setShowAbout(false)
@@ -163,7 +166,7 @@ export default function ChoroplethMap<K extends string>({
     }
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
-  }, [showAbout])
+  }, [showAbout, tourActive])
   const labelsStyle = useLabelsStyle()
 
   const config = geoLevels[geoLevel]
@@ -225,6 +228,17 @@ export default function ChoroplethMap<K extends string>({
       const props = (info.object as { properties?: TileProps } | undefined)?.properties
       if (props) {
         trackGeographyClick(props, geoLevel as unknown as LossGeoLevel, mapType)
+      }
+
+      // Mobile tooltip card for maps without a drawer (e.g. grants).
+      // On desktop the hover tooltip covers this; on mobile, tapping a region
+      // shows the same info as a dismissible card.
+      if (isMobile && !drawerConfig) {
+        if (props) {
+          setMobileTooltipProps(props)
+          return
+        }
+        if (!info.object) setMobileTooltipProps(null)
       }
 
       // If a custom click handler is provided, delegate to it
@@ -296,7 +310,7 @@ export default function ChoroplethMap<K extends string>({
               >
                 <Info className="h-4 w-4 text-gray-600 md:h-5 md:w-5" />
               </button>
-              {showAbout && (
+              {showAbout && !tourActive && (
                 <div className="absolute right-0 top-full mt-2 w-72 rounded-lg bg-white/95 p-4 shadow-lg backdrop-blur-sm md:w-96 md:p-5">
                   <div className="mb-2 flex items-start justify-between md:mb-3">
                     <h4 className="text-sm font-semibold text-gray-900 md:text-base">{aboutContent.heading ?? 'About This Map'}</h4>
@@ -371,6 +385,25 @@ export default function ChoroplethMap<K extends string>({
         />
       )}
 
+      {/* Mobile tooltip card — shown for maps without a drawer when a region is tapped */}
+      {isMobile && !drawerConfig && mobileTooltipProps && (
+        <div className="absolute bottom-2 left-2 right-14 z-20 rounded-xl bg-white p-3 text-sm text-gray-900 shadow-lg">
+          <div className="flex items-start gap-2">
+            <div
+              className="min-w-0 flex-1 space-y-0.5 [&_.font-semibold]:text-gray-900"
+              dangerouslySetInnerHTML={{ __html: renderTooltip(mobileTooltipProps, geoLevel) }}
+            />
+            <button
+              onClick={() => setMobileTooltipProps(null)}
+              className="shrink-0 rounded-md p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+              aria-label="Close"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Built-in drawer for budget maps */}
       {drawerConfig && (
         <>
@@ -398,7 +431,7 @@ export default function ChoroplethMap<K extends string>({
       )}
 
       {children}
-      <MapTour />
+      <MapTour onTourActiveChange={setTourActive} />
     </div>
   )
 }
