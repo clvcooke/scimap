@@ -35,6 +35,7 @@ import ColorScale, { type ColorScheme } from './ColorScale'
 import BudgetDrawer, { type BudgetDrawerConfig } from './BudgetDrawer'
 import type { FiscalYear } from '@/lib/report-card-data'
 import BudgetMobileCard from './BudgetMobileCard'
+import MapTour from './MapTour'
 
 export interface MapAboutContent {
   heading?: string
@@ -251,10 +252,10 @@ export default function ChoroplethMap<K extends string>({
   )
 
   return (
-    <div ref={containerRef} className="absolute inset-x-4 inset-y-2 overflow-hidden rounded-xl shadow-lg md:inset-x-16 md:inset-y-8">
+    <div ref={containerRef} data-tour="map-canvas" className="absolute inset-x-4 inset-y-2 overflow-hidden rounded-xl shadow-lg md:inset-x-16 md:inset-y-8">
       {/* Top bar: region selector (left) + info/share (right) */}
       <div className="pointer-events-none absolute left-2 right-2 top-2 z-10 flex items-start justify-between md:left-4 md:right-4 md:top-4">
-        <div className="pointer-events-auto flex flex-col gap-2 md:rounded-lg md:bg-white/90 md:p-3 md:shadow-md md:backdrop-blur-sm">
+        <div data-tour="map-toggles" className="pointer-events-auto flex flex-col gap-2 md:rounded-lg md:bg-white/90 md:p-3 md:shadow-md md:backdrop-blur-sm">
           <Tabs
             value={geoLevel}
             onValueChange={(v: string) => {
@@ -397,6 +398,7 @@ export default function ChoroplethMap<K extends string>({
       )}
 
       {children}
+      <MapTour />
     </div>
   )
 }

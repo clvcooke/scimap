@@ -31,6 +31,7 @@ export default function MapControls({
         <Minus className="size-4" />
       </button>
       <button
+        data-tour="map-locate"
         onClick={() => {
           navigator.geolocation.getCurrentPosition((pos) => {
             const { latitude, longitude } = pos.coords
