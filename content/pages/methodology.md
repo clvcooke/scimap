@@ -9,7 +9,8 @@ overview: We source data on historical grants and budgets for fiscal years
   spending and proposed cuts. We redistribute the impacts of research spending
   based on commuter flows to reflect how investment in scientific research
   creates jobs and economic opportunities in the communities that surround
-  research institutions.
+  research institutions. Code and data are available on
+  [Github](https://github.com/scienceimpacts/SciMap_Maps).
 geolocating_intro: We source data on historical grants (active between Fiscal
   Year 2020 and Fiscal Year 2024) from the National Institutes of Health (NIH)
   and National Science Foundation (NSF) [NIH
@@ -133,10 +134,10 @@ updates_intro: SCIMaP updates its data and visualizations to reflect the current
   state of funding cuts. For the full data history you can reference the
   publicly available data at the [Open Science Framework
   link](http://doi.org/10.17605/OSF.IO/H398E).
+updates_signup_cta: Sign up for email updates
+updates_signup_url: https://upenn.co1.qualtrics.com/jfe/form/SV_5vDEXlLWG9IyWmW
 updates_signup_text: To receive email updates about major website releases,
   reports, and publications, please sign up here.
-updates_signup_url: https://upenn.co1.qualtrics.com/jfe/form/SV_5vDEXlLWG9IyWmW
-updates_signup_cta: Sign up for email updates
 data_sources:
   - name: NIH RePORTER
     url: https://reporter.nih.gov/
