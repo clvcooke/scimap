@@ -10,7 +10,7 @@ image: /images/screenshot-2026-04-17-at-8.18.02 am.png
 tags:
   - annual-report
   - research
-downloadable: https://example.com/scimap-2025-annual-report.pdf
+downloadable: https://data.scienceimpacts.org/SCIMaP%20Press%20Release%20April%2022%202026%20NIH-NSF%20FY2027%20Budget.pdf
 downloadable_title: Download Full Report (PDF)
 ---
 The Science and Community Impacts Mapping Project (SCIMaP) team has published its 2025 Annual Report. 
