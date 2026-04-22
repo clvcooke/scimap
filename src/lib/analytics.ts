@@ -49,14 +49,20 @@ const isDev = import.meta.env.DEV
 
 // ── Init ───────────────────────────────────────────────────────────
 
+// PostHog project API keys (phc_*) are public-safe — they're designed to ship
+// to the browser. Hardcoding here keeps config simple; env vars can override
+// for local experimentation or a separate staging project.
+const DEFAULT_POSTHOG_KEY = 'phc_7xCOByPPLiPt1qyRf23Ga7ra7qPrAv6NkIkCn4lkZUH'
+const DEFAULT_POSTHOG_HOST = 'https://posthog.scienceimpacts.org'
+
 export function initAnalytics(router: AnyRouter): void {
-  const key = import.meta.env.VITE_POSTHOG_KEY as string | undefined
-  const host =
-    (import.meta.env.VITE_POSTHOG_HOST as string | undefined) ??
-    'https://us.i.posthog.com'
+  const envKey = import.meta.env.VITE_POSTHOG_KEY as string | undefined
+  const envHost = import.meta.env.VITE_POSTHOG_HOST as string | undefined
+  const key = envKey && envKey.length > 0 ? envKey : DEFAULT_POSTHOG_KEY
+  const host = envHost && envHost.length > 0 ? envHost : DEFAULT_POSTHOG_HOST
 
   if (!key) {
-    if (isDev) console.debug('[analytics] disabled — no VITE_POSTHOG_KEY')
+    if (isDev) console.debug('[analytics] disabled — no key')
   } else {
     posthog.init(key, {
       api_host: host,

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef, type ReactNode } from 'react'
 import {
   Megaphone,
@@ -127,19 +127,23 @@ function TakeActionPage() {
           <p className="mb-5 text-lg leading-relaxed text-gray-700 [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-sky">
             <InlineMarkdown>{a.contact_intro}</InlineMarkdown>
           </p>
-          <div className="mb-6">
-            <Link
-              to="/fy27"
-              onClick={() => {
-                track(Events.TAKE_ACTION_FIND_REPS_CLICKED, {})
-                setPersonProperties({ has_clicked_find_reps: true })
-              }}
-              className="inline-flex items-center gap-2 rounded-md bg-brand-blue px-5 py-3 text-base font-bold text-white transition-colors hover:bg-brand-blue-dark"
-            >
-              <MapPin className="size-4" />
-              Find your representatives
-            </Link>
-          </div>
+          {a.contact_link && (
+            <div className="mb-6">
+              <a
+                href={a.contact_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => {
+                  track(Events.TAKE_ACTION_FIND_REPS_CLICKED, {})
+                  setPersonProperties({ has_clicked_find_reps: true })
+                }}
+                className="inline-flex items-center gap-2 rounded-md bg-brand-blue px-5 py-3 text-base font-bold text-white transition-colors hover:bg-brand-blue-dark"
+              >
+                <MapPin className="size-4" />
+                {a.contact_link_text ?? 'Find your representatives'}
+              </a>
+            </div>
+          )}
           <BulletList items={a.talking_points ?? []} />
         </div>
       </Section>
