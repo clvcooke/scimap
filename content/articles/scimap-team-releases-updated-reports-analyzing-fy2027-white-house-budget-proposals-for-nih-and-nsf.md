@@ -1,5 +1,5 @@
 ---
-title: SCIMaP team releases new reports analyzing FY2027 White House budget
+title: SCIMaP team releases new reports analyzing FY 2027 White House budget
   proposals for NIH and NSF
 url: scienceimpacts.org
 order: 1
