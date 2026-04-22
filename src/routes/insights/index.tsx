@@ -1,0 +1,314 @@
+import { lazy, Suspense, useState } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { BookOpen, ExternalLink, Newspaper, Archive, ChevronDown, PenLine } from 'lucide-react'
+import MapAttribution from '@/components/MapAttribution'
+import { InlineMarkdown } from '@/components/InlineMarkdown'
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from '@/components/ui/tabs'
+import { getArticles, getBlogPosts, getPage } from '@/lib/content'
+
+const IDCMap = lazy(() => import('@/components/IDCMap'))
+const FY26Map = lazy(() => import('@/components/FY26Map'))
+
+const VALID_TABS = ['research', 'blog', 'substack', 'archived'] as const
+type Tab = (typeof VALID_TABS)[number]
+
+export const Route = createFileRoute('/insights/')({
+  component: InsightsPage,
+  validateSearch: (search: Record<string, unknown>): { tab?: Tab } => {
+    const tab = VALID_TABS.includes(search.tab as Tab)
+      ? (search.tab as Tab)
+      : undefined
+    return tab !== undefined ? { tab } : {}
+  },
+})
+
+/* ── Data ──────────────────────────────────────────────────────────── */
+
+const ARTICLES = getArticles()
+const BLOG_POSTS = getBlogPosts()
+const PAGE = getPage('insights')
+
+/* ── Collapsible section ───────────────────────────────────────────── */
+
+function CollapsibleSection({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex w-full cursor-pointer items-center justify-between px-5 py-4 text-left text-lg font-semibold text-gray-900 hover:bg-gray-50"
+      >
+        {title}
+        <ChevronDown
+          className={`h-5 w-5 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+      {open && <div className="border-t border-gray-200 px-5 py-5">{children}</div>}
+    </div>
+  )
+}
+
+/* ── Page ──────────────────────────────────────────────────────────── */
+
+function InsightsPage() {
+  const a = PAGE.attrs
+  const { tab } = Route.useSearch()
+  const navigate = Route.useNavigate()
+  const activeTab = tab ?? 'research'
+
+  return (
+    <div className="flex w-full flex-col bg-neutral-50">
+      {/* Compact page header + tab bar — single band */}
+      <Tabs
+        value={activeTab}
+        onValueChange={(v) => {
+          void navigate({ search: { tab: v as Tab }, replace: true })
+        }}
+        className="w-full gap-0"
+      >
+        <div className="w-full bg-white px-6 pt-6">
+          <div className="mx-auto max-w-4xl">
+            <h1 className="text-2xl font-bold text-brand-blue">Insights</h1>
+            <p className="mt-1 text-sm text-gray-500">
+              Publications, analysis, and deeper dives into the data
+            </p>
+
+            <div className="-mb-px mt-5 border-b border-gray-200">
+              <TabsList
+                variant="line"
+                className="h-10 w-full justify-start gap-0"
+              >
+                <TabsTrigger
+                  value="research"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
+                >
+                  <BookOpen className="hidden h-4 w-4 sm:block" />
+                  Research
+                </TabsTrigger>
+                <TabsTrigger
+                  value="blog"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
+                >
+                  <PenLine className="hidden h-4 w-4 sm:block" />
+                  Blog
+                </TabsTrigger>
+                <TabsTrigger
+                  value="substack"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
+                >
+                  <Newspaper className="hidden h-4 w-4 sm:block" />
+                  Science Matters
+                </TabsTrigger>
+                <TabsTrigger
+                  value="archived"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
+                >
+                  <Archive className="hidden h-4 w-4 sm:block" />
+                  Archived Maps
+                </TabsTrigger>
+              </TabsList>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Research Insights ─────────────────────────────────────── */}
+        <TabsContent value="research" className="text-base">
+          <div className="w-full px-6 py-8 md:py-10">
+            <div className="mx-auto max-w-4xl">
+              <p className="mb-6 leading-relaxed text-gray-600">
+                {a.research_intro}
+              </p>
+
+              <div className="space-y-4">
+                {ARTICLES.map((article) => (
+                  <div
+                    key={article.title}
+                    className="flex gap-5 rounded-lg border border-gray-200 bg-white p-5 shadow-sm"
+                  >
+                    {article.image && (
+                      article.url ? (
+                        <a
+                          href={article.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hidden shrink-0 sm:block"
+                        >
+                          <img
+                            src={article.image}
+                            alt=""
+                            className="h-28 w-28 rounded-md object-cover"
+                          />
+                        </a>
+                      ) : (
+                        <img
+                          src={article.image}
+                          alt=""
+                          className="hidden h-28 w-28 shrink-0 rounded-md object-cover sm:block"
+                        />
+                      )
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-3">
+                        {article.url ? (
+                          <a
+                            href={article.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold text-gray-900 hover:text-brand-blue"
+                          >
+                            {article.title}
+                          </a>
+                        ) : (
+                          <span className="font-semibold text-gray-900">
+                            {article.title}
+                          </span>
+                        )}
+                        {article.url && (
+                          <a
+                            href={article.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-0.5 shrink-0"
+                          >
+                            <ExternalLink className="h-4 w-4 text-gray-300 transition-colors hover:text-brand-blue" />
+                          </a>
+                        )}
+                      </div>
+                      {article.date && (
+                        <p className="mt-1 text-sm text-gray-400">
+                          {new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        </p>
+                      )}
+                      <p className="mt-2 text-[15px] leading-relaxed text-gray-500">
+                        <InlineMarkdown>{article.blurb}</InlineMarkdown>
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* ── Blog ─────────────────────────────────────────────────── */}
+        <TabsContent value="blog" className="text-base">
+          <div className="w-full px-6 py-8 md:py-10">
+            <div className="mx-auto max-w-4xl">
+              <p className="mb-6 leading-relaxed text-gray-600">
+                Analysis, commentary, and deeper dives from the SCIMaP team.
+              </p>
+
+              <div className="space-y-4">
+                {BLOG_POSTS.map((post) => (
+                  <Link
+                    key={post.slug}
+                    to="/insights/$slug"
+                    params={{ slug: post.slug }}
+                    className="group flex gap-5 rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition-colors hover:border-brand-blue/30"
+                  >
+                    {post.image && (
+                      <div className="hidden shrink-0 sm:block">
+                        <img
+                          src={post.image}
+                          alt=""
+                          className="h-28 w-28 rounded-md object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold text-gray-900 group-hover:text-brand-blue">
+                        {post.title}
+                      </h3>
+                      <div className="mt-1 flex items-center gap-3 text-sm text-gray-400">
+                        <span>
+                          {new Date(post.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
+                        </span>
+                        {post.author && (
+                          <>
+                            <span className="text-gray-300">|</span>
+                            <span>{post.author}</span>
+                          </>
+                        )}
+                      </div>
+                      <p className="mt-2 text-[15px] leading-relaxed text-gray-500">
+                        {post.summary}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* ── Science Matters ──────────────────────────────────────── */}
+        <TabsContent value="substack" className="text-base">
+          <div className="w-full px-6 py-8 md:py-10">
+            <div className="mx-auto max-w-4xl">
+              <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm md:p-8">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {a.substack_heading}
+                </h2>
+                <p className="mt-2 leading-relaxed text-gray-500">
+                  {a.substack_description}
+                </p>
+                <a
+                  href={a.substack_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 rounded-lg bg-brand-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-light"
+                >
+                  {a.substack_button_text}
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* ── Archived Maps ────────────────────────────────────────── */}
+        <TabsContent value="archived" className="text-base">
+          <div className="w-full px-6 py-8 md:py-10">
+            <div className="mx-auto max-w-4xl space-y-4">
+              <CollapsibleSection title="Analysis of Research Infrastructure Funding, 2025">
+                <p className="mb-6 leading-relaxed text-gray-600">
+                  {a.idc_intro}
+                </p>
+                <div className="relative h-125 md:h-150">
+                  <Suspense fallback={<div className="flex h-full items-center justify-center text-gray-400">Loading map…</div>}>
+                    <IDCMap />
+                  </Suspense>
+                </div>
+                <MapAttribution />
+              </CollapsibleSection>
+
+              <CollapsibleSection title="Analysis of White House FY26 Budget Proposal">
+                <div className="relative h-125 md:h-150">
+                  <Suspense fallback={<div className="flex h-full items-center justify-center text-gray-400">Loading map…</div>}>
+                    <FY26Map />
+                  </Suspense>
+                </div>
+                <MapAttribution />
+              </CollapsibleSection>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}

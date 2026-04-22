@@ -1,0 +1,360 @@
+backend:
+  name: git-gateway
+  branch: new-maps
+  identity_url: https://scimap.netlify.app/.netlify/identity
+  gateway_url: https://scimap.netlify.app/.netlify/git
+
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: team
+    label: Team Members
+    folder: content/team
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["order", "name"]
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Role", name: "role", widget: "string" }
+      - { label: "Photo", name: "photo", widget: "image", required: false }
+      - { label: "Display Order", name: "order", widget: "number", value_type: "int" }
+      - { label: "Bio", name: "body", widget: "markdown" }
+
+  - name: news
+    label: News
+    folder: content/news
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["date", "title"]
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "string", hint: "e.g. 'March 28, 2025' or 'Ongoing'" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Source", name: "source", widget: "string" }
+      - { label: "URL", name: "url", widget: "string" }
+      - { label: "Image", name: "image", widget: "image", required: false, hint: "Optional image to display with the news item" }
+      - { label: "Ongoing?", name: "is_ongoing", widget: "boolean", default: false }
+
+  - name: press-releases
+    label: Press Releases
+    folder: content/press-releases
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["date", "title"]
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "string", hint: "e.g. 'March 28, 2025'" }
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Image", name: "image", widget: "image", required: false, hint: "Optional image to display with the press release" }
+      - { label: "URL", name: "url", widget: "string" }
+
+  - name: insights
+    label: Blog Posts
+    folder: content/insights
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["date", "title"]
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", hint: "URL-friendly identifier, e.g. 'my-post-2026-04-14'" }
+      - { label: "Date", name: "date", widget: "string", hint: "e.g. '2026-04-14'" }
+      - { label: "Author", name: "author", widget: "string" }
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Tags", name: "tags", widget: "list" }
+      - { label: "Downloadable URL", name: "downloadable", widget: "string", required: false, hint: "Link to a downloadable file (e.g. PDF)" }
+      - { label: "Downloadable Title", name: "downloadable_title", widget: "string", required: false, hint: "Button text for the download link" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: updates
+    label: Methodology Updates
+    folder: content/updates
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["date", "title"]
+    summary: "{{date}} — {{title}}"
+    fields:
+      - { label: "Date", name: "date", widget: "string", hint: "e.g. 'September 15, 2025'" }
+      - { label: "Title", name: "title", widget: "string", required: false, hint: "Optional short headline shown above the description" }
+      - { label: "Description", name: "body", widget: "markdown" }
+
+  - name: articles
+    label: Research Articles
+    folder: content/articles
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["order", "title"]
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "URL", name: "url", widget: "string", required: false }
+      - { label: "Display Order", name: "order", widget: "number", value_type: "int" }
+      - { label: "Blurb", name: "body", widget: "markdown" }
+
+  # ─────────────────────────────────────────────────────────────────
+  # Site Pages — home, about, contact, take-action, insights landing, footer
+  # ─────────────────────────────────────────────────────────────────
+  - name: site-pages
+    label: "Site Pages"
+    files:
+      - name: home
+        label: "Home Page"
+        file: content/pages/home.md
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "text" }
+          - { label: "Hero Primary CTA", name: "hero_cta_primary", widget: "string" }
+          - { label: "Hero Secondary CTA", name: "hero_cta_secondary", widget: "string" }
+
+          - { label: "What's At Stake Heading", name: "stakes_heading", widget: "string" }
+          - label: "What's At Stake Paragraphs"
+            name: "stakes_paragraphs"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Metrics Heading", name: "metrics_heading", widget: "string" }
+          - label: "Metrics"
+            name: "metrics"
+            widget: "list"
+            fields:
+              - { label: "Value", name: "value", widget: "string", hint: "e.g. '$11B', '49K'" }
+              - { label: "Label", name: "label", widget: "string" }
+
+          - { label: "Local Area Heading", name: "local_heading", widget: "string" }
+          - { label: "Local Area Description", name: "local_description", widget: "text" }
+
+          - { label: "Why This Matters Heading", name: "why_heading", widget: "string" }
+          - label: "Why This Matters Paragraphs"
+            name: "why_paragraphs"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+          - { label: "Why This Matters CTA", name: "why_cta", widget: "string" }
+
+          - { label: "Who We Serve Heading", name: "who_heading", widget: "string" }
+          - label: "Who We Serve Items"
+            name: "who_items"
+            widget: "list"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Description", name: "desc", widget: "text" }
+
+      - name: about-overview
+        label: "About Page"
+        file: content/pages/about-overview.md
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Video URL", name: "video_url", widget: "string", required: false }
+          - { label: "Video Heading", name: "video_heading", widget: "string", required: false }
+          - { label: "Body", name: "body", widget: "markdown" }
+
+      - name: insights-landing
+        label: "Insights Landing Page"
+        file: content/pages/insights.md
+        fields:
+          - { label: "Research Intro", name: "research_intro", widget: "text" }
+          - { label: "Substack Heading", name: "substack_heading", widget: "string" }
+          - { label: "Substack Description", name: "substack_description", widget: "text" }
+          - { label: "Substack URL", name: "substack_url", widget: "string" }
+          - { label: "Substack Button Text", name: "substack_button_text", widget: "string" }
+          - { label: "IDC Intro", name: "idc_intro", widget: "text" }
+
+      - name: contact
+        label: "Contact Page"
+        file: content/pages/contact.md
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
+          - label: "Contact Cards"
+            name: "contacts"
+            widget: "list"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Icon", name: "icon", widget: "select", options: ["mail", "newspaper"], default: "mail" }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Email", name: "email", widget: "string" }
+
+      - name: take-action
+        label: "Take Action Page"
+        file: content/pages/take-action.md
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "text" }
+          - { label: "Contact Heading", name: "contact_heading", widget: "string" }
+          - { label: "Contact Intro", name: "contact_intro", widget: "text", hint: "Supports inline markdown" }
+          - { label: "Contact Link URL", name: "contact_link", widget: "string" }
+          - { label: "Contact Link Text", name: "contact_link_text", widget: "string" }
+          - label: "Talking Points"
+            name: "talking_points"
+            widget: "list"
+            field: { label: "Point", name: "point", widget: "text", hint: "Supports inline markdown" }
+          - { label: "Share Heading", name: "share_heading", widget: "string" }
+          - { label: "Share Intro", name: "share_intro", widget: "text" }
+          - label: "Partner Organizations"
+            name: "organizations"
+            widget: "list"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "URL", name: "url", widget: "string" }
+
+      - name: footer
+        label: "Site Footer"
+        file: content/pages/footer.md
+        fields:
+          - { label: "Site Name", name: "site_name", widget: "string" }
+          - { label: "Tagline", name: "tagline", widget: "text" }
+          - { label: "Press Email", name: "press_email", widget: "string" }
+          - { label: "Contact Email", name: "contact_email", widget: "string" }
+          - { label: "Organization Line", name: "org_line", widget: "text" }
+
+  # ─────────────────────────────────────────────────────────────────
+  # Map Pages — one entry per map, plus the maps gallery index
+  # ─────────────────────────────────────────────────────────────────
+  - name: map-pages
+    label: "Map Pages"
+    files:
+      - name: maps-index
+        label: "Maps Gallery (Index)"
+        file: content/pages/maps-index.md
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+
+      - name: map-baseline
+        label: "Baseline Funding Map"
+        file: content/pages/map-baseline.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: map-fy26
+        label: "FY26 Budget Impact Map"
+        file: content/pages/map-fy26.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: map-fy27
+        label: "FY27 Budget Impact Map"
+        file: content/pages/map-fy27.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: map-grants
+        label: "Grant Terminations Map"
+        file: content/pages/map-grants.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+      - name: map-idc
+        label: "Research Infrastructure (IDC) Map"
+        file: content/pages/map-idc.md
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", hint: "Shown in the top bar above the map" }
+          - { label: "Page Blurb", name: "blurb", widget: "text", hint: "Short tagline shown next to the title in the top bar" }
+          - { label: "About Popup — Heading", name: "heading", widget: "string" }
+          - { label: "About Popup — Description", name: "description", widget: "text", hint: "Supports inline markdown (e.g. **bold**, [links](url))" }
+          - label: "About Popup — Data Sources"
+            name: "data_sources"
+            widget: "list"
+            field: { label: "Source", name: "source", widget: "string", hint: "Markdown link, e.g. [Source Name](https://example.com)" }
+
+  # ─────────────────────────────────────────────────────────────────
+  # Methodology Pages — the main methodology page + its two tabs
+  # ─────────────────────────────────────────────────────────────────
+  - name: methodology-pages
+    label: "Methodology Pages"
+    files:
+      - name: methodology
+        label: "Methodology (Main)"
+        file: content/pages/methodology.md
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
+          - { label: "Overview", name: "overview", widget: "text" }
+
+          - { label: "Geolocating Grants — Intro", name: "geolocating_intro", widget: "text" }
+          - label: "Geolocating Grants — Details"
+            name: "geolocating_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Economic Multiplier — Intro", name: "economic_multiplier_intro", widget: "text" }
+          - label: "Economic Multiplier — Details"
+            name: "economic_multiplier_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Commuter Flows — Intro", name: "commuter_flows_intro", widget: "text" }
+          - label: "Commuter Flows — Details"
+            name: "commuter_flows_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Baseline — Intro", name: "baseline_intro", widget: "text" }
+          - label: "Baseline — Details"
+            name: "baseline_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "FY2027 Budget Cuts — Intro", name: "fy2027_intro", widget: "text" }
+          - label: "FY2027 Budget Cuts — Details"
+            name: "fy2027_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Disrupted Grants — Intro", name: "disrupted_intro", widget: "text" }
+          - label: "Disrupted Grants — Details"
+            name: "disrupted_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Indirect Costs — Intro", name: "indirect_costs_intro", widget: "text" }
+          - label: "Indirect Costs — Details"
+            name: "indirect_costs_details"
+            widget: "list"
+            field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Updates — Intro", name: "updates_intro", widget: "text", required: false, hint: "Shown above the list of updates. Supports inline markdown (e.g. [links](url))." }
+          - { label: "Updates — Signup CTA Button Text", name: "updates_signup_cta", widget: "string", required: false, hint: "Text on the email signup button, e.g. 'Sign up for email updates'" }
+          - { label: "Updates — Signup URL", name: "updates_signup_url", widget: "string", required: false, hint: "Link target for the email signup CTA" }
+          - { label: "Updates — Signup Description", name: "updates_signup_text", widget: "text", required: false, hint: "Short description shown under the signup button" }
+
+          - label: "Data Sources"
+            name: "data_sources"
+            widget: "list"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "URL", name: "url", widget: "string" }
+
+      - name: about-source-data
+        label: "Source Data Tab"
+        file: content/pages/about-source-data.md
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Body", name: "body", widget: "markdown" }
