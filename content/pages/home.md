@@ -20,9 +20,9 @@ stakes_paragraphs:
     NSF, and other key agencies by billions of dollars.
   - >+
     Other threats to science include ongoing **[terminations of research
-    grants](https://scienceimpacts.org/grants)* and proposed cuts to funding for
-    **[research infrastructure](https://scienceimpacts.org/idc)**. These cuts
-    will lead to cancelled projects and clinical trials, wasted funds, lost
+    grants](https://scienceimpacts.org/grants)** and proposed cuts to funding
+    for **[research infrastructure](https://scienceimpacts.org/idc)**. These
+    cuts will lead to cancelled projects and clinical trials, wasted funds, lost
     jobs, and hiring freezes that harm people and local economies.
 
 
