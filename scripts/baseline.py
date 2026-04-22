@@ -15,9 +15,10 @@ NSF_DATA_DIR = os.path.join(PROJECT_ROOT, "data", "baseline_new", "Baseline NSF"
 GEO_REF_DIR = os.path.join(PROJECT_ROOT, "data", "geo_ref")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "baseline-v5"
+TILE_VERSION = "baseline-v6"
 NIH_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
 NSF_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
+POP_REF_DIR = os.path.join(SCRIPT_DIR, "reference")
 
 # ── Remote geo-reference data (Cloudflare R2) ────────────────────────
 R2_BASE = "https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data"
@@ -76,7 +77,7 @@ def build_levels():
     """Build LEVELS config using cached geo-ref paths."""
     return {
         "states": {
-            "nih_csv": os.path.join(NIH_DATA_DIR, "baseline_state.csv"),
+            "nih_csv": os.path.join(NIH_DATA_DIR, "NIH_baseline_state.csv"),
             "nsf_csv": os.path.join(NSF_DATA_DIR, "baseline_state_nsf.csv"),
             "geo": geo_path("merged_data_states_CLIP.geojson"),
             "csv_key": "state",
@@ -84,7 +85,7 @@ def build_levels():
             "zoom": 7,
         },
         "counties": {
-            "nih_csv": os.path.join(NIH_DATA_DIR, "baseline_county.csv"),
+            "nih_csv": os.path.join(NIH_DATA_DIR, "NIH_baseline_county.csv"),
             "nsf_csv": os.path.join(NSF_DATA_DIR, "baseline_county_nsf.csv"),
             "geo": geo_path("merged_data_counties_CLIP_Compress.geojson"),
             "csv_key": "FIPS",
@@ -92,7 +93,7 @@ def build_levels():
             "zoom": 9,
         },
         "districts": {
-            "nih_csv": os.path.join(NIH_DATA_DIR, "baseline_district.csv"),
+            "nih_csv": os.path.join(NIH_DATA_DIR, "NIH_baseline_cong.csv"),
             "nsf_csv": os.path.join(NSF_DATA_DIR, "baseline_district_nsf.csv"),
             "geo": geo_path("CongDist_shp"),
             "csv_key": "GEOID",
@@ -101,13 +102,14 @@ def build_levels():
             "zoom": 9,
         },
         "cities": {
-            "nih_csv": os.path.join(NIH_DATA_DIR, "baseline_city.csv"),
+            "nih_csv": os.path.join(NIH_DATA_DIR, "NIH_baseline_city.csv"),
             "nsf_csv": os.path.join(NSF_DATA_DIR, "baseline_city_nsf.csv"),
             "geo": geo_path("Cities_Counties"),
             "csv_key": "CBSA_FIPS",
             "geo_key": "FIPSCITY",
             "filter": {"CITYFLAG": 1},
             "dissolve_key": "FIPSCITY",
+            "csv_key_pad": 5,  # CBSA_FIPS is 5 digits; NSF CSV strips leading zeros
             "zoom": 9,
         },
     }
@@ -142,10 +144,10 @@ def load_geometries(geo_file, geo_key, filter_by=None, dissolve_key=None):
 def pivot_baseline_data(csv_path, key_col, pivot_col, value_cols, prefix=""):
     """
     Pivot baseline CSV so each geographic unit becomes one row with columns like:
-    FIC_raw_funding, FIC_econ_impact, FIC_jobs, NCI_raw_funding, ..., pop_2024
+    NSF_BIO_raw_funding, NSF_BIO_econ_impact, NSF_BIO_jobs, ...
     Also preserves name/state/label columns (e.g. name, state, CBSA_NAME).
 
-    pivot_col: column to pivot on (e.g. "funding_ics" for NIH, "account_name" for NSF)
+    pivot_col: column to pivot on (e.g. "account_name" for NSF)
     value_cols: list of value columns to pivot
     prefix: optional prefix for pivoted column names (e.g. "NSF_")
     """
@@ -155,16 +157,32 @@ def pivot_baseline_data(csv_path, key_col, pivot_col, value_cols, prefix=""):
         index=key_col, columns=pivot_col, values=value_cols, aggfunc="sum"
     )
 
-    # Flatten multi-level columns: (raw_funding, FIC) -> FIC_raw_funding
+    # Flatten multi-level columns: (raw_funding, BIO) -> NSF_BIO_raw_funding
     pivoted.columns = [f"{prefix}{cat}_{metric}" for metric, cat in pivoted.columns]
 
-    # Preserve non-metric columns (pop_2024, name, state, CBSA_NAME, etc.)
+    # Preserve non-metric columns (name, state, CBSA_NAME, etc.)
     meta_cols = [c for c in df.columns if c not in [key_col, pivot_col] + value_cols]
     meta = df.drop_duplicates(subset=[key_col])[[key_col] + meta_cols].set_index(key_col)
     pivoted = pivoted.join(meta)
 
     pivoted = pivoted.reset_index()
     return pivoted
+
+
+def read_nih_totals(csv_path, key_col, value_cols):
+    """Read pre-aggregated NIH baseline CSV (one row per geo unit) and rename
+    value columns with the NIH_tot_ prefix the tile schema expects."""
+    df = pd.read_csv(csv_path)
+    return df.rename(columns={c: f"NIH_tot_{c}" for c in value_cols})
+
+
+def load_pop_ref(level_name, csv_key, pad_width=None):
+    """Load the pop_2024 reference CSV for a given geo level."""
+    path = os.path.join(POP_REF_DIR, f"pop_2024_{level_name}.csv")
+    df = pd.read_csv(path, dtype={csv_key: str})
+    if pad_width:
+        df[csv_key] = df[csv_key].str.zfill(pad_width)
+    return df
 
 
 def build_geojson(pivoted_df, geometries, csv_key):
@@ -288,11 +306,11 @@ def process_level(name, config):
     )
     print(f"  Loaded {len(geometries)} geometries")
 
-    # Pivot NIH data
-    print(f"Pivoting NIH: {os.path.basename(nih_csv)}...")
-    nih_pivoted = pivot_baseline_data(nih_csv, csv_key, "funding_ics", NIH_VALUE_COLUMNS)
-    nih_pivoted = normalize_key(nih_pivoted, csv_key, pad_width)
-    print(f"  NIH: {len(nih_pivoted)} rows, {len(nih_pivoted.columns)} columns")
+    # NIH data is pre-aggregated (one row per geo unit); just rename totals.
+    print(f"Reading NIH: {os.path.basename(nih_csv)}...")
+    nih_df = read_nih_totals(nih_csv, csv_key, NIH_VALUE_COLUMNS)
+    nih_df = normalize_key(nih_df, csv_key, pad_width)
+    print(f"  NIH: {len(nih_df)} rows, {len(nih_df.columns)} columns")
 
     # Pivot NSF data
     print(f"Pivoting NSF: {os.path.basename(nsf_csv)}...")
@@ -300,11 +318,18 @@ def process_level(name, config):
     nsf_pivoted = normalize_key(nsf_pivoted, csv_key, pad_width)
     print(f"  NSF: {len(nsf_pivoted)} rows, {len(nsf_pivoted.columns)} columns")
 
-    # Merge NIH and NSF — NIH is primary (has metadata like pop_2024, name, state)
+    # Merge NIH and NSF — NIH is primary (has metadata like name, state)
     # Drop duplicate meta columns from NSF before merge
     nsf_meta_cols = [c for c in nsf_pivoted.columns if not c.startswith("NSF_") and c != csv_key]
     nsf_pivoted = nsf_pivoted.drop(columns=nsf_meta_cols)
-    merged = nih_pivoted.merge(nsf_pivoted, on=csv_key, how="outer")
+    merged = nih_df.merge(nsf_pivoted, on=csv_key, how="outer")
+
+    # Join 2024 population from the reference CSV (new source CSVs don't carry it)
+    pop_df = load_pop_ref(name, csv_key, pad_width)
+    merged = merged.merge(pop_df, on=csv_key, how="left")
+    missing_pop = merged["pop_2024"].isna().sum()
+    if missing_pop:
+        print(f"  Warning: {missing_pop} rows missing pop_2024")
     print(f"  Merged: {len(merged)} rows, {len(merged.columns)} columns")
 
     print("Building GeoJSON...")

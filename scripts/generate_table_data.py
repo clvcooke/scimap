@@ -18,26 +18,30 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 NIH_DATA_DIR = os.path.join(PROJECT_ROOT, "data", "baseline_new", "Baseline NIH")
 NSF_DATA_DIR = os.path.join(PROJECT_ROOT, "data", "baseline_new", "Baseline NSF")
+POP_REF_DIR = os.path.join(SCRIPT_DIR, "reference")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "src", "data")
 
 LEVELS = {
     "states": {
-        "nih_csv": os.path.join(NIH_DATA_DIR, "baseline_state.csv"),
+        "nih_csv": os.path.join(NIH_DATA_DIR, "NIH_baseline_state.csv"),
         "nsf_csv": os.path.join(NSF_DATA_DIR, "baseline_state_nsf.csv"),
+        "pop_csv": os.path.join(POP_REF_DIR, "pop_2024_states.csv"),
         "id_col": "state",
         "name_col": None,
         "state_col": None,
     },
     "counties": {
-        "nih_csv": os.path.join(NIH_DATA_DIR, "baseline_county.csv"),
+        "nih_csv": os.path.join(NIH_DATA_DIR, "NIH_baseline_county.csv"),
         "nsf_csv": os.path.join(NSF_DATA_DIR, "baseline_county_nsf.csv"),
+        "pop_csv": os.path.join(POP_REF_DIR, "pop_2024_counties.csv"),
         "id_col": "FIPS",
         "name_col": "name",
         "state_col": "state",
     },
     "districts": {
-        "nih_csv": os.path.join(NIH_DATA_DIR, "baseline_district.csv"),
+        "nih_csv": os.path.join(NIH_DATA_DIR, "NIH_baseline_cong.csv"),
         "nsf_csv": os.path.join(NSF_DATA_DIR, "baseline_district_nsf.csv"),
+        "pop_csv": os.path.join(POP_REF_DIR, "pop_2024_districts.csv"),
         "id_col": "GEOID",
         "name_col": None,
         "state_col": "state",
@@ -63,7 +67,11 @@ def safe_int(val):
 
 
 def aggregate_csv(csv_path, id_col, name_col, state_col, sum_fields, prefix):
-    """Read a baseline CSV and return a dict of id -> aggregated values."""
+    """Read a baseline CSV and return a dict of id -> aggregated values.
+
+    Handles both shapes: NIH CSVs are pre-aggregated (one row per geo); NSF
+    CSVs still have one row per account_name and get summed.
+    """
     regions = {}
 
     with open(csv_path, newline="", encoding="utf-8") as f:
@@ -71,12 +79,6 @@ def aggregate_csv(csv_path, id_col, name_col, state_col, sum_fields, prefix):
         for row in reader:
             rid = row[id_col]
             if not rid:
-                continue
-
-            # NIH CSVs contain per-IC rows (NCI, NEI, …) plus an aggregate
-            # `NIH_tot` row that already sums them — skip it or every metric
-            # gets counted twice.
-            if row.get("funding_ics") == "NIH_tot":
                 continue
 
             if rid not in regions:
@@ -89,11 +91,7 @@ def aggregate_csv(csv_path, id_col, name_col, state_col, sum_fields, prefix):
                 else:
                     name = rid
 
-                regions[rid] = {
-                    "id": rid,
-                    "name": name,
-                    "pop_2024": safe_int(row.get("pop_2024")),
-                }
+                regions[rid] = {"id": rid, "name": name}
                 for field in sum_fields:
                     regions[rid][f"{prefix}{field}"] = 0.0
 
@@ -101,14 +99,23 @@ def aggregate_csv(csv_path, id_col, name_col, state_col, sum_fields, prefix):
             for field in sum_fields:
                 entry[f"{prefix}{field}"] += safe_float(row.get(field))
 
-            # Update pop_2024 if we got a non-zero value and didn't have one
-            if entry["pop_2024"] == 0:
-                entry["pop_2024"] = safe_int(row.get("pop_2024"))
-
     return regions
 
 
-def merge_and_total(nih_regions, nsf_regions):
+def load_pop(csv_path, id_col, pad_width=None):
+    """Load the pop_2024 reference CSV into a dict of id -> population."""
+    pop = {}
+    with open(csv_path, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            rid = row[id_col]
+            if pad_width:
+                rid = rid.zfill(pad_width)
+            pop[rid] = safe_int(row.get("pop_2024"))
+    return pop
+
+
+def merge_and_total(nih_regions, nsf_regions, pop_lookup):
     """Merge NIH and NSF aggregated dicts, compute totals."""
     all_ids = set(nih_regions.keys()) | set(nsf_regions.keys())
     result = []
@@ -126,7 +133,7 @@ def merge_and_total(nih_regions, nsf_regions):
         entry = {
             "id": nih.get("id", nsf.get("id", rid)),
             "name": name,
-            "pop_2024": nih.get("pop_2024", nsf.get("pop_2024", 0)),
+            "pop_2024": pop_lookup.get(rid, 0),
             # NIH fields
             "nih_econ_impact": round(nih.get("nih_econ_impact", 0), 2),
             "nih_raw_funding": round(nih.get("nih_raw_funding", 0), 2),
@@ -173,7 +180,10 @@ def main():
         )
         print(f"  NSF: {len(nsf_regions)} regions")
 
-        rows = merge_and_total(nih_regions, nsf_regions)
+        pop_lookup = load_pop(config["pop_csv"], config["id_col"])
+        print(f"  Pop: {len(pop_lookup)} regions")
+
+        rows = merge_and_total(nih_regions, nsf_regions, pop_lookup)
 
         output_path = os.path.join(OUTPUT_DIR, f"table_{level_name}.json")
         with open(output_path, "w", encoding="utf-8") as f:
