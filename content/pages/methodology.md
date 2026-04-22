@@ -4,7 +4,7 @@ hero_subtitle: How we track and analyze the impact of science funding cuts
 overview: We source data on historical grants and budgets for fiscal years
   2020-2024 to construct baseline spending, budget proposal, and indirect cost
   cap maps. Data on disrupted grants are retrieved from [Grant
-  Witness](https://grantwitness.org/). We apply economic and job multipliers
+  Witness](https://grant-witness.us/). We apply economic and job multipliers
   estimated for research spending to project the economic impacts of research
   spending and proposed cuts. We redistribute the impacts of research spending
   based on commuter flows to reflect how investment in scientific research
@@ -16,7 +16,7 @@ geolocating_intro: We source data on historical grants (active between Fiscal
   RePORTER](https://reporter.nih.gov/) and [NSF Awards Simple
   Search](https://www.nsf.gov/awardsearch/) respectively. We rescale obligations
   to reflect the inflation-adjusted budget annually. Data on terminated grants
-  are from [Grant Witness](https://grantwitness.org/). We map grant data based
+  are from [Grant Witness](https://grant-witness.us/). We map grant data based
   on institutional coordinates provided by NIH (latitude, longitude) and
   institution name provided by NSF geolocated using the Google API and
   OpenStreetMap, assigning grants to census tracts using QGIS and ArcPro.
@@ -98,7 +98,7 @@ disrupted_intro: Many NIH and NSF grants for biomedical and scientific research
   without justification), interrupting ongoing studies and clinical trials.
 disrupted_details:
   - To track cancelled and frozen grants, we use the [Grant
-    Witness](https://grantwitness.org/) database, which is based on reports from
+    Witness](https://grant-witness.us/) database, which is based on reports from
     government sources and researchers. For cancelled and frozen grants, we
     assume that losses are equivalent to the remaining grant funds that were not
     spent at the time of cancellation.
@@ -143,5 +143,5 @@ data_sources:
   - name: US Census - LODES
     url: https://lehd.ces.census.gov/data/
   - name: Grant Witness
-    url: https://grantwitness.org/
+    url: https://grant-witness.us/
 ---
