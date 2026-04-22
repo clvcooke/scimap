@@ -1,0 +1,7 @@
+---
+title: SCIMaP team releases new report analyzing FY 2027 White House budget
+  proposal for NSF
+url: https://data.scienceimpacts.org/SCIMaP%20FY2027%20NSF%20Budget%20Report.pdf
+order: 2
+---
+The White House FY 2027 budget proposal cuts funding to the National Science Foundation (NSF) by more than half, reducing NSF’s budget across key research areas by more than $6B compared to inflation-adjusted norms. NSF advances the progress of science through the assessment and distribution of competitively awarded research projects in communities nationwide with local, regional, national, and global impacts. As a baseline, the NSF’s inflation adjusted research budget from FY2020-FY2024 was $9.5 billion. A literature review from the Evaluation and Assessment Capability of the National Science Foundation found that each $1 spent on R&D generates $2.64 in median economic activity. Leveraging these findings, SCIMaP estimates an economic loss of ~$16.9 billion and nearly 90,000 lost jobs when compared to inflation-adjusted NSF support from FY 20202024. In addition, the White House projects its FY 2027 budget would result in 130,000 fewer students and teachers who engage with STEM programs. Analysis of the geographic distribution of NSF grants suggests that 39 states and Washington, D.C. will incur more than $100 million in economic losses, and nearly 90% of U.S. congressional districts will incur more than $10M in economic losses.
