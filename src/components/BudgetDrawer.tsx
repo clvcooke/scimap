@@ -107,6 +107,47 @@ function PoliticianInfo({ props, geoLevel }: { props: TileProps; geoLevel: LossG
   return <div className="mt-1">{lines}</div>
 }
 
+/** Scorecards only exist for FY26 (districts) and FY27 (districts + states). */
+function ScorecardLink({
+  props,
+  geoLevel,
+  fiscalYear,
+}: {
+  props: TileProps
+  geoLevel: LossGeoLevel
+  fiscalYear: FiscalYear | undefined
+}) {
+  const hasScorecard =
+    (geoLevel === 'districts' && (fiscalYear === 'fy26' || fiscalYear === 'fy27')) ||
+    (geoLevel === 'states' && fiscalYear === 'fy27')
+  if (!hasScorecard) return null
+
+  const sc = getScorecardParams(props, geoLevel)
+  if (!sc) return null
+
+  return (
+    <div className="border-b px-5 py-2">
+      <Drawer.Close render={<span />}>
+        <Link
+          to="/scorecard"
+          search={{ ...sc, fiscalYear }}
+          className="flex items-center gap-2 rounded-lg bg-brand-blue/10 px-3 py-2 text-sm font-medium text-brand-blue transition-colors hover:bg-brand-blue/20"
+          onClick={() =>
+            track(Events.BUDGET_DRAWER_SCORECARD_CLICKED, {
+              state_code: sc.stateCode,
+              district_id: sc.districtId,
+              fiscal_year: fiscalYear,
+            })
+          }
+        >
+          <FileText className="size-4" />
+          View Full Scorecard
+        </Link>
+      </Drawer.Close>
+    </div>
+  )
+}
+
 // ── Drawer body ─────────────────────────────────────────────────────
 
 function DrawerBody({
@@ -144,32 +185,7 @@ function DrawerBody({
         </Drawer.Close>
       </div>
 
-      {/* Scorecard link: districts always; states only on FY27 (only FY with state-level scorecards) */}
-      {(geoLevel === 'districts' || (geoLevel === 'states' && fiscalYear === 'fy27')) && (() => {
-        const sc = getScorecardParams(props, geoLevel)
-        if (!sc) return null
-        return (
-          <div className="border-b px-5 py-2">
-            <Drawer.Close render={<span />}>
-              <Link
-                to="/scorecard"
-                search={{ ...sc, fiscalYear }}
-                className="flex items-center gap-2 rounded-lg bg-brand-blue/10 px-3 py-2 text-sm font-medium text-brand-blue transition-colors hover:bg-brand-blue/20"
-                onClick={() =>
-                  track(Events.BUDGET_DRAWER_SCORECARD_CLICKED, {
-                    state_code: sc.stateCode,
-                    district_id: sc.districtId,
-                    fiscal_year: fiscalYear,
-                  })
-                }
-              >
-                <FileText className="size-4" />
-                View Full Scorecard
-              </Link>
-            </Drawer.Close>
-          </div>
-        )
-      })()}
+      <ScorecardLink props={props} geoLevel={geoLevel} fiscalYear={fiscalYear} />
 
       {/* Summary cards */}
       {stats.length > 0 && (
