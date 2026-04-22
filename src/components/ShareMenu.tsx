@@ -134,6 +134,7 @@ export default function ShareMenu({
       <div ref={menuRef} className="relative inline-block">
       <button
         ref={btnRef}
+        data-tour="map-share"
         onClick={() => {
           setOpen((o) => {
             if (!o && btnRef.current) {
