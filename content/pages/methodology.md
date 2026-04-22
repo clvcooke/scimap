@@ -63,18 +63,13 @@ baseline_intro: To illustrate the historic benefits of scientific research
   prior years, we retrieve all grants with budgets spanning FY2020 - FY2024 from
   NIH and NSF.
 baseline_details:
-  - The total budget of grants with budget periods spanning multiple fiscal
-    years are split across fiscal years, assuming spending is proportional to
-    the fraction of the grant's award period in a given year. We then find the
-    total spending within a given region per fiscal year and the average across
-    the specified five-year period.
-  - In addition to total funding, we report baseline spending broken down by
-    institutes and centers within the NIH or directorates within NSF.
   - We include all eight NSF directorates, the Office of Integrative Activities,
     and the Office of International Science and Engineering within the Office of
     the Director. We include all NIH institutes, plus the National Center for
     Complementary and Integrative Health, the National Center for Advancing
-    Translational Sciences, and the Fogarty International Center.
+    Translational Sciences, and the Fogarty International Center. We then
+    calculate the average research funding for each institution across the
+    historical baseline period.
 fy2027_intro: The White House budget proposals for FY2027 include large cuts to
   both NIH and NSF. We estimate the economic losses associated with the proposed
   cuts by comparing the proposed budgets to historic funding.
