@@ -118,8 +118,10 @@ disrupted_details:
     "Columbia University").
 indirect_costs_intro: Research grants include funding for research
   infrastructure (also known as indirect costs), which covers critical support
-  such as facilities and safety checks. While NIH and NSF grants both include
-  this funding, we focus only on NIH for this analysis.
+  such as facilities and safety checks. NIH and NSF grants both include indirect
+  costs, and the cuts have been proposed for both agencies. However, we focus
+  only on NIH for this analysis because the public NSF database does not specify
+  indirect costs for each grant.
 indirect_costs_details:
   - Indirect costs are calculated as some proportion of that grant's value,
     determined through negotiations between each institution and the NIH.
