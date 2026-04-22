@@ -67,6 +67,18 @@ collections:
       - { label: "Downloadable Title", name: "downloadable_title", widget: "string", required: false, hint: "Button text for the download link" }
       - { label: "Body", name: "body", widget: "markdown" }
 
+  - name: updates
+    label: Methodology Updates
+    folder: content/updates
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["date", "title"]
+    summary: "{{date}} — {{title}}"
+    fields:
+      - { label: "Date", name: "date", widget: "string", hint: "e.g. 'September 15, 2025'" }
+      - { label: "Title", name: "title", widget: "string", required: false, hint: "Optional short headline shown above the description" }
+      - { label: "Description", name: "body", widget: "markdown" }
+
   - name: articles
     label: Research Articles
     folder: content/articles
@@ -327,6 +339,11 @@ collections:
             name: "indirect_costs_details"
             widget: "list"
             field: { label: "Paragraph", name: "paragraph", widget: "text" }
+
+          - { label: "Updates — Intro", name: "updates_intro", widget: "text", required: false, hint: "Shown above the list of updates. Supports inline markdown (e.g. [links](url))." }
+          - { label: "Updates — Signup CTA Button Text", name: "updates_signup_cta", widget: "string", required: false, hint: "Text on the email signup button, e.g. 'Sign up for email updates'" }
+          - { label: "Updates — Signup URL", name: "updates_signup_url", widget: "string", required: false, hint: "Link target for the email signup CTA" }
+          - { label: "Updates — Signup Description", name: "updates_signup_text", widget: "text", required: false, hint: "Short description shown under the signup button" }
 
           - label: "Data Sources"
             name: "data_sources"

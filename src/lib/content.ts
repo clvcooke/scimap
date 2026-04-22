@@ -189,6 +189,35 @@ export function getBlogPost(slug: string): BlogPost | undefined {
   return getBlogPosts().find((p) => p.slug === slug)
 }
 
+/** Load all methodology updates from content/updates/*.md */
+export interface Update {
+  date: string
+  title?: string
+  body: string
+}
+
+const updateFiles = import.meta.glob<string>('/content/updates/*.md', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+})
+
+export function getUpdates(): Update[] {
+  return Object.values(updateFiles)
+    .map((raw) => {
+      const { attrs, body } = parseFrontmatter(raw)
+      return {
+        date: attrs.date ?? '',
+        title: attrs.title ?? undefined,
+        body,
+      }
+    })
+    .sort(
+      (a, b) =>
+        new Date(String(b.date)).getTime() - new Date(String(a.date)).getTime(),
+    )
+}
+
 /** Load all team members from content/team/*.md (uses Vite's import.meta.glob). */
 const teamFiles = import.meta.glob<string>('/content/team/*.md', {
   query: '?raw',

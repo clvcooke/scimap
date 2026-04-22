@@ -9,6 +9,8 @@ import {
   Scissors,
   AlertTriangle,
   Building,
+  History,
+  Mail,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import Markdown from 'react-markdown'
@@ -18,7 +20,7 @@ import {
   TabsTrigger,
   TabsContent,
 } from '@/components/ui/tabs'
-import { getPage } from '@/lib/content'
+import { getPage, getUpdates } from '@/lib/content'
 import { InlineMarkdown } from '@/components/InlineMarkdown'
 
 export const Route = createFileRoute('/methodology')({
@@ -29,6 +31,7 @@ export const Route = createFileRoute('/methodology')({
 
 const M = getPage('methodology')
 const SOURCE_DATA = getPage('about-source-data')
+const UPDATES = getUpdates()
 
 /* ── Tiny helpers ────────────────────────────────────────────────── */
 
@@ -135,6 +138,13 @@ function MethodologyPage() {
                   <Database className="hidden h-4 w-4 sm:block" />
                   Source Data
                 </TabsTrigger>
+                <TabsTrigger
+                  value="updates"
+                  className="h-10 gap-2 rounded-none px-2 text-xs font-semibold text-gray-500 hover:text-gray-700 data-active:text-brand-blue after:bg-brand-blue sm:px-4 sm:text-sm"
+                >
+                  <History className="hidden h-4 w-4 sm:block" />
+                  Updates
+                </TabsTrigger>
               </TabsList>
             </div>
           </div>
@@ -234,6 +244,7 @@ function MethodologyPage() {
               )}
             </ul>
           </Section>
+
         </TabsContent>
 
         {/* ── Source Data ──────────────────────────────────────────── */}
@@ -251,6 +262,52 @@ function MethodologyPage() {
               </div>
             </div>
           </div>
+        </TabsContent>
+
+        {/* ── Updates ──────────────────────────────────────────────── */}
+        <TabsContent value="updates" className="flex-1">
+          <Section bg="white">
+            <SectionHeading icon={History}>Updates</SectionHeading>
+            {a.updates_intro && (
+              <p className="mb-4 text-lg leading-relaxed text-gray-700">
+                <InlineMarkdown>{a.updates_intro}</InlineMarkdown>
+              </p>
+            )}
+            {a.updates_signup_url && (
+              <a
+                href={a.updates_signup_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mb-3 inline-flex items-center gap-2 rounded-lg bg-brand-blue px-4 py-2 text-base font-semibold text-white shadow-sm transition hover:bg-brand-blue/90"
+              >
+                <Mail className="h-4 w-4" />
+                {a.updates_signup_cta ?? 'Sign up for email updates'}
+              </a>
+            )}
+            {a.updates_signup_text && (
+              <p className="mb-8 text-sm leading-relaxed text-gray-600">
+                <InlineMarkdown>{a.updates_signup_text}</InlineMarkdown>
+              </p>
+            )}
+            <ol className="relative space-y-6 border-l-2 border-brand-blue/20 pl-6">
+              {UPDATES.map((u, i) => (
+                <li key={i} className="relative">
+                  <span className="absolute -left-[31px] top-2 h-3 w-3 rounded-full bg-brand-orange ring-4 ring-white" />
+                  <div className="text-sm font-semibold uppercase tracking-wide text-brand-blue">
+                    {u.date}
+                  </div>
+                  {u.title && (
+                    <div className="mt-1 text-lg font-bold text-gray-900">
+                      {u.title}
+                    </div>
+                  )}
+                  <p className="mt-1 text-lg leading-relaxed text-gray-700">
+                    <InlineMarkdown>{u.body}</InlineMarkdown>
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </Section>
         </TabsContent>
       </Tabs>
     </div>

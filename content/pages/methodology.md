@@ -129,6 +129,14 @@ indirect_costs_details:
   - To estimate decreases in funding due to the proposed cap on indirect costs,
     we calculate the difference between funding for indirect costs across grants
     active in fiscal year 2024 and proposed funding with a 15% maximum.
+updates_intro: SCIMaP updates its data and visualizations to reflect the current
+  state of funding cuts. For the full data history you can reference the
+  publicly available data at the [Open Science Framework
+  link](http://doi.org/10.17605/OSF.IO/H398E).
+updates_signup_text: To receive email updates about major website releases,
+  reports, and publications, please sign up here.
+updates_signup_url: https://upenn.co1.qualtrics.com/jfe/form/SV_5vDEXlLWG9IyWmW
+updates_signup_cta: Sign up for email updates
 data_sources:
   - name: NIH RePORTER
     url: https://reporter.nih.gov/
