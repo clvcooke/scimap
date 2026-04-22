@@ -139,7 +139,7 @@ data_sources:
   - name: United for Medical Research
     url: https://unitedformedicalresearch.org/
   - name: "NSF Economic Impacts: Literature Review"
-    url: https://www.nsf.gov/evaluation/reports
+    url: https://nsf-gov-resources.nsf.gov/files/NSF-Economic-Impacts-Literature-Review.pdf
   - name: US Census - LODES
     url: https://lehd.ces.census.gov/data/
   - name: Grant Witness
