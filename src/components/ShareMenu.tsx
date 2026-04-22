@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Share2, Link, Check } from 'lucide-react'
+import { Events, track, setPersonProperties, type SharePlatform } from '@/lib/analytics'
 
 const btnBase =
   'flex size-8 items-center justify-center bg-white shadow-md transition-colors hover:bg-gray-100 active:bg-gray-200'
@@ -8,13 +9,29 @@ const btnBase =
  *  with native share (on mobile), copy-link, and social sharing options.
  *  Designed to sit alongside MapControls or anywhere on the page.
  *  @param className
- *  @param className
  *  @param dropUp — opens the menu above the button instead of below.
  *  @param shareUrl — override the URL to share (defaults to current page URL).
- * @param variant
- * @param variant
- *  @param shareTitle — override the share title (defaults to current page title). */
-export default function ShareMenu({ className, dropUp, shareUrl, shareTitle, variant = 'icon' }: { className?: string; dropUp?: boolean; shareUrl?: string; shareTitle?: string; variant?: 'icon' | 'full' }) {
+ *  @param variant
+ *  @param shareTitle — override the share title (defaults to current page title).
+ *  @param pageType — analytics label for the page/context hosting this menu.
+ *  @param context — extra analytics props (state, district, fiscal year, …). */
+export default function ShareMenu({
+  className,
+  dropUp,
+  shareUrl,
+  shareTitle,
+  variant = 'icon',
+  pageType,
+  context,
+}: {
+  className?: string
+  dropUp?: boolean
+  shareUrl?: string
+  shareTitle?: string
+  variant?: 'icon' | 'full'
+  pageType?: string
+  context?: Record<string, unknown>
+}) {
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [pos, setPos] = useState<{ up: boolean; alignRight: boolean }>({ up: false, alignRight: true })
@@ -36,15 +53,28 @@ export default function ShareMenu({ className, dropUp, shareUrl, shareTitle, var
   const pageUrl = shareUrl ?? window.location.href
   const pageTitle = shareTitle ?? document.title
 
+  const trackShare = (platform: SharePlatform) => {
+    track(Events.SHARE_CLICKED, {
+      platform,
+      share_url: pageUrl,
+      share_title: pageTitle,
+      page_type: pageType,
+      ...(context ?? {}),
+    })
+    setPersonProperties({ last_share_platform: platform, has_shared: true })
+  }
+
   const copyLink = async () => {
     await navigator.clipboard.writeText(pageUrl)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+    trackShare('copy')
   }
 
   const shareNative = async () => {
     try {
       await navigator.share({ title: pageTitle, url: pageUrl })
+      trackShare('native')
     } catch {
       // user cancelled or not supported
     }
@@ -57,6 +87,7 @@ export default function ShareMenu({ className, dropUp, shareUrl, shareTitle, var
       '_blank',
       'noopener',
     )
+    trackShare('x')
     setOpen(false)
   }
 
@@ -66,6 +97,7 @@ export default function ShareMenu({ className, dropUp, shareUrl, shareTitle, var
       '_blank',
       'noopener',
     )
+    trackShare('bluesky')
     setOpen(false)
   }
 
@@ -75,6 +107,7 @@ export default function ShareMenu({ className, dropUp, shareUrl, shareTitle, var
       '_blank',
       'noopener',
     )
+    trackShare('facebook')
     setOpen(false)
   }
 
@@ -84,11 +117,13 @@ export default function ShareMenu({ className, dropUp, shareUrl, shareTitle, var
       '_blank',
       'noopener',
     )
+    trackShare('linkedin')
     setOpen(false)
   }
 
   const shareEmail = () => {
     window.location.href = `mailto:?subject=${encodeURIComponent(pageTitle)}&body=${encodeURIComponent(pageUrl)}`
+    trackShare('email')
     setOpen(false)
   }
 

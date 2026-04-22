@@ -16,6 +16,7 @@ import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
 import GrantsOverlay from './GrantsOverlay'
 import { Switch } from '@/components/ui/switch'
 import AgencyFilterControl from './AgencyFilterControl'
+import { Events, track } from '@/lib/analytics'
 
 const AGENCY_LABELS: Record<AgencyFilter, string> = {
   both: 'Economic Loss',
@@ -102,6 +103,7 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
       colorScaleDomain={colorScaleDomain}
       colorLUT={LUT_OR_RD}
       layerId="grants-mvt"
+      mapType="grants"
       renderTooltip={renderTooltip}
       initialLat={initialLat}
       initialLng={initialLng}
@@ -114,7 +116,13 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
       onGeoLevelChange={setGeoLevel as (level: string) => void}
       extraControls={
         <div className="flex flex-col gap-2">
-          <AgencyFilterControl value={agencyFilter} onValueChange={setAgencyFilter} />
+          <AgencyFilterControl
+            value={agencyFilter}
+            onValueChange={(v) => {
+              track(Events.MAP_AGENCY_FILTER_CHANGED, { map_type: 'grants', agency: v })
+              setAgencyFilter(v)
+            }}
+          />
           <div className="flex items-center gap-2">
             <Switch id="show-grants" checked={showBubbles} onCheckedChange={setShowBubbles} />
             <label htmlFor="show-grants" className="text-xs font-medium text-gray-700 cursor-pointer">Show grants</label>

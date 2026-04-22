@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { Loader2, MapPin } from 'lucide-react'
+import { Events, track, zipPrefix } from '@/lib/analytics'
 
 /**
  * Compact ZIP-code search bar for map pages.
@@ -16,6 +17,7 @@ export default function MapZipSearch({ mapRoute }: { mapRoute: string }) {
     const trimmed = zip.trim()
     if (!/^\d{5}$/.test(trimmed)) {
       setError('Please enter a valid 5-digit ZIP code')
+      track(Events.ZIP_SEARCHED, { zip_success: false, target_map: mapRoute, error: 'invalid_format' })
       return
     }
     setError('')
@@ -28,15 +30,34 @@ export default function MapZipSearch({ mapRoute }: { mapRoute: string }) {
       const data: { lat: string; lon: string }[] = await res.json()
       if (!data.length) {
         setError('Could not find that ZIP code')
+        track(Events.ZIP_SEARCHED, {
+          zip_prefix: zipPrefix(trimmed),
+          zip_success: false,
+          target_map: mapRoute,
+          error: 'not_found',
+        })
         return
       }
       const { lat, lon } = data[0]
+      track(Events.ZIP_SEARCHED, {
+        zip_prefix: zipPrefix(trimmed),
+        zip_success: true,
+        geocoded_lat: parseFloat(lat),
+        geocoded_lng: parseFloat(lon),
+        target_map: mapRoute,
+      })
       void navigate({
         to: mapRoute,
         search: { lat: parseFloat(lat), lng: parseFloat(lon), zoom: 8 },
       })
     } catch {
       setError('Geocoding failed — please try again')
+      track(Events.ZIP_SEARCHED, {
+        zip_prefix: zipPrefix(trimmed),
+        zip_success: false,
+        target_map: mapRoute,
+        error: 'geocode_failed',
+      })
     } finally {
       setLoading(false)
     }

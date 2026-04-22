@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { type ReactNode, useEffect } from 'react'
 import { DrawerPreview as Drawer } from '@base-ui/react/drawer'
 import { Link } from '@tanstack/react-router'
 import { interpolateOrRd } from 'd3-scale-chromatic'
@@ -12,6 +12,7 @@ import {
 import { getCountyName, getLegislatorKeys, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
 import type { FiscalYear } from '@/lib/report-card-data'
 import { stateName } from '@/lib/constants'
+import { Events, track, buildGeographyEventProps, type MapType } from '@/lib/analytics'
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -154,6 +155,13 @@ function DrawerBody({
                 to="/scorecard"
                 search={{ ...sc, fiscalYear }}
                 className="flex items-center gap-2 rounded-lg bg-brand-blue/10 px-3 py-2 text-sm font-medium text-brand-blue transition-colors hover:bg-brand-blue/20"
+                onClick={() =>
+                  track(Events.BUDGET_DRAWER_SCORECARD_CLICKED, {
+                    state_code: sc.stateCode,
+                    district_id: sc.districtId,
+                    fiscal_year: fiscalYear,
+                  })
+                }
               >
                 <FileText className="size-4" />
                 View Full Scorecard
@@ -232,13 +240,23 @@ export default function BudgetDrawer({
   config,
   onClose,
   fiscalYear,
+  mapType,
 }: {
   props: TileProps | null
   geoLevel: LossGeoLevel
   config: BudgetDrawerConfig
   onClose: () => void
   fiscalYear?: FiscalYear | undefined
+  mapType?: MapType | undefined
 }) {
+  useEffect(() => {
+    if (!props) return
+    track(Events.BUDGET_DRAWER_OPENED, {
+      ...buildGeographyEventProps(props, geoLevel, mapType),
+      fiscal_year: fiscalYear,
+    })
+  }, [props, geoLevel, mapType, fiscalYear])
+
   return (
     <Drawer.Root
       open={props !== null}

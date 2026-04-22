@@ -137,37 +137,53 @@ function InsightsPage() {
                     className="flex gap-5 rounded-lg border border-gray-200 bg-white p-5 shadow-sm"
                   >
                     {article.image && (
-                      <a
-                        href={article.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hidden shrink-0 sm:block"
-                      >
+                      article.url ? (
+                        <a
+                          href={article.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hidden shrink-0 sm:block"
+                        >
+                          <img
+                            src={article.image}
+                            alt=""
+                            className="h-28 w-28 rounded-md object-cover"
+                          />
+                        </a>
+                      ) : (
                         <img
                           src={article.image}
                           alt=""
-                          className="h-28 w-28 rounded-md object-cover"
+                          className="hidden h-28 w-28 shrink-0 rounded-md object-cover sm:block"
                         />
-                      </a>
+                      )
                     )}
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-3">
-                        <a
-                          href={article.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-semibold text-gray-900 hover:text-brand-blue"
-                        >
-                          {article.title}
-                        </a>
-                        <a
-                          href={article.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-0.5 shrink-0"
-                        >
-                          <ExternalLink className="h-4 w-4 text-gray-300 transition-colors hover:text-brand-blue" />
-                        </a>
+                        {article.url ? (
+                          <a
+                            href={article.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold text-gray-900 hover:text-brand-blue"
+                          >
+                            {article.title}
+                          </a>
+                        ) : (
+                          <span className="font-semibold text-gray-900">
+                            {article.title}
+                          </span>
+                        )}
+                        {article.url && (
+                          <a
+                            href={article.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-0.5 shrink-0"
+                          >
+                            <ExternalLink className="h-4 w-4 text-gray-300 transition-colors hover:text-brand-blue" />
+                          </a>
+                        )}
                       </div>
                       {article.date && (
                         <p className="mt-1 text-sm text-gray-400">

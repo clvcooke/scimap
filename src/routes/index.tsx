@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getPage } from '@/lib/content'
 import { InlineMarkdown } from '@/components/InlineMarkdown'
+import { Events, track, zipPrefix } from '@/lib/analytics'
 
 const MapPreview = lazy(() => import('@/components/MapPreview'))
 
@@ -26,6 +27,7 @@ function Index() {
     const trimmed = zip.trim()
     if (!/^\d{5}$/.test(trimmed)) {
       setZipError('Please enter a valid 5-digit ZIP code')
+      track(Events.ZIP_SEARCHED, { zip_success: false, target_map: '/fy27', error: 'invalid_format' })
       return
     }
     setZipError('')
@@ -38,15 +40,34 @@ function Index() {
       const data: { lat: string; lon: string }[] = await res.json()
       if (!data.length) {
         setZipError('Could not find that ZIP code')
+        track(Events.ZIP_SEARCHED, {
+          zip_prefix: zipPrefix(trimmed),
+          zip_success: false,
+          target_map: '/fy27',
+          error: 'not_found',
+        })
         return
       }
       const { lat, lon } = data[0]
+      track(Events.ZIP_SEARCHED, {
+        zip_prefix: zipPrefix(trimmed),
+        zip_success: true,
+        geocoded_lat: parseFloat(lat),
+        geocoded_lng: parseFloat(lon),
+        target_map: '/fy27',
+      })
       void navigate({
         to: '/fy27',
         search: { lat: parseFloat(lat), lng: parseFloat(lon), zoom: 8 },
       })
     } catch {
       setZipError('Geocoding failed — please try again')
+      track(Events.ZIP_SEARCHED, {
+        zip_prefix: zipPrefix(trimmed),
+        zip_success: false,
+        target_map: '/fy27',
+        error: 'geocode_failed',
+      })
     } finally {
       setZipLoading(false)
     }

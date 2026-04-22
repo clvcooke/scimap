@@ -14,6 +14,7 @@ import { formatCurrency, formatNumber } from '@/lib/constants'
 import type { StateReportCardData, FiscalYear } from '@/lib/report-card-data'
 import { FILL_ALPHA } from '@/lib/color-lut'
 import ColorScale from './ColorScale'
+import { Events, track, setPersonProperties, senatorPartyMix } from '@/lib/analytics'
 
 const DOMAIN = 'https://data.scienceimpacts.org'
 
@@ -263,7 +264,28 @@ export default function StateReportCard({
 
   const hasDownloadableImage = true
 
+  useEffect(() => {
+    track(Events.SCORECARD_VIEWED, {
+      scorecard_type: 'state',
+      state_code: data.state_code,
+      fiscal_year: fiscalYear,
+      senator_party_mix: senatorPartyMix(data.state_code),
+      total_loss: data.budg_total_cuts_econ_loss,
+      job_loss: data.budg_total_cuts_job_loss ?? data.budg_NIH_cuts_job_loss,
+    })
+    setPersonProperties({
+      last_fiscal_year: fiscalYear,
+      last_senator_party_mix: senatorPartyMix(data.state_code),
+      last_state_code: data.state_code,
+      has_viewed_scorecard: true,
+    })
+  }, [data, fiscalYear])
+
   const downloadImage = async () => {
+    track(Events.SCORECARD_IMAGE_DOWNLOADED, {
+      state_code: data.state_code,
+      fiscal_year: fiscalYear,
+    })
     const imageUrl = `${DOMAIN}/report-cards-${fiscalYear}-v2/report-card-${data.state_code}.png`
     const fileName = `fact-sheet-${fiscalYear}-${data.state_code}.png`
     try {
@@ -291,6 +313,11 @@ export default function StateReportCard({
     if (navigator.share) {
       try {
         await navigator.share(shareData)
+        track(Events.SCORECARD_SHARE_CLICKED, {
+          method: 'native',
+          state_code: data.state_code,
+          fiscal_year: fiscalYear,
+        })
       } catch {
         // user cancelled
       }
@@ -298,6 +325,11 @@ export default function StateReportCard({
       await navigator.clipboard.writeText(currentUrl)
       setShareOpen(true)
       setTimeout(() => setShareOpen(false), 2000)
+      track(Events.SCORECARD_SHARE_CLICKED, {
+        method: 'clipboard',
+        state_code: data.state_code,
+        fiscal_year: fiscalYear,
+      })
     }
   }
 

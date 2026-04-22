@@ -68,6 +68,7 @@ export default function IDCMap({ aboutContent }: { aboutContent?: MapAboutConten
       colorLUT={LUT_OR_RD}
       colorScheme="orrd"
       layerId="idc-mvt"
+      mapType="idc"
       renderTooltip={renderTooltip}
       drawerConfig={drawerConfig}
       aboutContent={aboutContent}

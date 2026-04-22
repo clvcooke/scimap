@@ -7,6 +7,7 @@ import {
   TabsContent,
 } from '@/components/ui/tabs'
 import { getNewsItems, getPressReleases } from '@/lib/content'
+import { Events, track } from '@/lib/analytics'
 
 export const Route = createFileRoute('/news')({
   component: NewsPage,
@@ -65,6 +66,14 @@ function NewsPage() {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() =>
+                      track(Events.NEWS_ARTICLE_CLICKED, {
+                        title: item.title,
+                        url: item.url,
+                        source: item.source,
+                        type: 'news',
+                      })
+                    }
                      className="group flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:border-brand-blue/30 hover:shadow-md"
                   >
                     {item.image && (
@@ -112,6 +121,13 @@ function NewsPage() {
                     href={pr.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() =>
+                      track(Events.NEWS_ARTICLE_CLICKED, {
+                        title: pr.title,
+                        url: pr.url,
+                        type: 'press_release',
+                      })
+                    }
                     className="group flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:border-brand-blue/30 hover:shadow-md"
                   >
                     {pr.image && (

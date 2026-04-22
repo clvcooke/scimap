@@ -91,6 +91,7 @@ export default function FY26Map({ initialLat, initialLng, initialZoom, aboutCont
       colorLUT={LUT_MAGMA_INV}
       layerId="fy26-mvt"
       useMagma
+      mapType="fy26"
       renderTooltip={renderTooltip}
       drawerConfig={drawerConfig}
       fiscalYear="fy26"

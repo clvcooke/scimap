@@ -1,5 +1,20 @@
 import { useState, useRef, useEffect } from 'react'
 import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
+import { Events, track } from '@/lib/analytics'
+
+function navClickHandler(navLocation: 'header' | 'footer' | 'mobile' | 'maps_dropdown') {
+  return (e: React.MouseEvent<HTMLElement>) => {
+    const anchor = (e.target as HTMLElement).closest('a')
+    if (!anchor) return
+    const href = anchor.getAttribute('href')
+    if (!href) return
+    track(Events.NAV_CLICKED, {
+      from_path: window.location.pathname,
+      to_path: href,
+      nav_location: navLocation,
+    })
+  }
+}
 
 function useChromeless(): boolean {
   // Subscribe to location changes so this re-evaluates on navigation.
@@ -45,7 +60,12 @@ function MapsDropdown() {
         Impact Maps <ChevronDown className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-52 rounded-md bg-white py-1 shadow-lg ring-1 ring-black/10">
+        // Delegated analytics listener — real <a> children handle keyboard natively.
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+        <div
+          className="absolute right-0 top-full mt-2 w-52 rounded-md bg-white py-1 shadow-lg ring-1 ring-black/10"
+          onClick={navClickHandler('maps_dropdown')}
+        >
           <Link
             to="/maps"
             className="block border-b border-gray-100 px-4 py-2 text-sm font-medium text-brand-blue hover:bg-gray-100"
@@ -102,8 +122,12 @@ function Header() {
           </div>
         </div>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 text-[15px] font-medium text-brand-blue md:flex">
+        {/* Desktop nav — delegated analytics listener on the <nav>, real <a> children handle keyboard. */}
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
+        <nav
+          className="hidden items-center gap-6 text-[15px] font-medium text-brand-blue md:flex"
+          onClick={navClickHandler('header')}
+        >
           <Link
             to="/"
             activeProps={navLinkActive}
@@ -145,7 +169,11 @@ function Header() {
 
       {/* Mobile dropdown */}
       {menuOpen && (
-        <nav className="mt-3 flex flex-col gap-3 border-t border-gray-200 pt-3 text-[15px] font-medium text-brand-blue md:hidden">
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+        <nav
+          className="mt-3 flex flex-col gap-3 border-t border-gray-200 pt-3 text-[15px] font-medium text-brand-blue md:hidden"
+          onClick={navClickHandler('mobile')}
+        >
           <Link
             to="/"
             className="text-left transition-colors hover:text-brand-blue-light"
@@ -291,12 +319,20 @@ function RootLayout() {
                   shareUrl="https://scienceimpacts.org"
                   shareTitle="SCIMaP — Science & Community Impacts Mapping Project"
                   dropUp
+                  pageType="footer"
                   className="[&_button]:text-gray-300 [&_button]:hover:text-white [&_button]:bg-transparent [&_button]:shadow-none"
                 />
                 <a
                   href="https://bsky.app/profile/scienceimpacts.org"
                   className="text-gray-300 transition-colors hover:text-white"
                   aria-label="Bluesky"
+                  onClick={() =>
+                    track(Events.EXTERNAL_LINK_CLICKED, {
+                      url: 'https://bsky.app/profile/scienceimpacts.org',
+                      context: 'footer_social',
+                      network: 'bluesky',
+                    })
+                  }
                 >
                   <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.905C2.566 1.127 1.816 1.494 1.196 1.889c-.58.37-1.196 1.258-1.196 2.502 0 1.253.284 3.778.682 4.965.732 2.186 3.12 3.292 5.565 3.33-2.738.163-5.263 1.09-5.112 3.565.176 2.872 3.843 5.378 7.37 5.378 2.375 0 3.5-1.298 3.5-1.298s1.125 1.298 3.5 1.298c3.527 0 7.194-2.506 7.37-5.378.15-2.475-2.374-3.402-5.112-3.565 2.445-.038 4.833-1.144 5.565-3.33.398-1.187.682-3.712.682-4.965 0-1.244-.616-2.132-1.196-2.502-.62-.395-1.37-.762-4.006 1.006-2.752 1.852-5.711 5.791-6.798 7.905z" />
@@ -308,6 +344,13 @@ function RootLayout() {
                   rel="noopener noreferrer"
                   className="text-gray-300 transition-colors hover:text-white"
                   aria-label="Instagram"
+                  onClick={() =>
+                    track(Events.EXTERNAL_LINK_CLICKED, {
+                      url: 'https://www.instagram.com/science_impacts',
+                      context: 'footer_social',
+                      network: 'instagram',
+                    })
+                  }
                 >
                   <svg
                     className="h-5 w-5"
@@ -327,6 +370,13 @@ function RootLayout() {
                   href="https://www.linkedin.com/company/science-community-impacts-mapping-project/about/"
                   className="text-gray-300 transition-colors hover:text-white"
                   aria-label="LinkedIn"
+                  onClick={() =>
+                    track(Events.EXTERNAL_LINK_CLICKED, {
+                      url: 'https://www.linkedin.com/company/science-community-impacts-mapping-project/about/',
+                      context: 'footer_social',
+                      network: 'linkedin',
+                    })
+                  }
                 >
                   <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />

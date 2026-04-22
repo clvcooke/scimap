@@ -14,10 +14,18 @@ import {
   createStateOutlineLayer,
   positionTooltip,
   useLabelsStyle,
+  getLegislatorKeys,
   type MapGeoConfig,
   type TileProps,
   type LossGeoLevel,
 } from '@/lib/map-shared'
+import {
+  Events,
+  track,
+  setPersonProperties,
+  buildGeographyEventProps,
+  type MapType,
+} from '@/lib/analytics'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Info, X } from 'lucide-react'
 import { InlineMarkdown } from './InlineMarkdown'
@@ -32,6 +40,24 @@ export interface MapAboutContent {
   heading?: string
   description?: string
   dataSources?: string[]
+}
+
+function trackGeographyClick(
+  props: TileProps,
+  geoLevel: LossGeoLevel,
+  mapType: MapType | undefined,
+): void {
+  const eventProps = buildGeographyEventProps(props, geoLevel, mapType)
+  track(Events.MAP_GEOGRAPHY_CLICKED, eventProps)
+  const { stateCode, cdFp } = getLegislatorKeys(props)
+  setPersonProperties({
+    last_state_code: stateCode || undefined,
+    last_state_name: props.state_name != null ? String(props.state_name) : undefined,
+    last_map_type: mapType,
+    last_geo_level: geoLevel,
+    last_district_viewed:
+      geoLevel === 'districts' && cdFp ? `${stateCode}-${cdFp}` : undefined,
+  })
 }
 
 interface ChoroplethMapProps<K extends string> {
@@ -78,6 +104,8 @@ interface ChoroplethMapProps<K extends string> {
   fiscalYear?: FiscalYear | undefined
   /** Content for the "About this map" info panel. */
   aboutContent?: MapAboutContent | undefined
+  /** Analytics label identifying which map this is (e.g. 'fy27'). */
+  mapType?: MapType
 }
 
 export default function ChoroplethMap<K extends string>({
@@ -104,6 +132,7 @@ export default function ChoroplethMap<K extends string>({
   onGeoLevelChange,
   fiscalYear,
   aboutContent,
+  mapType,
 }: ChoroplethMapProps<K>) {
   const [geoLevel, setGeoLevel] = useState<K>(defaultLevel)
   const [selectedProps, setSelectedProps] = useState<TileProps | null>(null)
@@ -192,6 +221,11 @@ export default function ChoroplethMap<K extends string>({
 
   const handleClick = useCallback(
     (info: PickingInfo, event: MjolnirGestureEvent) => {
+      const props = (info.object as { properties?: TileProps } | undefined)?.properties
+      if (props) {
+        trackGeographyClick(props, geoLevel as unknown as LossGeoLevel, mapType)
+      }
+
       // If a custom click handler is provided, delegate to it
       if (onMapClick) {
         onMapClick(info, event)
@@ -201,7 +235,6 @@ export default function ChoroplethMap<K extends string>({
       // Built-in drawer click handling
       if (!drawerConfig) return
 
-      const props = (info.object as { properties?: TileProps } | undefined)?.properties
       if (!props) {
         setSelectedProps(null)
         setPreviewProps(null)
@@ -214,7 +247,7 @@ export default function ChoroplethMap<K extends string>({
         requestAnimationFrame(() => setSelectedProps(props))
       }
     },
-    [onMapClick, drawerConfig, isMobile],
+    [onMapClick, drawerConfig, isMobile, geoLevel, mapType],
   )
 
   return (
@@ -222,7 +255,19 @@ export default function ChoroplethMap<K extends string>({
       {/* Top bar: region selector (left) + info/share (right) */}
       <div className="pointer-events-none absolute left-2 right-2 top-2 z-10 flex items-start justify-between md:left-4 md:right-4 md:top-4">
         <div className="pointer-events-auto flex flex-col gap-2 md:rounded-lg md:bg-white/90 md:p-3 md:shadow-md md:backdrop-blur-sm">
-          <Tabs value={geoLevel} onValueChange={(v: string) => { const level = v as K; setGeoLevel(level); onGeoLevelChange?.(level) }}>
+          <Tabs
+            value={geoLevel}
+            onValueChange={(v: string) => {
+              const level = v as K
+              track(Events.MAP_GEO_LEVEL_CHANGED, {
+                map_type: mapType,
+                from_level: geoLevel,
+                to_level: level,
+              })
+              setGeoLevel(level)
+              onGeoLevelChange?.(level)
+            }}
+          >
             <TabsList className="shadow md:shadow-none">
               {typedKeys(geoLevels).map((key) => (
                 <TabsTrigger key={key} value={key} className="text-xs md:text-sm">
@@ -239,7 +284,12 @@ export default function ChoroplethMap<K extends string>({
           {aboutContent?.description && (
             <div ref={aboutPanelRef} className="relative">
               <button
-                onClick={() => setShowAbout((v) => !v)}
+                onClick={() => {
+                  setShowAbout((v) => {
+                    if (!v) track(Events.MAP_ABOUT_OPENED, { map_type: mapType })
+                    return !v
+                  })
+                }}
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-colors hover:bg-white md:h-9 md:w-9"
                 aria-label="About this map"
               >
@@ -270,7 +320,7 @@ export default function ChoroplethMap<K extends string>({
               )}
             </div>
           )}
-          <ShareMenu />
+          <ShareMenu pageType={mapType ? `map-${mapType}` : 'map'} context={{ geo_level: geoLevel }} />
         </div>
       </div>
 
@@ -341,6 +391,7 @@ export default function ChoroplethMap<K extends string>({
             config={drawerConfig}
             onClose={() => setSelectedProps(null)}
             fiscalYear={fiscalYear}
+            mapType={mapType}
           />
         </>
       )}

@@ -1,13 +1,15 @@
-import { createFileRoute } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { useEffect, useRef, type ReactNode } from 'react'
 import {
   Megaphone,
   Share2,
+  MapPin,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { getPage } from '@/lib/content'
 import { InlineMarkdown } from '@/components/InlineMarkdown'
 import ShareMenu from '@/components/ShareMenu'
+import { Events, track, setPersonProperties } from '@/lib/analytics'
 
 export const Route = createFileRoute('/take-action')({
   component: TakeActionPage,
@@ -77,6 +79,27 @@ function BulletList({ items }: { items: string[] }) {
 
 function TakeActionPage() {
   const a = PAGE.attrs
+  const contactRef = useRef<HTMLDivElement>(null)
+  const sawContactRef = useRef(false)
+
+  useEffect(() => {
+    const el = contactRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5 && !sawContactRef.current) {
+            sawContactRef.current = true
+            track(Events.TAKE_ACTION_CONTACT_REPS_SEEN, {})
+          }
+        }
+      },
+      { threshold: [0.5] },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div className="flex w-full flex-col">
       {/* Hero */}
@@ -97,13 +120,28 @@ function TakeActionPage() {
 
       {/* Contact Your Representatives */}
       <Section bg="white">
-        <SectionHeading icon={Megaphone}>
-          {a.contact_heading}
-        </SectionHeading>
-        <p className="mb-5 text-lg leading-relaxed text-gray-700 [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-sky">
-          <InlineMarkdown>{a.contact_intro}</InlineMarkdown>
-        </p>
-        <BulletList items={a.talking_points ?? []} />
+        <div ref={contactRef}>
+          <SectionHeading icon={Megaphone}>
+            {a.contact_heading}
+          </SectionHeading>
+          <p className="mb-5 text-lg leading-relaxed text-gray-700 [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-sky">
+            <InlineMarkdown>{a.contact_intro}</InlineMarkdown>
+          </p>
+          <div className="mb-6">
+            <Link
+              to="/fy27"
+              onClick={() => {
+                track(Events.TAKE_ACTION_FIND_REPS_CLICKED, {})
+                setPersonProperties({ has_clicked_find_reps: true })
+              }}
+              className="inline-flex items-center gap-2 rounded-md bg-brand-blue px-5 py-3 text-base font-bold text-white transition-colors hover:bg-brand-blue-dark"
+            >
+              <MapPin className="size-4" />
+              Find your representatives
+            </Link>
+          </div>
+          <BulletList items={a.talking_points ?? []} />
+        </div>
       </Section>
 
       {/* Share */}
@@ -119,7 +157,7 @@ function TakeActionPage() {
           <p className="text-lg leading-relaxed text-gray-700">
             <InlineMarkdown>{a.share_intro}</InlineMarkdown>
           </p>
-          <ShareMenu className="inline-flex" dropUp variant="full" />
+          <ShareMenu className="inline-flex" dropUp variant="full" pageType="take-action" />
         </div>
         {a.organizations && (
           <ul className="mb-6 space-y-2">
@@ -130,6 +168,9 @@ function TakeActionPage() {
                   href={org.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    track(Events.TAKE_ACTION_ORG_CLICKED, { org_name: org.name, url: org.url })
+                  }
                   className="text-lg text-brand-blue underline hover:text-brand-sky"
                 >
                   {org.name}

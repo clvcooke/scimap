@@ -12,6 +12,7 @@ import {
 import type { BudgetDrawerConfig } from './BudgetDrawer'
 import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
 import AgencyFilterControl from './AgencyFilterControl'
+import { Events, track } from '@/lib/analytics'
 
 function buildDrawerConfig(agencyFilter: AgencyFilter): BudgetDrawerConfig {
   return {
@@ -121,6 +122,7 @@ export default function FY27Map({ initialLat, initialLng, initialZoom, aboutCont
       colorLUT={LUT_MAGMA_INV}
       layerId="fy27-mvt"
       useMagma
+      mapType="fy27"
       renderTooltip={renderTooltip}
       drawerConfig={drawerConfig}
       fiscalYear="fy27"
@@ -130,7 +132,13 @@ export default function FY27Map({ initialLat, initialLng, initialZoom, aboutCont
       aboutContent={aboutContent}
       onGeoLevelChange={setGeoLevel as (level: string) => void}
       extraControls={
-        <AgencyFilterControl value={agencyFilter} onValueChange={setAgencyFilter} />
+        <AgencyFilterControl
+          value={agencyFilter}
+          onValueChange={(v) => {
+            track(Events.MAP_AGENCY_FILTER_CHANGED, { map_type: 'fy27', agency: v })
+            setAgencyFilter(v)
+          }}
+        />
       }
     />
   )

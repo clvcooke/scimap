@@ -37,6 +37,7 @@
     "luxon": "^3.7.2",
     "maplibre-gl": "^5.19.0",
     "papaparse": "^5.5.3",
+    "posthog-js": "^1.369.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-map-gl": "^8.1.0",

@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowLeft, Download } from 'lucide-react'
 import Markdown from 'react-markdown'
 import { getBlogPost } from '@/lib/content'
+import { Events, track } from '@/lib/analytics'
 
 export const Route = createFileRoute('/insights/$slug')({
   component: BlogPostPage,
@@ -10,6 +12,12 @@ export const Route = createFileRoute('/insights/$slug')({
 function BlogPostPage() {
   const { slug } = Route.useParams()
   const post = getBlogPost(slug)
+
+  useEffect(() => {
+    if (post) {
+      track(Events.INSIGHT_ARTICLE_OPENED, { slug, title: post.title })
+    }
+  }, [slug, post])
 
   if (!post) {
     return (

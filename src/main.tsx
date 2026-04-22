@@ -4,10 +4,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
+import { initAnalytics } from './lib/analytics'
 import './index.css'
 
 // Create a new router instance
 const router = createRouter({ routeTree })
+
+initAnalytics(router)
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {

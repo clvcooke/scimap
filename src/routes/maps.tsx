@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { Events, track, type MapType } from '@/lib/analytics'
 import { Map } from 'react-map-gl/maplibre'
 import DeckGL from '@deck.gl/react'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -189,10 +190,12 @@ function MapCard({
 }) {
   const page = getPage(slug)
   const { title, blurb } = page.attrs
+  const mapType = to.slice(1) as MapType
 
   return (
     <Link
       to={to}
+      onClick={() => track(Events.MAP_CARD_CLICKED, { map_type: mapType })}
       className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="relative aspect-video overflow-hidden">

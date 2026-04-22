@@ -14,6 +14,7 @@ import { formatCurrency, formatNumber } from '@/lib/constants'
 import type { ReportCardData, FiscalYear } from '@/lib/report-card-data'
 import { FILL_ALPHA } from '@/lib/color-lut'
 import ColorScale from './ColorScale'
+import { Events, track, setPersonProperties, repParty, senatorPartyMix } from '@/lib/analytics'
 
 // ── Constants ──────────────────────────────────────────────────────
 
@@ -360,7 +361,35 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
   const reportCardImageDir = fiscalYear === 'fy27' ? 'report-cards-fy27-v2' : 'report-cards-v6'
   const hasDownloadableImage = true
 
+  useEffect(() => {
+    const totalLoss =
+      data.budg_total_cuts_econ_loss ?? data.budg_NIH_cuts_econ_loss
+    track(Events.SCORECARD_VIEWED, {
+      scorecard_type: 'district',
+      state_code: data.state_code,
+      district_id: data.CD119FP,
+      fiscal_year: fiscalYear,
+      rep_name: data.representativeName,
+      rep_party: repParty(data.state_code, data.CD119FP),
+      senator_party_mix: senatorPartyMix(data.state_code),
+      total_loss: totalLoss,
+      job_loss: data.budg_total_cuts_job_loss ?? data.budg_NIH_cuts_job_loss,
+    })
+    setPersonProperties({
+      last_fiscal_year: fiscalYear,
+      last_rep_party_viewed: repParty(data.state_code, data.CD119FP),
+      last_senator_party_mix: senatorPartyMix(data.state_code),
+      last_state_code: data.state_code,
+      has_viewed_scorecard: true,
+    })
+  }, [data, fiscalYear])
+
   const downloadImage = async () => {
+    track(Events.SCORECARD_IMAGE_DOWNLOADED, {
+      state_code: data.state_code,
+      district_id: data.CD119FP,
+      fiscal_year: fiscalYear,
+    })
     const imageUrl = `${DOMAIN}/${reportCardImageDir}/report-card-${data.state_code}-${data.CD119FP}.png`
     const fileName = `fact-sheet-${fiscalYear}-${data.state_code}-${data.CD119FP === '00' ? 'AL' : data.CD119FP}.png`
     try {
@@ -388,6 +417,12 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
     if (navigator.share) {
       try {
         await navigator.share(shareData)
+        track(Events.SCORECARD_SHARE_CLICKED, {
+          method: 'native',
+          state_code: data.state_code,
+          district_id: data.CD119FP,
+          fiscal_year: fiscalYear,
+        })
       } catch {
         // user cancelled
       }
@@ -395,6 +430,12 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
       await navigator.clipboard.writeText(currentUrl)
       setShareOpen(true)
       setTimeout(() => setShareOpen(false), 2000)
+      track(Events.SCORECARD_SHARE_CLICKED, {
+        method: 'clipboard',
+        state_code: data.state_code,
+        district_id: data.CD119FP,
+        fiscal_year: fiscalYear,
+      })
     }
   }
 
