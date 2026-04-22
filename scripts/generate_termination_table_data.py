@@ -56,42 +56,41 @@ def load_name_lookup(level_name):
     return {row["id"]: row["name"] for row in rows}
 
 
-def parse_week(w):
-    """NIH weeks are integers-as-strings ("1", "2", ..., "51"); NSF weeks are
-    ISO date strings ("2025-02-28"). Parse NIH as int so "51" > "9"; NSF dates
-    sort correctly as strings."""
-    try:
-        return int(w)
-    except (ValueError, TypeError):
-        return w
+def read_weeks(csv_path):
+    weeks = set()
+    with open(csv_path, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            w = row.get("week")
+            if w:
+                weeks.add(w)
+    return weeks
 
 
-def load_latest_week(csv_path, id_col):
-    """Load a terminations CSV, return only the latest week's data per region."""
+def shared_latest_week(*csv_paths):
+    """Return the latest ISO-date week that appears in every given CSV."""
+    sets = [read_weeks(p) for p in csv_paths]
+    shared = set.intersection(*sets)
+    if not shared:
+        raise RuntimeError(f"No shared weeks across {csv_paths}")
+    return max(shared)
+
+
+def load_week(csv_path, id_col, target_week):
+    """Load rows for exactly `target_week` from a terminations CSV, keyed by id."""
     regions = {}
 
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             rid = row[id_col]
-            if not rid:
+            if not rid or row.get("week") != target_week:
                 continue
 
-            week = parse_week(row["week"])
-
-            if rid not in regions or week > regions[rid]["_week"]:
-                entry = {"_week": week}
-                for field in VALUE_FIELDS:
-                    entry[field] = safe_float(row.get(field))
-                regions[rid] = entry
-            elif week == regions[rid]["_week"]:
-                # Same week — sum (shouldn't happen but be safe)
-                for field in VALUE_FIELDS:
-                    regions[rid][field] += safe_float(row.get(field))
-
-    # Strip internal _week field
-    for entry in regions.values():
-        del entry["_week"]
+            entry = {}
+            for field in VALUE_FIELDS:
+                entry[field] = safe_float(row.get(field))
+            regions[rid] = entry
 
     return regions
 
@@ -143,10 +142,13 @@ def main():
         name_lookup = load_name_lookup(level_name)
         print(f"  Name lookup: {len(name_lookup)} entries")
 
-        nih_regions = load_latest_week(config["nih_csv"], config["id_col"])
+        target_week = shared_latest_week(config["nih_csv"], config["nsf_csv"])
+        print(f"  Shared latest week: {target_week}")
+
+        nih_regions = load_week(config["nih_csv"], config["id_col"], target_week)
         print(f"  NIH: {len(nih_regions)} regions")
 
-        nsf_regions = load_latest_week(config["nsf_csv"], config["id_col"])
+        nsf_regions = load_week(config["nsf_csv"], config["id_col"], target_week)
         print(f"  NSF: {len(nsf_regions)} regions")
 
         rows = merge_nih_nsf(nih_regions, nsf_regions, name_lookup, config["id_col"])

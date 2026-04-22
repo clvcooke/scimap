@@ -1,7 +1,14 @@
 import { useState, useMemo, useCallback } from 'react'
 import type { PickingInfo, Position } from '@deck.gl/core'
 import { formatCurrency, formatNumber } from '@/lib/constants'
-import { GRANTS_GEO_LEVELS, GRANTS_COLOR_PROPERTIES, GRANTS_JOB_PROPERTIES, GRANTS_AGENCY_DOMAINS } from '@/lib/grants-map-config'
+import {
+  GRANTS_GEO_LEVELS,
+  GRANTS_COLOR_PROPERTIES,
+  GRANTS_JOB_PROPERTIES,
+  GRANTS_CURRENT_ECON_PROPERTIES,
+  GRANTS_CURRENT_JOB_PROPERTIES,
+  GRANTS_AGENCY_DOMAINS,
+} from '@/lib/grants-map-config'
 import {
   LUT_OR_RD,
   buildTooltipHeader,
@@ -18,25 +25,32 @@ import { Switch } from '@/components/ui/switch'
 import AgencyFilterControl from './AgencyFilterControl'
 import { Events, track } from '@/lib/analytics'
 
-const AGENCY_LABELS: Record<AgencyFilter, string> = {
-  both: 'Economic Loss',
-  nih: 'NIH Economic Loss',
-  nsf: 'NSF Economic Loss',
+const AGENCY_PREFIX: Record<AgencyFilter, string> = {
+  both: '',
+  nih: 'NIH ',
+  nsf: 'NSF ',
 }
 
 function buildRenderTooltip(agencyFilter: AgencyFilter) {
-  const econProp = GRANTS_COLOR_PROPERTIES[agencyFilter]
-  const jobProp = GRANTS_JOB_PROPERTIES[agencyFilter]
+  const cumEconProp = GRANTS_COLOR_PROPERTIES[agencyFilter]
+  const cumJobProp = GRANTS_JOB_PROPERTIES[agencyFilter]
+  const curEconProp = GRANTS_CURRENT_ECON_PROPERTIES[agencyFilter]
+  const curJobProp = GRANTS_CURRENT_JOB_PROPERTIES[agencyFilter]
+  const prefix = AGENCY_PREFIX[agencyFilter]
   return (p: TileProps, geoLevel: LossGeoLevel) => {
     const { locationLine, politicianHtml } = buildTooltipHeader(p, geoLevel)
-    const econLoss = Number(p[econProp] ?? 0)
-    const jobLoss = Number(p[jobProp] ?? 0)
+    const cumEcon = Number(p[cumEconProp] ?? 0)
+    const curEcon = Number(p[curEconProp] ?? 0)
+    const cumJobs = Number(p[cumJobProp] ?? 0)
+    const curJobs = Number(p[curJobProp] ?? 0)
 
     return (
       `<div class="font-semibold">${locationLine}</div>` +
       politicianHtml +
-      `<div>${AGENCY_LABELS[agencyFilter]}: ${formatCurrency(econLoss)}</div>` +
-      `<div>Jobs Lost: ${formatNumber(jobLoss)}</div>`
+      `<div>${prefix}Cumulative Economic Loss: ${formatCurrency(cumEcon)}</div>` +
+      `<div>${prefix}Current Economic Loss: ${formatCurrency(curEcon)}</div>` +
+      `<div>${prefix}Cumulative Jobs Lost: ${formatNumber(cumJobs)}</div>` +
+      `<div>${prefix}Current Jobs Lost: ${formatNumber(curJobs)}</div>`
     )
   }
 }

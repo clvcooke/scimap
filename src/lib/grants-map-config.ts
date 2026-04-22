@@ -1,7 +1,7 @@
 import type { AgencyFilter, LossGeoLevel, MapGeoConfig } from './map-shared'
 
 const DOMAIN = 'https://data.scienceimpacts.org'
-const TILE_VERSION = '2026-04-21c'
+const TILE_VERSION = '2026-04-22c'
 
 export const GRANTS_GEO_LEVELS: Record<LossGeoLevel, MapGeoConfig> = {
   counties: {
@@ -39,6 +39,20 @@ export const GRANTS_JOB_PROPERTIES: Record<AgencyFilter, string> = {
   both: 'terminated_job_loss',
   nih: 'nih_overall_job_loss',
   nsf: 'nsf_overall_job_loss',
+}
+
+/** Currently-active (not-yet-reinstated) economic loss. */
+export const GRANTS_CURRENT_ECON_PROPERTIES: Record<AgencyFilter, string> = {
+  both: 'terminated_current_econ_loss',
+  nih: 'nih_current_econ_loss',
+  nsf: 'nsf_current_econ_loss',
+}
+
+/** Currently-active (not-yet-reinstated) job loss. */
+export const GRANTS_CURRENT_JOB_PROPERTIES: Record<AgencyFilter, string> = {
+  both: 'terminated_current_job_loss',
+  nih: 'nih_current_job_loss',
+  nsf: 'nsf_current_job_loss',
 }
 
 /** Per-agency domain overrides for good color contrast. */

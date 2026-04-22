@@ -157,13 +157,15 @@ def build_levels():
 
 # ── Data loading ───────────────────────────────────────────────────
 
-def load_latest_week(csv_path, key_col):
+def load_latest_week(csv_path, key_col, target_week=None):
     """
-    Load a terminations CSV and return only the latest week's data.
+    Load a terminations CSV and return only a single week's data per geographic unit.
 
-    NIH files use a numeric 'week' column; NSF files use a date-string 'week'.
-    Both have the same value columns. We take the row with the max week value
-    per geographic unit, which gives the cumulative 'overall_*' totals.
+    Both NIH and NSF files use ISO-date 'week' strings (e.g. "2026-04-17"). Lex
+    ordering is equivalent to chronological ordering for ISO dates.
+
+    If `target_week` is provided, filter to rows where week == target_week.
+    Otherwise, take the row with the max week per geographic unit.
     """
     df = pd.read_csv(csv_path)
 
@@ -174,15 +176,33 @@ def load_latest_week(csv_path, key_col):
     else:
         df[key_col] = df[key_col].astype(str)
 
-    # Find latest week per geographic unit
-    # For NIH (numeric week): max int. For NSF (date string): max lexicographic = latest date.
-    latest_week = df.groupby(key_col)["week"].transform("max")
-    df = df[df["week"] == latest_week].copy()
+    df["week"] = df["week"].astype(str)
 
-    # De-duplicate (one row per geo unit)
+    if target_week is not None:
+        df = df[df["week"] == target_week].copy()
+    else:
+        latest_week = df.groupby(key_col)["week"].transform("max")
+        df = df[df["week"] == latest_week].copy()
+
     df = df.drop_duplicates(subset=[key_col], keep="last")
 
     return df
+
+
+def shared_latest_week(*csv_paths):
+    """Return the latest ISO-date 'week' that appears in every given CSV."""
+    week_sets = []
+    for p in csv_paths:
+        if p is None:
+            continue
+        weeks = pd.read_csv(p, usecols=["week"])["week"].astype(str)
+        week_sets.append(set(weeks.unique()))
+    if not week_sets:
+        return None
+    shared = set.intersection(*week_sets)
+    if not shared:
+        raise RuntimeError(f"No shared weeks across {csv_paths}")
+    return max(shared)
 
 
 def combine_nih_nsf(nih_df, nsf_df, key_col):
@@ -370,15 +390,22 @@ def process_level(name, config):
     zoom = config["zoom"]
     pad_width = config.get("csv_key_pad")
 
-    # Load and filter to latest week
+    # Determine the target week: when both NIH and NSF are available, use the
+    # latest week present in both (so per-region sums are from the same snapshot).
+    # Otherwise fall back to each file's own latest week.
+    target_week = None
+    if config.get("nsf_csv"):
+        target_week = shared_latest_week(config["nih_csv"], config["nsf_csv"])
+        print(f"  Shared latest week (NIH ∩ NSF): {target_week}")
+
     print(f"  Loading NIH: {os.path.basename(config['nih_csv'])}")
-    nih_df = load_latest_week(config["nih_csv"], csv_key)
-    print(f"    {len(nih_df)} rows (latest week)")
+    nih_df = load_latest_week(config["nih_csv"], csv_key, target_week=target_week)
+    print(f"    {len(nih_df)} rows @ {target_week or 'own latest'}")
 
     if config.get("nsf_csv"):
         print(f"  Loading NSF: {os.path.basename(config['nsf_csv'])}")
-        nsf_df = load_latest_week(config["nsf_csv"], csv_key)
-        print(f"    {len(nsf_df)} rows (latest week)")
+        nsf_df = load_latest_week(config["nsf_csv"], csv_key, target_week=target_week)
+        print(f"    {len(nsf_df)} rows @ {target_week}")
         combined = combine_nih_nsf(nih_df, nsf_df, csv_key)
     else:
         print("  NSF: skipped (not available for this level)")
@@ -531,20 +558,23 @@ def generate_terminated_grants():
     nih_org_path = os.path.join(NIH_DIR, "terminations_org.csv")
     nsf_org_path = os.path.join(NSF_DIR, "terminations_org_nsf.csv")
 
-    # Load org data, latest week only
+    # Shared latest week across NIH and NSF org files, so the combined org view
+    # is a consistent snapshot rather than a mix of agency-specific latest weeks.
+    target_week = shared_latest_week(nih_org_path, nsf_org_path)
+    print(f"  Shared latest week (orgs): {target_week}")
+
     nih_orgs = pd.read_csv(nih_org_path)
     nsf_orgs = pd.read_csv(nsf_org_path)
+    nih_orgs["week"] = nih_orgs["week"].astype(str)
+    nsf_orgs["week"] = nsf_orgs["week"].astype(str)
 
-    def latest_org_data(df):
-        """Get latest week per org (using org_name + org_city + org_state as key)."""
-        latest = df.groupby(["org_name", "org_city", "org_state"])["week"].transform("max")
-        df = df[df["week"] == latest].drop_duplicates(
+    def at_target_week(df):
+        return df[df["week"] == target_week].drop_duplicates(
             subset=["org_name", "org_city", "org_state"], keep="last"
         )
-        return df
 
-    nih_orgs = latest_org_data(nih_orgs)
-    nsf_orgs = latest_org_data(nsf_orgs)
+    nih_orgs = at_target_week(nih_orgs)
+    nsf_orgs = at_target_week(nsf_orgs)
 
     print(f"  NIH orgs: {len(nih_orgs)}, NSF orgs: {len(nsf_orgs)}")
 
