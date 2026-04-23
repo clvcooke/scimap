@@ -64,7 +64,9 @@
       "Bash(tee /tmp/report-card-gen.log)",
       "Bash(tee /tmp/terminations_tiles.log)",
       "Bash(tee /tmp/report_cards.log)",
-      "Bash(tee /tmp/report_cards_retry.log)"
+      "Bash(tee /tmp/report_cards_retry.log)",
+      "Bash(lsof -nP -iTCP:5173 -sTCP:LISTEN)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/ --max-time 3)"
     ]
   }
 }

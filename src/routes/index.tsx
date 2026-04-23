@@ -147,11 +147,11 @@ function Index() {
           <h2 className="text-center text-3xl font-bold text-white">
             {a.metrics_heading}
           </h2>
-          <div className="grid w-full grid-cols-1 gap-8 divide-y text-center sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4 divide-white/20">
+          <div className="grid w-full grid-cols-1 gap-8 text-center sm:grid-cols-2 lg:grid-cols-4">
             {metrics.map((m) => (
               <div
                 key={m.label}
-                className="flex flex-col items-center justify-center space-y-2 pt-6 sm:pt-0"
+                className="flex flex-col items-center justify-center space-y-2"
               >
                 <span className="text-5xl font-bold text-white">
                   {m.value}

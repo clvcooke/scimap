@@ -1,9 +1,10 @@
 name: Update News from Google Sheets
 
 on:
-  schedule:
-    # Run every night at 2 AM UTC
-    - cron: '0 2 * * *'
+  # Scheduled runs temporarily disabled — re-enable when changes are ready to go live
+  # schedule:
+  #   # Run every night at 2 AM UTC
+  #   - cron: '0 2 * * *'
   workflow_dispatch: # Allow manual triggering
 
 permissions:

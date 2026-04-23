@@ -1,7 +1,8 @@
 name: Update Data
 on:
-  schedule:
-    - cron: '0 23 * * *'
+  # Scheduled runs temporarily disabled — re-enable when changes are ready to go live
+  # schedule:
+  #   - cron: '0 23 * * *'
   workflow_dispatch:
 
 permissions:

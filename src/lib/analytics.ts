@@ -47,6 +47,14 @@ let prevPath: string | undefined
 
 const isDev = import.meta.env.DEV
 
+const GA_MEASUREMENT_ID = 'G-CCM3BQY1WQ'
+
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void
+  }
+}
+
 // ── Init ───────────────────────────────────────────────────────────
 
 // PostHog project API keys (phc_*) are public-safe — they're designed to ship
@@ -104,6 +112,18 @@ export function initAnalytics(router: AnyRouter): void {
       referrer_path: prevPath,
     })
     setPersonProperties({ last_path: pathname })
+
+    // GA4 SPA pageview. The gtag snippet in index.html fires the initial
+    // page_view on load; this covers every subsequent client-side nav.
+    if (prevPath !== undefined) {
+      window.gtag?.('event', 'page_view', {
+        page_path: pathname + window.location.search,
+        page_location: window.location.href,
+        page_title: document.title,
+        send_to: GA_MEASUREMENT_ID,
+      })
+    }
+
     prevPath = pathname
   })
 }

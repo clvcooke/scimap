@@ -170,12 +170,9 @@ export default class IconClusterLayer<
       this.getSubLayerProps({ id: 'circles' }) as Partial<ScatterplotLayer<ClusterFeatureT<DataT>>['props']>,
     )
 
-    // Only clusters get a count label; singletons render as a bare dot.
-    const clusterOnly = data.filter((d) => getCount(d) > 1)
-
     const labels = new TextLayer<ClusterFeatureT<DataT>>(
       {
-        data: clusterOnly,
+        data,
         pickable: false,
         sizeUnits: 'pixels',
         getPosition: getFeaturePosition,

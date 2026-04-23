@@ -46,6 +46,9 @@ BASE_URL = f"http://{DEV_HOST}:{DEV_PORT}"
 DEV_READY_TIMEOUT = 120  # seconds
 PAGE_WAIT_MS = 10_000  # time for tiles/map to settle before snapping
 VIEWPORT = {"width": 1600, "height": 950}
+# Blank screenshots of this viewport come out ~6KB; the smallest real card
+# observed is ~135KB. 50KB comfortably separates the two.
+MIN_PNG_BYTES = 50_000
 
 
 # ── Dev server lifecycle ──────────────────────────────────────────────
@@ -201,19 +204,26 @@ def validate(results, output_dir: Path) -> int:
     print("\n" + "=" * 60)
     print("VALIDATION")
     print("=" * 60)
-    ok, missing = [], []
+    ok, missing, blank = [], [], []
     for key, actual, expected in results:
-        if actual and actual.exists() and actual.stat().st_size > 0:
-            ok.append(key)
-        else:
+        if not (actual and actual.exists() and actual.stat().st_size > 0):
             missing.append((key, expected))
+            continue
+        size = actual.stat().st_size
+        if size < MIN_PNG_BYTES:
+            blank.append((key, actual, size))
+        else:
+            ok.append(key)
 
     print(f"✅ {len(ok)} generated")
     print(f"❌ {len(missing)} missing")
     for key, expected in missing:
         print(f"  - {key}: {expected}")
+    print(f"⚠️  {len(blank)} suspiciously small (< {MIN_PNG_BYTES:,} bytes — likely blank)")
+    for key, path, size in blank:
+        print(f"  - {key}: {path} ({size:,} bytes) — re-run with --overwrite")
     print(f"\nOutput directory: {output_dir}")
-    return len(missing)
+    return len(missing) + len(blank)
 
 
 # ── Main ──────────────────────────────────────────────────────────────
