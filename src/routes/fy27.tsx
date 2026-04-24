@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import FY27Map from '../components/FY27Map'
+import FY27BudgetTable from '../components/FY27BudgetTable'
 import { validateMapSearch, useScrollToTop } from '@/lib/map-search-params'
 import { getPage } from '@/lib/content'
 import { MapHeader } from '@/components/MapHeader'
@@ -31,6 +32,7 @@ function FY27Route() {
       </div>
       <MapZipSearch mapRoute="/fy27" />
       <MapAttribution />
+      <FY27BudgetTable />
     </>
   )
 }
