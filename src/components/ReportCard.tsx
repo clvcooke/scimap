@@ -495,7 +495,7 @@ export default function ReportCard({ data, fiscalYear = 'fy26' }: { data: Report
               {districtTitle} — FY{fyYear} Science Funding Impact
             </h2>
             <p className="text-sm text-gray-500">
-              Projected district-level economic losses from cuts proposed in the White House {fyLabel}
+              Projected district-level economic losses from cuts proposed in the White House {fyLabel}{' '}
               budget for NIH{fiscalYear === 'fy27' ? ' and NSF' : ''}
             </p>
           </div>
