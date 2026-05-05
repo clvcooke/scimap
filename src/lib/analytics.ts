@@ -75,7 +75,7 @@ export function initAnalytics(router: AnyRouter): void {
     posthog.init(key, {
       api_host: host,
       person_profiles: 'always',
-      capture_pageview: false,
+      capture_pageview: true,
       capture_pageleave: true,
       autocapture: false,
       respect_dnt: true,
