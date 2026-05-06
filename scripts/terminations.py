@@ -30,6 +30,7 @@ OUTPUT_DIR = os.path.join(SCRIPT_DIR, "outputs")
 
 NIH_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NIH")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NSF")
+COMBINED_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations Combined")
 
 TILE_VERSION = datetime.now().strftime("%Y-%m-%d") + "c"
 
@@ -527,118 +528,56 @@ def generate_state_totals(state_df):
 
 # ── Generate terminated_grants.json (scatter plot data) ────────────
 
-def build_state_centroid_lookup():
-    """
-    Build a lookup from state_abbreviation -> (lat, lon)
-    using state geometry centroids.
-    """
-    geo_file = geo_path("merged_data_states_CLIP.geojson")
-    gdf = gpd.read_file(geo_file)
-    if gdf.crs and gdf.crs != "EPSG:4326":
-        gdf = gdf.to_crs(epsg=4326)
-
-    lookup = {}
-    for _, row in gdf.iterrows():
-        state_code = row.get("state_code") or row.get("state") or ""
-        if state_code and pd.notna(row.geometry):
-            centroid = row.geometry.centroid
-            lookup[str(state_code).upper()] = (centroid.y, centroid.x)
-
-    print(f"  State centroid lookup: {len(lookup)} entries")
-    return lookup
-
-
 def generate_terminated_grants():
     """
-    Combine NIH + NSF org-level data into terminated_grants.json.
-    Geocode orgs to lat/lon via city centroid lookup.
+    Build terminated_grants.json from the pre-combined org-level CSV.
+    The combined file already has per-org lat/lon and pre-summed NIH+NSF values.
     """
     print("\nGenerating terminated_grants.json...")
 
-    nih_org_path = os.path.join(NIH_DIR, "terminations_org.csv")
-    nsf_org_path = os.path.join(NSF_DIR, "terminations_org_nsf.csv")
+    combined_path = os.path.join(COMBINED_DIR, "terminations_org_combined.csv")
+    df = pd.read_csv(combined_path)
+    df["week"] = df["week"].astype(str)
 
-    # Shared latest week across NIH and NSF org files, so the combined org view
-    # is a consistent snapshot rather than a mix of agency-specific latest weeks.
-    target_week = shared_latest_week(nih_org_path, nsf_org_path)
-    print(f"  Shared latest week (orgs): {target_week}")
+    # Use the latest week in the file
+    target_week = df["week"].max()
+    print(f"  Latest week: {target_week}")
+    df = df[df["week"] == target_week].drop_duplicates(
+        subset=["org_name", "org_city", "org_state"], keep="last"
+    )
+    print(f"  Orgs at latest week: {len(df)}")
 
-    nih_orgs = pd.read_csv(nih_org_path)
-    nsf_orgs = pd.read_csv(nsf_org_path)
-    nih_orgs["week"] = nih_orgs["week"].astype(str)
-    nsf_orgs["week"] = nsf_orgs["week"].astype(str)
+    # Derive agency from which agency has non-zero losses
+    def derive_agency(row):
+        has_nih = (row.get("overall_loss.nih") or 0) > 0
+        has_nsf = (row.get("overall_loss.nsf") or 0) > 0
+        if has_nih and has_nsf:
+            return "both"
+        if has_nsf:
+            return "nsf"
+        return "nih"
 
-    def at_target_week(df):
-        return df[df["week"] == target_week].drop_duplicates(
-            subset=["org_name", "org_city", "org_state"], keep="last"
-        )
-
-    nih_orgs = at_target_week(nih_orgs)
-    nsf_orgs = at_target_week(nsf_orgs)
-
-    print(f"  NIH orgs: {len(nih_orgs)}, NSF orgs: {len(nsf_orgs)}")
-
-    # Combine: sum values for orgs that appear in both
-    nih_orgs = nih_orgs.set_index(["org_name", "org_city", "org_state"])
-    nsf_orgs = nsf_orgs.set_index(["org_name", "org_city", "org_state"])
-
-    # Get all value cols present
-    val_cols = [c for c in VALUE_COLS if c in nih_orgs.columns]
-
-    combined = nih_orgs[val_cols].add(nsf_orgs[val_cols], fill_value=0)
-
-    # Add orgs only in one source
-    nih_only = nih_orgs.index.difference(nsf_orgs.index)
-    nsf_only = nsf_orgs.index.difference(nih_orgs.index)
-    both = nih_orgs.index.intersection(nsf_orgs.index)
-
-    frames = []
-    if len(both) > 0:
-        df_both = combined.loc[both].copy()
-        df_both["agency"] = "both"
-        frames.append(df_both)
-    if len(nih_only) > 0:
-        df_nih = nih_orgs.loc[nih_only, val_cols].copy()
-        df_nih["agency"] = "nih"
-        frames.append(df_nih)
-    if len(nsf_only) > 0:
-        df_nsf = nsf_orgs.loc[nsf_only, val_cols].copy()
-        df_nsf["agency"] = "nsf"
-        frames.append(df_nsf)
-
-    all_orgs = pd.concat(frames).reset_index()
-    print(f"  Combined orgs: {len(all_orgs)}")
-
-    # Build state centroid lookup for geocoding
-    # (org data lacks lat/lon; state centroid is a reasonable fallback)
-    centroid_lookup = build_state_centroid_lookup()
-
-    # Geocode and build output
     grant_losses = []
-    geocoded = 0
-    for _, row in all_orgs.iterrows():
-        state_abbr = str(row["org_state"]).upper().strip() if pd.notna(row["org_state"]) else ""
-        coords = centroid_lookup.get(state_abbr)
+    for _, row in df.iterrows():
+        loss = float(row.get("overall_loss.combined") or 0)
+        if loss <= 0:
+            continue
+        if not pd.notna(row.get("lat")) or not pd.notna(row.get("lon")):
+            continue
 
-        if coords is None:
-            continue  # Skip orgs we can't geocode
+        grant_count = int(row.get("overall_grant_loss.combined") or 1)
+        grant_count = max(grant_count, 1)
 
-        geocoded += 1
-        loss = float(row.get("overall_loss", 0) or 0)
         grant_losses.append({
             "org_name": row["org_name"],
-            "lat": round(coords[0], 6),
-            "lon": round(coords[1], 6),
+            "lat": round(float(row["lat"]), 6),
+            "lon": round(float(row["lon"]), 6),
             "terminated_loss": loss,
-            "terminated_num": 1,  # No grant count in new data
+            "terminated_num": grant_count,
             "terminated_loss_noself": loss,
-            "agency": row.get("agency", "nih"),
+            "agency": derive_agency(row),
         })
 
-    print(f"  Geocoded: {geocoded}/{len(all_orgs)} orgs")
-
-    # Filter to orgs with actual losses
-    grant_losses = [g for g in grant_losses if g["terminated_loss"] > 0]
     print(f"  With losses: {len(grant_losses)} orgs")
 
     output_path = os.path.join(REACT_DATA_DIR, "terminated_grants.json")
