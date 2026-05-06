@@ -9,8 +9,9 @@ overview: We source data on historical grants and budgets for fiscal years
   spending and proposed cuts. We redistribute the impacts of research spending
   based on commuter flows to reflect how investment in scientific research
   creates jobs and economic opportunities in the communities that surround
-  research institutions. Code and data are available on
-  [Github](https://github.com/scienceimpacts/SciMap_Maps).
+  research institutions. Code are available on
+  [Github](https://github.com/scienceimpacts/SciMap_Maps) and data are available
+  on [OSF](doi.org/10.17605/OSF.IO/H398E).
 geolocating_intro: We source data on historical grants (active between Fiscal
   Year 2020 and Fiscal Year 2024) from the National Institutes of Health (NIH)
   and National Science Foundation (NSF) [NIH
