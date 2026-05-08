@@ -143,6 +143,11 @@ export function getArticles(): Article[] {
 }
 
 /** Load all blog posts from content/insights/*.md */
+export interface BlogFigure {
+  image: string
+  caption: string
+}
+
 export interface BlogPost {
   title: string
   slug: string
@@ -153,6 +158,8 @@ export interface BlogPost {
   tags: string[]
   downloadable?: string
   downloadable_title?: string
+  video?: string
+  figures?: BlogFigure[]
   body: string
 }
 
@@ -176,6 +183,8 @@ export function getBlogPosts(): BlogPost[] {
         tags: Array.isArray(attrs.tags) ? attrs.tags : [],
         downloadable: attrs.downloadable ?? undefined,
         downloadable_title: attrs.downloadable_title ?? undefined,
+        video: attrs.video ?? undefined,
+        ...(Array.isArray(attrs.figures) && { figures: attrs.figures as BlogFigure[] }),
         body,
       }
     })
