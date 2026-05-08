@@ -6,6 +6,7 @@ date: MAY 6, 2026
 author: SCIMaP Team
 summary: The SCIMaP team explains the methods used to analyze the data behind
   mapping federal science cuts.
+image: /images/image1.jpg
 tags: []
 figures:
   - image: /images/image1.jpg
