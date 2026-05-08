@@ -7,6 +7,13 @@ author: SCIMaP Team
 summary: The SCIMaP team explains the methods used to analyze the data behind
   mapping federal science cuts.
 tags: []
+figures:
+  - image: /images/image1.jpg
+    caption: "Figure 1: This map shows the baseline positive economic impact of
+      science funding flowing outward from research institutions in the Houston,
+      TX area. Baseline impact is calculated based on inflation-adjusted NIH and
+      NSF funding from 2020-2024. The proposed FY2027 budget cuts would reduce
+      the economic benefits of science funding spreading across communities."
 ---
 When the federal government proposes deep cuts to scientific research funding, the consequences spread far beyond universities, research hubs, and urban areas. Jobs vanish. Communities lose economic stability. Clinical trials stall. Measuring the real-world impact of these cuts across the country is difficult. How do you estimate which regions will suffer the most? What do job losses look like when distributed across commuter networks?
 
