@@ -65,6 +65,15 @@ collections:
       - { label: "Tags", name: "tags", widget: "list" }
       - { label: "Downloadable URL", name: "downloadable", widget: "string", required: false, hint: "Link to a downloadable file (e.g. PDF)" }
       - { label: "Downloadable Title", name: "downloadable_title", widget: "string", required: false, hint: "Button text for the download link" }
+      - { label: "Video Embed URL", name: "video", widget: "string", required: false, hint: "Direct video URL (.mp4) or YouTube/Vimeo embed URL (e.g. https://www.youtube.com/embed/...)" }
+      - label: "Figures"
+        name: "figures"
+        widget: "list"
+        required: false
+        hint: "Images with captions to display within the article (e.g. Figure 1, Figure 2)"
+        fields:
+          - { label: "Image", name: "image", widget: "image" }
+          - { label: "Caption", name: "caption", widget: "string", hint: "e.g. 'Figure 1: Map showing commuter flows into Harris County, TX'" }
       - { label: "Body", name: "body", widget: "markdown" }
 
   - name: updates

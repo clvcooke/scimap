@@ -96,6 +96,27 @@ function BlogPostPage() {
             </a>
           )}
 
+          {post.video && (
+            <div className="mt-8 aspect-video w-full overflow-hidden rounded-lg bg-black">
+              {/\.(mp4|webm|ogg)(\?.*)?$/i.test(post.video) ? (
+                <video
+                  src={post.video}
+                  controls
+                  className="h-full w-full"
+                  preload="metadata"
+                />
+              ) : (
+                <iframe
+                  src={post.video}
+                  className="h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title={post.title}
+                />
+              )}
+            </div>
+          )}
+
           {post.image && (
             <img
               src={post.image}
@@ -107,6 +128,25 @@ function BlogPostPage() {
           <div className="prose prose-gray mt-8 max-w-none prose-headings:text-gray-900 prose-a:text-brand-blue prose-a:no-underline hover:prose-a:underline">
             <Markdown>{post.body}</Markdown>
           </div>
+
+          {post.figures && post.figures.length > 0 && (
+            <div className="mt-10 space-y-8">
+              {post.figures.map((fig, i) => (
+                <figure key={i} className="mx-auto">
+                  <img
+                    src={fig.image}
+                    alt={fig.caption}
+                    className="w-full rounded-lg"
+                  />
+                  {fig.caption && (
+                    <figcaption className="mt-2 text-center text-sm text-gray-500">
+                      {fig.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              ))}
+            </div>
+          )}
         </article>
       </div>
     </div>
