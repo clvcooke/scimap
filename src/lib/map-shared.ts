@@ -75,7 +75,7 @@ export function createChoroplethLayer(
     getLineWidth: 1,
     lineWidthMinPixels: 1,
     lineWidthUnits: 'pixels' as const,
-    updateTriggers: { getFillColor: [colorScale] },
+    updateTriggers: { getFillColor: [colorScale, colorProperty] },
     getFillColor: (f: { properties: Record<string, number> }) => {
       const v = f.properties[colorProperty] ?? 0
       const idx =

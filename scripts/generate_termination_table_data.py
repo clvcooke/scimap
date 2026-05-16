@@ -37,7 +37,7 @@ LEVELS = {
     },
 }
 
-VALUE_FIELDS = ["overall_loss", "overall_econ_loss", "overall_job_loss"]
+VALUE_FIELDS = ["current_loss", "current_econ_loss", "current_job_loss"]
 
 
 def safe_float(val):
@@ -110,22 +110,22 @@ def merge_nih_nsf(nih_regions, nsf_regions, name_lookup, id_col):
             "id": rid,
             "name": name,
             # NIH
-            "nih_econ_loss": round(nih.get("overall_econ_loss", 0), 2),
-            "nih_funding_loss": round(nih.get("overall_loss", 0), 2),
-            "nih_job_loss": round(nih.get("overall_job_loss", 0), 4),
+            "nih_econ_loss": round(nih.get("current_econ_loss", 0), 2),
+            "nih_funding_loss": round(nih.get("current_loss", 0), 2),
+            "nih_job_loss": round(nih.get("current_job_loss", 0), 4),
             # NSF
-            "nsf_econ_loss": round(nsf.get("overall_econ_loss", 0), 2),
-            "nsf_funding_loss": round(nsf.get("overall_loss", 0), 2),
-            "nsf_job_loss": round(nsf.get("overall_job_loss", 0), 4),
+            "nsf_econ_loss": round(nsf.get("current_econ_loss", 0), 2),
+            "nsf_funding_loss": round(nsf.get("current_loss", 0), 2),
+            "nsf_job_loss": round(nsf.get("current_job_loss", 0), 4),
             # Totals
             "total_econ_loss": round(
-                nih.get("overall_econ_loss", 0) + nsf.get("overall_econ_loss", 0), 2
+                nih.get("current_econ_loss", 0) + nsf.get("current_econ_loss", 0), 2
             ),
             "total_funding_loss": round(
-                nih.get("overall_loss", 0) + nsf.get("overall_loss", 0), 2
+                nih.get("current_loss", 0) + nsf.get("current_loss", 0), 2
             ),
             "total_job_loss": round(
-                nih.get("overall_job_loss", 0) + nsf.get("overall_job_loss", 0), 4
+                nih.get("current_job_loss", 0) + nsf.get("current_job_loss", 0), 4
             ),
         }
         result.append(entry)

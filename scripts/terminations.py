@@ -547,16 +547,6 @@ def generate_terminated_grants():
     )
     print(f"  Orgs at latest week: {len(df)}")
 
-    # Derive agency from which agency has non-zero current losses
-    def derive_agency(row):
-        has_nih = (row.get("current_loss.nih") or 0) > 0
-        has_nsf = (row.get("current_loss.nsf") or 0) > 0
-        if has_nih and has_nsf:
-            return "both"
-        if has_nsf:
-            return "nsf"
-        return "nih"
-
     grant_losses = []
     for _, row in df.iterrows():
         loss = float(row.get("current_loss.combined") or 0)
@@ -565,8 +555,11 @@ def generate_terminated_grants():
         if not pd.notna(row.get("lat")) or not pd.notna(row.get("lon")):
             continue
 
-        grant_count = int(row.get("current_grant_loss.combined") or 1)
-        grant_count = max(grant_count, 1)
+        nih_loss = float(row.get("current_loss.nih") or 0)
+        nsf_loss = float(row.get("current_loss.nsf") or 0)
+        nih_num = int(row.get("current_grant_loss.nih") or 0)
+        nsf_num = int(row.get("current_grant_loss.nsf") or 0)
+        grant_count = max(int(row.get("current_grant_loss.combined") or 1), 1)
 
         grant_losses.append({
             "org_name": row["org_name"],
@@ -575,7 +568,10 @@ def generate_terminated_grants():
             "terminated_loss": loss,
             "terminated_num": grant_count,
             "terminated_loss_noself": loss,
-            "agency": derive_agency(row),
+            "nih_loss": nih_loss,
+            "nih_num": nih_num,
+            "nsf_loss": nsf_loss,
+            "nsf_num": nsf_num,
         })
 
     print(f"  With losses: {len(grant_losses)} orgs")
