@@ -1,0 +1,40 @@
+name: Sync CMS Branch to Main
+
+on:
+  schedule:
+    # 5 PM Central (CDT = UTC-5, so 23:00 UTC)
+    - cron: '0 23 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for diff between new-maps and main
+        id: diff-check
+        run: |
+          git fetch origin new-maps
+          if git diff --quiet origin/main origin/new-maps; then
+            echo "has_diff=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_diff=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Merge new-maps into main
+        if: steps.diff-check.outputs.has_diff == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git merge origin/new-maps --no-edit -m "Auto-merge CMS branch (new-maps) into main"
+          git push origin main
