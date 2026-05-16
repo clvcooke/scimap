@@ -32,7 +32,7 @@ NIH_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NIH")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NSF")
 COMBINED_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations Combined")
 
-TILE_VERSION = datetime.now().strftime("%Y-%m-%d") + "c"
+TILE_VERSION = datetime.now().strftime("%Y-%m-%d") + "d"
 
 # ── Remote geo-reference data (same as baseline.py) ───────────────
 
@@ -107,6 +107,18 @@ FIPS_TO_STATE = {
     '47':'TN','48':'TX','49':'UT','50':'VT','51':'VA','53':'WA','54':'WV',
     '55':'WI','56':'WY','60':'AS','66':'GU','69':'MP','72':'PR','78':'VI',
 }
+
+# PR and VI have no state/county shapefiles; use their district polygon as a fallback.
+TERRITORY_DISTRICTS = {'PR': '7298', 'VI': '7898'}   # state abbr → district GEOID
+TERRITORY_STATE_FIPS = {'PR': '72', 'VI': '78'}       # state abbr → 2-digit FIPS prefix
+
+
+def load_territory_geometries():
+    """Load district polygons for PR and VI, which have no state/county shapes."""
+    dist_geos, _ = load_geometries(geo_path("CongDist_shp"), "GEOID")
+    return {abbr: dist_geos[geoid]
+            for abbr, geoid in TERRITORY_DISTRICTS.items()
+            if geoid in dist_geos}
 
 
 # ── Geographic level configuration ─────────────────────────────────
@@ -440,6 +452,26 @@ def process_level(name, config):
     )
     print(f"    {len(geometries)} geometries loaded")
 
+    # PR and VI lack state/county shapefiles — inject their district polygon as the shape.
+    # For states: the CSV already has rows keyed by abbreviation (PR, VI).
+    # For counties: aggregate individual municipality FIPS rows into one territory row.
+    if name in ("states", "counties"):
+        territory_geos = load_territory_geometries()
+        for abbr, geom in territory_geos.items():
+            if name == "states":
+                geometries[abbr] = geom
+            else:
+                fips_prefix = TERRITORY_STATE_FIPS[abbr]
+                synth_key = fips_prefix + "000"
+                mask = combined[csv_key].astype(str).str.startswith(fips_prefix)
+                num_cols = combined.select_dtypes(include="number").columns.tolist()
+                agg = combined.loc[mask, num_cols].sum().to_dict() if mask.any() else {c: 0.0 for c in num_cols}
+                agg[csv_key] = synth_key
+                combined = combined[~mask].copy()
+                combined = pd.concat([combined, pd.DataFrame([agg])], ignore_index=True)
+                geometries[synth_key] = geom
+        print(f"    + territory geometries injected: {', '.join(territory_geos)}")
+
     # Ensure every region in the geo reference has a row (no-data = zero terminations)
     all_geo_keys = pd.DataFrame({csv_key: list(geometries.keys())})
     combined = all_geo_keys.merge(combined, on=csv_key, how="left")
@@ -477,6 +509,10 @@ def process_level(name, config):
             'PR':'Puerto Rico','VI':'U.S. Virgin Islands',
         }.items()}
         combined["state"] = combined["state"].map(full_to_abbr).fillna(combined["state"])
+        # Territory rows have no geo shapefile entry, so state is NaN — fill it in
+        for abbr, fips_prefix in TERRITORY_STATE_FIPS.items():
+            synth_key = fips_prefix + "000"
+            combined.loc[combined[csv_key] == synth_key, "state"] = abbr
 
     # For districts: derive state abbreviation from STATEFP
     if name == "districts" and "STATEFP" in combined.columns:
