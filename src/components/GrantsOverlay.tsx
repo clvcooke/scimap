@@ -10,9 +10,9 @@ const currencyFmt = new Intl.NumberFormat('en-US', {
 })
 
 const OVERLAY_TITLES: Record<AgencyFilter, string> = {
-  nih: 'Cancelled & Frozen NIH Grants',
-  nsf: 'Cancelled & Frozen NSF Grants',
-  both: 'Cancelled & Frozen Grants',
+  nih: 'Current Cancelled & Frozen NIH Grants',
+  nsf: 'Current Cancelled & Frozen NSF Grants',
+  both: 'Current Cancelled & Frozen Grants',
 }
 
 interface GrantsOverlayProps {
