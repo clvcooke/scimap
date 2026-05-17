@@ -1,0 +1,70 @@
+name: Sync CMS Branch to Main
+
+on:
+  schedule:
+    # 5 PM Central (CDT = UTC-5, so 23:00 UTC)
+    - cron: '0 23 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Merge main into new-maps
+        id: main-to-cms
+        run: |
+          git checkout new-maps
+          git fetch origin main
+          if git diff --quiet origin/new-maps origin/main; then
+            echo "skipped=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          if ! git merge origin/main --no-edit -m "Auto-merge main into CMS branch (new-maps)"; then
+            echo "conflict=true" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          git push origin new-maps
+
+      - name: Notify Slack on main→new-maps conflict
+        if: failure() && steps.main-to-cms.outputs.conflict == 'true'
+        run: |
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"⚠️ CMS sync failed: conflict merging *main → new-maps*. Manual resolution required."}'
+
+      - name: Merge new-maps into main
+        id: cms-to-main
+        run: |
+          git checkout main
+          git fetch origin new-maps
+          if git diff --quiet origin/main origin/new-maps; then
+            echo "skipped=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          if ! git merge origin/new-maps --no-edit -m "Auto-merge CMS branch (new-maps) into main"; then
+            echo "conflict=true" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          git push origin main
+
+      - name: Notify Slack on new-maps→main conflict
+        if: failure() && steps.cms-to-main.outputs.conflict == 'true'
+        run: |
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"⚠️ CMS sync failed: conflict merging *new-maps → main*. Manual resolution required."}'
