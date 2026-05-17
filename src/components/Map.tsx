@@ -38,13 +38,15 @@ function getBaselineDisplayName(tile: TileProperties, geoLevel: GeoLevel): strin
       const state = tile.state as unknown as string | undefined
       if (name && name !== 'NA' && state) return `${name}, ${state}`
       if (name && name !== 'NA') return name
+      if (state) return stateName(state)
       return `County ${tile.FIPS ?? ''}`
     }
     case 'districts': {
       const state = tile.state as unknown as string | undefined
       const geoid = String(tile.GEOID ?? '')
       const num = geoid.slice(-2)
-      const distLabel = num === '00' ? 'At-Large' : num === '98' && state === 'DC' ? 'No District' : `District ${parseInt(num, 10)}`
+      if (num === '98' && state && state !== 'DC') return stateName(state)
+      const distLabel = num === '00' ? 'At-Large' : num === '98' ? 'No District' : `District ${parseInt(num, 10)}`
       return state ? `${state} ${distLabel}` : `District ${geoid}`
     }
     // case 'cities': {
@@ -84,7 +86,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
           `<div class="font-semibold">${displayName}</div>` +
           `<div>NIH Economic Impact: ${formatCurrency(impact)}</div>` +
           `<div>Jobs Supported: ${formatNumber(jobs)}</div>` +
-          `<div>Population: ${pop.toLocaleString()}</div>` +
+          (pop > 0 ? `<div>Population: ${pop.toLocaleString()}</div>` : '') +
           `<div class="text-xs mt-1 opacity-75">Click for details</div>`
         )
       }
@@ -96,7 +98,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
           `<div class="font-semibold">${displayName}</div>` +
           `<div>NSF Economic Impact: ${formatCurrency(impact)}</div>` +
           (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
-          `<div>Population: ${pop.toLocaleString()}</div>` +
+          (pop > 0 ? `<div>Population: ${pop.toLocaleString()}</div>` : '') +
           `<div class="text-xs mt-1 opacity-75">Click for details</div>`
         )
       }
@@ -109,7 +111,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
         `<div class="font-semibold">${displayName}</div>` +
         `<div>Total Economic Impact: ${formatCurrency(impact)}</div>` +
         (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
-        `<div>Population: ${pop.toLocaleString()}</div>` +
+        (pop > 0 ? `<div>Population: ${pop.toLocaleString()}</div>` : '') +
         `<div class="mt-1 text-[11px] text-gray-300">` +
         `NIH: ${formatCurrency(nihImpact)} · NSF: ${formatCurrency(nsfImpact)}` +
         `</div>` +

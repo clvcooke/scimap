@@ -15,9 +15,11 @@ NSF_DATA_DIR = os.path.join(PROJECT_ROOT, "data", "baseline_new", "Baseline NSF"
 GEO_REF_DIR = os.path.join(PROJECT_ROOT, "data", "geo_ref")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "baseline-v7"
+TILE_VERSION = "baseline-v8"
 NIH_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
 NSF_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
+# Territories that only have congressional district geometry (no state/county/city shapes)
+TERRITORY_DISTRICT_GEOIDS = {"PR": "7298", "VI": "7898"}
 POP_REF_DIR = os.path.join(SCRIPT_DIR, "reference")
 
 # ── Remote geo-reference data (Cloudflare R2) ────────────────────────
@@ -285,7 +287,61 @@ def normalize_key(df, key_col, pad_width=None):
     return df
 
 
-def process_level(name, config):
+def load_territory_district_data(district_config):
+    """Load district geometries and merged NIH/NSF data for PR and VI territories only."""
+    territory_geoids = set(TERRITORY_DISTRICT_GEOIDS.values())
+    pad_width = district_config.get("csv_key_pad")
+
+    all_geoms = load_geometries(district_config["geo"], district_config["geo_key"])
+    territory_geoms = {k: v for k, v in all_geoms.items() if k in territory_geoids}
+
+    nih_df = read_nih_totals(district_config["nih_csv"], "GEOID", NIH_VALUE_COLUMNS)
+    nih_df = normalize_key(nih_df, "GEOID", pad_width)
+
+    nsf_pivoted = pivot_baseline_data(
+        district_config["nsf_csv"], "GEOID", "account_name", NSF_VALUE_COLUMNS, prefix="NSF_"
+    )
+    nsf_pivoted = normalize_key(nsf_pivoted, "GEOID", pad_width)
+    nsf_meta_cols = [c for c in nsf_pivoted.columns if not c.startswith("NSF_") and c != "GEOID"]
+    nsf_pivoted = nsf_pivoted.drop(columns=nsf_meta_cols)
+
+    territory_df = nih_df.merge(nsf_pivoted, on="GEOID", how="outer")
+    territory_df = territory_df[territory_df["GEOID"].isin(territory_geoids)].copy()
+    return territory_geoms, territory_df
+
+
+def inject_territory_features(level_name, merged, geometries, csv_key, territory_geoms, territory_df):
+    """Inject PR/VI district data and geometry into non-district geo levels."""
+    for abbrev, geoid in TERRITORY_DISTRICT_GEOIDS.items():
+        if geoid not in territory_geoms:
+            print(f"  Warning: no district geometry for territory {abbrev} ({geoid})")
+            continue
+        rows = territory_df[territory_df["GEOID"] == geoid].copy()
+        if rows.empty:
+            print(f"  Warning: no district data for territory {abbrev} ({geoid})")
+            continue
+
+        if level_name == "states":
+            # State CSV has PR/VI rows by abbrev; replace them with district data
+            merged = merged[merged[csv_key] != abbrev]
+            key_val = abbrev
+        else:
+            # Counties/cities: drop any rows with this state abbreviation, use GEOID as key
+            if "state" in merged.columns:
+                merged = merged[merged["state"] != abbrev]
+            key_val = geoid
+
+        geometries[key_val] = territory_geoms[geoid]
+        rows = rows.copy()
+        rows[csv_key] = key_val
+        rows = rows.drop(columns=["GEOID"], errors="ignore")
+        merged = pd.concat([merged, rows], ignore_index=True)
+        print(f"  Injected territory: {abbrev} ({geoid}) as key '{key_val}'")
+
+    return merged, geometries
+
+
+def process_level(name, config, territory_geoms, territory_df):
     print(f"\n{'='*60}")
     print(f"Processing: {name}")
     print(f"{'='*60}")
@@ -332,6 +388,12 @@ def process_level(name, config):
         print(f"  Warning: {missing_pop} rows missing pop_2024")
     print(f"  Merged: {len(merged)} rows, {len(merged.columns)} columns")
 
+    if name != "districts":
+        print("Injecting territory (PR/VI) data from district level...")
+        merged, geometries = inject_territory_features(
+            name, merged, geometries, csv_key, territory_geoms, territory_df
+        )
+
     print("Building GeoJSON...")
     geojson_data = build_geojson(merged, geometries, csv_key)
 
@@ -354,8 +416,13 @@ def main():
     download_geo_refs()
 
     levels = build_levels()
+
+    print("\nPre-loading territory (PR/VI) district data...")
+    territory_geoms, territory_df = load_territory_district_data(levels["districts"])
+    print(f"  Loaded {len(territory_geoms)} territory geometries, {len(territory_df)} territory rows")
+
     for name, config in levels.items():
-        process_level(name, config)
+        process_level(name, config, territory_geoms, territory_df)
 
     print("\nAll levels complete!")
 

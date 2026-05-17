@@ -173,8 +173,12 @@ export function buildTooltipHeader(
   if (geoLevel === 'districts' && props.GEOID) {
     const geoid = String(props.GEOID).padStart(4, '0')
     const num = geoid.slice(-2)
-    const distLabel = num === '00' ? 'At-Large' : num === '98' ? (stateAbbr === 'DC' ? 'No District' : 'At-Large') : `District ${parseInt(num, 10)}`
-    locationLine = `${stateAbbr} (${distLabel})`
+    if (num === '98' && stateAbbr !== 'DC') {
+      locationLine = stateName(stateAbbr)
+    } else {
+      const distLabel = num === '00' ? 'At-Large' : num === '98' ? 'No District' : `District ${parseInt(num, 10)}`
+      locationLine = `${stateAbbr} (${distLabel})`
+    }
   }
 
   let html = ''
