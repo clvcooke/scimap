@@ -15,7 +15,7 @@ NSF_DATA_DIR = os.path.join(PROJECT_ROOT, "data", "baseline_new", "Baseline NSF"
 GEO_REF_DIR = os.path.join(PROJECT_ROOT, "data", "geo_ref")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "baseline-v6"
+TILE_VERSION = "baseline-v7"
 NIH_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
 NSF_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
 POP_REF_DIR = os.path.join(SCRIPT_DIR, "reference")

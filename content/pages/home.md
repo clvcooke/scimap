@@ -32,10 +32,10 @@ metrics:
     label: Combined NIH/NSF Economic Loss from FY27 Budget Proposal
   - value: 150K
     label: Combined NIH/NSF Jobs Lost from FY27 Budget Proposal
-  - value: 7,165
-    label: Cumulative Number of NIH & NSF Grants Disrupted
-  - value: $19.7B
-    label: Cumulative Economic Loss from NIH & NSF Grants Disrupted
+  - value: 2,400
+    label: Current Number of NIH & NSF Grants Disrupted
+  - value: $2.8B
+    label: Current Economic Loss from NIH & NSF Grants Disrupted
 local_heading: See Impacts in Your Local Area
 why_heading: Why This Matters
 why_paragraphs:

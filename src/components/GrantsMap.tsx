@@ -18,7 +18,7 @@ import {
   type TileProps,
 } from '@/lib/map-shared'
 import IconClusterLayer from '@/layers/icon-cluster-layer'
-import { GRANT_LOSSES, type GrantTermination } from '@/data/grant-losses'
+import { GRANT_LOSSES, expandGrants, type GrantTermination } from '@/data/grant-losses'
 import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
 import GrantsOverlay from './GrantsOverlay'
 import { Switch } from '@/components/ui/switch'
@@ -74,8 +74,12 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
   const renderTooltip = useMemo(() => buildRenderTooltip(agencyFilter), [agencyFilter])
 
   const filteredGrants = useMemo(() => {
-    if (agencyFilter === 'both') return GRANT_LOSSES
-    return GRANT_LOSSES.filter((g) => g.agency === agencyFilter || g.agency === 'both')
+    const filtered = agencyFilter === 'both'
+      ? GRANT_LOSSES
+      : agencyFilter === 'nih'
+        ? GRANT_LOSSES.filter((g) => g.nih_loss > 0)
+        : GRANT_LOSSES.filter((g) => g.nsf_loss > 0)
+    return expandGrants(filtered, agencyFilter)
   }, [agencyFilter])
 
   const clusterLayer = useMemo(

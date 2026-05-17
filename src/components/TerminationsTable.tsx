@@ -163,7 +163,7 @@ export default function TerminationsTable() {
     <section className="w-full bg-white px-3 py-6 md:px-6 md:py-8">
       <div className="mx-auto max-w-7xl">
         <h2 className="mb-4 text-xl font-bold text-gray-900">
-          Grant Terminations by Region
+          Current Grant Terminations by Region
         </h2>
 
         <div className="mb-4 flex items-center justify-between gap-2">
