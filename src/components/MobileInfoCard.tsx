@@ -40,7 +40,7 @@ export default function MobileInfoCard({
           <div className="mt-0.5 text-xs text-gray-500">
             <span>{AGENCY_LABELS[agencyFilter]}: {formatCurrency(impact)}</span>
             <span className="mx-1.5 text-gray-300">&middot;</span>
-            <span>Pop: {pop.toLocaleString()}</span>
+            {pop > 0 && <span>Pop: {pop.toLocaleString()}</span>}
             {perCapita && (
               <>
                 <span className="mx-1.5 text-gray-300">&middot;</span>
