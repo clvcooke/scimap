@@ -175,7 +175,7 @@ function DrawerBody({
           </Drawer.Title>
           {population > 0 && (
             <p className="mt-0.5 text-sm text-gray-500">
-              Population: {population.toLocaleString()}
+              Population: {formatNumber(population)}
             </p>
           )}
           <PoliticianInfo props={props} geoLevel={geoLevel} />

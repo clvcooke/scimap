@@ -137,9 +137,11 @@ export function getLegislatorKeys(props: TileProps): { stateCode: string; cdFp: 
     stateAbbr = FIPS_TO_STATE[String(props.GEOID).padStart(4, '0').slice(0, 2)] ?? ''
   }
   const stateCode = props.state_code != null ? String(props.state_code) : stateAbbr
-  const cdFp = props.CD119FP != null
+  const rawCdFp = props.CD119FP != null
     ? String(props.CD119FP)
     : (props.GEOID ? String(props.GEOID).padStart(4, '0').slice(-2) : '')
+  // GEOIDs ending in 98 are territory/DC delegate seats; legislators.json keys them as XX-00
+  const cdFp = rawCdFp === '98' ? '00' : rawCdFp
   return { stateCode, cdFp }
 }
 

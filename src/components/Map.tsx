@@ -86,7 +86,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
           `<div class="font-semibold">${displayName}</div>` +
           `<div>NIH Economic Impact: ${formatCurrency(impact)}</div>` +
           `<div>Jobs Supported: ${formatNumber(jobs)}</div>` +
-          (pop > 0 ? `<div>Population: ${pop.toLocaleString()}</div>` : '') +
+          (pop > 0 ? `<div>Population: ${formatNumber(pop)}</div>` : '') +
           `<div class="text-xs mt-1 opacity-75">Click for details</div>`
         )
       }
@@ -98,7 +98,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
           `<div class="font-semibold">${displayName}</div>` +
           `<div>NSF Economic Impact: ${formatCurrency(impact)}</div>` +
           (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
-          (pop > 0 ? `<div>Population: ${pop.toLocaleString()}</div>` : '') +
+          (pop > 0 ? `<div>Population: ${formatNumber(pop)}</div>` : '') +
           `<div class="text-xs mt-1 opacity-75">Click for details</div>`
         )
       }
@@ -111,7 +111,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
         `<div class="font-semibold">${displayName}</div>` +
         `<div>Total Economic Impact: ${formatCurrency(impact)}</div>` +
         (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
-        (pop > 0 ? `<div>Population: ${pop.toLocaleString()}</div>` : '') +
+        (pop > 0 ? `<div>Population: ${formatNumber(pop)}</div>` : '') +
         `<div class="mt-1 text-[11px] text-gray-300">` +
         `NIH: ${formatCurrency(nihImpact)} · NSF: ${formatCurrency(nsfImpact)}` +
         `</div>` +
