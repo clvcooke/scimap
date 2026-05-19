@@ -3,7 +3,7 @@ import { DrawerPreview as Drawer } from '@base-ui/react/drawer'
 import { interpolateBlues } from 'd3-scale-chromatic'
 import { X } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { METRICS, formatMetricValue } from '@/lib/constants'
+import { METRICS, formatMetricValue, formatNumber } from '@/lib/constants'
 import type { Metric } from '@/lib/constants'
 import type { SelectedFeature } from '@/lib/map-config'
 import { NSF_DIRECTORATES, type AgencyFilter } from '@/lib/map-shared'
@@ -98,9 +98,11 @@ function DrawerBody({
           <Drawer.Title className="text-lg font-semibold text-gray-900">
             {feature.id}
           </Drawer.Title>
-          <p className="mt-0.5 text-sm text-gray-500">
-            Population: {population.toLocaleString()}
-          </p>
+          {population > 0 && (
+            <p className="mt-0.5 text-sm text-gray-500">
+              Population: {formatNumber(population)}
+            </p>
+          )}
         </div>
         <Drawer.Close className="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 active:bg-gray-200">
           <X className="size-5" />

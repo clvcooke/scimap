@@ -137,9 +137,11 @@ export function getLegislatorKeys(props: TileProps): { stateCode: string; cdFp: 
     stateAbbr = FIPS_TO_STATE[String(props.GEOID).padStart(4, '0').slice(0, 2)] ?? ''
   }
   const stateCode = props.state_code != null ? String(props.state_code) : stateAbbr
-  const cdFp = props.CD119FP != null
+  const rawCdFp = props.CD119FP != null
     ? String(props.CD119FP)
     : (props.GEOID ? String(props.GEOID).padStart(4, '0').slice(-2) : '')
+  // GEOIDs ending in 98 are territory/DC delegate seats; legislators.json keys them as XX-00
+  const cdFp = rawCdFp === '98' ? '00' : rawCdFp
   return { stateCode, cdFp }
 }
 
@@ -173,8 +175,12 @@ export function buildTooltipHeader(
   if (geoLevel === 'districts' && props.GEOID) {
     const geoid = String(props.GEOID).padStart(4, '0')
     const num = geoid.slice(-2)
-    const distLabel = num === '00' ? 'At-Large' : num === '98' ? (stateAbbr === 'DC' ? 'No District' : 'At-Large') : `District ${parseInt(num, 10)}`
-    locationLine = `${stateAbbr} (${distLabel})`
+    if (num === '98' && stateAbbr !== 'DC') {
+      locationLine = stateName(stateAbbr)
+    } else {
+      const distLabel = num === '00' ? 'At-Large' : num === '98' ? 'No District' : `District ${parseInt(num, 10)}`
+      locationLine = `${stateAbbr} (${distLabel})`
+    }
   }
 
   let html = ''

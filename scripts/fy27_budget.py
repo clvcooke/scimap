@@ -25,7 +25,9 @@ NIH_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NIH Budget")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NSF Budget")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "v3"
+TILE_VERSION = "v4"
+# Territories that only have congressional district geometry (no state/county/city shapes)
+TERRITORY_DISTRICT_GEOIDS = {"PR": "7298", "VI": "7898"}
 
 # ── Remote geo-reference data (Cloudflare R2) ────────────────────────
 R2_BASE = "https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data"
@@ -268,7 +270,62 @@ def upload_tiles(tile_output_dir, remote_path):
     print(f"  Upload complete: {remote_path}")
 
 
-def process_level(name, config):
+def load_territory_district_data(district_config):
+    """Load district geometries and merged NIH/NSF data for PR and VI territories only."""
+    territory_geoids = set(TERRITORY_DISTRICT_GEOIDS.values())
+
+    all_geoms = load_geometries(
+        district_config["geo"], district_config["geo_key"],
+        geo_filter=district_config.get("geo_filter"),
+        geo_key_pad=district_config.get("geo_key_pad"),
+    )
+    territory_geoms = {k: v for k, v in all_geoms.items() if k in territory_geoids}
+
+    territory_df = merge_nih_nsf(
+        district_config["nih_csv"], district_config["nsf_csv"], "GEOID"
+    )
+    pad_width = district_config.get("csv_key_pad")
+    if pad_width:
+        territory_df["GEOID"] = territory_df["GEOID"].astype(str).str.zfill(pad_width)
+    else:
+        territory_df["GEOID"] = territory_df["GEOID"].astype(str)
+
+    territory_df = territory_df[territory_df["GEOID"].isin(territory_geoids)].copy()
+    return territory_geoms, territory_df
+
+
+def inject_territory_features(level_name, merged, geometries, csv_key, territory_geoms, territory_df):
+    """Inject PR/VI district data and geometry into non-district geo levels."""
+    for abbrev, geoid in TERRITORY_DISTRICT_GEOIDS.items():
+        if geoid not in territory_geoms:
+            print(f"  Warning: no district geometry for territory {abbrev} ({geoid})")
+            continue
+        rows = territory_df[territory_df["GEOID"] == geoid].copy()
+        if rows.empty:
+            print(f"  Warning: no district data for territory {abbrev} ({geoid})")
+            continue
+
+        if level_name == "states":
+            # State CSV has PR/VI rows by abbrev; replace them with district data
+            merged = merged[merged[csv_key] != abbrev]
+            key_val = abbrev
+        else:
+            # Counties/cities: drop any rows with this state abbreviation, use GEOID as key
+            if "state" in merged.columns:
+                merged = merged[merged["state"] != abbrev]
+            key_val = geoid
+
+        geometries[key_val] = territory_geoms[geoid]
+        rows = rows.copy()
+        rows[csv_key] = key_val
+        rows = rows.drop(columns=["GEOID"], errors="ignore")
+        merged = pd.concat([merged, rows], ignore_index=True)
+        print(f"  Injected territory: {abbrev} ({geoid}) as key '{key_val}'")
+
+    return merged, geometries
+
+
+def process_level(name, config, territory_geoms, territory_df):
     print(f"\n{'='*60}")
     print(f"Processing: {name}")
     print(f"{'='*60}")
@@ -299,6 +356,12 @@ def process_level(name, config):
     else:
         merged[csv_key] = merged[csv_key].astype(str)
 
+    if name != "districts":
+        print("Injecting territory (PR/VI) data from district level...")
+        merged, geometries = inject_territory_features(
+            name, merged, geometries, csv_key, territory_geoms, territory_df
+        )
+
     print("Building GeoJSON...")
     geojson_data = build_geojson(merged, geometries, csv_key)
 
@@ -321,8 +384,13 @@ def main():
     download_geo_refs()
 
     levels = build_levels()
+
+    print("\nPre-loading territory (PR/VI) district data...")
+    territory_geoms, territory_df = load_territory_district_data(levels["districts"])
+    print(f"  Loaded {len(territory_geoms)} territory geometries, {len(territory_df)} territory rows")
+
     for name, config in levels.items():
-        process_level(name, config)
+        process_level(name, config, territory_geoms, territory_df)
 
     print("\nAll levels complete!")
 
