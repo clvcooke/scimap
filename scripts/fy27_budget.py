@@ -25,7 +25,7 @@ NIH_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NIH Budget")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NSF Budget")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "v4"
+TILE_VERSION = "v5"
 # Territories that only have congressional district geometry (no state/county/city shapes)
 TERRITORY_DISTRICT_GEOIDS = {"PR": "7298", "VI": "7898"}
 
@@ -35,7 +35,7 @@ GEO_CACHE_DIR = os.path.join(tempfile.gettempdir(), "scimap_geo_cache")
 
 R2_FILES = [
     "Cities_Counties.zip",
-    "CongDist_shp.zip",
+    "CongDist_shp_119.zip",
     "merged_data_counties_CLIP_Compress.geojson",
     "merged_data_states_CLIP.geojson",
 ]
@@ -98,7 +98,7 @@ def build_levels():
         "districts": {
             "nih_csv": os.path.join(NIH_DIR, "NIH_budget27_cong.csv"),
             "nsf_csv": os.path.join(NSF_DIR, "NSF_budget27_cong.csv"),
-            "geo": geo_path("CongDist_shp"),
+            "geo": geo_path("CongDist_shp_119"),
             "csv_key": "GEOID",
             "geo_key": "GEOID",
             "csv_key_pad": 4,

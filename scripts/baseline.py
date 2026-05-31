@@ -15,7 +15,7 @@ NSF_DATA_DIR = os.path.join(PROJECT_ROOT, "data", "baseline_new", "Baseline NSF"
 GEO_REF_DIR = os.path.join(PROJECT_ROOT, "data", "geo_ref")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "baseline-v8"
+TILE_VERSION = "baseline-v9"
 NIH_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
 NSF_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
 # Territories that only have congressional district geometry (no state/county/city shapes)
@@ -28,7 +28,7 @@ GEO_CACHE_DIR = os.path.join(tempfile.gettempdir(), "scimap_geo_cache")
 
 R2_FILES = [
     "Cities_Counties.zip",
-    "CongDist_shp.zip",
+    "CongDist_shp_119.zip",
     "merged_data_counties_CLIP_Compress.geojson",
     "merged_data_states_CLIP.geojson",
 ]
@@ -97,7 +97,7 @@ def build_levels():
         "districts": {
             "nih_csv": os.path.join(NIH_DATA_DIR, "NIH_baseline_cong.csv"),
             "nsf_csv": os.path.join(NSF_DATA_DIR, "baseline_district_nsf.csv"),
-            "geo": geo_path("CongDist_shp"),
+            "geo": geo_path("CongDist_shp_119"),
             "csv_key": "GEOID",
             "geo_key": "GEOID",
             "csv_key_pad": 4,  # zero-pad CSV key to 4 digits to match geo
