@@ -67,7 +67,28 @@
       "Bash(tee /tmp/report_cards_retry.log)",
       "Bash(lsof -nP -iTCP:5173 -sTCP:LISTEN)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/ --max-time 3)",
-      "Bash(git -C /Users/colincooke/code/scimap status --short)"
+      "Bash(git -C /Users/colincooke/code/scimap status --short)",
+      "Bash(rclone lsf *)",
+      "Bash(curl -sI \"https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data/CongDist_shp.zip\")",
+      "Bash(curl -sL \"https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data/CongDist_shp.zip\" -o /tmp/CongDist_shp.zip)",
+      "Bash(unzip -l /tmp/CongDist_shp.zip)",
+      "Bash(curl -sI \"https://www2.census.gov/geo/tiger/TIGER2025/CD/\")",
+      "Bash(curl -s \"https://www2.census.gov/geo/tiger/TIGER2025/CD/\")",
+      "Bash(curl -s \"https://www2.census.gov/geo/tiger/GENZ2024/shp/\")",
+      "Bash(curl -L \"https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_cd119_500k.zip\" -o /tmp/cb_2024_us_cd119_500k.zip)",
+      "Bash(mkdir -p /tmp/CongDist_shp_119_repack/CongDist_shp)",
+      "Bash(unzip -j /tmp/cb_2024_us_cd119_500k.zip -d CongDist_shp)",
+      "Bash(python scripts/baseline.py)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(python scripts/terminations.py)",
+      "Bash(python scripts/fy27_budget.py)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -sI \"https://data.scienceimpacts.org/tiles_districts_baseline_baseline-v8/5/9/12.pbf\")",
+      "Bash(curl -sI \"https://data.scienceimpacts.org/tiles_districts_baseline_baseline-v9/5/9/12.pbf\")",
+      "Bash(wait)",
+      "Bash(python scripts/generate_table_data.py)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(echo \"eslint exit: $?\")"
     ]
   }
 }

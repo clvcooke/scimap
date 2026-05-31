@@ -63,6 +63,14 @@ declare global {
 const DEFAULT_POSTHOG_KEY = 'phc_7xCOByPPLiPt1qyRf23Ga7ra7qPrAv6NkIkCn4lkZUH'
 const DEFAULT_POSTHOG_HOST = 'https://posthog.scienceimpacts.org'
 
+// Extra URL query params (e.g. from Qualtrics/Prolific survey links) that
+// PostHog should treat as campaign params. PostHog captures these on every
+// event and persists them to the person profile automatically: current value
+// under each name (`$set`) and first-touch value as `$initial_<name>`
+// (`$set_once`). Names are case-sensitive and must match the URL param exactly.
+// Single source of truth — edit this list to change what's tracked.
+export const TRACKED_URL_PARAMS = ['prolific_PID', 'condition'] as const
+
 export function initAnalytics(router: AnyRouter): void {
   const envKey = import.meta.env.VITE_POSTHOG_KEY as string | undefined
   const envHost = import.meta.env.VITE_POSTHOG_HOST as string | undefined
@@ -80,6 +88,7 @@ export function initAnalytics(router: AnyRouter): void {
       autocapture: false,
       respect_dnt: true,
       persistence: 'localStorage+cookie',
+      custom_campaign_params: [...TRACKED_URL_PARAMS],
       session_recording: { maskAllInputs: true },
       loaded: (ph) => {
         if (
