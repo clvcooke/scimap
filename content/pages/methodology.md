@@ -38,12 +38,12 @@ economic_multiplier_intro: For estimates of economic impacts in communities,
 economic_multiplier_details:
   - "For NIH, we apply state-specific economic multipliers derived from a
     [recent and widely-cited
-    report](https://unitedformedicalresearch.org/wp-content/uploads/2025/01/UMR\
-    -The-Economic-Impact-of-NIH-in-2025_FINAL.pdf), which found that every
-    dollar invested in NIH in 2025 generated between $1.97 and $5.30 (national
-    average: $2.57) in new economic activity. To estimate the number of jobs
-    lost due to funding cuts, we use the ratio of the number of jobs supported /
-    research funds awarded in the 2025 fiscal year at the state level."
+    report](https://www.unitedformedicalresearch.org/wp-content/uploads/2025/10\
+    /UMR_2025-My-WHY-Report_Final.pdf), which found that every dollar invested
+    in NIH in 2025 generated between $1.97 and $5.30 (national average: $2.57)
+    in new economic activity. To estimate the number of jobs lost due to funding
+    cuts, we use the ratio of the number of jobs supported / research funds
+    awarded in the 2025 fiscal year at the state level."
   - For NSF, we apply a uniform national multiplier of $2.64 in new economic
     activity generated per dollar spent and $72,000 spent per job supported
     based on median estimates from a March 2026
