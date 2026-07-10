@@ -25,7 +25,7 @@ NIH_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NIH Budget")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NSF Budget")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "v5"
+TILE_VERSION = "v6"
 # Territories that only have congressional district geometry (no state/county/city shapes)
 TERRITORY_DISTRICT_GEOIDS = {"PR": "7298", "VI": "7898"}
 
