@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowLeft, Download } from 'lucide-react'
-import Markdown from 'react-markdown'
+import { MarkdownBody } from '@/components/MarkdownBody'
 import { getBlogPost } from '@/lib/content'
 import { Events, track } from '@/lib/analytics'
 
@@ -125,9 +125,7 @@ function BlogPostPage() {
             />
           )}
 
-          <div className="prose prose-gray mt-8 max-w-none prose-headings:text-gray-900 prose-a:text-brand-blue prose-a:no-underline hover:prose-a:underline">
-            <Markdown>{post.body}</Markdown>
-          </div>
+          <MarkdownBody className="mt-8">{post.body}</MarkdownBody>
 
           {post.figures && post.figures.length > 0 && (
             <div className="mt-10 space-y-8">

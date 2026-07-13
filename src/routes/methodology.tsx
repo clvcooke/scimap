@@ -13,7 +13,7 @@ import {
   Mail,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
-import Markdown from 'react-markdown'
+import { MarkdownBody } from '@/components/MarkdownBody'
 import {
   Tabs,
   TabsList,
@@ -256,9 +256,9 @@ function MethodologyPage() {
                   {SOURCE_DATA.attrs.title}
                 </h2>
 
-                <div className="prose prose-gray mt-4 max-w-none leading-relaxed [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-blue-light">
-                  <Markdown>{SOURCE_DATA.body}</Markdown>
-                </div>
+                <MarkdownBody className="mt-4 leading-relaxed [&_a]:text-brand-blue [&_a]:underline [&_a]:hover:text-brand-blue-light">
+                  {SOURCE_DATA.body}
+                </MarkdownBody>
               </div>
             </div>
           </div>
