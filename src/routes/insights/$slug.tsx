@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowLeft, Download } from 'lucide-react'
+import { InlineMarkdown } from '@/components/InlineMarkdown'
 import { MarkdownBody } from '@/components/MarkdownBody'
 import { getBlogPost } from '@/lib/content'
 import { Events, track } from '@/lib/analytics'
@@ -131,14 +132,10 @@ function BlogPostPage() {
             <div className="mt-10 space-y-8">
               {post.figures.map((fig, i) => (
                 <figure key={i} className="mx-auto">
-                  <img
-                    src={fig.image}
-                    alt={fig.caption}
-                    className="w-full rounded-lg"
-                  />
+                  <img src={fig.image} alt="" className="w-full rounded-lg" />
                   {fig.caption && (
                     <figcaption className="mt-2 text-center text-sm text-gray-500">
-                      {fig.caption}
+                      <InlineMarkdown>{fig.caption}</InlineMarkdown>
                     </figcaption>
                   )}
                 </figure>
