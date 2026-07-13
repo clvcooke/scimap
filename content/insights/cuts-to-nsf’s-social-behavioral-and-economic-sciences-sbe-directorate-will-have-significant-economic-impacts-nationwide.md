@@ -7,6 +7,7 @@ author: Alex Music
 summary: The White House FY27 budget proposal would nearly eliminate all funding
   for the Social, Behavioral, and Economic Sciences (SBE) directorate of NSF.
   Read more about the economic impact of these cuts.
+image: /images/money_cut.jpg
 figures:
   - caption: "Figure 1: Estimated economic losses per district resulting from the
       proposed dissolution of the NSF’s Directorate for Social, Behavioral, and
@@ -42,9 +43,17 @@ The largest funded UMich SBE grant in the past six years is for over $38 million
 
 The national-scale analysis and two examples from Michigan illustrate the impact of dissolving SBE on local economic investment in communities in major cities, regional hubs, and near college towns nationwide.
 
-To see more linkages between economic losses and specific institutions, visitors to the SCIMaP website can generate an economic impact [scorecard for each Congressional District](https://scienceimpacts.org/scorecard.) associated with the White House’s proposed FY2027 budget for the NSF—including the cuts to SBE—and the [National Institutes of Health](https://www.nih.gov/). The SCIMaP website also includes additional information on the impacts of grant terminations, budget cuts, and policy proposals along with links to make it easier for visitors to share their opinions with their elected representatives.
+[Click here to explore](https://www.datawrapper.de/_/fk8sq/?v=5) an interactive map showing economic losses from SBE cuts nationwide. To see more linkages between economic losses and specific institutions, visitors to the SCIMaP website can generate an economic impact [scorecard for each Congressional District](https://scienceimpacts.org/scorecard.) associated with the White House’s proposed FY2027 budget for the NSF—including the cuts to SBE—and the [National Institutes of Health](https://www.nih.gov/). The SCIMaP website also includes additional information on the impacts of grant terminations, budget cuts, and policy proposals along with links to make it easier for visitors to share their opinions with their elected representatives.
 
+**Take action and share your thoughts on SBE and other science funding cuts:**
 
+* Save NSF: [Action Page](https://www.savensf.com/take-action)
+* Stand Up for Science: [Science Advocacy Resources](https://fight2win.standupforscience.net/?_gl=1*i7vjyy*_ga*MjEyMTI5MzgyMS4xNzgzOTU5OTIx*_ga_GD376CM0GB*czE3ODM5NzA1NjUkbzMkZzAkdDE3ODM5NzA1NjUkajYwJGwwJGgxOTMwNjQ0Nzgy)
+* Consortium of Social Science Associations (COSSA): [Action Page](https://nam12.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcossa.org%2Faction-center%2Ftake-action%2F%23%2F58&data=05%7C02%7Cclio%40gatech.edu%7Cbb8bb147e5c342bab1c508decbedb374%7C482198bbae7b4b258b7a6d7f32faa083%7C1%7C0%7C639172418949647325%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=xRts8i05mQ4goxtt8DozS5%2FoVDYbzvxwSh%2FpG26Rrk4%3D&reserved=0)
+* American Association of Geographers (AAG): [Action Page](https://aagorg-my.sharepoint.com/:w:/g/personal/lschamess_aag_org/IQA8752SDoX6QpfGMBz_tZsTARb3noMgz3G6WZGS5Yxg1-w?rtime=KOkF3kPC3kg&xsdata=MDV8MDJ8Y2xpb0BnYXRlY2guZWR1fGJiOGJiMTQ3ZTVjMzQyYmFiMWM1MDhkZWNiZWRiMzc0fDQ4MjE5OGJiYWU3YjRiMjU4YjdhNmQ3ZjMyZmFhMDgzfDF8MHw2MzkxNzI0MTg5NDk2NjYwNDd8VW5rbm93bnxUV0ZwYkdac2IzZDhleUpGYlhCMGVVMWhjR2tpT25SeWRXVXNJbFlpT2lJd0xqQXVNREF3TUNJc0lsQWlPaUpYYVc0ek1pSXNJa0ZPSWpvaVRXRnBiQ0lzSWxkVUlqb3lmUT09fDB8fHw%3d&sdata=anp2QzlCaHN5aWF0VVl1VW0vLzE4MEoreXg0MmtVbDdxc2d6U0kvem1XRT0%3d)
+* American Political Science Association (APSA): [Updates Page](https://politicalsciencenow.com/update-on-proposed-dissolution-of-sbe-directorate-at-the-national-science-foundation-nsf/)
+* The Population Association of America (PAA): [Share Your NSF SBE Story](https://nam12.safelinks.protection.outlook.com/?url=https%3A%2F%2Fform.jotform.com%2F261235485927162&data=05%7C02%7Cclio%40gatech.edu%7Cbb8bb147e5c342bab1c508decbedb374%7C482198bbae7b4b258b7a6d7f32faa083%7C1%7C0%7C639172418949678962%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=7K%2FoRxj0ei6h%2Bgt9gvLl7fHuaxAjABMbvsyEKqRgPdg%3D&reserved=0)
+* American Psychological Association (APA): [Advocacy Actions](https://www.apaservices.org/advocacy/actions)
 
 ### Top 5 Districts For Economic Losses Under Proposed SBE Cuts For Each Political Party
 
@@ -75,15 +84,3 @@ To see more linkages between economic losses and specific institutions, visitors
 | Texas          | Republican           | $33,197,716   | $12,574,892 | 172      |
 | Virginia       | Democrat             | $28,580,498   | $10,825,946 | 151      |
 | North Carolina | Republican           | $24,228,303   | $9,177,388  | 128      |
-
-## Read more and share your thoughts on SBE cuts:
-
-Stand Up for Science, American Association of University Professors (AAUP), and American Federation of Teachers (AFT): [Share Comments](https://nam12.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffight2win.standupforscience.net%2Fcampaign%2F164033%2F&data=05%7C02%7Cclio%40gatech.edu%7Cbb8bb147e5c342bab1c508decbedb374%7C482198bbae7b4b258b7a6d7f32faa083%7C1%7C0%7C639172418949574029%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=jCET7mL3%2BxBKBWUvVBbwzLRA3EUbnY83gZc4iL%2BffDU%3D&reserved=0). 
-
-Consortium of Social Science Associations (COSSA): [Action Page.](https://nam12.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcossa.org%2Faction-center%2Ftake-action%2F%23%2F58&data=05%7C02%7Cclio%40gatech.edu%7Cbb8bb147e5c342bab1c508decbedb374%7C482198bbae7b4b258b7a6d7f32faa083%7C1%7C0%7C639172418949647325%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=xRts8i05mQ4goxtt8DozS5%2FoVDYbzvxwSh%2FpG26Rrk4%3D&reserved=0)
-
-American Association of Geographers (AAG): [Action Page.
-American Political Science Association (APSA): ](https://aagorg-my.sharepoint.com/:w:/g/personal/lschamess_aag_org/IQA8752SDoX6QpfGMBz_tZsTARb3noMgz3G6WZGS5Yxg1-w?rtime=KOkF3kPC3kg&xsdata=MDV8MDJ8Y2xpb0BnYXRlY2guZWR1fGJiOGJiMTQ3ZTVjMzQyYmFiMWM1MDhkZWNiZWRiMzc0fDQ4MjE5OGJiYWU3YjRiMjU4YjdhNmQ3ZjMyZmFhMDgzfDF8MHw2MzkxNzI0MTg5NDk2NjYwNDd8VW5rbm93bnxUV0ZwYkdac2IzZDhleUpGYlhCMGVVMWhjR2tpT25SeWRXVXNJbFlpT2lJd0xqQXVNREF3TUNJc0lsQWlPaUpYYVc0ek1pSXNJa0ZPSWpvaVRXRnBiQ0lzSWxkVUlqb3lmUT09fDB8fHw%3d&sdata=anp2QzlCaHN5aWF0VVl1VW0vLzE4MEoreXg0MmtVbDdxc2d6U0kvem1XRT0%3d)[Updates](https://politicalsciencenow.com/update-on-proposed-dissolution-of-sbe-directorate-at-the-national-science-foundation-nsf/).
-
-The Population Association of America (PAA): [Share Your NSF SBE Story](https://nam12.safelinks.protection.outlook.com/?url=https%3A%2F%2Fform.jotform.com%2F261235485927162&data=05%7C02%7Cclio%40gatech.edu%7Cbb8bb147e5c342bab1c508decbedb374%7C482198bbae7b4b258b7a6d7f32faa083%7C1%7C0%7C639172418949678962%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=7K%2FoRxj0ei6h%2Bgt9gvLl7fHuaxAjABMbvsyEKqRgPdg%3D&reserved=0).
-American Psychological Association (APA): [Advocacy Actions](https://www.apaservices.org/advocacy/actions).
