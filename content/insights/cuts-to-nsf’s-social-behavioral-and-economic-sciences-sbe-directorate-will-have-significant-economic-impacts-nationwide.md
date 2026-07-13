@@ -7,7 +7,7 @@ author: Alex Music
 summary: The White House FY27 budget proposal would nearly eliminate all funding
   for the Social, Behavioral, and Economic Sciences (SBE) directorate of NSF.
   Read more about the economic impact of these cuts.
-image: /images/money_cut.jpg
+image: /images/fk8sq-directorate-for-social-behavioral-and-economic-sciences-sbe-economic-losses-from-fy27-proposed-budget-cuts-.png
 figures:
   - caption: "Figure 1: Estimated economic losses per district resulting from the
       proposed dissolution of the NSF’s Directorate for Social, Behavioral, and
