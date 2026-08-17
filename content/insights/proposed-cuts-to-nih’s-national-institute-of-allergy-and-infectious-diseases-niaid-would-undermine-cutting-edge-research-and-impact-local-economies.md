@@ -11,6 +11,7 @@ summary: >
   pandemic, and the development of drugs to delay the onset of Type 1 diabetes.
   Proposed budget cuts threaten these advances and local economies in
   communities nationwide.
+image: /images/cwiuv-economic-losses-due-to-niaid-cuts-proposed-for-fy27-.png
 tags:
   - NIAID
   - economic
