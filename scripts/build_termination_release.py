@@ -88,8 +88,10 @@ def parse_args(argv=None):
 
 
 def build_release(args):
-    if not re.fullmatch(r"[A-Za-z0-9._-]+", args.release_id):
-        raise SystemExit("--release-id may contain only letters, numbers, '.', '_' and '-'")
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", args.release_id):
+        raise SystemExit(
+            "--release-id must start with a letter or number and may also contain '.', '_' and '-'"
+        )
     try:
         date.fromisoformat(args.week)
     except ValueError as error:

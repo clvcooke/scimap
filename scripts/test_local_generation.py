@@ -1,4 +1,5 @@
 import importlib.util
+import json
 from pathlib import Path
 from types import SimpleNamespace
 import tempfile
@@ -21,19 +22,8 @@ builder = load_script("build_termination_release.py")
 
 
 class LocalGenerationSafetyTest(unittest.TestCase):
-    def test_upload_is_opt_in(self):
-        self.assertFalse(terminations.parse_args([]).upload)
-        self.assertTrue(terminations.parse_args(["--upload"]).upload)
-
-    def test_local_mode_does_not_call_uploader(self):
-        with patch.object(terminations, "upload_tiles") as upload:
-            terminations.publish_tiles("tiles", "remote", upload=False)
-            upload.assert_not_called()
-
-    def test_publish_mode_calls_uploader(self):
-        with patch.object(terminations, "upload_tiles") as upload:
-            terminations.publish_tiles("tiles", "remote", upload=True)
-            upload.assert_called_once_with("tiles", "remote")
+    def test_generator_has_no_upload_option(self):
+        self.assertFalse(hasattr(terminations.parse_args([]), "upload"))
 
     def test_default_outputs_are_outside_frontend_data(self):
         frontend_data = Path(terminations.PROJECT_ROOT, "src", "data").resolve()
@@ -81,10 +71,48 @@ class LocalGenerationSafetyTest(unittest.TestCase):
                 "ok",
             )
 
+    def test_state_summary_writes_missing_values_as_null(self):
+        frame = terminations.pd.DataFrame(
+            [{"state": "AA", "terminated_econ_loss": float("nan"), "terminated_job_loss": 1}]
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            with patch.object(terminations, "OUTPUT_DIR", directory):
+                terminations.generate_state_totals(frame)
+            path = Path(directory, "state_total_losses.json")
+            self.assertIsNone(json.loads(path.read_text())["STATE_LOSSES"]["AA"]["term_loss"])
+            self.assertNotIn("NaN", path.read_text())
+
+    def test_institution_summary_rejects_missing_required_values(self):
+        row = {
+            "week": "2026-09-25",
+            "org_name": "Example",
+            "org_city": "CITY",
+            "org_state": "MD",
+            "lat": 1,
+            "lon": 2,
+            "current_loss.combined": 1,
+            "current_loss.nih": None,
+            "current_loss.nsf": 1,
+            "current_grant_loss.nih": 0,
+            "current_grant_loss.nsf": 1,
+            "current_grant_loss.combined": 1,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            terminations.pd.DataFrame([row]).to_csv(
+                Path(directory, "terminations_org_combined.csv"), index=False
+            )
+            with (
+                patch.object(terminations, "COMBINED_DIR", directory),
+                patch.object(terminations, "OUTPUT_DIR", directory),
+                self.assertRaisesRegex(RuntimeError, "current_loss.nih"),
+            ):
+                terminations.generate_terminated_grants("2026-09-25")
+
     def test_release_id_rejects_paths(self):
-        args = SimpleNamespace(release_id="../bad", week="2026-09-25")
-        with self.assertRaises(SystemExit):
-            builder.build_release(args)
+        for release_id in (".", "..", "-bad", "../bad"):
+            args = SimpleNamespace(release_id=release_id, week="2026-09-25")
+            with self.subTest(release_id=release_id), self.assertRaises(SystemExit):
+                builder.build_release(args)
 
 
 if __name__ == "__main__":

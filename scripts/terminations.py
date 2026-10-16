@@ -3,7 +3,7 @@ Generate terminated-grants tiles and JSON locally.
 
 Input data lives in data/terminations/Terminations {NIH,NSF}/ with weekly CSVs
 at each geographic level plus org-level detail. Outputs default to
-scripts/outputs; pass --upload explicitly to publish tiles to Cloudflare R2.
+scripts/outputs. Publishing is handled separately after validation.
 """
 
 import argparse
@@ -381,31 +381,9 @@ def generate_tiles(geojson_path, tile_output_dir, zoom):
     print(f"  Tiles generated: {tile_output_dir}")
 
 
-def upload_tiles(tile_output_dir, remote_path):
-    args = [
-        "rclone",
-        "copy",
-        f"{to_wsl_path(tile_output_dir)}/",
-        f"r2:scimap-data/{remote_path}/",
-        "--transfers",
-        "32",
-    ]
-    rc = run_command(args)
-    if rc != 0:
-        raise RuntimeError(f"rclone upload failed with exit code {rc}")
-    print(f"  Upload complete: {remote_path}")
-
-
-def publish_tiles(tile_output_dir, remote_path, upload):
-    if not upload:
-        print("  Upload skipped (use --upload to publish)")
-        return
-    upload_tiles(tile_output_dir, remote_path)
-
-
 # ── Process one geographic level ───────────────────────────────────
 
-def process_level(name, config, reporting_week=None, release_id=TILE_VERSION, upload=False):
+def process_level(name, config, reporting_week=None, release_id=TILE_VERSION):
     print(f"\n{'='*60}")
     print(f"Processing: {name}")
     print(f"{'='*60}")
@@ -543,11 +521,9 @@ def process_level(name, config, reporting_week=None, release_id=TILE_VERSION, up
     geojson_path = os.path.join(OUTPUT_DIR, f"terminations_{name}.geojson")
     save_geojson(geojson, geojson_path)
 
-    # Generate tiles locally; publishing requires an explicit opt-in.
     print("  Generating tiles...")
     tile_dir = os.path.join(OUTPUT_DIR, tile_name)
     generate_tiles(geojson_path, tile_dir, zoom)
-    publish_tiles(tile_dir, tile_name, upload)
 
     print(f"  Done: {name}")
 
@@ -556,6 +532,10 @@ def process_level(name, config, reporting_week=None, release_id=TILE_VERSION, up
 
 # ── Generate state_total_losses.json ───────────────────────────────
 
+def nullable_number(value):
+    return None if pd.isna(value) else float(value)
+
+
 def generate_state_totals(state_df):
     """Generate state_total_losses.json for the frontend."""
     state_losses = {}
@@ -563,8 +543,8 @@ def generate_state_totals(state_df):
         state_code = row["state"]
         state_losses[state_code] = {
             "state_code": state_code,
-            "term_loss": row.get("terminated_econ_loss", 0) or 0,
-            "term_job_loss": row.get("terminated_job_loss", 0) or 0,
+            "term_loss": nullable_number(row.get("terminated_econ_loss")),
+            "term_job_loss": nullable_number(row.get("terminated_job_loss")),
             # Keep backward compat with fields the frontend may use
             "idc_loss": 0,
             "idc_job_loss": 0,
@@ -572,7 +552,7 @@ def generate_state_totals(state_df):
 
     output_path = os.path.join(OUTPUT_DIR, "state_total_losses.json")
     with open(output_path, "w") as f:
-        json.dump({"STATE_LOSSES": state_losses}, f)
+        json.dump({"STATE_LOSSES": state_losses}, f, allow_nan=False)
     print(f"  Saved: {output_path}")
 
 
@@ -601,17 +581,32 @@ def generate_terminated_grants(reporting_week=None):
 
     grant_losses = []
     for _, row in df.iterrows():
-        loss = float(row.get("current_loss.combined") or 0)
+        loss = row.get("current_loss.combined")
+        if pd.isna(loss):
+            raise RuntimeError(f"Missing current_loss.combined for {row.get('org_name')}")
+        loss = float(loss)
         if loss <= 0:
             continue
         if not pd.notna(row.get("lat")) or not pd.notna(row.get("lon")):
             continue
 
-        nih_loss = float(row.get("current_loss.nih") or 0)
-        nsf_loss = float(row.get("current_loss.nsf") or 0)
-        nih_num = int(row.get("current_grant_loss.nih") or 0)
-        nsf_num = int(row.get("current_grant_loss.nsf") or 0)
-        grant_count = max(int(row.get("current_grant_loss.combined") or 1), 1)
+        required = (
+            "current_loss.nih",
+            "current_loss.nsf",
+            "current_grant_loss.nih",
+            "current_grant_loss.nsf",
+            "current_grant_loss.combined",
+        )
+        missing = [field for field in required if pd.isna(row.get(field))]
+        if missing:
+            raise RuntimeError(
+                f"Missing {', '.join(missing)} for {row.get('org_name')}"
+            )
+        nih_loss = float(row["current_loss.nih"])
+        nsf_loss = float(row["current_loss.nsf"])
+        nih_num = int(row["current_grant_loss.nih"])
+        nsf_num = int(row["current_grant_loss.nsf"])
+        grant_count = max(int(row["current_grant_loss.combined"]), 1)
 
         grant_losses.append({
             "org_name": row["org_name"],
@@ -630,7 +625,7 @@ def generate_terminated_grants(reporting_week=None):
 
     output_path = os.path.join(OUTPUT_DIR, "terminated_grants.json")
     with open(output_path, "w") as f:
-        json.dump({"GRANT_LOSSES": grant_losses}, f)
+        json.dump({"GRANT_LOSSES": grant_losses}, f, allow_nan=False)
     print(f"  Saved: {output_path}")
 
 
@@ -675,19 +670,16 @@ def parse_args(argv=None):
         default=("states", "counties", "districts"),
         help="Geographic levels to generate (city publication is excluded by default)",
     )
-    parser.add_argument(
-        "--upload",
-        action="store_true",
-        help="Upload generated tiles to the configured rclone remote",
-    )
     return parser.parse_args(argv)
 
 
 def main(argv=None):
     global NIH_DIR, NSF_DIR, COMBINED_DIR, OUTPUT_DIR, GEO_CACHE_DIR
     args = parse_args(argv)
-    if not re.fullmatch(r"[A-Za-z0-9._-]+", args.release_id):
-        raise SystemExit("--release-id may contain only letters, numbers, '.', '_' and '-'")
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", args.release_id):
+        raise SystemExit(
+            "--release-id must start with a letter or number and may also contain '.', '_' and '-'"
+        )
     NIH_DIR = os.path.abspath(args.nih_dir)
     NSF_DIR = os.path.abspath(args.nsf_dir)
     COMBINED_DIR = os.path.abspath(args.combined_dir)
@@ -710,7 +702,6 @@ def main(argv=None):
             levels[name],
             reporting_week=args.week,
             release_id=args.release_id,
-            upload=args.upload,
         )
         if result is not None:
             state_df = result
