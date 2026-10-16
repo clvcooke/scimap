@@ -1,9 +1,10 @@
 """
-Generate terminated-grants tiles and JSON locally.
+Generate terminated-grants tiles and JSON.
 
 Input data lives in data/terminations/Terminations {NIH,NSF}/ with weekly CSVs
-at each geographic level plus org-level detail. Outputs default to
-scripts/outputs. Publishing is handled separately after validation.
+at each geographic level plus org-level detail. Commands with options generate
+locally under scripts/outputs. For compatibility, the bare command retains the
+existing manual website-output and tile-publishing behavior.
 """
 
 import argparse
@@ -15,6 +16,7 @@ import platform
 import re
 import shlex
 import subprocess
+import sys
 import tempfile
 import zipfile
 from datetime import datetime
@@ -23,8 +25,10 @@ from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
+REACT_DATA_DIR = os.path.join(PROJECT_ROOT, "src", "data")
 DEFAULT_OUTPUT_DIR = os.path.join(SCRIPT_DIR, "outputs")
 OUTPUT_DIR = DEFAULT_OUTPUT_DIR
+JSON_OUTPUT_DIR = DEFAULT_OUTPUT_DIR
 
 NIH_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NIH")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NSF")
@@ -381,9 +385,26 @@ def generate_tiles(geojson_path, tile_output_dir, zoom):
     print(f"  Tiles generated: {tile_output_dir}")
 
 
+def upload_tiles(tile_output_dir, remote_path):
+    args = [
+        "rclone",
+        "copy",
+        f"{to_wsl_path(tile_output_dir)}/",
+        f"r2:scimap-data/{remote_path}/",
+        "--transfers",
+        "32",
+    ]
+    rc = run_command(args)
+    if rc != 0:
+        raise RuntimeError(f"rclone upload failed with exit code {rc}")
+    print(f"  Upload complete: {remote_path}")
+
+
 # ── Process one geographic level ───────────────────────────────────
 
-def process_level(name, config, reporting_week=None, release_id=TILE_VERSION):
+def process_level(
+    name, config, reporting_week=None, release_id=TILE_VERSION, publish=False
+):
     print(f"\n{'='*60}")
     print(f"Processing: {name}")
     print(f"{'='*60}")
@@ -524,6 +545,9 @@ def process_level(name, config, reporting_week=None, release_id=TILE_VERSION):
     print("  Generating tiles...")
     tile_dir = os.path.join(OUTPUT_DIR, tile_name)
     generate_tiles(geojson_path, tile_dir, zoom)
+    if publish:
+        print("  Uploading tiles...")
+        upload_tiles(tile_dir, tile_name)
 
     print(f"  Done: {name}")
 
@@ -550,7 +574,7 @@ def generate_state_totals(state_df):
             "idc_job_loss": 0,
         }
 
-    output_path = os.path.join(OUTPUT_DIR, "state_total_losses.json")
+    output_path = os.path.join(JSON_OUTPUT_DIR, "state_total_losses.json")
     with open(output_path, "w") as f:
         json.dump({"STATE_LOSSES": state_losses}, f, allow_nan=False)
     print(f"  Saved: {output_path}")
@@ -623,7 +647,7 @@ def generate_terminated_grants(reporting_week=None):
 
     print(f"  With losses: {len(grant_losses)} orgs")
 
-    output_path = os.path.join(OUTPUT_DIR, "terminated_grants.json")
+    output_path = os.path.join(JSON_OUTPUT_DIR, "terminated_grants.json")
     with open(output_path, "w") as f:
         json.dump({"GRANT_LOSSES": grant_losses}, f, allow_nan=False)
     print(f"  Saved: {output_path}")
@@ -673,8 +697,8 @@ def parse_args(argv=None):
     return parser.parse_args(argv)
 
 
-def main(argv=None):
-    global NIH_DIR, NSF_DIR, COMBINED_DIR, OUTPUT_DIR, GEO_CACHE_DIR
+def main(argv=None, publish=False):
+    global NIH_DIR, NSF_DIR, COMBINED_DIR, OUTPUT_DIR, JSON_OUTPUT_DIR, GEO_CACHE_DIR
     args = parse_args(argv)
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", args.release_id):
         raise SystemExit(
@@ -684,7 +708,13 @@ def main(argv=None):
     NSF_DIR = os.path.abspath(args.nsf_dir)
     COMBINED_DIR = os.path.abspath(args.combined_dir)
     OUTPUT_DIR = os.path.abspath(args.output_dir)
+    JSON_OUTPUT_DIR = REACT_DATA_DIR if publish else OUTPUT_DIR
+    if publish:
+        print("LEGACY PUBLISH MODE: uploading to r2:scimap-data and writing src/data")
+    else:
+        print(f"LOCAL MODE: nothing uploaded; outputs in {OUTPUT_DIR}")
     os.makedirs(OUTPUT_DIR, exist_ok=True)
+    os.makedirs(JSON_OUTPUT_DIR, exist_ok=True)
 
     if args.geo_dir:
         GEO_CACHE_DIR = os.path.abspath(args.geo_dir)
@@ -694,14 +724,16 @@ def main(argv=None):
         download_geo_refs()
 
     levels = build_levels()
+    selected_levels = tuple(levels) if publish else args.levels
     state_df = None
 
-    for name in args.levels:
+    for name in selected_levels:
         result = process_level(
             name,
             levels[name],
             reporting_week=args.week,
             release_id=args.release_id,
+            publish=publish,
         )
         if result is not None:
             state_df = result
@@ -713,7 +745,7 @@ def main(argv=None):
     generate_terminated_grants(args.week)
 
     # Write tile version for the frontend
-    tile_version_path = os.path.join(OUTPUT_DIR, "tile_version.json")
+    tile_version_path = os.path.join(JSON_OUTPUT_DIR, "tile_version.json")
     with open(tile_version_path, "w") as f:
         json.dump({"TILE_VERSION": args.release_id}, f)
     print(f"\nRelease ID: {args.release_id}")
@@ -722,4 +754,4 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    main()
+    main(publish=len(sys.argv) == 1)

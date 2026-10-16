@@ -22,8 +22,43 @@ builder = load_script("build_termination_release.py")
 
 
 class LocalGenerationSafetyTest(unittest.TestCase):
-    def test_generator_has_no_upload_option(self):
+    def test_explicit_commands_have_no_upload_option(self):
         self.assertFalse(hasattr(terminations.parse_args([]), "upload"))
+
+    def test_bare_table_command_retains_legacy_output_destination(self):
+        self.assertEqual(tables.cli_output_dir(None, 1), tables.LEGACY_OUTPUT_DIR)
+        self.assertEqual(tables.cli_output_dir(None, 2), tables.DEFAULT_OUTPUT_DIR)
+
+    def test_programmatic_main_is_local_and_bare_command_can_publish(self):
+        levels = {name: {} for name in ("states", "counties", "districts", "cities")}
+        with tempfile.TemporaryDirectory() as directory:
+            args = SimpleNamespace(
+                nih_dir="nih",
+                nsf_dir="nsf",
+                combined_dir="combined",
+                output_dir=directory,
+                release_id="release",
+                geo_dir="geo",
+                levels=("states", "counties", "districts"),
+                week=None,
+            )
+            with (
+                patch.object(terminations, "parse_args", return_value=args),
+                patch.object(terminations, "REACT_DATA_DIR", directory),
+                patch.object(terminations, "build_levels", return_value=levels),
+                patch.object(terminations, "process_level", return_value=None) as process,
+                patch.object(terminations, "generate_terminated_grants"),
+            ):
+                terminations.main()
+                local_calls = process.call_args_list
+                process.reset_mock()
+                terminations.main(publish=True)
+                publish_calls = process.call_args_list
+
+        self.assertEqual([call.args[0] for call in local_calls], list(args.levels))
+        self.assertTrue(all(not call.kwargs["publish"] for call in local_calls))
+        self.assertEqual([call.args[0] for call in publish_calls], list(levels))
+        self.assertTrue(all(call.kwargs["publish"] for call in publish_calls))
 
     def test_default_outputs_are_outside_frontend_data(self):
         frontend_data = Path(terminations.PROJECT_ROOT, "src", "data").resolve()
@@ -76,7 +111,7 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             [{"state": "AA", "terminated_econ_loss": float("nan"), "terminated_job_loss": 1}]
         )
         with tempfile.TemporaryDirectory() as directory:
-            with patch.object(terminations, "OUTPUT_DIR", directory):
+            with patch.object(terminations, "JSON_OUTPUT_DIR", directory):
                 terminations.generate_state_totals(frame)
             path = Path(directory, "state_total_losses.json")
             self.assertIsNone(json.loads(path.read_text())["STATE_LOSSES"]["AA"]["term_loss"])

@@ -2,9 +2,9 @@
 Generate pre-aggregated JSON table data from termination CSVs.
 
 Reads each geographic level's NIH and NSF termination CSVs, takes the latest
-week's current totals, and writes a compact JSON array for each level. Outputs
-default to scripts/outputs/tables; region names come from the bundled baseline
-table JSON.
+week's current totals, and writes a compact JSON array for each level. Commands
+with options default to scripts/outputs/tables; for compatibility, the bare
+command writes src/data. Region names come from the bundled baseline table JSON.
 
 Usage:
     python scripts/generate_termination_table_data.py [--output-dir PATH]
@@ -14,12 +14,14 @@ import argparse
 import csv
 import json
 import os
+import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 NIH_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NIH")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NSF")
 LABEL_DIR = os.path.join(PROJECT_ROOT, "src", "data")
+LEGACY_OUTPUT_DIR = LABEL_DIR
 DEFAULT_OUTPUT_DIR = os.path.join(SCRIPT_DIR, "outputs", "tables")
 OUTPUT_DIR = DEFAULT_OUTPUT_DIR
 
@@ -42,6 +44,12 @@ LEVELS = {
 }
 
 VALUE_FIELDS = ["current_loss", "current_econ_loss", "current_job_loss"]
+
+
+def cli_output_dir(requested, argument_count):
+    if requested:
+        return requested
+    return LEGACY_OUTPUT_DIR if argument_count == 1 else DEFAULT_OUTPUT_DIR
 
 
 def safe_float(val):
@@ -206,9 +214,9 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--output-dir",
-        default=DEFAULT_OUTPUT_DIR,
-        help="Local output directory (default: scripts/outputs/tables)",
+        help="Output directory (bare command: src/data; otherwise scripts/outputs/tables)",
     )
     parser.add_argument("--week", help="Exact ISO reporting week to generate")
     args = parser.parse_args()
-    main(args.output_dir, args.nih_dir, args.nsf_dir, args.labels_dir, args.week)
+    output_dir = cli_output_dir(args.output_dir, len(sys.argv))
+    main(output_dir, args.nih_dir, args.nsf_dir, args.labels_dir, args.week)
