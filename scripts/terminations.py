@@ -1,22 +1,20 @@
 """
-Process terminated-grants data from data/terminations/ into:
-  1. MVT tiles (state, county, district, city) uploaded to Cloudflare R2
-  2. src/data/terminated_grants.json  (scatter-plot / cluster-layer data)
-  3. src/data/state_total_losses.json (state-level summary)
+Generate terminated-grants tiles and JSON locally.
 
 Input data lives in data/terminations/Terminations {NIH,NSF}/ with weekly CSVs
-at each geographic level plus org-level detail.
-
-Methodology mirrors baseline.py: download geo-reference files, merge data with
-geometries, generate GeoJSON, tile with tippecanoe, upload via rclone.
+at each geographic level plus org-level detail. Outputs default to
+scripts/outputs; pass --upload explicitly to publish tiles to Cloudflare R2.
 """
 
+import argparse
 import pandas as pd
 import geopandas as gpd
 import json
 import os
-import subprocess
 import platform
+import re
+import shlex
+import subprocess
 import tempfile
 import zipfile
 from datetime import datetime
@@ -25,8 +23,8 @@ from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
-REACT_DATA_DIR = os.path.join(PROJECT_ROOT, "src", "data")
-OUTPUT_DIR = os.path.join(SCRIPT_DIR, "outputs")
+DEFAULT_OUTPUT_DIR = os.path.join(SCRIPT_DIR, "outputs")
+OUTPUT_DIR = DEFAULT_OUTPUT_DIR
 
 NIH_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NIH")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NSF")
@@ -64,14 +62,15 @@ def download_geo_refs():
         local_path = os.path.join(GEO_CACHE_DIR, filename)
         if os.path.exists(local_path):
             print(f"  Cached: {filename}")
-            continue
-
-        url = f"{R2_BASE}/{filename}"
-        print(f"  Downloading: {filename} ...")
-        rc = subprocess.run(["curl", "-sL", "-o", local_path, url]).returncode
-        if rc != 0:
-            raise RuntimeError(f"curl failed for {url} (exit {rc})")
-        print(f"  Saved: {local_path}")
+        else:
+            url = f"{R2_BASE}/{filename}"
+            print(f"  Downloading: {filename} ...")
+            rc = subprocess.run(
+                ["curl", "--fail", "--silent", "--show-error", "--location", "--output", local_path, url]
+            ).returncode
+            if rc != 0:
+                raise RuntimeError(f"curl failed for {url} (exit {rc})")
+            print(f"  Saved: {local_path}")
 
         if filename.endswith(".zip"):
             extract_dir = os.path.join(GEO_CACHE_DIR, os.path.splitext(filename)[0])
@@ -193,6 +192,8 @@ def load_latest_week(csv_path, key_col, target_week=None):
 
     if target_week is not None:
         df = df[df["week"] == target_week].copy()
+        if df.empty:
+            raise RuntimeError(f"Reporting week {target_week} is absent from {csv_path}")
     else:
         latest_week = df.groupby(key_col)["week"].transform("max")
         df = df[df["week"] == latest_week].copy()
@@ -233,27 +234,23 @@ def combine_nih_nsf(nih_df, nsf_df, key_col):
     nih_vals = nih_vals.rename(columns=nih_rename)
     nsf_vals = nsf_vals.rename(columns=nsf_rename)
 
-    merged = nih_vals.merge(nsf_vals, on=key_col, how="outer")
+    merged = nih_vals.merge(nsf_vals, on=key_col, how="outer", indicator=True)
 
-    # Sum NIH + NSF for each value column
-    for col in VALUE_COLS:
-        nih_col = f"nih_{col}"
-        nsf_col = f"nsf_{col}"
-        if nih_col in merged.columns and nsf_col in merged.columns:
-            merged[col] = merged[nih_col].fillna(0) + merged[nsf_col].fillna(0)
-        elif nih_col in merged.columns:
-            merged[col] = merged[nih_col].fillna(0)
-        elif nsf_col in merged.columns:
-            merged[col] = merged[nsf_col].fillna(0)
-
-    # Also keep individual agency values for potential frontend use
+    # An absent agency row contributes zero; a present but missing value stays missing.
     for col in VALUE_COLS:
         nih_col = f"nih_{col}"
         nsf_col = f"nsf_{col}"
         if nih_col in merged.columns:
-            merged[nih_col] = merged[nih_col].fillna(0)
+            merged.loc[merged["_merge"] == "right_only", nih_col] = 0
         if nsf_col in merged.columns:
-            merged[nsf_col] = merged[nsf_col].fillna(0)
+            merged.loc[merged["_merge"] == "left_only", nsf_col] = 0
+        if nih_col in merged.columns and nsf_col in merged.columns:
+            merged[col] = merged[nih_col] + merged[nsf_col]
+        elif nih_col in merged.columns:
+            merged[col] = merged[nih_col]
+        elif nsf_col in merged.columns:
+            merged[col] = merged[nsf_col]
+    merged = merged.drop(columns="_merge")
 
     # Rename combined values to match what the frontend expects
     merged = merged.rename(columns={
@@ -356,44 +353,59 @@ def to_wsl_path(windows_path):
     return f"/mnt/{drive}{rest}"
 
 
-def run_wsl(cmd):
+def run_command(args):
     if platform.system() == "Windows":
-        full_cmd = ["wsl", "bash", "-c", cmd]
+        command = ["wsl", "bash", "-c", shlex.join(args)]
     else:
-        full_cmd = cmd
-    print(f"  Running: {cmd}")
-    result = subprocess.run(full_cmd, shell=(platform.system() != "Windows"))
-    return result.returncode
+        command = args
+    print(f"  Running: {shlex.join(args)}")
+    return subprocess.run(command).returncode
 
 
 def generate_tiles(geojson_path, tile_output_dir, zoom):
-    wsl_geojson = to_wsl_path(geojson_path)
-    wsl_tile_dir = to_wsl_path(tile_output_dir)
-    cmd = (
-        f"tippecanoe -z{zoom} -e {wsl_tile_dir} "
-        f"--no-feature-limit --no-tile-size-limit --no-tile-compression "
-        f"--no-tiny-polygon-reduction "
-        f"{wsl_geojson}"
-        " --force"
-    )
-    rc = run_wsl(cmd)
+    args = [
+        "tippecanoe",
+        f"-z{zoom}",
+        "-e",
+        to_wsl_path(tile_output_dir),
+        "--no-feature-limit",
+        "--no-tile-size-limit",
+        "--no-tile-compression",
+        "--no-tiny-polygon-reduction",
+        to_wsl_path(geojson_path),
+        "--force",
+    ]
+    rc = run_command(args)
     if rc != 0:
         raise RuntimeError(f"tippecanoe failed with exit code {rc}")
     print(f"  Tiles generated: {tile_output_dir}")
 
 
 def upload_tiles(tile_output_dir, remote_path):
-    wsl_tile_dir = to_wsl_path(tile_output_dir)
-    cmd = f"rclone copy {wsl_tile_dir}/ r2:scimap-data/{remote_path}/ --transfers 32"
-    rc = run_wsl(cmd)
+    args = [
+        "rclone",
+        "copy",
+        f"{to_wsl_path(tile_output_dir)}/",
+        f"r2:scimap-data/{remote_path}/",
+        "--transfers",
+        "32",
+    ]
+    rc = run_command(args)
     if rc != 0:
         raise RuntimeError(f"rclone upload failed with exit code {rc}")
     print(f"  Upload complete: {remote_path}")
 
 
+def publish_tiles(tile_output_dir, remote_path, upload):
+    if not upload:
+        print("  Upload skipped (use --upload to publish)")
+        return
+    upload_tiles(tile_output_dir, remote_path)
+
+
 # ── Process one geographic level ───────────────────────────────────
 
-def process_level(name, config):
+def process_level(name, config, reporting_week=None, release_id=TILE_VERSION, upload=False):
     print(f"\n{'='*60}")
     print(f"Processing: {name}")
     print(f"{'='*60}")
@@ -406,10 +418,12 @@ def process_level(name, config):
     # Determine the target week: when both NIH and NSF are available, use the
     # latest week present in both (so per-region sums are from the same snapshot).
     # Otherwise fall back to each file's own latest week.
-    target_week = None
-    if config.get("nsf_csv"):
+    target_week = reporting_week
+    if config.get("nsf_csv") and target_week is None:
         target_week = shared_latest_week(config["nih_csv"], config["nsf_csv"])
         print(f"  Shared latest week (NIH ∩ NSF): {target_week}")
+    elif target_week is not None:
+        print(f"  Selected reporting week: {target_week}")
 
     print(f"  Loading NIH: {os.path.basename(config['nih_csv'])}")
     nih_df = load_latest_week(config["nih_csv"], csv_key, target_week=target_week)
@@ -472,12 +486,14 @@ def process_level(name, config):
                 geometries[synth_key] = geom
         print(f"    + territory geometries injected: {', '.join(territory_geos)}")
 
-    # Ensure every region in the geo reference has a row (no-data = zero terminations)
+    # Ensure every region in the geo reference has a row (no-data = zero terminations).
+    # Do not turn a reported-but-missing source value into a valid zero.
+    combined["_has_data"] = True
     all_geo_keys = pd.DataFrame({csv_key: list(geometries.keys())})
     combined = all_geo_keys.merge(combined, on=csv_key, how="left")
-    # Fill missing numeric columns with 0
+    no_data = combined.pop("_has_data").isna()
     num_cols = combined.select_dtypes(include="number").columns
-    combined[num_cols] = combined[num_cols].fillna(0)
+    combined.loc[no_data, num_cols] = combined.loc[no_data, num_cols].fillna(0)
     print(f"  After filling missing regions: {len(combined)} rows")
 
     # Merge geo attributes (county name, state, etc.) into the dataframe
@@ -523,17 +539,15 @@ def process_level(name, config):
     # Build GeoJSON
     geojson = build_geojson(combined, geometries, csv_key)
 
-    tile_name = f"tiles_{name}_total_v{TILE_VERSION}-v2"
+    tile_name = f"tiles_{name}_total_v{release_id}-v2"
     geojson_path = os.path.join(OUTPUT_DIR, f"terminations_{name}.geojson")
     save_geojson(geojson, geojson_path)
 
-    # Generate and upload tiles
+    # Generate tiles locally; publishing requires an explicit opt-in.
     print("  Generating tiles...")
     tile_dir = os.path.join(OUTPUT_DIR, tile_name)
     generate_tiles(geojson_path, tile_dir, zoom)
-
-    print("  Uploading tiles...")
-    upload_tiles(tile_dir, tile_name)
+    publish_tiles(tile_dir, tile_name, upload)
 
     print(f"  Done: {name}")
 
@@ -556,7 +570,7 @@ def generate_state_totals(state_df):
             "idc_job_loss": 0,
         }
 
-    output_path = os.path.join(REACT_DATA_DIR, "state_total_losses.json")
+    output_path = os.path.join(OUTPUT_DIR, "state_total_losses.json")
     with open(output_path, "w") as f:
         json.dump({"STATE_LOSSES": state_losses}, f)
     print(f"  Saved: {output_path}")
@@ -564,7 +578,7 @@ def generate_state_totals(state_df):
 
 # ── Generate terminated_grants.json (scatter plot data) ────────────
 
-def generate_terminated_grants():
+def generate_terminated_grants(reporting_week=None):
     """
     Build terminated_grants.json from the pre-combined org-level CSV.
     The combined file already has per-org lat/lon and pre-summed NIH+NSF values.
@@ -575,10 +589,12 @@ def generate_terminated_grants():
     df = pd.read_csv(combined_path)
     df["week"] = df["week"].astype(str)
 
-    # Use the latest week in the file
-    target_week = df["week"].max()
-    print(f"  Latest week: {target_week}")
-    df = df[df["week"] == target_week].drop_duplicates(
+    target_week = reporting_week or df["week"].max()
+    print(f"  Reporting week: {target_week}")
+    df = df[df["week"] == target_week]
+    if df.empty:
+        raise RuntimeError(f"Reporting week {target_week} is absent from {combined_path}")
+    df = df.drop_duplicates(
         subset=["org_name", "org_city", "org_state"], keep="last"
     )
     print(f"  Orgs at latest week: {len(df)}")
@@ -612,7 +628,7 @@ def generate_terminated_grants():
 
     print(f"  With losses: {len(grant_losses)} orgs")
 
-    output_path = os.path.join(REACT_DATA_DIR, "terminated_grants.json")
+    output_path = os.path.join(OUTPUT_DIR, "terminated_grants.json")
     with open(output_path, "w") as f:
         json.dump({"GRANT_LOSSES": grant_losses}, f)
     print(f"  Saved: {output_path}")
@@ -620,17 +636,82 @@ def generate_terminated_grants():
 
 # ── Main ───────────────────────────────────────────────────────────
 
-def main():
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--nih-dir",
+        default=NIH_DIR,
+        help="Directory containing NIH termination CSVs",
+    )
+    parser.add_argument(
+        "--nsf-dir",
+        default=NSF_DIR,
+        help="Directory containing NSF termination CSVs",
+    )
+    parser.add_argument(
+        "--combined-dir",
+        default=COMBINED_DIR,
+        help="Directory containing terminations_org_combined.csv",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=DEFAULT_OUTPUT_DIR,
+        help="Local output directory (default: scripts/outputs)",
+    )
+    parser.add_argument("--week", help="Exact ISO reporting week to generate")
+    parser.add_argument(
+        "--release-id",
+        default=TILE_VERSION,
+        help="Release identifier used in generated tile directory names",
+    )
+    parser.add_argument(
+        "--geo-dir",
+        help="Directory containing unpacked geographic reference files; skips downloads",
+    )
+    parser.add_argument(
+        "--levels",
+        nargs="+",
+        choices=("states", "counties", "districts", "cities"),
+        default=("states", "counties", "districts"),
+        help="Geographic levels to generate (city publication is excluded by default)",
+    )
+    parser.add_argument(
+        "--upload",
+        action="store_true",
+        help="Upload generated tiles to the configured rclone remote",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    global NIH_DIR, NSF_DIR, COMBINED_DIR, OUTPUT_DIR, GEO_CACHE_DIR
+    args = parse_args(argv)
+    if not re.fullmatch(r"[A-Za-z0-9._-]+", args.release_id):
+        raise SystemExit("--release-id may contain only letters, numbers, '.', '_' and '-'")
+    NIH_DIR = os.path.abspath(args.nih_dir)
+    NSF_DIR = os.path.abspath(args.nsf_dir)
+    COMBINED_DIR = os.path.abspath(args.combined_dir)
+    OUTPUT_DIR = os.path.abspath(args.output_dir)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    print("Downloading geo-reference data...")
-    download_geo_refs()
+    if args.geo_dir:
+        GEO_CACHE_DIR = os.path.abspath(args.geo_dir)
+        print(f"Using local geo-reference data: {GEO_CACHE_DIR}")
+    else:
+        print("Downloading geo-reference data...")
+        download_geo_refs()
 
     levels = build_levels()
     state_df = None
 
-    for name, config in levels.items():
-        result = process_level(name, config)
+    for name in args.levels:
+        result = process_level(
+            name,
+            levels[name],
+            reporting_week=args.week,
+            release_id=args.release_id,
+            upload=args.upload,
+        )
         if result is not None:
             state_df = result
 
@@ -638,13 +719,13 @@ def main():
     if state_df is not None:
         generate_state_totals(state_df)
 
-    generate_terminated_grants()
+    generate_terminated_grants(args.week)
 
     # Write tile version for the frontend
-    tile_version_path = os.path.join(REACT_DATA_DIR, "tile_version.json")
+    tile_version_path = os.path.join(OUTPUT_DIR, "tile_version.json")
     with open(tile_version_path, "w") as f:
-        json.dump({"TILE_VERSION": TILE_VERSION}, f)
-    print(f"\nTile version: {TILE_VERSION}")
+        json.dump({"TILE_VERSION": args.release_id}, f)
+    print(f"\nRelease ID: {args.release_id}")
 
     print("\nAll done!")
 
