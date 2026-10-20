@@ -15,6 +15,7 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import signal
 import subprocess
 import urllib.request
 import uuid
@@ -109,8 +110,10 @@ def publish_release(args):
     prefix = args.prefix.strip("/")
     destination = f"{args.remote.rstrip('/')}/{prefix}/{release_id}"
     public_url = f"{args.public_base.rstrip('/')}/{prefix}/{release_id}"
+    started_at = datetime.now(timezone.utc)
+    # One record per attempt, so a refused retry never overwrites an earlier failure.
     record_path = Path(args.record).resolve() if args.record else (
-        SCRIPT_DIR / "outputs" / "uploads" / f"{release_id}.json"
+        SCRIPT_DIR / "outputs" / "uploads" / f"{release_id}-{started_at:%Y%m%dT%H%M%SZ}.json"
     )
     record = {
         "release_id": release_id,
@@ -118,7 +121,7 @@ def publish_release(args):
         "public_url": public_url,
         "manifest_sha256": validator.sha256(root / "manifest.json"),
         "local": local_inventory(root),
-        "started_at": datetime.now(timezone.utc).isoformat(),
+        "started_at": started_at.isoformat(),
         "status": "started",
     }
     print(f"Publishing {release_id}: {record['local']['objects']} objects, "
@@ -128,22 +131,36 @@ def publish_release(args):
         return record
 
     record_path.parent.mkdir(parents=True, exist_ok=True)
+
+    def advance(status):
+        # Saved at every stage so even a hard kill leaves the last completed stage on disk.
+        record["status"] = status
+        record["updated_at"] = datetime.now(timezone.utc).isoformat()
+        record_path.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n")
+
     try:
+        advance("started")
         if not destination_is_empty(destination):
             record["status"] = "refused"
             raise SystemExit(f"Refusing to publish into non-empty destination: {destination}")
         transfers = ["--transfers", args.transfers, "--checkers", args.transfers]
+        advance("uploading")
         rclone("copy", root, destination, "--exclude", "/manifest.json", *transfers)
-        record["status"] = "uploaded"
+        advance("uploaded")
         rclone("check", root, destination, "--one-way", "--exclude", "/manifest.json", *transfers)
-        record["status"] = "checked"
+        advance("checked")
         record["public_samples"] = verify_public(root, public_url, sample_files(root, manifest))
-        record["status"] = "verified"
+        advance("verified")
 
         rclone("copyto", root / "manifest.json", f"{destination}/manifest.json")
-        record["status"] = "manifest_uploaded"
+        advance("manifest_uploaded")
         verify_public(root, public_url, ["manifest.json"])
         record["status"] = "published"
+    except KeyboardInterrupt:
+        record["interrupted_during"] = record["status"]
+        record["status"] = "interrupted"
+        record["error"] = "Interrupted before completion"
+        raise
     except (Exception, SystemExit) as error:
         record["error"] = str(error)
         raise
@@ -162,13 +179,19 @@ def parse_args(argv=None):
     parser.add_argument("--remote", default=DEFAULT_REMOTE, help="rclone remote and bucket")
     parser.add_argument("--prefix", default=DEFAULT_PREFIX)
     parser.add_argument("--public-base", default=DEFAULT_PUBLIC_BASE)
-    parser.add_argument("--record", help="Upload record path (default: scripts/outputs/uploads/<release-id>.json)")
+    parser.add_argument("--record", help="Upload record path (default: scripts/outputs/uploads/<release-id>-<UTC time>.json)")
     parser.add_argument("--transfers", type=int, default=32)
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args(argv)
 
 
+def raise_interrupt(signum, frame):
+    raise KeyboardInterrupt
+
+
 def main(argv=None):
+    # CI cancellation sends SIGTERM; record it like Ctrl-C instead of dying silently.
+    signal.signal(signal.SIGTERM, raise_interrupt)
     publish_release(parse_args(argv))
 
 
