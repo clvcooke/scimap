@@ -20,6 +20,36 @@ terminations = load_script("terminations.py")
 tables = load_script("generate_termination_table_data.py")
 builder = load_script("build_termination_release.py")
 validator = load_script("validate_termination_release.py")
+publisher = load_script("publish_termination_release.py")
+
+
+def publish_fixture(directory):
+    root = Path(directory, "release")
+    (root / "tiles" / "states" / "0" / "0").mkdir(parents=True)
+    (root / "tiles" / "states" / "0" / "0" / "0.pbf").write_bytes(b"tile")
+    (root / "tables").mkdir()
+    (root / "tables" / "states.json").write_text("{}")
+    (root / "manifest.json").write_text("{}")
+    manifest = {
+        "release_id": "candidate-1",
+        "artifacts": {
+            "tiles": {"states": {}},
+            "tables": {"states": {"path": "tables/states.json"}},
+            "institutions": {"path": "tables/states.json"},
+            "state_totals": {"path": "tables/states.json"},
+            "inputs": {"scientific_run": None},
+        },
+    }
+    args = SimpleNamespace(
+        release=root,
+        remote="r2:bucket",
+        prefix="terminations/releases",
+        public_base="https://data.example.org",
+        record=Path(directory, "record.json"),
+        transfers=4,
+        dry_run=False,
+    )
+    return manifest, args
 
 
 class LocalGenerationSafetyTest(unittest.TestCase):
@@ -160,6 +190,64 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             args = SimpleNamespace(release_id=release_id, week="2026-09-25")
             with self.subTest(release_id=release_id), self.assertRaises(SystemExit):
                 builder.build_release(args)
+
+    def test_publisher_uploads_manifest_last_after_public_verification(self):
+        calls = []
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "destination_is_empty", return_value=True),
+                patch.object(publisher, "rclone", side_effect=lambda *a, **_: calls.append(a[0])),
+                patch.object(
+                    publisher,
+                    "verify_public",
+                    side_effect=lambda root, url, paths: calls.append(("public", tuple(paths))) or [],
+                ),
+            ):
+                record = publisher.publish_release(args)
+
+        self.assertEqual(record["destination"], "r2:bucket/terminations/releases/candidate-1")
+        self.assertEqual(record["status"], "published")
+        self.assertEqual(calls[:2], ["copy", "check"])
+        self.assertNotIn("manifest.json", calls[2][1])
+        self.assertIn("tiles/states/0/0/0.pbf", calls[2][1])
+        self.assertEqual(calls[3:], ["copyto", ("public", ("manifest.json",))])
+
+    def test_publisher_refuses_non_empty_destination(self):
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "destination_is_empty", return_value=False),
+                patch.object(publisher, "rclone") as rclone,
+                self.assertRaisesRegex(SystemExit, "non-empty"),
+            ):
+                publisher.publish_release(args)
+        rclone.assert_not_called()
+
+    def test_failed_verification_leaves_manifest_unpublished(self):
+        calls = []
+
+        def fake_rclone(*command, **_):
+            calls.append(command[0])
+            if command[0] == "check":
+                raise RuntimeError("rclone check failed")
+
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "destination_is_empty", return_value=True),
+                patch.object(publisher, "rclone", side_effect=fake_rclone),
+                self.assertRaisesRegex(RuntimeError, "check failed"),
+            ):
+                publisher.publish_release(args)
+            record = json.loads(args.record.read_text())
+
+        self.assertNotIn("copyto", calls)
+        self.assertEqual(record["status"], "uploaded")
+        self.assertIn("check failed", record["error"])
 
 
 if __name__ == "__main__":
