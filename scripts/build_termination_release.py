@@ -104,6 +104,13 @@ def build_release(args):
     if output.exists():
         raise SystemExit(f"Refusing to overwrite existing release directory: {output}")
 
+    analysis_report_path = analysis_dir / "run-report.json"
+    analysis_report = None
+    if analysis_report_path.is_file():
+        analysis_report = json.loads(analysis_report_path.read_text())
+        if analysis_report.get("status") != "passed":
+            raise SystemExit(f"Analysis report did not pass: {analysis_report_path}")
+
     sources = {}
     for filename in DOWNLOAD_FILES:
         path = analysis_dir / filename
@@ -198,16 +205,28 @@ def build_release(args):
 
         source_record = inputs / "analysis-files.json"
         source_record.write_text(json.dumps(sources, indent=2, sort_keys=True) + "\n")
+        analysis_report_record = None
+        if analysis_report is not None:
+            copied_report = inputs / "scientific-run-report.json"
+            shutil.copy2(analysis_report_path, copied_report)
+            analysis_report_record = {
+                "path": "inputs/scientific-run-report.json",
+                "sha256": sha256_file(copied_report),
+            }
+
+        state_totals = release / "state-total-losses.json"
+        shutil.copy2(generated / "state_total_losses.json", state_totals)
 
         manifest = {
             "schema_version": 1,
-            "status": "prototype",
+            "status": "candidate",
             "release_id": args.release_id,
             "created_at": datetime.now(timezone.utc).isoformat(),
+            "as_of": analysis_report.get("as_of") if analysis_report else None,
             "reporting_week": args.week,
             "code": {
                 "scimap": git_state(PROJECT_ROOT),
-                "SciMap_Maps": git_state(analysis_dir.parent),
+                "SciMap_Maps": analysis_report["code"] if analysis_report else git_state(analysis_dir.parent),
             },
             "metrics": {
                 "overall": {
@@ -222,8 +241,7 @@ def build_release(args):
                 },
             },
             "limitations": [
-                "City/CBSA artifacts are excluded pending identifier and geometry validation.",
-                "This prototype packages committed outputs; it is not an independent scientific replay.",
+                "City/CBSA artifacts are excluded pending identifier and geometry validation."
             ],
             "artifacts": {
                 "tiles": tile_manifest,
@@ -233,10 +251,18 @@ def build_release(args):
                     "bytes": institutions.stat().st_size,
                     "sha256": sha256_file(institutions),
                 },
+                "state_totals": {
+                    "path": "state-total-losses.json",
+                    "bytes": state_totals.stat().st_size,
+                    "sha256": sha256_file(state_totals),
+                },
                 "downloads": download_manifest,
                 "inputs": {
-                    "path": "inputs/analysis-files.json",
-                    "sha256": sha256_file(source_record),
+                    "analysis_files": {
+                        "path": "inputs/analysis-files.json",
+                        "sha256": sha256_file(source_record),
+                    },
+                    "scientific_run": analysis_report_record,
                 },
             },
         }
