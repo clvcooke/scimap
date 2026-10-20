@@ -252,6 +252,32 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             record = json.loads(args.record.read_text())
         self.assertEqual(record["status"], "manifest_uploaded")
 
+    def test_interrupted_upload_is_recorded_without_manifest(self):
+        calls = []
+        recorded = []
+
+        def fake_rclone(*command, **_):
+            calls.append(command[0])
+            recorded.append(json.loads(args.record.read_text())["status"])
+            if command[0] == "copy":
+                raise KeyboardInterrupt
+
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "destination_is_empty", return_value=True),
+                patch.object(publisher, "rclone", side_effect=fake_rclone),
+                self.assertRaises(KeyboardInterrupt),
+            ):
+                publisher.publish_release(args)
+            record = json.loads(args.record.read_text())
+
+        self.assertEqual(calls, ["copy"])
+        self.assertEqual(recorded, ["uploading"])
+        self.assertEqual(record["status"], "interrupted")
+        self.assertEqual(record["interrupted_during"], "uploading")
+
     def test_release_validator_rejects_undeclared_files(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
