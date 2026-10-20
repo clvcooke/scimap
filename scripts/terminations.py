@@ -15,6 +15,7 @@ import os
 import platform
 import re
 import shlex
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -78,7 +79,13 @@ def download_geo_refs():
 
         if filename.endswith(".zip"):
             extract_dir = os.path.join(GEO_CACHE_DIR, os.path.splitext(filename)[0])
-            if not os.path.exists(extract_dir):
+            has_files = os.path.isdir(extract_dir) and any(
+                os.path.isfile(os.path.join(root, name))
+                for root, _dirs, names in os.walk(extract_dir)
+                for name in names
+            )
+            if not has_files:
+                shutil.rmtree(extract_dir, ignore_errors=True)
                 print(f"  Extracting: {filename} -> {extract_dir}")
                 with zipfile.ZipFile(local_path, "r") as zf:
                     zf.extractall(extract_dir)

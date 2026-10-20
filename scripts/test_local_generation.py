@@ -19,6 +19,7 @@ def load_script(name):
 terminations = load_script("terminations.py")
 tables = load_script("generate_termination_table_data.py")
 builder = load_script("build_termination_release.py")
+validator = load_script("validate_termination_release.py")
 
 
 class LocalGenerationSafetyTest(unittest.TestCase):
@@ -96,6 +97,7 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             archive = Path(directory, "reference.zip")
             with zipfile.ZipFile(archive, "w") as zipped:
                 zipped.writestr("reference/value.txt", "ok")
+            Path(directory, "reference", "reference").mkdir(parents=True)
             with (
                 patch.object(terminations, "GEO_CACHE_DIR", directory),
                 patch.object(terminations, "R2_FILES", [archive.name]),
@@ -142,6 +144,16 @@ class LocalGenerationSafetyTest(unittest.TestCase):
                 self.assertRaisesRegex(RuntimeError, "current_loss.nih"),
             ):
                 terminations.generate_terminated_grants("2026-09-25")
+
+    def test_release_validator_rejects_checksum_mismatch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory, "value.json")
+            path.write_text("{}")
+            with self.assertRaisesRegex(RuntimeError, "Checksum mismatch"):
+                validator.validate_file(
+                    Path(directory),
+                    {"path": "value.json", "bytes": 2, "sha256": "0" * 64},
+                )
 
     def test_release_id_rejects_paths(self):
         for release_id in (".", "..", "-bad", "../bad"):
