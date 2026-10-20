@@ -59,7 +59,25 @@ def validate_release(root):
         count, digest = digest_tree(tile_dir)
         if count != record["file_count"] or digest != record["sha256"]:
             raise RuntimeError(f"Tile tree mismatch: {level}")
+
+    reject_undeclared_files(root, artifacts)
     return manifest
+
+
+def reject_undeclared_files(root, artifacts):
+    """Everything in the directory is published, so nothing may be undeclared."""
+    declared = {"manifest.json"}
+    for group in ("tables", "downloads", "inputs"):
+        declared.update(record["path"] for record in artifacts[group].values() if record)
+    declared.update(artifacts[name]["path"] for name in ("institutions", "state_totals"))
+    tile_dirs = tuple(f"tiles/{level}/" for level in artifacts["tiles"])
+    extra = sorted(
+        relative
+        for relative in (path.relative_to(root).as_posix() for path in root.rglob("*") if path.is_file())
+        if relative not in declared and not relative.startswith(tile_dirs)
+    )
+    if extra:
+        raise RuntimeError(f"Undeclared files in release: {', '.join(extra[:10])}")
 
 
 def main():

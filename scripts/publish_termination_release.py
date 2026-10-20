@@ -127,11 +127,11 @@ def publish_release(args):
         print("Dry run: nothing uploaded")
         return record
 
-    if not destination_is_empty(destination):
-        raise SystemExit(f"Refusing to publish into non-empty destination: {destination}")
-
     record_path.parent.mkdir(parents=True, exist_ok=True)
     try:
+        if not destination_is_empty(destination):
+            record["status"] = "refused"
+            raise SystemExit(f"Refusing to publish into non-empty destination: {destination}")
         transfers = ["--transfers", args.transfers, "--checkers", args.transfers]
         rclone("copy", root, destination, "--exclude", "/manifest.json", *transfers)
         record["status"] = "uploaded"
@@ -141,9 +141,10 @@ def publish_release(args):
         record["status"] = "verified"
 
         rclone("copyto", root / "manifest.json", f"{destination}/manifest.json")
+        record["status"] = "manifest_uploaded"
         verify_public(root, public_url, ["manifest.json"])
         record["status"] = "published"
-    except Exception as error:
+    except (Exception, SystemExit) as error:
         record["error"] = str(error)
         raise
     finally:

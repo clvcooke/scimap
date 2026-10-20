@@ -198,7 +198,7 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             with (
                 patch.object(publisher.validator, "validate_release", return_value=manifest),
                 patch.object(publisher, "destination_is_empty", return_value=True),
-                patch.object(publisher, "rclone", side_effect=lambda *a, **_: calls.append(a[0])),
+                patch.object(publisher, "rclone", side_effect=lambda *a, **_: calls.append(a)),
                 patch.object(
                     publisher,
                     "verify_public",
@@ -209,12 +209,16 @@ class LocalGenerationSafetyTest(unittest.TestCase):
 
         self.assertEqual(record["destination"], "r2:bucket/terminations/releases/candidate-1")
         self.assertEqual(record["status"], "published")
-        self.assertEqual(calls[:2], ["copy", "check"])
+        self.assertEqual([call[0] for call in calls], ["copy", "check", "public", "copyto", "public"])
+        for bulk in calls[:2]:
+            self.assertIn("--exclude", bulk)
+            self.assertEqual(bulk[bulk.index("--exclude") + 1], "/manifest.json")
         self.assertNotIn("manifest.json", calls[2][1])
         self.assertIn("tiles/states/0/0/0.pbf", calls[2][1])
-        self.assertEqual(calls[3:], ["copyto", ("public", ("manifest.json",))])
+        self.assertEqual(calls[3][2], "r2:bucket/terminations/releases/candidate-1/manifest.json")
+        self.assertEqual(calls[4], ("public", ("manifest.json",)))
 
-    def test_publisher_refuses_non_empty_destination(self):
+    def test_publisher_records_refused_non_empty_destination(self):
         with tempfile.TemporaryDirectory() as directory:
             manifest, args = publish_fixture(directory)
             with (
@@ -224,7 +228,49 @@ class LocalGenerationSafetyTest(unittest.TestCase):
                 self.assertRaisesRegex(SystemExit, "non-empty"),
             ):
                 publisher.publish_release(args)
+            record = json.loads(args.record.read_text())
         rclone.assert_not_called()
+        self.assertEqual(record["status"], "refused")
+        self.assertIn("non-empty", record["error"])
+
+    def test_failed_manifest_check_records_uploaded_manifest(self):
+        def fake_public(root, url, paths):
+            if paths == ["manifest.json"]:
+                raise RuntimeError("Public copy does not match local release: manifest.json")
+            return []
+
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "destination_is_empty", return_value=True),
+                patch.object(publisher, "rclone"),
+                patch.object(publisher, "verify_public", side_effect=fake_public),
+                self.assertRaises(RuntimeError),
+            ):
+                publisher.publish_release(args)
+            record = json.loads(args.record.read_text())
+        self.assertEqual(record["status"], "manifest_uploaded")
+
+    def test_release_validator_rejects_undeclared_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "tiles" / "states").mkdir(parents=True)
+            (root / "tiles" / "states" / "0.pbf").write_bytes(b"tile")
+            for name in ("manifest.json", "institutions.json", "notes.txt"):
+                (root / name).write_text("{}")
+            artifacts = {
+                "tiles": {"states": {}},
+                "tables": {},
+                "downloads": {},
+                "inputs": {"scientific_run": None},
+                "institutions": {"path": "institutions.json"},
+                "state_totals": {"path": "institutions.json"},
+            }
+            with self.assertRaisesRegex(RuntimeError, "notes.txt"):
+                validator.reject_undeclared_files(root, artifacts)
+            (root / "notes.txt").unlink()
+            validator.reject_undeclared_files(root, artifacts)
 
     def test_failed_verification_leaves_manifest_unpublished(self):
         calls = []
