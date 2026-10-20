@@ -52,6 +52,66 @@ def publish_fixture(directory):
     return manifest, args
 
 
+def encode_varint(value):
+    out = bytearray()
+    while True:
+        byte, value = value & 0x7F, value >> 7
+        out.append(byte | (0x80 if value else 0))
+        if not value:
+            return bytes(out)
+
+
+def encode_field(number, payload):
+    return encode_varint(number << 3 | 2) + encode_varint(len(payload)) + payload
+
+
+def encode_tile(layer, features):
+    """Tiny MVT encoder for tests: string and double properties, no geometry."""
+    import struct
+    keys, values, body = [], [], b""
+    for properties in features:
+        tags = []
+        for key, value in properties.items():
+            if key not in keys:
+                keys.append(key)
+            encoded = encode_field(1, value.encode()) if isinstance(value, str) else (
+                encode_varint(3 << 3 | 1) + struct.pack("<d", value)
+            )
+            if encoded not in values:
+                values.append(encoded)
+            tags += [keys.index(key), values.index(encoded)]
+        body += encode_field(2, encode_field(2, b"".join(encode_varint(tag) for tag in tags)))
+    body = encode_field(1, layer.encode()) + body
+    body += b"".join(encode_field(3, key.encode()) for key in keys)
+    body += b"".join(encode_field(4, value) for value in values)
+    return encode_field(3, body)
+
+
+def tile_release(directory, table_rows, tile_features, level="counties"):
+    root = Path(directory)
+    (root / "tiles" / level / "0" / "0").mkdir(parents=True)
+    (root / "tiles" / level / "0" / "0" / "0.pbf").write_bytes(encode_tile(f"terminations_{level}", tile_features))
+    (root / "tables").mkdir()
+    (root / "tables" / f"{level}.json").write_text(json.dumps(table_rows))
+    return root, {
+        "metrics": {"current": {"tile_property": "terminated_current_econ_loss"}},
+        "artifacts": {
+            "tiles": {level: {"layer": f"terminations_{level}", "id_property": "FIPS"}},
+            "tables": {level: {"path": f"tables/{level}.json"}},
+        },
+    }
+
+
+def table_row(identifier, value, name="County"):
+    return {"id": identifier, "name": name, "total_econ_loss": value * 2,
+            "total_funding_loss": value, "total_job_loss": value / 1000}
+
+
+def tile_feature(identifier, value):
+    return {"FIPS": identifier, "terminated_current_econ_loss": value * 2,
+            "terminated_current_loss": value, "terminated_current_job_loss": value / 1000}
+
+
 class LocalGenerationSafetyTest(unittest.TestCase):
     def test_explicit_commands_have_no_upload_option(self):
         self.assertFalse(hasattr(terminations.parse_args([]), "upload"))
@@ -321,6 +381,51 @@ class LocalGenerationSafetyTest(unittest.TestCase):
         self.assertEqual(record["status"], "uploaded")
         self.assertIn("check failed", record["error"])
 
+
+    def test_tile_reader_round_trips_properties(self):
+        layers = validator.read_tile(encode_tile("terminations_counties", [tile_feature("6001", 10.5)]))
+        self.assertEqual(layers["terminations_counties"][0]["FIPS"], "6001")
+        self.assertEqual(layers["terminations_counties"][0]["terminated_current_loss"], 10.5)
+
+    def test_tiles_match_tables_including_territory_aggregates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(
+                directory,
+                [table_row("06001", 10), table_row("72127", 3), table_row("72013", 4)],
+                [tile_feature("6001", 10), tile_feature("72000", 7)],
+            )
+            self.assertEqual(validator.validate_tile_content(root, manifest), [])
+
+    def test_table_row_missing_from_tiles_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("06001", 10), table_row("06003", 2)], [tile_feature("6001", 10)])
+            with self.assertRaisesRegex(RuntimeError, "06003"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_tile_value_must_match_table(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("06001", 10)], [tile_feature("6001", 11)])
+            with self.assertRaisesRegex(RuntimeError, "06001"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_territory_aggregate_must_reconcile(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("72127", 3), table_row("72013", 4)], [tile_feature("72000", 9)])
+            with self.assertRaisesRegex(RuntimeError, "Territory aggregate 72000"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_territory_missing_from_tiles_is_a_warning(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("06001", 10), table_row("66010", 1, "Guam")], [tile_feature("6001", 10)])
+            warnings = validator.validate_tile_content(root, manifest)
+        self.assertEqual(len(warnings), 1)
+        self.assertIn("66010 (Guam)", warnings[0])
+
+    def test_negative_tile_value_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("06001", -1)], [tile_feature("6001", -1)])
+            with self.assertRaisesRegex(RuntimeError, "invalid"):
+                validator.validate_tile_content(root, manifest)
 
 if __name__ == "__main__":
     unittest.main()

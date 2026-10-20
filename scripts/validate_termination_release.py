@@ -3,8 +3,30 @@
 
 import argparse
 import hashlib
+import importlib.util
 import json
+import math
 from pathlib import Path
+
+
+def _load_tile_reader():
+    path = Path(__file__).with_name("vector_tiles.py")
+    spec = importlib.util.spec_from_file_location(path.stem, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.read_tile
+
+
+read_tile = _load_tile_reader()
+TERRITORY_FIPS = {"60", "66", "69", "72", "78"}
+TERRITORY_STATES = {"AS", "GU", "MP", "PR", "VI"}
+ID_WIDTH = {"counties": 5, "districts": 4}
+# Table "total_*" values are current measures; they must match these tile properties.
+TABLE_TO_TILE = {
+    "total_econ_loss": "terminated_current_econ_loss",
+    "total_funding_loss": "terminated_current_loss",
+    "total_job_loss": "terminated_current_job_loss",
+}
 
 
 def sha256(path):
@@ -61,7 +83,71 @@ def validate_release(root):
             raise RuntimeError(f"Tile tree mismatch: {level}")
 
     reject_undeclared_files(root, artifacts)
+    for warning in validate_tile_content(root, manifest):
+        print(f"Warning: {warning}")
     return manifest
+
+
+def tile_id(level, value):
+    return str(value).zfill(ID_WIDTH[level]) if level in ID_WIDTH else str(value)
+
+
+def is_territory(level, identifier):
+    return identifier in TERRITORY_STATES if level == "states" else identifier[:2] in TERRITORY_FIPS
+
+
+def validate_tile_content(root, manifest):
+    """Decode every tile; check structure, table coverage and values. Returns warnings."""
+    warnings = []
+    metric_properties = {metric["tile_property"] for metric in manifest["metrics"].values() if "tile_property" in metric}
+    for level, record in manifest["artifacts"]["tiles"].items():
+        features = {}
+        for path in sorted((root / "tiles" / level).rglob("*.pbf")):
+            layers = read_tile(path.read_bytes())
+            unexpected = set(layers) - {record["layer"]}
+            if unexpected:
+                raise RuntimeError(f"Unexpected tile layer in {path}: {', '.join(sorted(unexpected))}")
+            for properties in layers.get(record["layer"], []):
+                if record["id_property"] not in properties:
+                    raise RuntimeError(f"{level} tile feature without {record['id_property']}: {path}")
+                for name in metric_properties | set(TABLE_TO_TILE.values()):
+                    value = properties.get(name)
+                    if not isinstance(value, (int, float)) or not math.isfinite(value) or value < -1e-6:
+                        raise RuntimeError(f"{level} {properties[record['id_property']]} has invalid {name}: {value!r}")
+                features.setdefault(tile_id(level, properties[record["id_property"]]), properties)
+        if not features:
+            raise RuntimeError(f"No {record['layer']} features in {level} tiles")
+
+        table = json.loads((root / manifest["artifacts"]["tables"][level]["path"]).read_text())
+        aggregates, missing = {}, []
+        for row in table:
+            identifier = tile_id(level, row["id"])
+            feature = features.get(identifier)
+            if feature is None and level == "counties" and is_territory(level, identifier):
+                aggregate = identifier[:2] + "000"
+                if aggregate in features:
+                    totals = aggregates.setdefault(aggregate, dict.fromkeys(TABLE_TO_TILE, 0.0))
+                    for column in TABLE_TO_TILE:
+                        totals[column] += row[column]
+                    continue
+            if feature is None:
+                (warnings if is_territory(level, identifier) else missing).append(
+                    f"{level} {identifier} ({row.get('name')}) is in the table but on no map tile "
+                    f"(${row['total_econ_loss']:,.2f} current economic loss)"
+                )
+                continue
+            for column, prop in TABLE_TO_TILE.items():
+                if not math.isclose(row[column], feature[prop], rel_tol=1e-6, abs_tol=0.01):
+                    raise RuntimeError(f"{level} {identifier}: table {column} {row[column]} != tile {prop} {feature[prop]}")
+        if missing:
+            raise RuntimeError("; ".join(missing[:10]))
+        for aggregate, totals in aggregates.items():
+            for column, prop in TABLE_TO_TILE.items():
+                if not math.isclose(totals[column], features[aggregate][prop], rel_tol=1e-6, abs_tol=0.05):
+                    raise RuntimeError(
+                        f"Territory aggregate {aggregate}: table rows sum {column} {totals[column]} != tile {prop} {features[aggregate][prop]}"
+                    )
+    return warnings
 
 
 def reject_undeclared_files(root, artifacts):
