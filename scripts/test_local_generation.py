@@ -427,5 +427,37 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "invalid"):
                 validator.validate_tile_content(root, manifest)
 
+    def test_every_tile_copy_must_match(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("06001", 10)], [tile_feature("6001", 10)])
+            (root / "tiles" / "counties" / "1" / "0").mkdir(parents=True)
+            (root / "tiles" / "counties" / "1" / "0" / "0.pbf").write_bytes(
+                encode_tile("terminations_counties", [tile_feature("6001", 11)])
+            )
+            with self.assertRaisesRegex(RuntimeError, "different values"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_tile_feature_with_loss_but_no_table_row_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            features = [tile_feature("6001", 10), tile_feature("6003", 5), tile_feature("6005", 0)]
+            root, manifest = tile_release(directory, [table_row("06001", 10)], features)
+            with self.assertRaisesRegex(RuntimeError, "no table row: 06003"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_tile_totals_must_equal_nih_plus_nsf(self):
+        with tempfile.TemporaryDirectory() as directory:
+            feature = {**tile_feature("6001", 10), "nih_current_loss": 4.0, "nsf_current_loss": 5.0,
+                       "terminated_loss": 20.0}
+            root, manifest = tile_release(directory, [table_row("06001", 10)], [feature])
+            with self.assertRaisesRegex(RuntimeError, "NIH \\+ NSF"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_current_loss_cannot_exceed_overall(self):
+        with tempfile.TemporaryDirectory() as directory:
+            feature = {**tile_feature("6001", 10), "terminated_loss": 5.0}
+            root, manifest = tile_release(directory, [table_row("06001", 10)], [feature])
+            with self.assertRaisesRegex(RuntimeError, "exceeds"):
+                validator.validate_tile_content(root, manifest)
+
 if __name__ == "__main__":
     unittest.main()

@@ -26,7 +26,36 @@ TABLE_TO_TILE = {
     "total_econ_loss": "terminated_current_econ_loss",
     "total_funding_loss": "terminated_current_loss",
     "total_job_loss": "terminated_current_job_loss",
+    "nih_econ_loss": "nih_current_econ_loss",
+    "nih_funding_loss": "nih_current_loss",
+    "nih_job_loss": "nih_current_job_loss",
+    "nsf_econ_loss": "nsf_current_econ_loss",
+    "nsf_funding_loss": "nsf_current_loss",
+    "nsf_job_loss": "nsf_current_job_loss",
 }
+# Tile totals and their agency parts: (total, current part names, overall total, overall part names).
+TILE_SUMS = [
+    (f"terminated_current_{kind}", f"terminated_{kind}")
+    for kind in ("loss", "econ_loss", "job_loss")
+]
+
+
+def check_tile_feature(level, identifier, properties):
+    """Totals equal NIH + NSF, and current loss never exceeds overall loss."""
+    for current, overall in TILE_SUMS:
+        if current not in properties or overall not in properties:
+            continue
+        kind = current.removeprefix("terminated_current_")
+        for total, parts in (
+            (current, (f"nih_current_{kind}", f"nsf_current_{kind}")),
+            (overall, (f"nih_overall_{kind}", f"nsf_overall_{kind}")),
+        ):
+            if all(part in properties for part in parts):
+                expected = sum(properties[part] for part in parts)
+                if not math.isclose(properties[total], expected, rel_tol=1e-6, abs_tol=0.05):
+                    raise RuntimeError(f"{level} {identifier}: {total} {properties[total]} != NIH + NSF {expected}")
+        if properties[current] > properties[overall] * (1 + 1e-6) + 0.05:
+            raise RuntimeError(f"{level} {identifier}: {current} exceeds {overall}")
 
 
 def sha256(path):
@@ -110,25 +139,32 @@ def validate_tile_content(root, manifest):
             for properties in layers.get(record["layer"], []):
                 if record["id_property"] not in properties:
                     raise RuntimeError(f"{level} tile feature without {record['id_property']}: {path}")
-                for name in metric_properties | set(TABLE_TO_TILE.values()):
+                identifier = tile_id(level, properties[record["id_property"]])
+                for name in metric_properties | {n for n in TABLE_TO_TILE.values() if n in properties}:
                     value = properties.get(name)
                     if not isinstance(value, (int, float)) or not math.isfinite(value) or value < -1e-6:
                         raise RuntimeError(f"{level} {properties[record['id_property']]} has invalid {name}: {value!r}")
-                features.setdefault(tile_id(level, properties[record["id_property"]]), properties)
+                # A feature repeats across tiles and zooms; every copy must carry the same values.
+                first = features.setdefault(identifier, properties)
+                if first is not properties and first != properties:
+                    raise RuntimeError(f"{level} {identifier} has different values in {path}")
+                if first is properties:
+                    check_tile_feature(level, identifier, properties)
         if not features:
             raise RuntimeError(f"No {record['layer']} features in {level} tiles")
 
         table = json.loads((root / manifest["artifacts"]["tables"][level]["path"]).read_text())
+        columns = [column for column in TABLE_TO_TILE if column in table[0]]
         aggregates, missing = {}, []
         for row in table:
             identifier = tile_id(level, row["id"])
             feature = features.get(identifier)
-            if feature is None and level == "counties" and is_territory(level, identifier):
-                aggregate = identifier[:2] + "000"
-                if aggregate in features:
-                    totals = aggregates.setdefault(aggregate, dict.fromkeys(TABLE_TO_TILE, 0.0))
-                    for column in TABLE_TO_TILE:
-                        totals[column] += row[column]
+            if level == "counties" and is_territory(level, identifier) and identifier[:2] + "000" in features:
+                # The territory-wide feature carries the sum of all of the territory's counties.
+                totals = aggregates.setdefault(identifier[:2] + "000", dict.fromkeys(columns, 0.0))
+                for column in columns:
+                    totals[column] += row[column]
+                if feature is None:
                     continue
             if feature is None:
                 (warnings if is_territory(level, identifier) else missing).append(
@@ -136,13 +172,23 @@ def validate_tile_content(root, manifest):
                     f"(${row['total_econ_loss']:,.2f} current economic loss)"
                 )
                 continue
-            for column, prop in TABLE_TO_TILE.items():
+            for column in columns:
+                prop = TABLE_TO_TILE[column]
                 if not math.isclose(row[column], feature[prop], rel_tol=1e-6, abs_tol=0.01):
                     raise RuntimeError(f"{level} {identifier}: table {column} {row[column]} != tile {prop} {feature[prop]}")
         if missing:
             raise RuntimeError("; ".join(missing[:10]))
+        # Shapes without a table row may exist only with zero loss (e.g. counties with no grants).
+        listed = {tile_id(level, row["id"]) for row in table} | set(aggregates)
+        unlisted = [
+            identifier for identifier, properties in features.items()
+            if identifier not in listed and any(properties.get(prop) for prop in TABLE_TO_TILE.values())
+        ]
+        if unlisted:
+            raise RuntimeError(f"{level} tile features with losses but no table row: {', '.join(sorted(unlisted)[:10])}")
         for aggregate, totals in aggregates.items():
-            for column, prop in TABLE_TO_TILE.items():
+            for column in columns:
+                prop = TABLE_TO_TILE[column]
                 if not math.isclose(totals[column], features[aggregate][prop], rel_tol=1e-6, abs_tol=0.05):
                     raise RuntimeError(
                         f"Territory aggregate {aggregate}: table rows sum {column} {totals[column]} != tile {prop} {features[aggregate][prop]}"
