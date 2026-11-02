@@ -1,7 +1,7 @@
 import type { AgencyFilter, LossGeoLevel, MapGeoConfig } from './map-shared'
 
 const DOMAIN = 'https://data.scienceimpacts.org'
-const RELEASE = `${DOMAIN}/terminations/releases/2026-10-23-s01-validated-20261102`
+const RELEASE = `${DOMAIN}/terminations/releases/2026-10-23-s01-reviewed-20261102-v2`
 
 export const GRANTS_GEO_LEVELS: Record<LossGeoLevel, MapGeoConfig> = {
   counties: {
