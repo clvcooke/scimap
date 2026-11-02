@@ -53,10 +53,11 @@ def destination_is_empty(destination):
 
 
 def sample_files(root, manifest):
-    """Small JSON artifacts plus a deterministic spread of tiles per level."""
+    """Hash every JSON/CSV artifact publicly, plus representative tiles per level."""
     artifacts = manifest["artifacts"]
     records = [
         *artifacts["tables"].values(),
+        *artifacts["downloads"].values(),
         artifacts["institutions"],
         artifacts["state_totals"],
         *(record for record in artifacts["inputs"].values() if record is not None),
@@ -121,6 +122,10 @@ def publish_release(args):
         "public_url": public_url,
         "manifest_sha256": validator.sha256(root / "manifest.json"),
         "local": local_inventory(root),
+        "verification": {
+            "remote_check": "All objects: sizes and available remote hashes (rclone check)",
+            "public_sha256": "Every JSON and CSV artifact, representative tiles, then the manifest",
+        },
         "started_at": started_at.isoformat(),
         "status": "started",
     }

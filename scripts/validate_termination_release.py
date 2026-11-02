@@ -141,9 +141,17 @@ def validate_release(root):
             raise RuntimeError(f"Tile tree mismatch: {level}")
 
     reject_undeclared_files(root, artifacts)
-    for warning in validate_tile_content(root, manifest):
+    warnings = validate_tile_content(root, manifest)
+    validate_release_warnings(manifest, warnings)
+    for warning in warnings:
         print(f"Warning: {warning}")
     return manifest
+
+
+def validate_release_warnings(manifest, warnings):
+    expected = {"status": "passed", "warnings": warnings}
+    if manifest.get("release_validation") != expected:
+        raise RuntimeError("Release validation warnings differ from the manifest")
 
 
 def tile_id(level, value):

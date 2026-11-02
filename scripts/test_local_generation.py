@@ -38,6 +38,7 @@ def publish_fixture(directory):
             "institutions": {"path": "tables/states.json"},
             "state_totals": {"path": "tables/states.json"},
             "inputs": {"scientific_run": None},
+            "downloads": {},
         },
     }
     args = SimpleNamespace(
@@ -547,6 +548,64 @@ class ValidatedRunTest(unittest.TestCase):
             (root / "manifest.json").write_text(json.dumps({"status": "candidate", "approval_candidate": False}))
             with self.assertRaisesRegex(RuntimeError, "validated scientific run"):
                 validator.validate_release(root)
+
+
+
+class ReviewRegressionTests(unittest.TestCase):
+    def point_rows(self, directory, loss, count):
+        row = {"week": "2026-10-23", "org_name": "Example", "org_city": "CITY", "org_state": "MD",
+               "lat": 1, "lon": 2, "current_loss.combined": loss,
+               "current_loss.nih": loss, "current_loss.nsf": 0,
+               "current_grant_loss.nih": count, "current_grant_loss.nsf": 0,
+               "current_grant_loss.combined": count}
+        terminations.pd.DataFrame([row]).to_csv(Path(directory) / "terminations_org_combined.csv", index=False)
+        with patch.object(terminations, "COMBINED_DIR", directory), patch.object(terminations, "JSON_OUTPUT_DIR", directory):
+            terminations.generate_terminated_grants("2026-10-23")
+        return json.loads((Path(directory) / "terminated_grants.json").read_text())["GRANT_LOSSES"]
+
+    def test_floating_point_residue_never_creates_a_marker(self):
+        for loss in (2.3283064365386963e-10, 0.0049, 0, -1e-10):
+            with self.subTest(loss=loss), tempfile.TemporaryDirectory() as directory:
+                self.assertEqual(self.point_rows(directory, loss, 0), [])
+
+    def test_real_cent_loss_preserves_the_scientific_grant_count(self):
+        with tempfile.TemporaryDirectory() as directory:
+            points = self.point_rows(directory, 0.01, 2)
+            self.assertEqual(points[0]["terminated_num"], 2)
+            self.assertEqual(points[0]["terminated_loss"], 0.01)
+
+    def test_material_loss_without_grants_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(RuntimeError, "inconsistent grant counts"):
+            self.point_rows(directory, 10, 0)
+
+    def test_fractional_grants_are_rejected(self):
+        with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(RuntimeError, "Invalid current grant count"):
+            self.point_rows(directory, 10, 1.5)
+
+    def test_release_warnings_cannot_be_omitted_or_silenced(self):
+        warnings = ["Guam missing from map geometry"]
+        validator.validate_release_warnings({"release_validation": {"status": "passed", "warnings": warnings}}, warnings)
+        for manifest in ({}, {"release_validation": {"status": "passed", "warnings": []}}):
+            with self.subTest(manifest=manifest), self.assertRaisesRegex(RuntimeError, "warnings differ"):
+                validator.validate_release_warnings(manifest, warnings)
+
+    def test_publisher_hashes_downloads_and_stops_on_corruption_before_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            (args.release / "downloads").mkdir()
+            (args.release / "downloads" / "county.csv").write_text("county,loss\nExample,10\n")
+            manifest["artifacts"]["downloads"]["county.csv"] = {"path": "downloads/county.csv"}
+            self.assertIn("downloads/county.csv", publisher.sample_files(args.release, manifest))
+            calls = []
+            def corrupted(url):
+                return "wrong" if "downloads/county.csv" in url else publisher.validator.sha256(args.release / "tables/states.json")
+            with (patch.object(publisher.validator, "validate_release", return_value=manifest),
+                  patch.object(publisher, "destination_is_empty", return_value=True),
+                  patch.object(publisher, "rclone", side_effect=lambda *a, **kw: calls.append(a)),
+                  patch.object(publisher, "fetch_sha256", side_effect=corrupted),
+                  self.assertRaisesRegex(RuntimeError, "downloads/county.csv")):
+                publisher.publish_release(args)
+            self.assertNotIn("copyto", [c[0] for c in calls])
 
 
 if __name__ == "__main__":

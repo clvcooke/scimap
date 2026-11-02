@@ -11,6 +11,7 @@ import argparse
 import pandas as pd
 import geopandas as gpd
 import json
+import math
 import os
 import platform
 import re
@@ -34,6 +35,9 @@ JSON_OUTPUT_DIR = DEFAULT_OUTPUT_DIR
 NIH_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NIH")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NSF")
 COMBINED_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations Combined")
+
+# Below half a cent displays as zero dollars; this affects map points only.
+POINT_DOLLAR_ZERO_TOLERANCE = 0.005
 
 TILE_VERSION = datetime.now().strftime("%Y-%m-%d") + "d"
 
@@ -616,7 +620,9 @@ def generate_terminated_grants(reporting_week=None):
         if pd.isna(loss):
             raise RuntimeError(f"Missing current_loss.combined for {row.get('org_name')}")
         loss = float(loss)
-        if loss <= 0:
+        if not math.isfinite(loss):
+            raise RuntimeError(f"Non-finite current loss for {row.get('org_name')}")
+        if loss < POINT_DOLLAR_ZERO_TOLERANCE:
             continue
         if not pd.notna(row.get("lat")) or not pd.notna(row.get("lon")):
             continue
@@ -635,9 +641,14 @@ def generate_terminated_grants(reporting_week=None):
             )
         nih_loss = float(row["current_loss.nih"])
         nsf_loss = float(row["current_loss.nsf"])
-        nih_num = int(row["current_grant_loss.nih"])
-        nsf_num = int(row["current_grant_loss.nsf"])
-        grant_count = max(int(row["current_grant_loss.combined"]), 1)
+        counts = [float(row[field]) for field in (
+            "current_grant_loss.nih", "current_grant_loss.nsf", "current_grant_loss.combined"
+        )]
+        if any(not math.isfinite(value) or value < 0 or not value.is_integer() for value in counts):
+            raise RuntimeError(f"Invalid current grant count for {row.get('org_name')}")
+        nih_num, nsf_num, grant_count = map(int, counts)
+        if grant_count == 0 or grant_count != nih_num + nsf_num:
+            raise RuntimeError(f"Current loss has inconsistent grant counts for {row.get('org_name')}")
 
         grant_losses.append({
             "org_name": row["org_name"],
