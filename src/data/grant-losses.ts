@@ -20,7 +20,9 @@ export function expandGrants(grants: GrantTermination[], agency: 'nih' | 'nsf' |
   return grants.flatMap((grant) => {
     const num = agency === 'nih' ? grant.nih_num : agency === 'nsf' ? grant.nsf_num : grant.terminated_num
     const loss = agency === 'nih' ? grant.nih_loss : agency === 'nsf' ? grant.nsf_loss : grant.terminated_loss
-    const n = Math.max(num, 1)
+    // Restored awards can leave tiny arithmetic residues; never invent an active grant.
+    if (!Number.isInteger(num) || num <= 0 || !Number.isFinite(loss) || loss < 0.005) return []
+    const n = num
     if (n > 1) {
       return Array(n).fill({ ...grant, terminated_loss: loss / n }) as GrantTermination[]
     }
