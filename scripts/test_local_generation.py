@@ -589,6 +589,10 @@ class ReviewRegressionTests(unittest.TestCase):
             with self.subTest(manifest=manifest), self.assertRaisesRegex(RuntimeError, "warnings differ"):
                 validator.validate_release_warnings(manifest, warnings)
 
+    def test_release_warnings_are_stable_across_manifest_key_order(self):
+        manifest = {"release_validation": {"status": "passed", "warnings": ["county warning", "state warning"]}}
+        validator.validate_release_warnings(manifest, ["state warning", "county warning"])
+
     def test_publisher_hashes_downloads_and_stops_on_corruption_before_manifest(self):
         with tempfile.TemporaryDirectory() as directory:
             manifest, args = publish_fixture(directory)

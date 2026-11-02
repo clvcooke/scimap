@@ -149,7 +149,7 @@ def validate_release(root):
 
 
 def validate_release_warnings(manifest, warnings):
-    expected = {"status": "passed", "warnings": warnings}
+    expected = {"status": "passed", "warnings": sorted(warnings)}
     if manifest.get("release_validation") != expected:
         raise RuntimeError("Release validation warnings differ from the manifest")
 
