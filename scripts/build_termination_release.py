@@ -344,7 +344,7 @@ def build_release(args):
         }
         # Persist release-level coverage warnings separately from scientific validation.
         validator = load_release_validator()
-        warnings = validator.validate_tile_content(release, manifest)
+        warnings = sorted(validator.validate_tile_content(release, manifest))
         manifest["release_validation"] = {"status": "passed", "warnings": warnings}
         manifest["institution_points"] = {
             "minimum_current_loss_dollars": 0.005,
