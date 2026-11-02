@@ -459,5 +459,95 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "exceeds"):
                 validator.validate_tile_content(root, manifest)
 
+class ValidatedRunTest(unittest.TestCase):
+    def make_run(self, directory, **changes):
+        run = Path(directory)
+        (run / "terminations_state.csv").write_text("state,week\nCA,2026-10-23\n")
+        report = {
+            "status": "passed",
+            "as_of": "2026-10-26",
+            "validation": {"mode": "enforce", "status": "passed", "warnings": [], "checks": []},
+            "outputs": {"terminations_state.csv": {
+                "bytes": (run / "terminations_state.csv").stat().st_size,
+                "sha256": builder.sha256_file(run / "terminations_state.csv"),
+            }},
+        }
+        for key, value in changes.items():
+            report[key] = value
+        (run / "run-report.json").write_text(json.dumps(report))
+        return run
+
+    def test_week_is_derived_from_as_of(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report, week = builder.load_validated_run(self.make_run(directory), None)
+            self.assertEqual(week, "2026-10-23")
+
+    def test_reporting_weeks_start_on_friday(self):
+        from datetime import date
+        self.assertEqual(builder.reporting_week(date(2026, 10, 23)), date(2026, 10, 23))
+        self.assertEqual(builder.reporting_week(date(2026, 10, 29)), date(2026, 10, 23))
+
+    def test_rejects_week_mismatch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(SystemExit, "does not match"):
+                builder.load_validated_run(self.make_run(directory), "2026-10-16")
+
+    def test_rejects_report_mode_validation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = self.make_run(directory, validation={"mode": "report", "status": "failed", "warnings": [], "checks": []})
+            with self.assertRaisesRegex(SystemExit, "not enforced and passed"):
+                builder.load_validated_run(run, None)
+
+    def test_rejects_output_changed_after_validation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = self.make_run(directory)
+            (run / "terminations_state.csv").write_text("state,week\nCA,2026-10-16\n")
+            with self.assertRaisesRegex(SystemExit, "changed after validation"):
+                builder.load_validated_run(run, None)
+
+    def test_rejects_unvalidated_extra_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = self.make_run(directory)
+            (run / "terminations_county.csv").write_text("FIPS,week\n")
+            with self.assertRaisesRegex(SystemExit, "not covered"):
+                builder.load_validated_run(run, None)
+
+    def test_rejects_missing_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(SystemExit, "Missing run report"):
+                builder.load_validated_run(Path(directory), None)
+
+    def test_rejects_report_claiming_pass_with_errors(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = self.make_run(directory, validation={"mode": "enforce", "status": "passed", "errors": ["duplicate_grants"]})
+            with self.assertRaisesRegex(SystemExit, "not enforced and passed"):
+                builder.load_validated_run(run, None)
+
+    def test_publisher_rechecks_scientific_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.make_run(directory)
+            report = json.loads((root / "run-report.json").read_text())
+            report["code"] = {"revision": "abc", "dirty": False}
+            (root / "run-report.json").write_text(json.dumps(report))
+            manifest = {
+                "as_of": report["as_of"], "code": {"SciMap_Maps": report["code"]},
+                "validation": {"status": "passed", "warnings": []},
+                "artifacts": {"inputs": {"scientific_run": {
+                    "path": "run-report.json", "sha256": builder.sha256_file(root / "run-report.json")}},
+                    "downloads": {"terminations_state.csv": dict(report["outputs"]["terminations_state.csv"])}}
+            }
+            validator.validate_scientific_provenance(root, manifest)
+            manifest["artifacts"]["downloads"]["terminations_state.csv"]["sha256"] = "changed"
+            with self.assertRaisesRegex(RuntimeError, "does not match validated output"):
+                validator.validate_scientific_provenance(root, manifest)
+
+    def test_prototype_release_is_never_published(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "manifest.json").write_text(json.dumps({"status": "candidate", "approval_candidate": False}))
+            with self.assertRaisesRegex(RuntimeError, "validated scientific run"):
+                validator.validate_release(root)
+
+
 if __name__ == "__main__":
     unittest.main()

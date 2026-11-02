@@ -86,14 +86,43 @@ def validate_file(root, record):
         raise RuntimeError(f"Checksum mismatch: {path}")
 
 
+
+def validate_scientific_provenance(root, manifest):
+    """Require the packaged downloads to be the exact outputs that passed science checks."""
+    record = manifest["artifacts"]["inputs"].get("scientific_run")
+    if not record:
+        raise RuntimeError("Missing scientific run report")
+    validate_file(root, record)
+    report = json.loads((root / record["path"]).read_text())
+    validation = report.get("validation", {})
+    if (report.get("status") != "passed" or validation.get("mode") != "enforce"
+            or validation.get("status") != "passed" or validation.get("errors")):
+        raise RuntimeError("Scientific run did not pass enforced validation")
+    if report.get("code") != manifest["code"]["SciMap_Maps"]:
+        raise RuntimeError("Scientific code provenance differs from the manifest")
+    if report.get("as_of") != manifest.get("as_of"):
+        raise RuntimeError("Scientific cutoff differs from the manifest")
+    if manifest.get("validation") != {
+        "status": validation["status"], "warnings": validation["warnings"]
+    }:
+        raise RuntimeError("Scientific validation differs from the manifest")
+    for name, artifact in manifest["artifacts"]["downloads"].items():
+        expected = report.get("outputs", {}).get(name)
+        if not expected or any(artifact.get(key) != expected.get(key) for key in ("bytes", "sha256")):
+            raise RuntimeError(f"Download does not match validated output: {name}")
+
+
 def validate_release(root):
     manifest_path = root / "manifest.json"
     manifest = json.loads(manifest_path.read_text())
     if manifest.get("status") != "candidate":
         raise RuntimeError("Release manifest is not a candidate")
+    if manifest.get("approval_candidate") is not True:
+        raise RuntimeError("Release was not built from a validated scientific run (prototype releases are never published)")
     if manifest["code"]["scimap"]["dirty"] or manifest["code"]["SciMap_Maps"]["dirty"]:
         raise RuntimeError("Candidate was generated from dirty code")
 
+    validate_scientific_provenance(root, manifest)
     artifacts = manifest["artifacts"]
     for record in artifacts["tables"].values():
         validate_file(root, record)
