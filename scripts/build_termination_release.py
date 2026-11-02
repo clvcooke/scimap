@@ -342,12 +342,19 @@ def build_release(args):
                 },
             },
         }
+        # Persist release-level coverage warnings separately from scientific validation.
+        validator = load_release_validator()
+        warnings = validator.validate_tile_content(release, manifest)
+        manifest["release_validation"] = {"status": "passed", "warnings": warnings}
+        manifest["institution_points"] = {
+            "minimum_current_loss_dollars": 0.005,
+            "requires_positive_current_grant_count": True,
+            "description": "Suppress sub-half-cent numerical residues; never invent grant counts. Scientific CSVs are unchanged.",
+        }
         (release / "manifest.json").write_text(
             json.dumps(manifest, indent=2, sort_keys=True) + "\n"
         )
-        # Check tiles against tables before the release directory appears.
-        validator = load_release_validator()
-        for warning in validator.validate_tile_content(release, manifest):
+        for warning in warnings:
             print(f"Warning: {warning}")
         shutil.move(release, output)
 
