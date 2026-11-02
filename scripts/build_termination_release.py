@@ -1,7 +1,14 @@
-"""Build a local prototype termination release from committed analysis outputs."""
+"""Build a versioned termination release from a validated scientific run.
+
+The run's run-report.json must show an enforced, passing validation, and every
+analysis file the release packages must match the fingerprint recorded in that
+report. `--prototype` keeps the original behaviour for committed outputs that
+have no run report; such releases are never candidates for approval.
+"""
 
 import argparse
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
+import importlib.util
 import hashlib
 import json
 from pathlib import Path
@@ -74,11 +81,16 @@ def run(command):
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--analysis-dir", default=DEFAULT_ANALYSIS_DIR)
-    parser.add_argument("--week", required=True, help="ISO reporting week")
+    parser.add_argument("--week", help="ISO reporting week (default: derived from the run's as_of)")
     parser.add_argument("--release-id", required=True)
     parser.add_argument(
         "--output",
         help="Final release directory (default: scripts/outputs/releases/<release-id>)",
+    )
+    parser.add_argument(
+        "--prototype",
+        action="store_true",
+        help="Allow committed outputs without a validated run report (never an approval candidate)",
     )
     parser.add_argument(
         "--geo-dir",
@@ -87,15 +99,72 @@ def parse_args(argv=None):
     return parser.parse_args(argv)
 
 
+def reporting_week(as_of):
+    """Weeks start on Friday (the analysis start date, 2025-02-28)."""
+    return as_of - timedelta(days=(as_of.weekday() - 4) % 7)
+
+
+def load_validated_run(analysis_dir, week):
+    """Return (report, week) after checking validation and output fingerprints."""
+    report_path = analysis_dir / "run-report.json"
+    if not report_path.is_file():
+        raise SystemExit(f"Missing run report (use --prototype only for committed outputs): {report_path}")
+    report = json.loads(report_path.read_text())
+    validation = report.get("validation", {})
+    if report.get("status") != "passed":
+        raise SystemExit(f"Analysis report did not pass: {report_path}")
+    if validation.get("mode") != "enforce" or validation.get("status") != "passed" or validation.get("errors"):
+        raise SystemExit(f"Analysis validation was not enforced and passed: {report_path}")
+    outputs = report.get("outputs")
+    if not outputs:
+        raise SystemExit(f"Run report has no output fingerprints: {report_path}")
+    unlisted = sorted(path.name for path in analysis_dir.glob("*.csv") if path.name not in outputs)
+    if unlisted:
+        raise SystemExit(f"Analysis files not covered by the run report: {', '.join(unlisted)}")
+    for name, record in outputs.items():
+        if Path(name).name != name or not name.endswith(".csv"):
+            raise SystemExit(f"Invalid analysis output name: {name}")
+        path = analysis_dir / name
+        if not path.is_file() or path.stat().st_size != record["bytes"] or sha256_file(path) != record["sha256"]:
+            raise SystemExit(f"Analysis output changed after validation: {path}")
+    derived = reporting_week(date.fromisoformat(report["as_of"])).isoformat()
+    if week and week != derived:
+        raise SystemExit(f"--week {week} does not match the run's reporting week {derived}")
+    return report, derived
+
+
+def source_provenance(report):
+    """Grant Witness snapshot and freshness, as recorded by the validated run."""
+    inputs = report.get("inputs", {})
+    freshness = next(
+        (check.get("sources", {}) for check in report["validation"]["checks"] if check["name"] == "source_freshness"),
+        {},
+    )
+    return {
+        "snapshot_files": {name: record for name, record in inputs.items() if name.startswith("source-snapshot/")},
+        "freshness": freshness,
+    }
+
+
+def load_release_validator():
+    spec = importlib.util.spec_from_file_location(
+        "validate_termination_release", SCRIPT_DIR / "validate_termination_release.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def build_release(args):
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", args.release_id):
         raise SystemExit(
             "--release-id must start with a letter or number and may also contain '.', '_' and '-'"
         )
-    try:
-        date.fromisoformat(args.week)
-    except ValueError as error:
-        raise SystemExit("--week must be an ISO date such as 2026-09-25") from error
+    if args.week:
+        try:
+            date.fromisoformat(args.week)
+        except ValueError as error:
+            raise SystemExit("--week must be an ISO date such as 2026-09-25") from error
 
     analysis_dir = Path(args.analysis_dir).resolve()
     output = Path(args.output).resolve() if args.output else (
@@ -105,11 +174,12 @@ def build_release(args):
         raise SystemExit(f"Refusing to overwrite existing release directory: {output}")
 
     analysis_report_path = analysis_dir / "run-report.json"
-    analysis_report = None
-    if analysis_report_path.is_file():
-        analysis_report = json.loads(analysis_report_path.read_text())
-        if analysis_report.get("status") != "passed":
-            raise SystemExit(f"Analysis report did not pass: {analysis_report_path}")
+    if getattr(args, "prototype", False):
+        if not args.week:
+            raise SystemExit("--prototype requires --week")
+        analysis_report, week = None, args.week
+    else:
+        analysis_report, week = load_validated_run(analysis_dir, args.week)
 
     sources = {}
     for filename in DOWNLOAD_FILES:
@@ -141,7 +211,7 @@ def build_release(args):
             "--output-dir",
             generated,
             "--week",
-            args.week,
+            week,
             "--release-id",
             args.release_id,
         ]
@@ -162,7 +232,7 @@ def build_release(args):
                 "--output-dir",
                 tables,
                 "--week",
-                args.week,
+                week,
             ]
         )
 
@@ -223,7 +293,13 @@ def build_release(args):
             "release_id": args.release_id,
             "created_at": datetime.now(timezone.utc).isoformat(),
             "as_of": analysis_report.get("as_of") if analysis_report else None,
-            "reporting_week": args.week,
+            "reporting_week": week,
+            "approval_candidate": analysis_report is not None,
+            "sources": source_provenance(analysis_report) if analysis_report else None,
+            "validation": {
+                "status": analysis_report["validation"]["status"],
+                "warnings": analysis_report["validation"]["warnings"],
+            } if analysis_report else None,
             "code": {
                 "scimap": git_state(PROJECT_ROOT),
                 "SciMap_Maps": analysis_report["code"] if analysis_report else git_state(analysis_dir.parent),
@@ -269,6 +345,10 @@ def build_release(args):
         (release / "manifest.json").write_text(
             json.dumps(manifest, indent=2, sort_keys=True) + "\n"
         )
+        # Check tiles against tables before the release directory appears.
+        validator = load_release_validator()
+        for warning in validator.validate_tile_content(release, manifest):
+            print(f"Warning: {warning}")
         shutil.move(release, output)
 
     print(f"Local release created: {output}")
