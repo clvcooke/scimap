@@ -623,5 +623,85 @@ class ReviewRegressionTests(unittest.TestCase):
             self.assertNotIn("copyto", [c[0] for c in calls])
 
 
+selector = load_script("select_termination_release.py")
+
+
+class SelectionTests(unittest.TestCase):
+    def fixture(self, tmp):
+        root = Path(tmp)
+        record = {"status": "published", "release_id": "verified-a", "public_url": selector.PUBLIC_BASE + "/terminations/releases/verified-a", "manifest_sha256": "a" * 64}
+        path = root / "upload.json"
+        path.write_text(json.dumps(record))
+        args = selector.parse_args(['--upload-record', str(path), '--pointer', 'latest-validated'])
+        selection = {"schema_version": 1, "release_id": "verified-a", "as_of": "2026-10-26", "manifest_url": record['public_url'] + '/manifest.json', "manifest_sha256": 'a' * 64}
+        return args, record, selection
+
+    def test_unpublished_and_corrupt_releases_cannot_be_selected(self):
+        with self.assertRaisesRegex(ValueError, 'completed'):
+            selector.prepare({'status': 'uploading'})
+        with tempfile.TemporaryDirectory() as tmp:
+            _, record, _ = self.fixture(tmp)
+            with patch.object(selector, 'fetch', return_value=b'{}'), self.assertRaisesRegex(ValueError, 'checksum'):
+                selector.prepare(record)
+
+    def test_dry_run_and_backwards_latest_do_not_write(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, _, selection = self.fixture(tmp)
+            with patch.object(selector, 'prepare', return_value=selection), patch.object(selector, 'remote', return_value='') as remote:
+                self.assertEqual(selector.select(args)['status'], 'prepared')
+                self.assertNotIn('copyto', [c.args[0] for c in remote.call_args_list])
+            with patch.object(selector, 'prepare', return_value=selection), patch.object(selector, 'remote', side_effect=['latest-validated.json', '{"as_of":"2026-10-27"}']), self.assertRaisesRegex(ValueError, 'backwards'):
+                selector.select(args)
+
+    def test_website_requires_recorded_authorization_and_historical_skips_latest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, _, selection = self.fixture(tmp)
+            with patch.object(selector, 'prepare', return_value=selection), patch.object(selector, 'remote') as remote:
+                args.pointer = 'website-release'
+                with self.assertRaisesRegex(ValueError, 'authorization'):
+                    selector.select(args)
+                remote.assert_not_called()
+                args.pointer, args.historical = 'latest-validated', True
+                with self.assertRaisesRegex(ValueError, 'Historical'):
+                    selector.select(args)
+
+    def test_uncertain_write_is_recorded_and_never_retried(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, _, selection = self.fixture(tmp)
+            args.apply, args.record = True, str(Path(tmp) / 'audit.json')
+            calls = []
+            def remote(*command):
+                calls.append(command)
+                if command[0] == 'copyto' and command[2].endswith('latest-validated.json'):
+                    raise RuntimeError('timeout')
+                return ''
+            with patch.object(selector, 'prepare', return_value=selection), patch.object(selector, 'remote', side_effect=remote), self.assertRaisesRegex(RuntimeError, 'timeout'):
+                selector.select(args)
+            self.assertEqual(json.loads(Path(args.record).read_text())['status'], 'unconfirmed')
+            pointer_writes = [c for c in calls if c[0] == 'copyto' and c[2].endswith('latest-validated.json')]
+            self.assertEqual(len(pointer_writes), 1)
+
+    def test_success_archives_previous_then_writes_once_and_verifies(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, _, selection = self.fixture(tmp)
+            args.apply, args.record = True, str(Path(tmp) / 'audit.json')
+            calls = []
+            stored = {}
+            def remote(*command):
+                calls.append(command)
+                if command[0] == 'lsf': return 'latest-validated.json'
+                if command[0] == 'cat': return json.dumps(stored.get('selection', {'as_of': '2026-10-20', 'release_id': 'previous'}))
+                if command[0] == 'copyto' and command[2].endswith('latest-validated.json'):
+                    stored['selection'] = json.loads(Path(command[1]).read_text())
+                return ''
+            with patch.object(selector, 'prepare', return_value=selection), patch.object(selector, 'remote', side_effect=remote), patch.object(selector, 'fetch', side_effect=lambda url: json.dumps(stored['selection']).encode()):
+                result = selector.select(args)
+            self.assertEqual(result['status'], 'selected')
+            self.assertEqual(result['previous']['release_id'], 'previous')
+            writes = [c for c in calls if c[0] == 'copyto']
+            self.assertIn('/selections/', writes[0][2])
+            self.assertTrue(writes[1][2].endswith('latest-validated.json'))
+
+
 if __name__ == "__main__":
     unittest.main()
