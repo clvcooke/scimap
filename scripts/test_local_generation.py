@@ -557,12 +557,12 @@ class ReviewRegressionTests(unittest.TestCase):
         self.assertEqual(terminations.POINT_DOLLAR_ZERO_TOLERANCE, policy["minimum_current_loss_dollars"])
         self.assertEqual(builder.POINT_POLICY, policy)
 
-    def point_rows(self, directory, loss, count):
+    def point_rows(self, directory, loss, count, combined_count=None):
         row = {"week": "2026-10-23", "org_name": "Example", "org_city": "CITY", "org_state": "MD",
                "lat": 1, "lon": 2, "current_loss.combined": loss,
                "current_loss.nih": loss, "current_loss.nsf": 0,
                "current_grant_loss.nih": count, "current_grant_loss.nsf": 0,
-               "current_grant_loss.combined": count}
+               "current_grant_loss.combined": count if combined_count is None else combined_count}
         terminations.pd.DataFrame([row]).to_csv(Path(directory) / "terminations_org_combined.csv", index=False)
         with patch.object(terminations, "COMBINED_DIR", directory), patch.object(terminations, "JSON_OUTPUT_DIR", directory):
             terminations.generate_terminated_grants("2026-10-23")
@@ -582,6 +582,12 @@ class ReviewRegressionTests(unittest.TestCase):
     def test_material_loss_without_grants_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(RuntimeError, "inconsistent grant counts"):
             self.point_rows(directory, 10, 0)
+
+    def test_agency_counts_must_reconcile_before_points_are_written(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(RuntimeError, "inconsistent grant counts"):
+                self.point_rows(directory, 10, 2, combined_count=1)
+            self.assertFalse((Path(directory) / "terminated_grants.json").exists())
 
     def test_fractional_grants_are_rejected(self):
         with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(RuntimeError, "Invalid current grant count"):
