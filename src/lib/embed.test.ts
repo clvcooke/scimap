@@ -15,7 +15,7 @@ describe('partner embed code', () => {
   it('clamps invalid sizes and keeps a meaningful accessible title', () => {
     expect(buildEmbed('baseline', -1, '').height).toBe(400)
     expect(buildEmbed('baseline', 100000, '').height).toBe(1600)
-    expect(buildEmbed('baseline', NaN, '  ').height).toBe(740)
+    expect(buildEmbed('baseline', NaN, '  ').height).toBe(500)
     expect(buildEmbed('baseline', 700, '').title).toBe(EMBED_MAPS.baseline.title)
   })
   it('uses public chromeless pages and retains visible click-through attribution', () => {

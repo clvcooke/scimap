@@ -13,7 +13,7 @@ export function escapeAttribute(value: string) {
 }
 export function buildEmbed(map: EmbedMap, requestedHeight: number, title: string) {
   const selected = EMBED_MAPS[map]
-  const height = Number.isFinite(requestedHeight) ? Math.min(1600, Math.max(400, Math.round(requestedHeight))) : 740
+  const height = Number.isFinite(requestedHeight) ? Math.min(1600, Math.max(400, Math.round(requestedHeight))) : 500
   const pageUrl = `https://scienceimpacts.org${selected.path}`
   const src = pageUrl + '?chromeless=true'
   const accessibleTitle = title.trim().slice(0, 160) || selected.title
