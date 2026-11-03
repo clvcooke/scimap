@@ -1,0 +1,36 @@
+name: Release tooling tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release-tooling:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: scripts/requirements-release-tests.txt
+      - name: Install release test dependencies
+        run: python -m pip install -r scripts/requirements-release-tests.txt
+      - name: Test release generation, validation and publisher safety
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p test-results
+          python scripts/test_local_generation.py -v 2>&1 | tee test-results/release-tooling.log
+      - name: Retain test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-tooling-python-3.12
+          path: test-results/release-tooling.log

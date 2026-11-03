@@ -18,6 +18,8 @@ import subprocess
 import sys
 import tempfile
 
+from termination_point_policy import POINT_POLICY
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 DEFAULT_ANALYSIS_DIR = PROJECT_ROOT.parent / "SciMap_Maps" / "output"
@@ -347,8 +349,7 @@ def build_release(args):
         warnings = sorted(validator.validate_tile_content(release, manifest))
         manifest["release_validation"] = {"status": "passed", "warnings": warnings}
         manifest["institution_points"] = {
-            "minimum_current_loss_dollars": 0.005,
-            "requires_positive_current_grant_count": True,
+            **POINT_POLICY,
             "description": "Suppress sub-half-cent numerical residues; never invent grant counts. Scientific CSVs are unchanged.",
         }
         (release / "manifest.json").write_text(

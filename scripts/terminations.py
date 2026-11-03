@@ -23,6 +23,8 @@ import tempfile
 import zipfile
 from datetime import datetime
 
+from termination_point_policy import POINT_DOLLAR_ZERO_TOLERANCE
+
 # ── Paths ──────────────────────────────────────────────────────────
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -35,9 +37,6 @@ JSON_OUTPUT_DIR = DEFAULT_OUTPUT_DIR
 NIH_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NIH")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations NSF")
 COMBINED_DIR = os.path.join(PROJECT_ROOT, "data", "terminations", "Terminations Combined")
-
-# Below half a cent displays as zero dollars; this affects map points only.
-POINT_DOLLAR_ZERO_TOLERANCE = 0.005
 
 TILE_VERSION = datetime.now().strftime("%Y-%m-%d") + "d"
 

@@ -552,6 +552,11 @@ class ValidatedRunTest(unittest.TestCase):
 
 
 class ReviewRegressionTests(unittest.TestCase):
+    def test_generator_and_manifest_share_the_frontend_policy(self):
+        policy = json.loads((Path(__file__).parent.parent / "src/lib/termination-point-policy.json").read_text())
+        self.assertEqual(terminations.POINT_DOLLAR_ZERO_TOLERANCE, policy["minimum_current_loss_dollars"])
+        self.assertEqual(builder.POINT_POLICY, policy)
+
     def point_rows(self, directory, loss, count):
         row = {"week": "2026-10-23", "org_name": "Example", "org_city": "CITY", "org_state": "MD",
                "lat": 1, "lon": 2, "current_loss.combined": loss,

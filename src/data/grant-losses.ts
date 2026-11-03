@@ -1,4 +1,5 @@
 import GRANT_LOSS_DATA from './terminated_grants.json'
+import POINT_POLICY from '@/lib/termination-point-policy.json'
 
 export interface GrantTermination {
   [key: string]: unknown
@@ -21,7 +22,7 @@ export function expandGrants(grants: GrantTermination[], agency: 'nih' | 'nsf' |
     const num = agency === 'nih' ? grant.nih_num : agency === 'nsf' ? grant.nsf_num : grant.terminated_num
     const loss = agency === 'nih' ? grant.nih_loss : agency === 'nsf' ? grant.nsf_loss : grant.terminated_loss
     // Restored awards can leave tiny arithmetic residues; never invent an active grant.
-    if (!Number.isInteger(num) || num <= 0 || !Number.isFinite(loss) || loss < 0.005) return []
+    if (!Number.isInteger(num) || num <= 0 || !Number.isFinite(loss) || loss < POINT_POLICY.minimum_current_loss_dollars) return []
     const n = num
     if (n > 1) {
       return Array(n).fill({ ...grant, terminated_loss: loss / n }) as GrantTermination[]
