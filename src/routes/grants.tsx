@@ -1,3 +1,4 @@
+import { TerminationReleaseProvider, TerminationReleaseDetails } from '@/components/TerminationReleaseProvider'
 import { createFileRoute } from '@tanstack/react-router'
 import GrantsMap from '../components/GrantsMap'
 import TerminationsTable from '../components/TerminationsTable'
@@ -22,7 +23,7 @@ function GrantsRoute() {
   useScrollToTop(lat, lng)
 
   return (
-    <>
+    <TerminationReleaseProvider>
       <div className="flex h-[calc(100dvh-57px)] flex-col md:h-[calc(100dvh-65px)]">
         <MapHeader page={PAGE} />
         <div key={`${lat}-${lng}-${zoom}`} className="relative w-full flex-1 min-h-0">
@@ -30,9 +31,10 @@ function GrantsRoute() {
           <MapFocusOverlay />
         </div>
       </div>
+      <TerminationReleaseDetails />
       <MapZipSearch mapRoute="/grants" />
       <MapAttribution />
       <TerminationsTable />
-    </>
+    </TerminationReleaseProvider>
   )
 }

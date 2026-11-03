@@ -1,25 +1,24 @@
 import type { AgencyFilter, LossGeoLevel, MapGeoConfig } from './map-shared'
 
-const DOMAIN = 'https://data.scienceimpacts.org'
-const RELEASE = `${DOMAIN}/terminations/releases/2026-10-23-s01-reviewed-20261102-v2`
+import { artifactUrl, type TerminationRelease } from './termination-release'
 
-export const GRANTS_GEO_LEVELS: Record<LossGeoLevel, MapGeoConfig> = {
+const GEO_LEVEL_DEFAULTS: Record<LossGeoLevel, MapGeoConfig> = {
   counties: {
-    tileUrl: `${RELEASE}/tiles/counties/{z}/{x}/{y}.pbf`,
+    tileUrl: '',
     maxZoom: 7,
     uniqueIdProperty: 'FIPS',
     label: 'Counties',
     domain: [0, 25_000_000],
   },
   districts: {
-    tileUrl: `${RELEASE}/tiles/districts/{z}/{x}/{y}.pbf`,
+    tileUrl: '',
     maxZoom: 7,
     uniqueIdProperty: 'GEOID',
     label: 'Districts',
     domain: [250_000, 50_000_000],
   },
   states: {
-    tileUrl: `${RELEASE}/tiles/states/{z}/{x}/{y}.pbf`,
+    tileUrl: '',
     maxZoom: 7,
     uniqueIdProperty: 'state',
     label: 'States',
@@ -72,4 +71,11 @@ export const GRANTS_AGENCY_DOMAINS: Record<AgencyFilter, Record<LossGeoLevel, [n
     districts: [50_000, 10_000_000],
     states:    [10_000, 500_000_000],
   },
+}
+
+export function grantsGeoLevels(release: TerminationRelease): Record<LossGeoLevel, MapGeoConfig> {
+  return Object.fromEntries(Object.entries(GEO_LEVEL_DEFAULTS).map(([level, config]) => {
+    const tile = release.manifest.artifacts.tiles[level as LossGeoLevel]
+    return [level, { ...config, tileUrl: artifactUrl(release.baseUrl, tile.path), maxZoom: tile.max_zoom, uniqueIdProperty: tile.id_property }]
+  })) as Record<LossGeoLevel, MapGeoConfig>
 }

@@ -1,4 +1,3 @@
-import GRANT_LOSS_DATA from './terminated_grants.json'
 import POINT_POLICY from '@/lib/termination-point-policy.json'
 
 export interface GrantTermination {
@@ -14,8 +13,6 @@ export interface GrantTermination {
   nsf_loss: number
   nsf_num: number
 }
-
-export const GRANT_LOSSES: GrantTermination[] = GRANT_LOSS_DATA.GRANT_LOSSES as unknown as GrantTermination[]
 
 export function expandGrants(grants: GrantTermination[], agency: 'nih' | 'nsf' | 'both'): GrantTermination[] {
   return grants.flatMap((grant) => {
