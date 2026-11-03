@@ -1,0 +1,3 @@
+# Matches the locally verified release-tooling environment.
+pandas==2.2.3
+geopandas==1.1.0
