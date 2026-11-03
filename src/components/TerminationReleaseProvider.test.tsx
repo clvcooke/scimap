@@ -18,11 +18,19 @@ it('shares a fixed session selection across consumers and route remounts, discar
     }),
   )
   const first = render(
-    <TerminationReleaseProvider>
+    <TerminationReleaseProvider
+      fallback={(status) => (
+        <>
+          <h1>Grant Terminations Map</h1>
+          {status}
+        </>
+      )}
+    >
       <Consumer />
     </TerminationReleaseProvider>,
   )
   expect(screen.getByRole('status')).toHaveTextContent('Loading')
+  expect(screen.getByRole('heading', { name: 'Grant Terminations Map' })).toBeInTheDocument()
   first.unmount()
   render(
     <TerminationReleaseProvider>

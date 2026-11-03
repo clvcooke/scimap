@@ -14,7 +14,13 @@ function selectedRelease() {
   })
   return sessionRelease
 }
-export function TerminationReleaseProvider({ children }: { children: ReactNode }) {
+export function TerminationReleaseProvider({
+  children,
+  fallback = (status) => status,
+}: {
+  children: ReactNode
+  fallback?: (status: ReactNode) => ReactNode
+}) {
   const [release, setRelease] = useState<TerminationRelease | null>(null)
   const [error, setError] = useState(false)
   useEffect(() => {
@@ -32,21 +38,21 @@ export function TerminationReleaseProvider({ children }: { children: ReactNode }
     }
   }, [])
   if (error)
-    return (
+    return fallback(
       <div role="alert" className="p-6">
         Termination data could not be loaded. Please reload to try again.
-      </div>
+      </div>,
     )
   if (!release)
-    return (
+    return fallback(
       <div role="status" className="p-6">
         Loading termination data…
-      </div>
+      </div>,
     )
   return <ReleaseContext.Provider value={release}>{children}</ReleaseContext.Provider>
 }
 export function TerminationReleaseDetails() {
-  const { manifest, downloads } = useTerminationRelease()
+  const { manifest, manifestUrl, downloads } = useTerminationRelease()
   return (
     <aside
       className="bg-gray-50 px-4 py-3 text-sm text-gray-700"
@@ -57,7 +63,7 @@ export function TerminationReleaseDetails() {
         <time>{manifest.as_of}</time>
       </p>
       <p>
-        Source events:{' '}
+        Latest recorded grant event:{' '}
         {Object.entries(manifest.sources.freshness)
           .map(
             ([name, source]) =>
@@ -65,11 +71,19 @@ export function TerminationReleaseDetails() {
           )
           .join(' · ')}
       </p>
-      {manifest.release_validation.warnings.map((warning) => (
-        <p key={warning}>{warning}</p>
-      ))}
+      {manifest.release_validation.warnings.some((warning) =>
+        /\bGuam\b|\bstates GU\b/.test(warning),
+      ) && <p>Guam appears in tables and downloads but not on the state or county maps.</p>}
+      {manifest.release_validation.warnings.some(
+        (warning) => !/\bGuam\b|\bstates GU\b/.test(warning),
+      ) && <p>Some areas have limited map coverage. See the release information for details.</p>}
       <details>
         <summary className="cursor-pointer">Scientific CSV downloads</summary>
+        <p>
+          <a className="underline" href={manifestUrl}>
+            Release information
+          </a>
+        </p>
         <ul>
           {downloads.map(({ name, url }) => (
             <li key={name}>
