@@ -1,8 +1,9 @@
+import { useTerminationRelease } from '@/lib/termination-release-context'
 import { useState, useMemo, useCallback } from 'react'
 import type { PickingInfo, Position } from '@deck.gl/core'
 import { formatCurrency, formatNumber } from '@/lib/constants'
 import {
-  GRANTS_GEO_LEVELS,
+  grantsGeoLevels,
   GRANTS_COLOR_PROPERTIES,
   GRANTS_JOB_PROPERTIES,
   GRANTS_CURRENT_ECON_PROPERTIES,
@@ -18,7 +19,7 @@ import {
   type TileProps,
 } from '@/lib/map-shared'
 import IconClusterLayer from '@/layers/icon-cluster-layer'
-import { GRANT_LOSSES, expandGrants, type GrantTermination } from '@/data/grant-losses'
+import { expandGrants, type GrantTermination } from '@/data/grant-losses'
 import ChoroplethMap, { type MapAboutContent } from './ChoroplethMap'
 import GrantsOverlay from './GrantsOverlay'
 import { Switch } from '@/components/ui/switch'
@@ -63,6 +64,9 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
   initialZoom?: number | undefined
   aboutContent?: MapAboutContent
 }) {
+  const release = useTerminationRelease()
+  const GRANT_LOSSES = release.grants
+  const geoLevels = useMemo(() => grantsGeoLevels(release), [release])
   const [overlayGrants, setOverlayGrants] = useState<GrantTermination[]>([])
   const [showOverlay, setShowOverlay] = useState(false)
   const [showBubbles, setShowBubbles] = useState(true)
@@ -80,19 +84,19 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
         ? GRANT_LOSSES.filter((g) => g.nih_loss > 0)
         : GRANT_LOSSES.filter((g) => g.nsf_loss > 0)
     return expandGrants(filtered, agencyFilter)
-  }, [agencyFilter])
+  }, [agencyFilter, GRANT_LOSSES])
 
   const clusterLayer = useMemo(
     () =>
       new IconClusterLayer<GrantTermination>({
         data: filteredGrants,
         getPosition: getGrantPosition,
-        id: 'icon-cluster',
+        id: `icon-cluster-${release.manifest.release_id}`,
         sizeScale: 40,
         pickable: true,
         visible: showBubbles,
       }),
-    [showBubbles, filteredGrants],
+    [showBubbles, filteredGrants, release.manifest.release_id],
   )
 
   const onClick = useCallback(
@@ -111,12 +115,12 @@ export default function GrantsMap({ initialLat, initialLng, initialZoom, aboutCo
 
   return (
     <ChoroplethMap
-      geoLevels={GRANTS_GEO_LEVELS}
+      geoLevels={geoLevels}
       defaultLevel="counties"
       colorProperty={colorProperty}
       colorScaleDomain={colorScaleDomain}
       colorLUT={LUT_OR_RD}
-      layerId="grants-mvt"
+      layerId={`grants-mvt-${release.manifest.release_id}`}
       mapType="grants"
       renderTooltip={renderTooltip}
       initialLat={initialLat}

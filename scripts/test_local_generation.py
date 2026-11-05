@@ -19,6 +19,98 @@ def load_script(name):
 terminations = load_script("terminations.py")
 tables = load_script("generate_termination_table_data.py")
 builder = load_script("build_termination_release.py")
+validator = load_script("validate_termination_release.py")
+publisher = load_script("publish_termination_release.py")
+
+
+def publish_fixture(directory):
+    root = Path(directory, "release")
+    (root / "tiles" / "states" / "0" / "0").mkdir(parents=True)
+    (root / "tiles" / "states" / "0" / "0" / "0.pbf").write_bytes(b"tile")
+    (root / "tables").mkdir()
+    (root / "tables" / "states.json").write_text("{}")
+    (root / "manifest.json").write_text("{}")
+    manifest = {
+        "release_id": "candidate-1",
+        "artifacts": {
+            "tiles": {"states": {}},
+            "tables": {"states": {"path": "tables/states.json"}},
+            "institutions": {"path": "tables/states.json"},
+            "state_totals": {"path": "tables/states.json"},
+            "inputs": {"scientific_run": None},
+            "downloads": {},
+        },
+    }
+    args = SimpleNamespace(
+        release=root,
+        remote="r2:bucket",
+        prefix="terminations/releases",
+        public_base="https://data.example.org",
+        record=Path(directory, "record.json"),
+        transfers=4,
+        dry_run=False,
+    )
+    return manifest, args
+
+
+def encode_varint(value):
+    out = bytearray()
+    while True:
+        byte, value = value & 0x7F, value >> 7
+        out.append(byte | (0x80 if value else 0))
+        if not value:
+            return bytes(out)
+
+
+def encode_field(number, payload):
+    return encode_varint(number << 3 | 2) + encode_varint(len(payload)) + payload
+
+
+def encode_tile(layer, features):
+    """Tiny MVT encoder for tests: string and double properties, no geometry."""
+    import struct
+    keys, values, body = [], [], b""
+    for properties in features:
+        tags = []
+        for key, value in properties.items():
+            if key not in keys:
+                keys.append(key)
+            encoded = encode_field(1, value.encode()) if isinstance(value, str) else (
+                encode_varint(3 << 3 | 1) + struct.pack("<d", value)
+            )
+            if encoded not in values:
+                values.append(encoded)
+            tags += [keys.index(key), values.index(encoded)]
+        body += encode_field(2, encode_field(2, b"".join(encode_varint(tag) for tag in tags)))
+    body = encode_field(1, layer.encode()) + body
+    body += b"".join(encode_field(3, key.encode()) for key in keys)
+    body += b"".join(encode_field(4, value) for value in values)
+    return encode_field(3, body)
+
+
+def tile_release(directory, table_rows, tile_features, level="counties"):
+    root = Path(directory)
+    (root / "tiles" / level / "0" / "0").mkdir(parents=True)
+    (root / "tiles" / level / "0" / "0" / "0.pbf").write_bytes(encode_tile(f"terminations_{level}", tile_features))
+    (root / "tables").mkdir()
+    (root / "tables" / f"{level}.json").write_text(json.dumps(table_rows))
+    return root, {
+        "metrics": {"current": {"tile_property": "terminated_current_econ_loss"}},
+        "artifacts": {
+            "tiles": {level: {"layer": f"terminations_{level}", "id_property": "FIPS"}},
+            "tables": {level: {"path": f"tables/{level}.json"}},
+        },
+    }
+
+
+def table_row(identifier, value, name="County"):
+    return {"id": identifier, "name": name, "total_econ_loss": value * 2,
+            "total_funding_loss": value, "total_job_loss": value / 1000}
+
+
+def tile_feature(identifier, value):
+    return {"FIPS": identifier, "terminated_current_econ_loss": value * 2,
+            "terminated_current_loss": value, "terminated_current_job_loss": value / 1000}
 
 
 class LocalGenerationSafetyTest(unittest.TestCase):
@@ -96,6 +188,7 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             archive = Path(directory, "reference.zip")
             with zipfile.ZipFile(archive, "w") as zipped:
                 zipped.writestr("reference/value.txt", "ok")
+            Path(directory, "reference", "reference").mkdir(parents=True)
             with (
                 patch.object(terminations, "GEO_CACHE_DIR", directory),
                 patch.object(terminations, "R2_FILES", [archive.name]),
@@ -143,11 +236,471 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             ):
                 terminations.generate_terminated_grants("2026-09-25")
 
+    def test_release_validator_rejects_checksum_mismatch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory, "value.json")
+            path.write_text("{}")
+            with self.assertRaisesRegex(RuntimeError, "Checksum mismatch"):
+                validator.validate_file(
+                    Path(directory),
+                    {"path": "value.json", "bytes": 2, "sha256": "0" * 64},
+                )
+
     def test_release_id_rejects_paths(self):
         for release_id in (".", "..", "-bad", "../bad"):
             args = SimpleNamespace(release_id=release_id, week="2026-09-25")
             with self.subTest(release_id=release_id), self.assertRaises(SystemExit):
                 builder.build_release(args)
+
+    def test_publisher_uploads_manifest_last_after_public_verification(self):
+        calls = []
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "destination_is_empty", return_value=True),
+                patch.object(publisher, "rclone", side_effect=lambda *a, **_: calls.append(a)),
+                patch.object(
+                    publisher,
+                    "verify_public",
+                    side_effect=lambda root, url, paths: calls.append(("public", tuple(paths))) or [],
+                ),
+            ):
+                record = publisher.publish_release(args)
+
+        self.assertEqual(record["destination"], "r2:bucket/terminations/releases/candidate-1")
+        self.assertEqual(record["status"], "published")
+        self.assertEqual([call[0] for call in calls], ["copy", "check", "public", "copyto", "public"])
+        for bulk in calls[:2]:
+            self.assertIn("--exclude", bulk)
+            self.assertEqual(bulk[bulk.index("--exclude") + 1], "/manifest.json")
+        self.assertNotIn("manifest.json", calls[2][1])
+        self.assertIn("tiles/states/0/0/0.pbf", calls[2][1])
+        self.assertEqual(calls[3][2], "r2:bucket/terminations/releases/candidate-1/manifest.json")
+        self.assertEqual(calls[4], ("public", ("manifest.json",)))
+
+    def test_publisher_records_refused_non_empty_destination(self):
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "destination_is_empty", return_value=False),
+                patch.object(publisher, "rclone") as rclone,
+                self.assertRaisesRegex(SystemExit, "non-empty"),
+            ):
+                publisher.publish_release(args)
+            record = json.loads(args.record.read_text())
+        rclone.assert_not_called()
+        self.assertEqual(record["status"], "refused")
+        self.assertIn("non-empty", record["error"])
+
+    def test_failed_manifest_check_records_uploaded_manifest(self):
+        def fake_public(root, url, paths):
+            if paths == ["manifest.json"]:
+                raise RuntimeError("Public copy does not match local release: manifest.json")
+            return []
+
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "destination_is_empty", return_value=True),
+                patch.object(publisher, "rclone"),
+                patch.object(publisher, "verify_public", side_effect=fake_public),
+                self.assertRaises(RuntimeError),
+            ):
+                publisher.publish_release(args)
+            record = json.loads(args.record.read_text())
+        self.assertEqual(record["status"], "manifest_uploaded")
+
+    def test_interrupted_upload_is_recorded_without_manifest(self):
+        calls = []
+        recorded = []
+
+        def fake_rclone(*command, **_):
+            calls.append(command[0])
+            recorded.append(json.loads(args.record.read_text())["status"])
+            if command[0] == "copy":
+                raise KeyboardInterrupt
+
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "destination_is_empty", return_value=True),
+                patch.object(publisher, "rclone", side_effect=fake_rclone),
+                self.assertRaises(KeyboardInterrupt),
+            ):
+                publisher.publish_release(args)
+            record = json.loads(args.record.read_text())
+
+        self.assertEqual(calls, ["copy"])
+        self.assertEqual(recorded, ["uploading"])
+        self.assertEqual(record["status"], "interrupted")
+        self.assertEqual(record["interrupted_during"], "uploading")
+
+    def test_release_validator_rejects_undeclared_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "tiles" / "states").mkdir(parents=True)
+            (root / "tiles" / "states" / "0.pbf").write_bytes(b"tile")
+            for name in ("manifest.json", "institutions.json", "notes.txt"):
+                (root / name).write_text("{}")
+            artifacts = {
+                "tiles": {"states": {}},
+                "tables": {},
+                "downloads": {},
+                "inputs": {"scientific_run": None},
+                "institutions": {"path": "institutions.json"},
+                "state_totals": {"path": "institutions.json"},
+            }
+            with self.assertRaisesRegex(RuntimeError, "notes.txt"):
+                validator.reject_undeclared_files(root, artifacts)
+            (root / "notes.txt").unlink()
+            validator.reject_undeclared_files(root, artifacts)
+
+    def test_failed_verification_leaves_manifest_unpublished(self):
+        calls = []
+
+        def fake_rclone(*command, **_):
+            calls.append(command[0])
+            if command[0] == "check":
+                raise RuntimeError("rclone check failed")
+
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "destination_is_empty", return_value=True),
+                patch.object(publisher, "rclone", side_effect=fake_rclone),
+                self.assertRaisesRegex(RuntimeError, "check failed"),
+            ):
+                publisher.publish_release(args)
+            record = json.loads(args.record.read_text())
+
+        self.assertNotIn("copyto", calls)
+        self.assertEqual(record["status"], "uploaded")
+        self.assertIn("check failed", record["error"])
+
+
+    def test_tile_reader_round_trips_properties(self):
+        layers = validator.read_tile(encode_tile("terminations_counties", [tile_feature("6001", 10.5)]))
+        self.assertEqual(layers["terminations_counties"][0]["FIPS"], "6001")
+        self.assertEqual(layers["terminations_counties"][0]["terminated_current_loss"], 10.5)
+
+    def test_tiles_match_tables_including_territory_aggregates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(
+                directory,
+                [table_row("06001", 10), table_row("72127", 3), table_row("72013", 4)],
+                [tile_feature("6001", 10), tile_feature("72000", 7)],
+            )
+            self.assertEqual(validator.validate_tile_content(root, manifest), [])
+
+    def test_table_row_missing_from_tiles_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("06001", 10), table_row("06003", 2)], [tile_feature("6001", 10)])
+            with self.assertRaisesRegex(RuntimeError, "06003"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_tile_value_must_match_table(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("06001", 10)], [tile_feature("6001", 11)])
+            with self.assertRaisesRegex(RuntimeError, "06001"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_territory_aggregate_must_reconcile(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("72127", 3), table_row("72013", 4)], [tile_feature("72000", 9)])
+            with self.assertRaisesRegex(RuntimeError, "Territory aggregate 72000"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_territory_missing_from_tiles_is_a_warning(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("06001", 10), table_row("66010", 1, "Guam")], [tile_feature("6001", 10)])
+            warnings = validator.validate_tile_content(root, manifest)
+        self.assertEqual(len(warnings), 1)
+        self.assertIn("66010 (Guam)", warnings[0])
+
+    def test_negative_tile_value_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("06001", -1)], [tile_feature("6001", -1)])
+            with self.assertRaisesRegex(RuntimeError, "invalid"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_every_tile_copy_must_match(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, manifest = tile_release(directory, [table_row("06001", 10)], [tile_feature("6001", 10)])
+            (root / "tiles" / "counties" / "1" / "0").mkdir(parents=True)
+            (root / "tiles" / "counties" / "1" / "0" / "0.pbf").write_bytes(
+                encode_tile("terminations_counties", [tile_feature("6001", 11)])
+            )
+            with self.assertRaisesRegex(RuntimeError, "different values"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_tile_feature_with_loss_but_no_table_row_fails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            features = [tile_feature("6001", 10), tile_feature("6003", 5), tile_feature("6005", 0)]
+            root, manifest = tile_release(directory, [table_row("06001", 10)], features)
+            with self.assertRaisesRegex(RuntimeError, "no table row: 06003"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_tile_totals_must_equal_nih_plus_nsf(self):
+        with tempfile.TemporaryDirectory() as directory:
+            feature = {**tile_feature("6001", 10), "nih_current_loss": 4.0, "nsf_current_loss": 5.0,
+                       "terminated_loss": 20.0}
+            root, manifest = tile_release(directory, [table_row("06001", 10)], [feature])
+            with self.assertRaisesRegex(RuntimeError, "NIH \\+ NSF"):
+                validator.validate_tile_content(root, manifest)
+
+    def test_current_loss_cannot_exceed_overall(self):
+        with tempfile.TemporaryDirectory() as directory:
+            feature = {**tile_feature("6001", 10), "terminated_loss": 5.0}
+            root, manifest = tile_release(directory, [table_row("06001", 10)], [feature])
+            with self.assertRaisesRegex(RuntimeError, "exceeds"):
+                validator.validate_tile_content(root, manifest)
+
+class ValidatedRunTest(unittest.TestCase):
+    def make_run(self, directory, **changes):
+        run = Path(directory)
+        (run / "terminations_state.csv").write_text("state,week\nCA,2026-10-23\n")
+        report = {
+            "status": "passed",
+            "as_of": "2026-10-26",
+            "validation": {"mode": "enforce", "status": "passed", "warnings": [], "checks": []},
+            "outputs": {"terminations_state.csv": {
+                "bytes": (run / "terminations_state.csv").stat().st_size,
+                "sha256": builder.sha256_file(run / "terminations_state.csv"),
+            }},
+        }
+        for key, value in changes.items():
+            report[key] = value
+        (run / "run-report.json").write_text(json.dumps(report))
+        return run
+
+    def test_week_is_derived_from_as_of(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report, week = builder.load_validated_run(self.make_run(directory), None)
+            self.assertEqual(week, "2026-10-23")
+
+    def test_reporting_weeks_start_on_friday(self):
+        from datetime import date
+        self.assertEqual(builder.reporting_week(date(2026, 10, 23)), date(2026, 10, 23))
+        self.assertEqual(builder.reporting_week(date(2026, 10, 29)), date(2026, 10, 23))
+
+    def test_rejects_week_mismatch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(SystemExit, "does not match"):
+                builder.load_validated_run(self.make_run(directory), "2026-10-16")
+
+    def test_rejects_report_mode_validation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = self.make_run(directory, validation={"mode": "report", "status": "failed", "warnings": [], "checks": []})
+            with self.assertRaisesRegex(SystemExit, "not enforced and passed"):
+                builder.load_validated_run(run, None)
+
+    def test_rejects_output_changed_after_validation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = self.make_run(directory)
+            (run / "terminations_state.csv").write_text("state,week\nCA,2026-10-16\n")
+            with self.assertRaisesRegex(SystemExit, "changed after validation"):
+                builder.load_validated_run(run, None)
+
+    def test_rejects_unvalidated_extra_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = self.make_run(directory)
+            (run / "terminations_county.csv").write_text("FIPS,week\n")
+            with self.assertRaisesRegex(SystemExit, "not covered"):
+                builder.load_validated_run(run, None)
+
+    def test_rejects_missing_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(SystemExit, "Missing run report"):
+                builder.load_validated_run(Path(directory), None)
+
+    def test_rejects_report_claiming_pass_with_errors(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run = self.make_run(directory, validation={"mode": "enforce", "status": "passed", "errors": ["duplicate_grants"]})
+            with self.assertRaisesRegex(SystemExit, "not enforced and passed"):
+                builder.load_validated_run(run, None)
+
+    def test_publisher_rechecks_scientific_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = self.make_run(directory)
+            report = json.loads((root / "run-report.json").read_text())
+            report["code"] = {"revision": "abc", "dirty": False}
+            (root / "run-report.json").write_text(json.dumps(report))
+            manifest = {
+                "as_of": report["as_of"], "code": {"SciMap_Maps": report["code"]},
+                "validation": {"status": "passed", "warnings": []},
+                "artifacts": {"inputs": {"scientific_run": {
+                    "path": "run-report.json", "sha256": builder.sha256_file(root / "run-report.json")}},
+                    "downloads": {"terminations_state.csv": dict(report["outputs"]["terminations_state.csv"])}}
+            }
+            validator.validate_scientific_provenance(root, manifest)
+            manifest["artifacts"]["downloads"]["terminations_state.csv"]["sha256"] = "changed"
+            with self.assertRaisesRegex(RuntimeError, "does not match validated output"):
+                validator.validate_scientific_provenance(root, manifest)
+
+    def test_prototype_release_is_never_published(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "manifest.json").write_text(json.dumps({"status": "candidate", "approval_candidate": False}))
+            with self.assertRaisesRegex(RuntimeError, "validated scientific run"):
+                validator.validate_release(root)
+
+
+
+class ReviewRegressionTests(unittest.TestCase):
+    def test_generator_and_manifest_share_the_frontend_policy(self):
+        policy = json.loads((Path(__file__).parent.parent / "src/lib/termination-point-policy.json").read_text())
+        self.assertEqual(terminations.POINT_DOLLAR_ZERO_TOLERANCE, policy["minimum_current_loss_dollars"])
+        self.assertEqual(builder.POINT_POLICY, policy)
+
+    def point_rows(self, directory, loss, count, combined_count=None):
+        row = {"week": "2026-10-23", "org_name": "Example", "org_city": "CITY", "org_state": "MD",
+               "lat": 1, "lon": 2, "current_loss.combined": loss,
+               "current_loss.nih": loss, "current_loss.nsf": 0,
+               "current_grant_loss.nih": count, "current_grant_loss.nsf": 0,
+               "current_grant_loss.combined": count if combined_count is None else combined_count}
+        terminations.pd.DataFrame([row]).to_csv(Path(directory) / "terminations_org_combined.csv", index=False)
+        with patch.object(terminations, "COMBINED_DIR", directory), patch.object(terminations, "JSON_OUTPUT_DIR", directory):
+            terminations.generate_terminated_grants("2026-10-23")
+        return json.loads((Path(directory) / "terminated_grants.json").read_text())["GRANT_LOSSES"]
+
+    def test_floating_point_residue_never_creates_a_marker(self):
+        for loss in (2.3283064365386963e-10, 0.0049, 0, -1e-10):
+            with self.subTest(loss=loss), tempfile.TemporaryDirectory() as directory:
+                self.assertEqual(self.point_rows(directory, loss, 0), [])
+
+    def test_real_cent_loss_preserves_the_scientific_grant_count(self):
+        with tempfile.TemporaryDirectory() as directory:
+            points = self.point_rows(directory, 0.01, 2)
+            self.assertEqual(points[0]["terminated_num"], 2)
+            self.assertEqual(points[0]["terminated_loss"], 0.01)
+
+    def test_material_loss_without_grants_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(RuntimeError, "inconsistent grant counts"):
+            self.point_rows(directory, 10, 0)
+
+    def test_agency_counts_must_reconcile_before_points_are_written(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaisesRegex(RuntimeError, "inconsistent grant counts"):
+                self.point_rows(directory, 10, 2, combined_count=1)
+            self.assertFalse((Path(directory) / "terminated_grants.json").exists())
+
+    def test_fractional_grants_are_rejected(self):
+        with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(RuntimeError, "Invalid current grant count"):
+            self.point_rows(directory, 10, 1.5)
+
+    def test_release_warnings_cannot_be_omitted_or_silenced(self):
+        warnings = ["Guam missing from map geometry"]
+        validator.validate_release_warnings({"release_validation": {"status": "passed", "warnings": warnings}}, warnings)
+        for manifest in ({}, {"release_validation": {"status": "passed", "warnings": []}}):
+            with self.subTest(manifest=manifest), self.assertRaisesRegex(RuntimeError, "warnings differ"):
+                validator.validate_release_warnings(manifest, warnings)
+
+    def test_release_warnings_are_stable_across_manifest_key_order(self):
+        manifest = {"release_validation": {"status": "passed", "warnings": ["county warning", "state warning"]}}
+        validator.validate_release_warnings(manifest, ["state warning", "county warning"])
+
+    def test_publisher_hashes_downloads_and_stops_on_corruption_before_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            (args.release / "downloads").mkdir()
+            (args.release / "downloads" / "county.csv").write_text("county,loss\nExample,10\n")
+            manifest["artifacts"]["downloads"]["county.csv"] = {"path": "downloads/county.csv"}
+            self.assertIn("downloads/county.csv", publisher.sample_files(args.release, manifest))
+            calls = []
+            def corrupted(url):
+                return "wrong" if "downloads/county.csv" in url else publisher.validator.sha256(args.release / "tables/states.json")
+            with (patch.object(publisher.validator, "validate_release", return_value=manifest),
+                  patch.object(publisher, "destination_is_empty", return_value=True),
+                  patch.object(publisher, "rclone", side_effect=lambda *a, **kw: calls.append(a)),
+                  patch.object(publisher, "fetch_sha256", side_effect=corrupted),
+                  self.assertRaisesRegex(RuntimeError, "downloads/county.csv")):
+                publisher.publish_release(args)
+            self.assertNotIn("copyto", [c[0] for c in calls])
+
+
+selector = load_script("select_termination_release.py")
+
+
+class SelectionTests(unittest.TestCase):
+    def fixture(self, tmp):
+        root = Path(tmp)
+        record = {"status": "published", "release_id": "verified-a", "public_url": selector.PUBLIC_BASE + "/terminations/releases/verified-a", "manifest_sha256": "a" * 64}
+        path = root / "upload.json"
+        path.write_text(json.dumps(record))
+        args = selector.parse_args(['--upload-record', str(path), '--pointer', 'latest-validated'])
+        selection = {"schema_version": 1, "release_id": "verified-a", "as_of": "2026-10-26", "manifest_url": record['public_url'] + '/manifest.json', "manifest_sha256": 'a' * 64}
+        return args, record, selection
+
+    def test_unpublished_and_corrupt_releases_cannot_be_selected(self):
+        with self.assertRaisesRegex(ValueError, 'completed'):
+            selector.prepare({'status': 'uploading'})
+        with tempfile.TemporaryDirectory() as tmp:
+            _, record, _ = self.fixture(tmp)
+            with patch.object(selector, 'fetch', return_value=b'{}'), self.assertRaisesRegex(ValueError, 'checksum'):
+                selector.prepare(record)
+
+    def test_dry_run_and_backwards_latest_do_not_write(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, _, selection = self.fixture(tmp)
+            with patch.object(selector, 'prepare', return_value=selection), patch.object(selector, 'remote', return_value='') as remote:
+                self.assertEqual(selector.select(args)['status'], 'prepared')
+                self.assertNotIn('copyto', [c.args[0] for c in remote.call_args_list])
+            with patch.object(selector, 'prepare', return_value=selection), patch.object(selector, 'remote', side_effect=['latest-validated.json', '{"as_of":"2026-10-27"}']), self.assertRaisesRegex(ValueError, 'backwards'):
+                selector.select(args)
+
+    def test_website_requires_recorded_authorization_and_historical_skips_latest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, _, selection = self.fixture(tmp)
+            with patch.object(selector, 'prepare', return_value=selection), patch.object(selector, 'remote') as remote:
+                args.pointer = 'website-release'
+                with self.assertRaisesRegex(ValueError, 'authorization'):
+                    selector.select(args)
+                remote.assert_not_called()
+                args.pointer, args.historical = 'latest-validated', True
+                with self.assertRaisesRegex(ValueError, 'Historical'):
+                    selector.select(args)
+
+    def test_uncertain_write_is_recorded_and_never_retried(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, _, selection = self.fixture(tmp)
+            args.apply, args.record = True, str(Path(tmp) / 'audit.json')
+            calls = []
+            def remote(*command):
+                calls.append(command)
+                if command[0] == 'copyto' and command[2].endswith('latest-validated.json'):
+                    raise RuntimeError('timeout')
+                return ''
+            with patch.object(selector, 'prepare', return_value=selection), patch.object(selector, 'remote', side_effect=remote), self.assertRaisesRegex(RuntimeError, 'timeout'):
+                selector.select(args)
+            self.assertEqual(json.loads(Path(args.record).read_text())['status'], 'unconfirmed')
+            pointer_writes = [c for c in calls if c[0] == 'copyto' and c[2].endswith('latest-validated.json')]
+            self.assertEqual(len(pointer_writes), 1)
+
+    def test_success_archives_previous_then_writes_once_and_verifies(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args, _, selection = self.fixture(tmp)
+            args.apply, args.record = True, str(Path(tmp) / 'audit.json')
+            calls = []
+            stored = {}
+            def remote(*command):
+                calls.append(command)
+                if command[0] == 'lsf': return 'latest-validated.json'
+                if command[0] == 'cat': return json.dumps(stored.get('selection', {'as_of': '2026-10-20', 'release_id': 'previous'}))
+                if command[0] == 'copyto' and command[2].endswith('latest-validated.json'):
+                    stored['selection'] = json.loads(Path(command[1]).read_text())
+                return ''
+            with patch.object(selector, 'prepare', return_value=selection), patch.object(selector, 'remote', side_effect=remote), patch.object(selector, 'fetch', side_effect=lambda url: json.dumps(stored['selection']).encode()):
+                result = selector.select(args)
+            self.assertEqual(result['status'], 'selected')
+            self.assertEqual(result['previous']['release_id'], 'previous')
+            writes = [c for c in calls if c[0] == 'copyto']
+            self.assertIn('/selections/', writes[0][2])
+            self.assertTrue(writes[1][2].endswith('latest-validated.json'))
 
 
 if __name__ == "__main__":

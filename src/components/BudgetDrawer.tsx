@@ -3,7 +3,7 @@ import { DrawerPreview as Drawer } from '@base-ui/react/drawer'
 import { Link } from '@tanstack/react-router'
 import { interpolateOrRd } from 'd3-scale-chromatic'
 import { X, FileText } from 'lucide-react'
-import { formatCurrency, formatNumber } from '@/lib/constants'
+import { formatCurrency, formatNumber, formatPopulation } from '@/lib/constants'
 import {
   getHouseRep,
   getSenatorsList,
@@ -163,7 +163,6 @@ function DrawerBody({
 }) {
   const stats = config.stats(props)
   const sections = config.sections(props)
-  const population = Number(props.pop_2024 ?? 0)
 
   return (
     <>
@@ -173,11 +172,9 @@ function DrawerBody({
           <Drawer.Title className="text-lg font-semibold text-gray-900">
             {locationLabel(props, geoLevel)}
           </Drawer.Title>
-          {population > 0 && (
-            <p className="mt-0.5 text-sm text-gray-500">
-              Population: {formatNumber(population)}
-            </p>
-          )}
+          <p className="mt-0.5 text-sm text-gray-500">
+            Population: {formatPopulation(props.pop_2024)}
+          </p>
           <PoliticianInfo props={props} geoLevel={geoLevel} />
         </div>
         <Drawer.Close className="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 active:bg-gray-200">

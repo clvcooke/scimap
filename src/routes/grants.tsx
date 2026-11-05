@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+import { TerminationReleaseProvider, TerminationReleaseDetails } from '@/components/TerminationReleaseProvider'
 import { createFileRoute } from '@tanstack/react-router'
 import GrantsMap from '../components/GrantsMap'
 import TerminationsTable from '../components/TerminationsTable'
@@ -17,22 +19,27 @@ export const Route = createFileRoute('/grants')({
 const PAGE = getPage('map-grants')
 const ABOUT: MapAboutContent = { heading: PAGE.attrs.heading, description: PAGE.attrs.description, dataSources: PAGE.attrs.data_sources }
 
+function GrantsMapShell({ children }: { children: ReactNode }) {
+  return <div className="flex h-[calc(100dvh-57px)] flex-col md:h-[calc(100dvh-65px)]">
+    <MapHeader page={PAGE} />
+    <div className="relative w-full flex-1 min-h-0">{children}</div>
+  </div>
+}
+
 function GrantsRoute() {
   const { lat, lng, zoom } = Route.useSearch()
   useScrollToTop(lat, lng)
 
   return (
-    <>
-      <div className="flex h-[calc(100dvh-57px)] flex-col md:h-[calc(100dvh-65px)]">
-        <MapHeader page={PAGE} />
-        <div key={`${lat}-${lng}-${zoom}`} className="relative w-full flex-1 min-h-0">
+    <TerminationReleaseProvider fallback={(status) => <GrantsMapShell>{status}</GrantsMapShell>}>
+      <GrantsMapShell key={`${lat}-${lng}-${zoom}`}>
           <GrantsMap initialLat={lat} initialLng={lng} initialZoom={zoom} aboutContent={ABOUT} />
           <MapFocusOverlay />
-        </div>
-      </div>
+      </GrantsMapShell>
+      <TerminationReleaseDetails />
       <MapZipSearch mapRoute="/grants" />
       <MapAttribution />
       <TerminationsTable />
-    </>
+    </TerminationReleaseProvider>
   )
 }

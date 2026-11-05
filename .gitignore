@@ -25,3 +25,7 @@ outputs
 *.sw?
 test-results
 data
+
+# Python bytecode
+__pycache__/
+*.pyc
