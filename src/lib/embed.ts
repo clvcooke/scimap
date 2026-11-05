@@ -17,6 +17,6 @@ export function buildEmbed(map: EmbedMap, requestedHeight: number, title: string
   const pageUrl = `https://scienceimpacts.org${selected.path}`
   const src = pageUrl + '?chromeless=true'
   const accessibleTitle = title.trim().slice(0, 160) || selected.title
-  const html = `<iframe\n  src="${src}"\n  title="${escapeAttribute(accessibleTitle)}"\n  width="100%"\n  height="${height}"\n  style="border: 0; display: block; width: 100%;"\n  loading="lazy"\n  referrerpolicy="strict-origin-when-cross-origin"\n></iframe>\n<p>Source: <a href="${pageUrl}" target="_blank" rel="noopener noreferrer">Science &amp; Community Impacts Mapping Project (SCIMaP)</a></p>`
+  const html = `<iframe\n  src="${src}"\n  title="${escapeAttribute(accessibleTitle)}"\n  width="100%"\n  height="${height}"\n  style="border: 0; display: block; width: 100%;"\n  loading="lazy"\n  referrerpolicy="strict-origin-when-cross-origin"\n></iframe>\n<p>Credit: Science and Community Impacts Mapping Project, <a href="https://scienceimpacts.org" target="_blank" rel="noopener noreferrer">scienceimpacts.org</a>. <a href="${pageUrl}" target="_blank" rel="noopener noreferrer">Open the full map on SCIMaP</a></p>`
   return { html, src, pageUrl, title: accessibleTitle, height }
 }

@@ -25,7 +25,10 @@ describe('partner embed code', () => {
       expect(result.html).toContain('width="100%"')
       expect(result.html).toContain('loading="lazy"')
       expect(result.html).toContain(`<a href="${result.pageUrl}"`)
-      expect(result.html).toContain('SCIMaP')
+      const markup = document.createElement('div')
+      markup.innerHTML = result.html
+      expect(markup.textContent).toContain('Credit: Science and Community Impacts Mapping Project, scienceimpacts.org')
+      expect(markup.querySelector('a[href="https://scienceimpacts.org"]')?.textContent).toBe('scienceimpacts.org')
     }
   })
 })
