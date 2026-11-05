@@ -18,3 +18,7 @@ jobs:
         node-version: '20.x'
     - run: npm ci
     - run: npm test
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - run: python -m unittest discover -s scripts -p test_generate_table_data.py

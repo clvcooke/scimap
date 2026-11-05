@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { ChevronUp, ChevronDown, Download } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { formatCurrency, formatNumber, countyDisplayName } from '@/lib/constants'
+import { formatCurrency, formatNumber, formatPopulation, countyDisplayName } from '@/lib/constants'
 import type { GeoLevel } from '@/lib/constants'
 import { typedKeys } from '@/lib/utils'
 import { toCsv, downloadCsv } from '@/lib/csv'
@@ -23,7 +23,7 @@ interface RegionRow {
   nsf_raw_funding: number
   total_econ_impact: number
   total_raw_funding: number
-  pop_2024: number
+  pop_2024: number | null
 }
 
 type SortKey = keyof Omit<RegionRow, 'id' | 'name'>
@@ -139,9 +139,10 @@ function firstInGroup(col: ColumnDef, idx: number): string {
   return ''
 }
 
-function formatValue(value: number, key: SortKey): string {
+function formatValue(value: number | null, key: SortKey): string {
+  if (key === 'pop_2024') return formatPopulation(value)
+  if (value === null) return 'Not available'
   if (key === 'nih_jobs') return formatNumber(value)
-  if (key === 'pop_2024') return formatNumber(value)
   return formatCurrency(value)
 }
 
@@ -159,7 +160,7 @@ function buildCsv(rows: RegionRow[], regionLabel: string): string {
   const dataRows = rows.map((row) => [
     row.id,
     row.name,
-    ...SORT_COLUMNS.map((col) => row[col.key]),
+    ...SORT_COLUMNS.map((col) => row[col.key] ?? ''),
   ])
   return toCsv([header, ...dataRows])
 }
@@ -176,7 +177,11 @@ export default function FundingTable() {
   const sortedRows = useMemo(() => {
     const sorted = [...config.data]
     sorted.sort((a, b) => {
-      const diff = a[sortKey] - b[sortKey]
+      const left = a[sortKey]
+      const right = b[sortKey]
+      if (left === null) return right === null ? 0 : 1
+      if (right === null) return -1
+      const diff = left - right
       return sortAsc ? diff : -diff
     })
     return sorted
@@ -202,6 +207,9 @@ export default function FundingTable() {
         <h2 className="mb-4 text-xl font-bold text-gray-900">
           Funding by Region
         </h2>
+        {config.data.some((row) => row.pop_2024 === null) && (
+          <p className="mb-4 text-sm text-gray-600">Population: Not available means the reference data has no population for that region; it does not mean zero residents.</p>
+        )}
 
         <div className="mb-4 flex items-center justify-between gap-2">
           <Tabs
