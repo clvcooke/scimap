@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
 import { Events, track } from '@/lib/analytics'
+import { useEmbedLayout } from '@/hooks/use-embed-layout'
 
 function navClickHandler(navLocation: 'header' | 'footer' | 'mobile' | 'maps_dropdown') {
   return (e: React.MouseEvent<HTMLElement>) => {
@@ -16,15 +17,6 @@ function navClickHandler(navLocation: 'header' | 'footer' | 'mobile' | 'maps_dro
   }
 }
 
-function useChromeless(): boolean {
-  // Subscribe to location changes so this re-evaluates on navigation.
-  // Read from window.location directly because TanStack Router parses
-  // search values as JSON (so `chromeless=true` becomes boolean `true`,
-  // and unvalidated params can be stripped).
-  useLocation()
-  if (typeof window === 'undefined') return false
-  return new URLSearchParams(window.location.search).get('chromeless') === 'true'
-}
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { getPage } from '@/lib/content'
 import ShareMenu from '@/components/ShareMenu'
@@ -287,17 +279,17 @@ function ScrollToTop() {
 }
 
 function RootLayout() {
-  const chromeless = useChromeless()
+  const { header, footer } = useEmbedLayout()
   return (
     <div className="flex min-h-screen w-full flex-col bg-white">
       <ScrollToTop />
-      {!chromeless && <Header />}
+      {header && <Header />}
 
       <main className="relative flex w-full flex-1 flex-col">
         <Outlet />
       </main>
 
-      <footer className="border-t border-brand-blue-light/30 bg-brand-blue-dark px-4 pb-4 pt-6 text-white md:px-6 md:pt-8">
+      {footer && <footer className="border-t border-brand-blue-light/30 bg-brand-blue-dark px-4 pb-4 pt-6 text-white md:px-6 md:pt-8">
         <div className="mx-auto flex max-w-7xl flex-col space-y-3">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
             <div className="space-y-4">
@@ -390,7 +382,12 @@ function RootLayout() {
             {FOOTER.org_line}
           </div>
         </div>
-      </footer>
+      </footer>}
+      {!header && !footer && (
+        <footer className="border-t border-gray-200 px-4 py-2 text-center text-xs text-gray-500">
+          Credit: Science and Community Impacts Mapping Project, <a href="https://scienceimpacts.org" target="_blank" rel="noopener noreferrer" className="underline">scienceimpacts.org</a>
+        </footer>
+      )}
     </div>
   )
 }

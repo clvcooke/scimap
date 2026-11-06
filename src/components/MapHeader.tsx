@@ -2,12 +2,14 @@ import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { LayoutGrid, ChevronDown } from 'lucide-react'
 import type { PageContent } from '@/lib/content'
+import { useEmbedLayout } from '@/hooks/use-embed-layout'
 
 export function MapHeader({ page }: { page: PageContent }) {
   const { title, blurb } = page.attrs
   const [expanded, setExpanded] = useState(false)
 
-  if (!title && !blurb) return null
+  const { mapHeader } = useEmbedLayout()
+  if (!mapHeader || (!title && !blurb)) return null
 
   return (
     <div className="w-full bg-brand-blue px-4 py-2 md:px-6 md:py-2.5">
