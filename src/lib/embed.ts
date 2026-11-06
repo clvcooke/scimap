@@ -11,12 +11,23 @@ export function embedMap(value: unknown): EmbedMap {
 export function escapeAttribute(value: string) {
   return value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!)
 }
-export function buildEmbed(map: EmbedMap, requestedHeight: number, title: string) {
+export function getEmbedLayout(search: string) {
+  const params = new URLSearchParams(search)
+  const chromeless = params.get('chromeless') === 'true'
+  return {
+    header: !chromeless || params.get('embedHeader') === 'true',
+    mapHeader: !chromeless || params.get('embedHeader') !== 'false',
+    footer: !chromeless || params.get('embedFooter') !== 'false',
+  }
+}
+export function buildEmbed(map: EmbedMap, requestedHeight: number, title: string, header = true, footer = true) {
   const selected = EMBED_MAPS[map]
   const height = Number.isFinite(requestedHeight) ? Math.min(1600, Math.max(400, Math.round(requestedHeight))) : 500
   const pageUrl = `https://scienceimpacts.org${selected.path}`
-  const src = pageUrl + '?chromeless=true'
+  const query = `?chromeless=true&embedHeader=${header}&embedFooter=${footer}`
+  const src = pageUrl + query
+  const previewSrc = selected.path + query
   const accessibleTitle = title.trim().slice(0, 160) || selected.title
-  const html = `<iframe\n  src="${src}"\n  title="${escapeAttribute(accessibleTitle)}"\n  width="100%"\n  height="${height}"\n  style="border: 0; display: block; width: 100%;"\n  loading="lazy"\n  referrerpolicy="strict-origin-when-cross-origin"\n></iframe>\n<p>Credit: Science and Community Impacts Mapping Project, <a href="https://scienceimpacts.org" target="_blank" rel="noopener noreferrer">scienceimpacts.org</a>. <a href="${pageUrl}" target="_blank" rel="noopener noreferrer">Open the full map on SCIMaP</a></p>`
-  return { html, src, pageUrl, title: accessibleTitle, height }
+  const html = `<iframe\n  src="${escapeAttribute(src)}"\n  title="${escapeAttribute(accessibleTitle)}"\n  width="100%"\n  height="${height}"\n  style="border: 0; display: block; width: 100%;"\n  loading="lazy"\n  referrerpolicy="strict-origin-when-cross-origin"\n></iframe>\n<p><a href="${pageUrl}" target="_blank" rel="noopener noreferrer">Open the full map on SCIMaP</a></p>`
+  return { html, src, previewSrc, pageUrl, title: accessibleTitle, height }
 }
