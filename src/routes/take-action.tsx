@@ -1,9 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useRef, type ReactNode } from 'react'
 import {
   Megaphone,
   Share2,
   MapPin,
+  CodeXml,
+  ArrowRight,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { getPage } from '@/lib/content'
@@ -183,6 +185,21 @@ function TakeActionPage() {
             ))}
           </ul>
         )}
+      </Section>
+
+      <Section bg="white">
+        <SectionHeading icon={CodeXml}>Bring SCIMaP to your website</SectionHeading>
+        <p className="mb-5 text-lg leading-relaxed text-gray-700">
+          Help your readers explore science funding and its local impact. Choose a map, customize its appearance, and copy the code for your website.
+        </p>
+        <Link
+          to="/embed"
+          search={{ map: 'grants' }}
+          className="inline-flex items-center gap-2 rounded-md bg-brand-blue px-5 py-3 text-base font-bold text-white transition-colors hover:bg-brand-blue-dark"
+        >
+          Embed a SCIMaP map
+          <ArrowRight className="size-4" aria-hidden="true" />
+        </Link>
       </Section>
     </div>
   )

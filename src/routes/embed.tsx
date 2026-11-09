@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { ArrowLeft } from 'lucide-react'
 import { buildEmbed, embedMap, EMBED_MAPS } from '@/lib/embed'
 import { Switch } from '@/components/ui/switch'
 
@@ -27,6 +28,10 @@ function EmbedTutorial() {
     }
   }
   return <article className="mx-auto w-full max-w-5xl px-4 py-10 md:px-6">
+    <Link to="/take-action" className="mb-4 inline-flex items-center gap-2 text-sm text-brand-blue hover:underline">
+      <ArrowLeft className="size-4" aria-hidden="true" />
+      Back to Take Action
+    </Link>
     <h1 className="text-3xl font-bold text-brand-blue">Embed a SCIMaP map</h1>
     <p className="mt-3 text-gray-700">Add an interactive map to your website with a responsive iframe. The map loads directly from SCIMaP and follows updates to the source page.</p>
     <section className="mt-8 rounded-xl border border-gray-200 bg-gray-50 p-5" aria-labelledby="configure-embed">

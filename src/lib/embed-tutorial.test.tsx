@@ -1,16 +1,17 @@
-import { afterEach, expect, it, vi } from 'vitest'
+import { afterEach, expect, it } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { Route } from '@/routes/embed'
+import { createMemoryHistory, createRouter, RouterProvider } from '@tanstack/react-router'
+import { routeTree } from '@/routeTree.gen'
 
-afterEach(() => {
-  cleanup()
-  vi.restoreAllMocks()
-})
+async function renderTutorial() {
+  const router = createRouter({ routeTree, history: createMemoryHistory({ initialEntries: ['/embed?map=grants'] }) })
+  await act(async () => { render(<RouterProvider router={router} />) })
+}
+
+afterEach(cleanup)
 
 it('updates generated HTML and the local preview for all header/footer combinations', async () => {
-  vi.spyOn(Route, 'useSearch').mockReturnValue({ map: 'grants' })
-  const Tutorial = Route.options.component!
-  await act(async () => { render(<Tutorial />) })
+  await renderTutorial()
   const header = await screen.findByRole('switch', { name: 'Include header' })
   const footer = screen.getByRole('switch', { name: 'Include footer' })
   const code = screen.getByRole('textbox', { name: 'Embed HTML' }) as HTMLTextAreaElement
@@ -31,9 +32,7 @@ it('updates generated HTML and the local preview for all header/footer combinati
 })
 
 it('allows clear/retype but rejects non-positive, fractional and unsafe heights', async () => {
-  vi.spyOn(Route, 'useSearch').mockReturnValue({ map: 'grants' })
-  const Tutorial = Route.options.component!
-  await act(async () => { render(<Tutorial />) })
+  await renderTutorial()
   const input = await screen.findByRole('spinbutton', { name: 'Height in pixels' }) as HTMLInputElement
   const code = screen.getByRole('textbox', { name: 'Embed HTML' }) as HTMLTextAreaElement
 
