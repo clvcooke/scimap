@@ -34,7 +34,7 @@ function EmbedTutorial() {
     </Link>
     <h1 className="text-3xl font-bold text-brand-blue">Embed a SCIMaP map</h1>
     <p className="mt-3 text-gray-700">Add an interactive map to your website with a responsive iframe. The map loads directly from SCIMaP and follows updates to the source page.</p>
-    <section className="mt-8 rounded-xl border border-gray-200 bg-gray-50 p-5" aria-labelledby="configure-embed">
+    <section className="mt-8" aria-labelledby="configure-embed">
       <h2 id="configure-embed" className="text-xl font-bold">1. Choose your map</h2>
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         <label className="flex min-w-0 flex-col gap-1 font-medium">Map
@@ -76,7 +76,7 @@ function EmbedTutorial() {
       <h2 id="preview-embed" className="text-xl font-bold">3. Preview and check your page</h2>
       <p className="mt-2 text-gray-700">Check your published page on desktop and a real iPhone or Android phone. Check that you can scroll past the map as well as interact with it. Confirm the map, geography controls, available tables and source link work. The preview uses this version of the site; copied HTML links to scienceimpacts.org. Your site may need to allow frames from scienceimpacts.org in its content security policy.</p>
       <button className="my-4 rounded-lg border border-brand-blue px-4 py-2 font-semibold text-brand-blue" onClick={() => setPreview(!preview)}>{preview ? 'Hide preview' : 'Load live preview'}</button>
-      {preview && <div className="overflow-hidden rounded-xl border"><iframe src={embed.previewSrc} title={embed.title} height={embed.height} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" className="block w-full border-0" /></div>}
+      {preview && <div className="overflow-hidden rounded-xl border"><iframe key={embed.previewSrc} src={embed.previewSrc} title={embed.title} height={embed.height} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" className="block w-full border-0" /></div>}
       <p className="mt-3 text-sm"><a className="underline text-brand-blue" href={embed.pageUrl} target="_blank" rel="noopener noreferrer">Open the full map on SCIMaP</a></p>
     </section>
   </article>

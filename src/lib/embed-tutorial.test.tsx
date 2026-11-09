@@ -16,8 +16,10 @@ it('updates generated HTML and the local preview for all header/footer combinati
   const footer = screen.getByRole('switch', { name: 'Include footer' })
   const code = screen.getByRole('textbox', { name: 'Embed HTML' }) as HTMLTextAreaElement
   fireEvent.click(screen.getByRole('button', { name: 'Load live preview' }))
+  let previousFrame = screen.getByTitle('SCIMaP grant terminations')
+  let previousSrc = previousFrame.getAttribute('src')
 
-  for (const [showHeader, showFooter] of [[true, true], [false, true], [false, false], [true, false]]) {
+  for (const [showHeader, showFooter] of [[true, true], [false, true], [false, false], [true, false], [true, true]]) {
     if (header.getAttribute('aria-checked') !== String(showHeader)) fireEvent.click(header)
     if (footer.getAttribute('aria-checked') !== String(showFooter)) fireEvent.click(footer)
     const markup = document.createElement('div')
@@ -26,7 +28,15 @@ it('updates generated HTML and the local preview for all header/footer combinati
     expect(url.origin).toBe('https://scienceimpacts.org')
     expect(url.searchParams.get('embedHeader')).toBe(String(showHeader))
     expect(url.searchParams.get('embedFooter')).toBe(String(showFooter))
-    expect(screen.getByTitle('SCIMaP grant terminations')).toHaveAttribute('src', url.pathname + url.search)
+    const frame = screen.getByTitle('SCIMaP grant terminations')
+    expect(frame).toHaveAttribute('src', url.pathname + url.search)
+    if (previousSrc !== frame.getAttribute('src')) {
+      expect(frame).not.toBe(previousFrame)
+      expect(previousFrame.isConnected).toBe(false)
+    }
+    expect(screen.getByRole('button', { name: 'Hide preview' })).toBeInTheDocument()
+    previousFrame = frame
+    previousSrc = frame.getAttribute('src')
     expect(code.value).not.toContain('Credit:')
   }
 })
