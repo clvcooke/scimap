@@ -158,6 +158,25 @@ getFillColor: (feature) => {
 }
 ```
 
+## Baseline table population corrections (T24)
+
+The table generator normalizes county FIPS to five digits and district GEOIDs to four digits on both sides of the population join. Population references use `scripts/reference/pop_2024_{states,counties,districts}.csv`. Empty/NA or unmatched populations are stored as JSON `null`, displayed as “Not available”, sorted after known populations, and exported as blank CSV cells—not as zero or `<10`.
+
+The population-only correction restores 319 county rows using `SciMap_Maps/data/county_pop.csv` (`pop_2024`) from commit `4684cf10143decacaab65e177dd623ed1d74afd0`, SHA-256 `773470640fee82d9a8a1b530b63f359c722b2ebfd3efa7436cb1304b839dfc7d`. All 2,825 previously populated county rows match that source exactly and remain unchanged. Funding, economic-impact, jobs, names, IDs and row order are unchanged at every level; no tile regeneration or upload is needed.
+
+Territory population additions are **pending reviewed source data from Elena**. The current references do not provide populations for the 22 territory county rows, five territory state rows, or five territory district rows present in the tables. Do not substitute another year's Census totals into `pop_2024` silently. The missing county rows comprise 17 Puerto Rico municipalities, two American Samoa areas, Guam, one Northern Mariana Islands area, and St. Thomas in the US Virgin Islands.
+
+To reproduce the population-only correction from a website checkout (without rebuilding scientific outputs):
+
+```bash
+python scripts/generate_table_data.py --population-only
+python -m unittest discover -s scripts -p test_generate_table_data.py
+```
+
+The reference CSVs are checked in under `scripts/reference/`; see its [provenance notes](reference/README.md). County populations come from the scientific county source above; state/district snapshots preserve existing website values, not newly reviewed estimates. The command has been run on the real tables and reference CSVs, and the test suite verifies an identical repeat run. The default full generator still needs matching funding CSVs that are not all present here; newer scientific baseline outputs have different funding totals and must not be used to reconstruct this population-only patch.
+
+Tooltips, desktop drawers and mobile cards use the same population formatter as the table and explicitly label missing values “Not available”. The table explanation is shown only for tabs with missing population data.
+
 ## Regenerating Tiles
 
 ```bash

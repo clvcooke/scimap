@@ -80,6 +80,11 @@ export function formatNumber(value: number): string {
   return COMPACT_NUM.format(value)
 }
 
+export function formatPopulation(value: number | string | null | undefined): string {
+  const population = Number(value)
+  return Number.isFinite(population) && population > 0 ? COMPACT_NUM.format(population) : 'Not available'
+}
+
 export function formatMetricValue(value: number, metric: Metric): string {
   return metric === 'jobs' ? formatNumber(value) : formatCurrency(value)
 }

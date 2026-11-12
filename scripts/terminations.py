@@ -11,15 +11,19 @@ import argparse
 import pandas as pd
 import geopandas as gpd
 import json
+import math
 import os
 import platform
 import re
 import shlex
+import shutil
 import subprocess
 import sys
 import tempfile
 import zipfile
 from datetime import datetime
+
+from termination_point_policy import POINT_DOLLAR_ZERO_TOLERANCE
 
 # ── Paths ──────────────────────────────────────────────────────────
 
@@ -78,7 +82,13 @@ def download_geo_refs():
 
         if filename.endswith(".zip"):
             extract_dir = os.path.join(GEO_CACHE_DIR, os.path.splitext(filename)[0])
-            if not os.path.exists(extract_dir):
+            has_files = os.path.isdir(extract_dir) and any(
+                os.path.isfile(os.path.join(root, name))
+                for root, _dirs, names in os.walk(extract_dir)
+                for name in names
+            )
+            if not has_files:
+                shutil.rmtree(extract_dir, ignore_errors=True)
                 print(f"  Extracting: {filename} -> {extract_dir}")
                 with zipfile.ZipFile(local_path, "r") as zf:
                     zf.extractall(extract_dir)
@@ -609,7 +619,9 @@ def generate_terminated_grants(reporting_week=None):
         if pd.isna(loss):
             raise RuntimeError(f"Missing current_loss.combined for {row.get('org_name')}")
         loss = float(loss)
-        if loss <= 0:
+        if not math.isfinite(loss):
+            raise RuntimeError(f"Non-finite current loss for {row.get('org_name')}")
+        if loss < POINT_DOLLAR_ZERO_TOLERANCE:
             continue
         if not pd.notna(row.get("lat")) or not pd.notna(row.get("lon")):
             continue
@@ -628,9 +640,14 @@ def generate_terminated_grants(reporting_week=None):
             )
         nih_loss = float(row["current_loss.nih"])
         nsf_loss = float(row["current_loss.nsf"])
-        nih_num = int(row["current_grant_loss.nih"])
-        nsf_num = int(row["current_grant_loss.nsf"])
-        grant_count = max(int(row["current_grant_loss.combined"]), 1)
+        counts = [float(row[field]) for field in (
+            "current_grant_loss.nih", "current_grant_loss.nsf", "current_grant_loss.combined"
+        )]
+        if any(not math.isfinite(value) or value < 0 or not value.is_integer() for value in counts):
+            raise RuntimeError(f"Invalid current grant count for {row.get('org_name')}")
+        nih_num, nsf_num, grant_count = map(int, counts)
+        if grant_count == 0 or grant_count != nih_num + nsf_num:
+            raise RuntimeError(f"Current loss has inconsistent grant counts for {row.get('org_name')}")
 
         grant_losses.append({
             "org_name": row["org_name"],

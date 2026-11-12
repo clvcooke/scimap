@@ -1,5 +1,5 @@
 import { X } from 'lucide-react'
-import { formatCurrency, formatNumber } from '@/lib/constants'
+import { formatCurrency, formatPopulation } from '@/lib/constants'
 import { getBaselineValue } from '@/lib/map-config'
 import type { SelectedFeature } from '@/lib/map-config'
 import type { AgencyFilter } from '@/lib/map-shared'
@@ -40,11 +40,11 @@ export default function MobileInfoCard({
           <div className="mt-0.5 text-xs text-gray-500">
             <span>{AGENCY_LABELS[agencyFilter]}: {formatCurrency(impact)}</span>
             <span className="mx-1.5 text-gray-300">&middot;</span>
-            {pop > 0 && <span>Pop: {formatNumber(pop)}</span>}
+            <span>Pop: {formatPopulation(props.pop_2024)}</span>
             {perCapita && (
               <>
                 <span className="mx-1.5 text-gray-300">&middot;</span>
-                <span>Per Cap: {formatCurrency(pc)}</span>
+                <span>Per Cap: {pop > 0 ? formatCurrency(pc) : 'Not available'}</span>
               </>
             )}
           </div>
