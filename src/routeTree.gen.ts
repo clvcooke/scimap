@@ -19,6 +19,7 @@ import { Route as GrantsRouteImport } from './routes/grants'
 import { Route as Fy27RouteImport } from './routes/fy27'
 import { Route as Fy26RouteImport } from './routes/fy26'
 import { Route as ExportPreviewRouteImport } from './routes/export-preview'
+import { Route as EmbedRouteImport } from './routes/embed'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BaselineRouteImport } from './routes/baseline'
 import { Route as AboutRouteImport } from './routes/about'
@@ -76,6 +77,11 @@ const ExportPreviewRoute = ExportPreviewRouteImport.update({
   path: '/export-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmbedRoute = EmbedRouteImport.update({
+  id: '/embed',
+  path: '/embed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/baseline': typeof BaselineRoute
   '/contact': typeof ContactRoute
+  '/embed': typeof EmbedRoute
   '/export-preview': typeof ExportPreviewRoute
   '/fy26': typeof Fy26Route
   '/fy27': typeof Fy27Route
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/baseline': typeof BaselineRoute
   '/contact': typeof ContactRoute
+  '/embed': typeof EmbedRoute
   '/export-preview': typeof ExportPreviewRoute
   '/fy26': typeof Fy26Route
   '/fy27': typeof Fy27Route
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/baseline': typeof BaselineRoute
   '/contact': typeof ContactRoute
+  '/embed': typeof EmbedRoute
   '/export-preview': typeof ExportPreviewRoute
   '/fy26': typeof Fy26Route
   '/fy27': typeof Fy27Route
@@ -169,6 +178,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/baseline'
     | '/contact'
+    | '/embed'
     | '/export-preview'
     | '/fy26'
     | '/fy27'
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/baseline'
     | '/contact'
+    | '/embed'
     | '/export-preview'
     | '/fy26'
     | '/fy27'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/baseline'
     | '/contact'
+    | '/embed'
     | '/export-preview'
     | '/fy26'
     | '/fy27'
@@ -224,6 +236,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BaselineRoute: typeof BaselineRoute
   ContactRoute: typeof ContactRoute
+  EmbedRoute: typeof EmbedRoute
   ExportPreviewRoute: typeof ExportPreviewRoute
   Fy26Route: typeof Fy26Route
   Fy27Route: typeof Fy27Route
@@ -310,6 +323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExportPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/embed': {
+      id: '/embed'
+      path: '/embed'
+      fullPath: '/embed'
+      preLoaderRoute: typeof EmbedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -360,6 +380,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BaselineRoute: BaselineRoute,
   ContactRoute: ContactRoute,
+  EmbedRoute: EmbedRoute,
   ExportPreviewRoute: ExportPreviewRoute,
   Fy26Route: Fy26Route,
   Fy27Route: Fy27Route,

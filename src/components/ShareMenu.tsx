@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { EMBED_MAPS } from '@/lib/embed'
 import { Share2, Link, Check } from 'lucide-react'
 import { Events, track, setPersonProperties, type SharePlatform } from '@/lib/analytics'
 
@@ -51,6 +52,9 @@ export default function ShareMenu({
   }, [open])
 
   const pageUrl = shareUrl ?? window.location.href
+  const embedEntry = Object.entries(EMBED_MAPS).find(([, entry]) => {
+    try { return new URL(pageUrl, window.location.origin).pathname === entry.path } catch { return false }
+  })
   const pageTitle = shareTitle ?? document.title
 
   const trackShare = (platform: SharePlatform) => {
@@ -167,6 +171,7 @@ export default function ShareMenu({
             label={copied ? 'Copied!' : 'Copy link'}
             onClick={() => void copyLink()}
           />
+          {embedEntry && <a href={`/embed?map=${embedEntry[0]}`} className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">Embed this map</a>}
           <div className="my-1 border-t border-gray-100" />
           <ShareItem icon={<XLogo />} label="X / Twitter" onClick={shareX} />
           <ShareItem icon={<BlueskyLogo />} label="Bluesky" onClick={shareBluesky} />
