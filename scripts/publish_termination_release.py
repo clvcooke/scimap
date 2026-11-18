@@ -4,9 +4,10 @@
 Order: validate locally, refuse a non-empty destination, upload everything
 except the manifest, download every uploaded object and check its size and
 SHA-256, check public checksums, then upload the manifest last. Uploads use
-the AWS CLI against the R2 S3 endpoint. This command never calls rclone and
-never writes selection pointers such as latest-validated.json or
-website-release.json.
+the AWS CLI against the R2 S3 endpoint. Machine-consumed calls force JSON
+output, disable paging and prompts, and reject a listing that is blank,
+malformed, or incomplete. This command never calls rclone and never writes
+selection pointers such as latest-validated.json or website-release.json.
 
 A release without a public manifest is incomplete. A retry must use a new
 release ID. The upload record stores the publisher git revision separately
@@ -84,22 +85,70 @@ def aws_environment():
     return env, endpoint
 
 
+def command_name(args):
+    return args[1] if len(args) > 1 else args[0]
+
+
 def aws(*args, capture=False):
     env, endpoint = aws_environment()
-    command = ["aws", *map(str, args), "--endpoint-url", endpoint]
+    # Operator output, pager, and prompt preferences must not change results.
+    env["AWS_DEFAULT_OUTPUT"] = "json"
+    env["AWS_PAGER"] = ""
+    env["AWS_CLI_AUTO_PROMPT"] = "off"
+    command = [
+        "aws",
+        *map(str, args),
+        "--endpoint-url", endpoint,
+        "--output", "json",
+        "--no-cli-pager",
+        "--no-cli-auto-prompt",
+    ]
     print("Running:", " ".join(command))
     result = subprocess.run(command, capture_output=capture, text=True, env=env)
     if result.returncode != 0:
         detail = f": {result.stderr.strip()}" if capture and result.stderr else ""
-        raise RuntimeError(f"aws {args[1] if len(args) > 1 else args[0]} failed with exit code {result.returncode}{detail}")
+        raise RuntimeError(f"aws {command_name(args)} failed with exit code {result.returncode}{detail}")
     return result.stdout if capture else None
 
 
 def aws_json(*args):
     stdout = aws(*args, capture=True)
-    if not stdout or not stdout.strip():
-        return {}
-    return json.loads(stdout)
+    name = command_name(args)
+    if stdout is None or not stdout.strip():
+        raise RuntimeError(f"aws {name} returned no JSON")
+    try:
+        payload = json.loads(stdout)
+    except json.JSONDecodeError as error:
+        raise RuntimeError(f"aws {name} returned malformed JSON") from error
+    if not isinstance(payload, dict):
+        raise RuntimeError(f"aws {name} returned JSON that is not an object")
+    return payload
+
+
+def listing_page(*args, prefix):
+    """Require a complete ListObjectsV2 page. Never treat a bad page as empty."""
+    page = aws_json(*args)
+    key_count = page.get("KeyCount")
+    truncated = page.get("IsTruncated")
+    contents = page.get("Contents", [])
+    common_prefixes = page.get("CommonPrefixes", [])
+    if type(key_count) is not int or key_count < 0 or type(truncated) is not bool:
+        raise RuntimeError(f"Listing response is missing KeyCount or IsTruncated: {prefix}")
+    if not isinstance(contents, list) or not isinstance(common_prefixes, list):
+        raise RuntimeError(f"Listing response has an invalid key listing: {prefix}")
+    if len(contents) != key_count:
+        raise RuntimeError(f"Listing response KeyCount does not match Contents: {prefix}")
+    for item in contents:
+        key = item.get("Key") if isinstance(item, dict) else None
+        if type(key) is not str or not key:
+            raise RuntimeError(f"Listing response contains an object without a key: {prefix}")
+    for item in common_prefixes:
+        common = item.get("Prefix") if isinstance(item, dict) else None
+        if type(common) is not str or not common:
+            raise RuntimeError(f"Listing response contains an invalid common prefix: {prefix}")
+    if truncated and (type(page.get("NextContinuationToken")) is not str or not page["NextContinuationToken"]):
+        raise RuntimeError(f"Truncated listing without a continuation token: {prefix}")
+    return page
 
 
 def release_files(root, include_manifest):
@@ -115,13 +164,14 @@ def release_files(root, include_manifest):
 
 
 def destination_is_empty(bucket, prefix):
-    page = aws_json(
+    page = listing_page(
         "s3api", "list-objects-v2",
         "--bucket", bucket,
         "--prefix", prefix,
         "--max-keys", "1",
+        prefix=prefix,
     )
-    return not page.get("Contents") and not page.get("CommonPrefixes") and not page.get("KeyCount")
+    return page["KeyCount"] == 0 and not page.get("Contents") and not page.get("CommonPrefixes") and not page["IsTruncated"]
 
 
 def list_keys(bucket, prefix):
@@ -131,13 +181,11 @@ def list_keys(bucket, prefix):
         command = ["s3api", "list-objects-v2", "--bucket", bucket, "--prefix", prefix]
         if token:
             command.extend(["--continuation-token", token])
-        page = aws_json(*command)
+        page = listing_page(*command, prefix=prefix)
         keys.extend(item["Key"] for item in page.get("Contents", []))
-        if not page.get("IsTruncated"):
+        if not page["IsTruncated"]:
             return keys
-        token = page.get("NextContinuationToken")
-        if not token:
-            raise RuntimeError(f"Truncated listing without a continuation token: {prefix}")
+        token = page["NextContinuationToken"]
 
 
 def put_file(bucket, key, path):

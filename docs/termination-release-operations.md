@@ -26,7 +26,7 @@ python scripts/publish_termination_release.py /path/to/release \
   --record /path/to/upload-record.json
 ```
 
-That command needs `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, and `R2_ENDPOINT` or `R2_ACCOUNT_ID`. It refuses a destination that already has objects, puts each object with `If-None-Match: *` and `Content-MD5`, uploads every file except the manifest, downloads every object and checks its size and SHA-256, checks public checksums, and uploads the manifest last. The upload record stores the publisher git revision separately from the candidate manifest's code provenance. It does not change `latest-validated.json`, `website-release.json`, or `/termination-selection.json`.
+That command needs `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, and `R2_ENDPOINT` or `R2_ACCOUNT_ID`. It refuses a destination that already has objects, puts each object with `If-None-Match: *` and `Content-MD5`, uploads every file except the manifest, downloads every object and checks its size and SHA-256, checks public checksums, and uploads the manifest last. Listings force JSON output and disable the CLI pager and input prompts, so `AWS_DEFAULT_OUTPUT=off` or `text` cannot make an occupied prefix look empty. A blank, malformed, or incomplete listing fails before any upload. The upload record stores the publisher git revision separately from the candidate manifest's code provenance. It does not change `latest-validated.json`, `website-release.json`, or `/termination-selection.json`.
 
 Use an upload record from `publish_termination_release.py` with status `published`.
 The selector checks the public manifest hash, validation, code cleanliness, supported

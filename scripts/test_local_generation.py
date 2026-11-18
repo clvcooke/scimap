@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import os
 from pathlib import Path
 from types import SimpleNamespace
 import tempfile
@@ -480,6 +481,117 @@ class LocalGenerationSafetyTest(unittest.TestCase):
         with patch.dict("os.environ", {}, clear=True):
             with self.assertRaisesRegex(SystemExit, "R2_ACCESS_KEY_ID"):
                 publisher.aws_environment()
+
+    def test_cli_output_preferences_cannot_upload_into_occupied_prefix(self):
+        """Exercise the real subprocess boundary, not a mocked aws() function."""
+        cases = {
+            "off": ("occupied", SystemExit, "non-empty", "refused"),
+            "text": ("occupied", SystemExit, "non-empty", "refused"),
+            "blank": ("blank", RuntimeError, "no JSON", "started"),
+            "malformed": ("malformed", RuntimeError, "malformed JSON", "started"),
+            "incomplete": ("empty-object", RuntimeError, "KeyCount", "started"),
+        }
+        for output_mode, (body, error_type, message, status) in cases.items():
+            with self.subTest(output_mode=output_mode):
+                self.run_publisher_against_aws_stub(output_mode, body, error_type, message, status)
+
+    def test_valid_empty_listing_is_not_refused(self):
+        with tempfile.TemporaryDirectory() as directory:
+            log = self.install_aws_stub(directory, "empty")
+            with self.aws_stub_environment(directory, "off"):
+                empty = publisher.destination_is_empty("bucket", "terminations/releases/candidate-1/")
+            calls = [json.loads(line) for line in log.read_text().splitlines()]
+        self.assertTrue(empty)
+        self.assertEqual(len(calls), 1)
+        self.assertIn("--output", calls[0]["args"])
+        self.assertEqual(calls[0]["args"][calls[0]["args"].index("--output") + 1], "json")
+        self.assertEqual(calls[0]["default_output"], "json")
+        self.assertEqual(calls[0]["pager"], "")
+        self.assertEqual(calls[0]["auto_prompt"], "off")
+
+    def install_aws_stub(self, directory, body):
+        stub_dir = Path(directory, "bin")
+        stub_dir.mkdir()
+        log = Path(directory, "aws-stub.jsonl")
+        log.write_text("")
+        Path(directory, "stub-body").write_text(body)
+        stub = stub_dir / "aws"
+        stub.write_text(
+            "#!/usr/bin/env python3\n"
+            "import json, os, sys\n"
+            "args = sys.argv[1:]\n"
+            "log = os.environ['AWS_STUB_LOG']\n"
+            "with open(log, 'a') as handle:\n"
+            "    handle.write(json.dumps({\n"
+            "        'args': args,\n"
+            "        'default_output': os.environ.get('AWS_DEFAULT_OUTPUT'),\n"
+            "        'pager': os.environ.get('AWS_PAGER'),\n"
+            "        'auto_prompt': os.environ.get('AWS_CLI_AUTO_PROMPT'),\n"
+            "    }) + '\\n')\n"
+            "if 'put-object' in args:\n"
+            "    raise SystemExit(0)\n"
+            "output = args[args.index('--output') + 1] if '--output' in args else os.environ.get('AWS_DEFAULT_OUTPUT', 'json')\n"
+            "body = open(os.environ['AWS_STUB_BODY']).read().strip()\n"
+            "if output == 'json':\n"
+            "    if body == 'blank':\n"
+            "        raise SystemExit(0)\n"
+            "    if body == 'malformed':\n"
+            "        sys.stdout.write('not-json\\n')\n"
+            "        raise SystemExit(0)\n"
+            "    if body == 'empty-object':\n"
+            "        sys.stdout.write('{}\\n')\n"
+            "        raise SystemExit(0)\n"
+            "    if body == 'empty':\n"
+            "        sys.stdout.write(json.dumps({'IsTruncated': False, 'KeyCount': 0, 'Name': 'bucket', 'Prefix': 'terminations/releases/candidate-1/', 'MaxKeys': 1}))\n"
+            "        raise SystemExit(0)\n"
+            "    if body == 'occupied':\n"
+            "        sys.stdout.write(json.dumps({'IsTruncated': False, 'KeyCount': 1, 'Name': 'bucket', 'Prefix': 'terminations/releases/candidate-1/', 'MaxKeys': 1, 'Contents': [{'Key': 'terminations/releases/candidate-1/existing'}]}))\n"
+            "        raise SystemExit(0)\n"
+            "if output in ('off', 'none'):\n"
+            "    raise SystemExit(0)\n"
+            "sys.stdout.write('2026-01-01 00:00:00 existing\\n')\n"
+            "raise SystemExit(0)\n"
+        )
+        stub.chmod(0o755)
+        return log
+
+    def aws_stub_environment(self, directory, output_mode):
+        stub_dir = str(Path(directory, "bin"))
+        return patch.dict(os.environ, {
+            "R2_ACCESS_KEY_ID": "test-access-key",
+            "R2_SECRET_ACCESS_KEY": "test-secret-key",
+            "R2_ENDPOINT": "https://example.invalid",
+            "AWS_DEFAULT_OUTPUT": output_mode,
+            "AWS_STUB_LOG": str(Path(directory, "aws-stub.jsonl")),
+            "AWS_STUB_BODY": str(Path(directory, "stub-body")),
+            "PATH": stub_dir + os.pathsep + os.environ.get("PATH", ""),
+        })
+
+    def run_publisher_against_aws_stub(self, output_mode, body, error_type, message, status):
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            log = self.install_aws_stub(directory, body)
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                self.aws_stub_environment(directory, output_mode),
+                self.assertRaisesRegex(error_type, message),
+            ):
+                self.assertEqual(os.environ["AWS_DEFAULT_OUTPUT"], output_mode)
+                publisher.publish_release(args)
+            record = json.loads(args.record.read_text())
+            calls = [json.loads(line) for line in log.read_text().splitlines()]
+        self.assertEqual(record["status"], status)
+        self.assertFalse(any("put-object" in call["args"] for call in calls))
+        self.assertTrue(calls)
+        for call in calls:
+            args = call["args"]
+            self.assertEqual(args[args.index("--output") + 1], "json")
+            self.assertIn("--no-cli-pager", args)
+            self.assertIn("--no-cli-auto-prompt", args)
+            self.assertEqual(call["default_output"], "json")
+            self.assertEqual(call["pager"], "")
+            self.assertEqual(call["auto_prompt"], "off")
+            self.assertNotIn("test-secret-key", " ".join(args))
 
     def test_dry_run_does_not_need_credentials(self):
         with tempfile.TemporaryDirectory() as directory:
