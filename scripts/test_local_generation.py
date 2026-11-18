@@ -1,11 +1,20 @@
+from contextlib import redirect_stdout
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
+import shutil
+import ssl
+import subprocess
 from types import SimpleNamespace
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
+from urllib.parse import parse_qs, unquote, urlsplit
+from xml.sax.saxutils import escape
 import zipfile
 
 
@@ -505,6 +514,7 @@ class LocalGenerationSafetyTest(unittest.TestCase):
         self.assertEqual(len(calls), 1)
         self.assertIn("--output", calls[0]["args"])
         self.assertEqual(calls[0]["args"][calls[0]["args"].index("--output") + 1], "json")
+        self.assertIn("--no-paginate", calls[0]["args"])
         self.assertEqual(calls[0]["default_output"], "json")
         self.assertEqual(calls[0]["pager"], "")
         self.assertEqual(calls[0]["auto_prompt"], "off")
@@ -540,6 +550,12 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             "        raise SystemExit(0)\n"
             "    if body == 'empty-object':\n"
             "        sys.stdout.write('{}\\n')\n"
+            "        raise SystemExit(0)\n"
+            "    if 'list-objects-v2' in args and '--no-paginate' not in args and body in ('empty', 'occupied'):\n"
+            "        payload = {'Prefix': 'terminations/releases/candidate-1/', 'RequestCharged': None}\n"
+            "        if body == 'occupied':\n"
+            "            payload['Contents'] = [{'Key': 'terminations/releases/candidate-1/existing'}]\n"
+            "        sys.stdout.write(json.dumps(payload))\n"
             "        raise SystemExit(0)\n"
             "    if body == 'empty':\n"
             "        sys.stdout.write(json.dumps({'IsTruncated': False, 'KeyCount': 0, 'Name': 'bucket', 'Prefix': 'terminations/releases/candidate-1/', 'MaxKeys': 1}))\n"
@@ -588,6 +604,8 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             self.assertEqual(args[args.index("--output") + 1], "json")
             self.assertIn("--no-cli-pager", args)
             self.assertIn("--no-cli-auto-prompt", args)
+            if "list-objects-v2" in args:
+                self.assertIn("--no-paginate", args)
             self.assertEqual(call["default_output"], "json")
             self.assertEqual(call["pager"], "")
             self.assertEqual(call["auto_prompt"], "off")
@@ -683,6 +701,154 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             root, manifest = tile_release(directory, [table_row("06001", 10)], [feature])
             with self.assertRaisesRegex(RuntimeError, "exceeds"):
                 validator.validate_tile_content(root, manifest)
+
+    def test_real_aws_cli_service_pagination_verifies_inventory(self):
+        """Single-page and 1,005-key inventories must finish through the real CLI.
+
+        The stub above cannot reproduce AWS CLI pagination. This fixture serves
+        ListObjectsV2 pages, and the installed aws binary must be the client.
+        """
+        if shutil.which("aws") is None:
+            self.fail("aws CLI is required to prove service pagination")
+        prefix = "terminations/releases/pages/"
+        single = {f"{prefix}a.bin": b"alpha", f"{prefix}nested/b.bin": b"beta"}
+        multi = {f"{prefix}{index:04d}": b"item" for index in range(1005)}
+        with tempfile.TemporaryDirectory(prefix="scimap-r2-pages-") as directory:
+            root = Path(directory)
+            cert, key = root / "cert.pem", root / "key.pem"
+            subprocess.run(
+                [
+                    "openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes",
+                    "-keyout", str(key), "-out", str(cert), "-days", "1",
+                    "-subj", "/CN=localhost",
+                    "-addext", "subjectAltName=DNS:localhost,IP:127.0.0.1",
+                ],
+                check=True, capture_output=True,
+            )
+            server = ThreadingHTTPServer(("127.0.0.1", 0), _ServicePageHandler)
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            context.load_cert_chain(cert, key)
+            server.socket = context.wrap_socket(server.socket, server_side=True)
+            server.objects = {}
+            server.events = []
+            thread = threading.Thread(target=server.serve_forever, daemon=True)
+            thread.start()
+            endpoint = f"https://127.0.0.1:{server.server_port}"
+            env = {
+                "R2_ACCESS_KEY_ID": "LOCAL_TEST_ONLY",
+                "R2_SECRET_ACCESS_KEY": "LOCAL_TEST_ONLY",
+                "R2_ENDPOINT": endpoint,
+                "AWS_CONFIG_FILE": os.devnull,
+                "AWS_SHARED_CREDENTIALS_FILE": os.devnull,
+                "AWS_CA_BUNDLE": str(cert),
+                "AWS_DEFAULT_OUTPUT": "off",
+                "AWS_PAGER": "less",
+                "AWS_CLI_AUTO_PROMPT": "on",
+                "AWS_MAX_ATTEMPTS": "1",
+                "AWS_S3_ADDRESSING_STYLE": "path",
+            }
+            try:
+                with patch.dict(os.environ, env):
+                    release = root / "release"
+                    (release / "nested").mkdir(parents=True)
+                    (release / "a.bin").write_bytes(single[f"{prefix}a.bin"])
+                    (release / "nested" / "b.bin").write_bytes(single[f"{prefix}nested/b.bin"])
+                    server.objects = dict(single)
+                    server.events = []
+                    with redirect_stdout(io.StringIO()) as single_log:
+                        found = publisher.list_keys("bucket", prefix)
+                        self.assertEqual(server.events, [
+                            {"operation": "list", "count": 2, "offset": 0, "max_keys": 1000},
+                        ])
+                        server.events = []
+                        publisher.verify_remote("bucket", prefix, release)
+                    single_lists = [
+                        line for line in single_log.getvalue().splitlines()
+                        if "list-objects-v2" in line
+                    ]
+                    self.assertEqual(found, sorted(single))
+                    self.assertEqual(len(single_lists), 2)
+                    self.assertTrue(all("--no-paginate" in line for line in single_lists))
+                    self.assertTrue(all("--continuation-token" not in line for line in single_lists))
+                    self.assertEqual(server.events, [
+                        {"operation": "list", "count": 2, "offset": 0, "max_keys": 1000},
+                        {"operation": "get", "key": f"{prefix}a.bin"},
+                        {"operation": "get", "key": f"{prefix}nested/b.bin"},
+                    ])
+
+                    server.objects = dict(multi)
+                    server.events = []
+                    with redirect_stdout(io.StringIO()) as multi_log:
+                        found = publisher.list_keys("bucket", prefix)
+                    multi_lists = [
+                        line for line in multi_log.getvalue().splitlines()
+                        if "list-objects-v2" in line
+                    ]
+                    self.assertEqual(found, sorted(multi))
+                    self.assertEqual(len(found), 1005)
+                    self.assertEqual(len(multi_lists), 2)
+                    self.assertTrue(all("--no-paginate" in line for line in multi_lists))
+                    self.assertNotIn("--continuation-token", multi_lists[0])
+                    self.assertIn("--continuation-token", multi_lists[1])
+                    self.assertEqual(server.events, [
+                        {"operation": "list", "count": 1000, "offset": 0, "max_keys": 1000},
+                        {"operation": "list", "count": 5, "offset": 1000, "max_keys": 1000},
+                    ])
+            finally:
+                server.shutdown()
+                server.server_close()
+
+
+class _ServicePageHandler(BaseHTTPRequestHandler):
+    protocol_version = "HTTP/1.1"
+
+    def log_message(self, format, *args):
+        return
+
+    def do_GET(self):
+        if len(self.server.events) > 6:
+            self._send(500, b"<Error><Code>TooManyRequests</Code></Error>")
+            return
+        url = urlsplit(self.path)
+        query = parse_qs(url.query)
+        if "list-type" in query:
+            prefix = query.get("prefix", [""])[0]
+            keys = sorted(key for key in self.server.objects if key.startswith(prefix))
+            offset = int(query.get("continuation-token", ["0"])[0])
+            count = int(query.get("max-keys", ["1000"])[0])
+            page = keys[offset:offset + count]
+            truncated = offset + count < len(keys)
+            self.server.events.append({
+                "operation": "list", "count": len(page), "offset": offset, "max_keys": count,
+            })
+            contents = "".join(
+                f"<Contents><Key>{escape(key)}</Key><Size>{len(self.server.objects[key])}</Size></Contents>"
+                for key in page
+            )
+            token = f"<NextContinuationToken>{offset + count}</NextContinuationToken>" if truncated else ""
+            body = (
+                '<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">'
+                f"<Name>bucket</Name><Prefix>{escape(prefix)}</Prefix>"
+                f"<KeyCount>{len(page)}</KeyCount><MaxKeys>{count}</MaxKeys>"
+                f"<IsTruncated>{str(truncated).lower()}</IsTruncated>{contents}{token}"
+                "</ListBucketResult>"
+            ).encode()
+            self._send(200, body)
+            return
+        key = unquote(url.path).removeprefix("/bucket/")
+        self.server.events.append({"operation": "get", "key": key})
+        if key not in self.server.objects:
+            self._send(404, b"<Error><Code>NoSuchKey</Code></Error>")
+            return
+        self._send(200, self.server.objects[key], "application/octet-stream")
+
+    def _send(self, code, body, content_type="application/xml"):
+        self.send_response(code)
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Content-Type", content_type)
+        self.end_headers()
+        self.wfile.write(body)
+
 
 class ValidatedRunTest(unittest.TestCase):
     def make_run(self, directory, **changes):

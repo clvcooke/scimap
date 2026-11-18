@@ -5,8 +5,10 @@ Order: validate locally, refuse a non-empty destination, upload everything
 except the manifest, download every uploaded object and check its size and
 SHA-256, check public checksums, then upload the manifest last. Uploads use
 the AWS CLI against the R2 S3 endpoint. Machine-consumed calls force JSON
-output, disable paging and prompts, and reject a listing that is blank,
-malformed, or incomplete. This command never calls rclone and never writes
+output, disable the display pager and prompts, and reject a listing that is
+blank, malformed, or incomplete. List calls pass --no-paginate so this script
+owns continuation tokens and each response stays one service page. This command
+never calls rclone and never writes
 selection pointers such as latest-validated.json or website-release.json.
 
 A release without a public manifest is incomplete. A retry must use a new
@@ -163,14 +165,27 @@ def release_files(root, include_manifest):
     return files
 
 
-def destination_is_empty(bucket, prefix):
-    page = listing_page(
+def object_listing(bucket, prefix, *, max_keys=None, token=None):
+    """Fetch one ListObjectsV2 service page.
+
+    --no-paginate keeps the CLI from aggregating pages and dropping KeyCount
+    and IsTruncated. This loop is the only pagination owner.
+    """
+    command = [
         "s3api", "list-objects-v2",
         "--bucket", bucket,
         "--prefix", prefix,
-        "--max-keys", "1",
-        prefix=prefix,
-    )
+        "--no-paginate",
+    ]
+    if max_keys is not None:
+        command.extend(["--max-keys", str(max_keys)])
+    if token:
+        command.extend(["--continuation-token", token])
+    return listing_page(*command, prefix=prefix)
+
+
+def destination_is_empty(bucket, prefix):
+    page = object_listing(bucket, prefix, max_keys=1)
     return page["KeyCount"] == 0 and not page.get("Contents") and not page.get("CommonPrefixes") and not page["IsTruncated"]
 
 
@@ -178,10 +193,7 @@ def list_keys(bucket, prefix):
     keys = []
     token = None
     while True:
-        command = ["s3api", "list-objects-v2", "--bucket", bucket, "--prefix", prefix]
-        if token:
-            command.extend(["--continuation-token", token])
-        page = listing_page(*command, prefix=prefix)
+        page = object_listing(bucket, prefix, token=token)
         keys.extend(item["Key"] for item in page.get("Contents", []))
         if not page["IsTruncated"]:
             return keys
