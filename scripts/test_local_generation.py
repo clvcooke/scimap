@@ -199,6 +199,66 @@ class LocalGenerationSafetyTest(unittest.TestCase):
                 "ok",
             )
 
+    def test_territory_fallback_requires_guam_district_geometry(self):
+        from shapely.geometry import box
+        guam = box(144.6, 13.2, 145.0, 13.7)
+        shapes = {'7298': box(-68, 17, -65, 19), '7898': box(-65, 17, -64, 19), '6698': guam}
+        with patch.object(terminations, 'load_geometries', return_value=(shapes, {})):
+            self.assertTrue(terminations.load_territory_geometries()['GU'].equals(guam))
+        for geoid in shapes:
+            with self.subTest(missing=geoid), patch.object(
+                terminations, 'load_geometries',
+                return_value=({key: geom for key, geom in shapes.items() if key != geoid}, {}),
+            ):
+                with self.assertRaisesRegex(RuntimeError, geoid):
+                    terminations.load_territory_geometries()
+
+    def test_guam_state_and_county_fallback_preserves_losses_and_missing_values(self):
+        from shapely.geometry import box, shape
+        guam = box(144.6, 13.2, 145.0, 13.7)
+        territories = {'PR': box(-68, 17, -65, 19), 'VI': box(-65, 17, -64, 19), 'GU': guam}
+        for level in ('states', 'counties'):
+            for missing in (False, True):
+                with self.subTest(level=level, missing=missing), tempfile.TemporaryDirectory() as directory:
+                    key = 'state' if level == 'states' else 'FIPS'
+                    guam_key = 'GU' if level == 'states' else '66010'
+                    mainland = 'CA' if level == 'states' else '06001'
+                    # A second synthetic county ensures known values cannot hide an unknown.
+                    identifiers = (guam_key, mainland) if level == 'states' else (guam_key, '66020', mainland)
+                    def frame(value):
+                        return terminations.pd.DataFrame([
+                            {key: identifier, 'week': '2026-10-23', **dict.fromkeys(terminations.VALUE_COLS, value)}
+                            for identifier in identifiers
+                        ])
+                    nih, nsf = frame(1.0), frame(2.0)
+                    if missing:
+                        nih.loc[nih[key] == guam_key, 'current_loss'] = float('nan')
+                    attrs = {} if level == 'states' else {mainland: {'county': 'Alameda County', 'state': 'California'}}
+                    config = {'csv_key': key, 'geo_key': key, 'zoom': 0, 'nih_csv': 'nih', 'nsf_csv': 'nsf', 'geo': 'mainland', 'attr_cols': list(attrs.get(mainland, {}))}
+                    with (
+                        patch.object(terminations, 'OUTPUT_DIR', directory),
+                        patch.object(terminations, 'load_latest_week', side_effect=[nih, nsf]),
+                        patch.object(terminations, 'load_geometries', return_value=({mainland: box(-123, 37, -122, 38)}, attrs)),
+                        patch.object(terminations, 'load_territory_geometries', return_value=territories),
+                        patch.object(terminations, 'generate_tiles'),
+                    ):
+                        terminations.process_level(level, config, reporting_week='2026-10-23')
+                    features = {f['properties'][key]: f for f in json.loads(Path(directory, f'terminations_{level}.geojson').read_text())['features']}
+                    target = features['GU' if level == 'states' else '66000']
+                    self.assertTrue(shape(target['geometry']).equals(guam))
+                    props = target['properties']
+                    self.assertEqual(props['state'], 'GU')
+                    count = 1 if level == 'states' else 2
+                    self.assertEqual(props['nih_overall_loss'], count)
+                    self.assertEqual(props['nsf_overall_loss'], 2 * count)
+                    self.assertEqual(props['terminated_loss'], 3 * count)
+                    self.assertEqual(props['nih_current_loss'], None if missing else count)
+                    self.assertEqual(props['nsf_current_loss'], 2 * count)
+                    self.assertEqual(props['terminated_current_loss'], None if missing else 3 * count)
+                    self.assertEqual(features[mainland]['properties']['terminated_loss'], 3)
+                    if level == 'counties':
+                        self.assertNotIn('66010', features)
+
     def test_state_summary_writes_missing_values_as_null(self):
         frame = terminations.pd.DataFrame(
             [{"state": "AA", "terminated_econ_loss": float("nan"), "terminated_job_loss": 1}]

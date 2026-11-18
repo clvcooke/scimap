@@ -47,6 +47,16 @@ pointer and its public response before taking another action; do not blindly ret
 All pointer writers must share the daily workflow's single concurrency group, or
 operators must ensure no run is active before using the local CLI.
 
+## Territory map coverage
+
+State/county geometry references cover the 50 states plus DC. The generator reuses territory-wide polygons from the existing 119th-Congress district reference for Puerto Rico (`7298`), the Virgin Islands (`7898`) and Guam (`6698`). Guam is keyed as `GU` on the state map and `66000` as a territory-wide county aggregate; its table/download county stays `66010`. The tile validator reconciles the aggregate against the county rows. A missing required district polygon fails generation instead of silently dropping the territory.
+
+The reference is `CongDist_shp_119.zip` under the existing R2 reference-data URL in `scripts/terminations.py` (verified SHA-256 `746dd8fd7d07888ba5290b88480011710025aa1a89322438bce428d8f4e59a8b`). Its Guam polygon is valid and covers Guam's native Pacific coordinates; no artificial inset or scientific reassignment is introduced.
+
+Adding this generator support does not change an already-published immutable release. Build from a clean code revision, validate a new release ID, obtain publication approval, then publish/select a new preview candidate. Old releases retain their recorded coverage warnings; the frontend removes the Guam limitation sentence only when the selected release no longer reports that gap.
+
+Territory population values are separate from map geometry. Existing baseline population references still need reviewed territory values/reference years; a polygon or a filename containing `2024` does not supply those values. Do not fill unknown populations with zero or substitute another year silently.
+
 ## Checks before enabling production selection
 
 - Exact candidate approved by Mallory, Elena and Joshua; current website PR remains draft until then.

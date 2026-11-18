@@ -43,6 +43,11 @@ describe('public release details', () => {
     ).toBeInTheDocument()
     expect(screen.getByText(/Data through:/)).toHaveTextContent('2026-10-26')
   })
+  it('does not claim Guam is absent when the selected release has full coverage', () => {
+    renderDetails([])
+    expect(screen.queryByText(/Guam appears in tables/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/limited map coverage/)).not.toBeInTheDocument()
+  })
   it('acknowledges other coverage warnings without publishing raw diagnostics', () => {
     renderDetails(['internal-validator diagnostic 123'])
     expect(screen.getByText(/Some areas have limited map coverage/)).toBeInTheDocument()

@@ -121,17 +121,18 @@ FIPS_TO_STATE = {
     '55':'WI','56':'WY','60':'AS','66':'GU','69':'MP','72':'PR','78':'VI',
 }
 
-# PR and VI have no state/county shapefiles; use their district polygon as a fallback.
-TERRITORY_DISTRICTS = {'PR': '7298', 'VI': '7898'}   # state abbr → district GEOID
-TERRITORY_STATE_FIPS = {'PR': '72', 'VI': '78'}       # state abbr → 2-digit FIPS prefix
+# PR, VI and GU have no state/county shapes in these references; use district polygons.
+TERRITORY_DISTRICTS = {'PR': '7298', 'VI': '7898', 'GU': '6698'}
+TERRITORY_STATE_FIPS = {'PR': '72', 'VI': '78', 'GU': '66'}
 
 
 def load_territory_geometries():
-    """Load district polygons for PR and VI, which have no state/county shapes."""
+    """Load the territory-wide district polygons required by state/county maps."""
     dist_geos, _ = load_geometries(geo_path("CongDist_shp_119"), "GEOID")
-    return {abbr: dist_geos[geoid]
-            for abbr, geoid in TERRITORY_DISTRICTS.items()
-            if geoid in dist_geos}
+    missing = set(TERRITORY_DISTRICTS.values()) - dist_geos.keys()
+    if missing:
+        raise RuntimeError(f"Missing territory district geometry: {', '.join(sorted(missing))}")
+    return {abbr: dist_geos[geoid] for abbr, geoid in TERRITORY_DISTRICTS.items()}
 
 
 # ── Geographic level configuration ─────────────────────────────────
@@ -475,8 +476,8 @@ def process_level(
     )
     print(f"    {len(geometries)} geometries loaded")
 
-    # PR and VI lack state/county shapefiles — inject their district polygon as the shape.
-    # For states: the CSV already has rows keyed by abbreviation (PR, VI).
+    # Territory state/county shapes use their existing territory-wide district polygons.
+    # For states: the CSV already has rows keyed by abbreviation.
     # For counties: aggregate individual municipality FIPS rows into one territory row.
     if name in ("states", "counties"):
         territory_geos = load_territory_geometries()
@@ -488,7 +489,7 @@ def process_level(
                 synth_key = fips_prefix + "000"
                 mask = combined[csv_key].astype(str).str.startswith(fips_prefix)
                 num_cols = combined.select_dtypes(include="number").columns.tolist()
-                agg = combined.loc[mask, num_cols].sum().to_dict() if mask.any() else {c: 0.0 for c in num_cols}
+                agg = combined.loc[mask, num_cols].sum(skipna=False).to_dict() if mask.any() else {c: 0.0 for c in num_cols}
                 agg[csv_key] = synth_key
                 combined = combined[~mask].copy()
                 combined = pd.concat([combined, pd.DataFrame([agg])], ignore_index=True)
