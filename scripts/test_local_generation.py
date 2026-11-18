@@ -314,12 +314,21 @@ class LocalGenerationSafetyTest(unittest.TestCase):
 
     def test_publisher_uploads_manifest_last_after_public_verification(self):
         calls = []
+
+        def fake_aws(*command, capture=False):
+            calls.append(("aws", command))
+            return ""
+
         with tempfile.TemporaryDirectory() as directory:
             manifest, args = publish_fixture(directory)
+            manifest["code"] = {"scimap": {"revision": "a" * 40, "dirty": False}}
+            before = (args.release / "manifest.json").read_bytes()
             with (
                 patch.object(publisher.validator, "validate_release", return_value=manifest),
                 patch.object(publisher, "destination_is_empty", return_value=True),
-                patch.object(publisher, "rclone", side_effect=lambda *a, **_: calls.append(a)),
+                patch.object(publisher, "verify_remote", side_effect=lambda *a, **k: calls.append(("remote",))),
+                patch.object(publisher, "verify_objects", side_effect=lambda *a, **k: calls.append(("objects",))),
+                patch.object(publisher, "aws", side_effect=fake_aws),
                 patch.object(
                     publisher,
                     "verify_public",
@@ -327,17 +336,25 @@ class LocalGenerationSafetyTest(unittest.TestCase):
                 ),
             ):
                 record = publisher.publish_release(args)
+            self.assertEqual((args.release / "manifest.json").read_bytes(), before)
 
-        self.assertEqual(record["destination"], "r2:bucket/terminations/releases/candidate-1")
+        puts = [call for call in calls if call[0] == "aws" and call[1][1] == "put-object"]
+        self.assertEqual(record["destination"], "s3://bucket/terminations/releases/candidate-1")
+        self.assertEqual(record["transport"], "aws-cli")
         self.assertEqual(record["status"], "published")
-        self.assertEqual([call[0] for call in calls], ["copy", "check", "public", "copyto", "public"])
-        for bulk in calls[:2]:
-            self.assertIn("--exclude", bulk)
-            self.assertEqual(bulk[bulk.index("--exclude") + 1], "/manifest.json")
-        self.assertNotIn("manifest.json", calls[2][1])
-        self.assertIn("tiles/states/0/0/0.pbf", calls[2][1])
-        self.assertEqual(calls[3][2], "r2:bucket/terminations/releases/candidate-1/manifest.json")
-        self.assertEqual(calls[4], ("public", ("manifest.json",)))
+        self.assertEqual(record["candidate_code"], manifest["code"])
+        self.assertEqual(len(record["publisher_code"]["revision"]), 40)
+        self.assertNotEqual(record["publisher_code"]["revision"], "a" * 40)
+        self.assertEqual([call[0] for call in calls], ["aws", "aws", "remote", "public", "aws", "objects", "public"])
+        for _kind, command in puts:
+            self.assertEqual(command[command.index("--if-none-match") + 1], "*")
+            self.assertIn("--content-md5", command)
+            self.assertNotIn("--checksum-algorithm", command)
+        self.assertTrue(all(not command[command.index("--key") + 1].endswith("manifest.json") for _kind, command in puts[:-1]))
+        self.assertTrue(puts[-1][1][puts[-1][1].index("--key") + 1].endswith("/manifest.json"))
+        self.assertNotIn("manifest.json", calls[3][1])
+        self.assertIn("tiles/states/0/0/0.pbf", calls[3][1])
+        self.assertEqual(calls[-1], ("public", ("manifest.json",)))
 
     def test_publisher_records_refused_non_empty_destination(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -345,12 +362,12 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             with (
                 patch.object(publisher.validator, "validate_release", return_value=manifest),
                 patch.object(publisher, "destination_is_empty", return_value=False),
-                patch.object(publisher, "rclone") as rclone,
+                patch.object(publisher, "aws") as aws,
                 self.assertRaisesRegex(SystemExit, "non-empty"),
             ):
                 publisher.publish_release(args)
             record = json.loads(args.record.read_text())
-        rclone.assert_not_called()
+        aws.assert_not_called()
         self.assertEqual(record["status"], "refused")
         self.assertIn("non-empty", record["error"])
 
@@ -365,7 +382,9 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             with (
                 patch.object(publisher.validator, "validate_release", return_value=manifest),
                 patch.object(publisher, "destination_is_empty", return_value=True),
-                patch.object(publisher, "rclone"),
+                patch.object(publisher, "verify_remote"),
+                patch.object(publisher, "verify_objects"),
+                patch.object(publisher, "aws"),
                 patch.object(publisher, "verify_public", side_effect=fake_public),
                 self.assertRaises(RuntimeError),
             ):
@@ -377,24 +396,23 @@ class LocalGenerationSafetyTest(unittest.TestCase):
         calls = []
         recorded = []
 
-        def fake_rclone(*command, **_):
-            calls.append(command[0])
+        def fake_aws(*command, capture=False):
+            calls.append(command[1])
             recorded.append(json.loads(args.record.read_text())["status"])
-            if command[0] == "copy":
-                raise KeyboardInterrupt
+            raise KeyboardInterrupt
 
         with tempfile.TemporaryDirectory() as directory:
             manifest, args = publish_fixture(directory)
             with (
                 patch.object(publisher.validator, "validate_release", return_value=manifest),
                 patch.object(publisher, "destination_is_empty", return_value=True),
-                patch.object(publisher, "rclone", side_effect=fake_rclone),
+                patch.object(publisher, "aws", side_effect=fake_aws),
                 self.assertRaises(KeyboardInterrupt),
             ):
                 publisher.publish_release(args)
             record = json.loads(args.record.read_text())
 
-        self.assertEqual(calls, ["copy"])
+        self.assertEqual(calls, ["put-object"])
         self.assertEqual(recorded, ["uploading"])
         self.assertEqual(record["status"], "interrupted")
         self.assertEqual(record["interrupted_during"], "uploading")
@@ -422,26 +440,60 @@ class LocalGenerationSafetyTest(unittest.TestCase):
     def test_failed_verification_leaves_manifest_unpublished(self):
         calls = []
 
-        def fake_rclone(*command, **_):
-            calls.append(command[0])
-            if command[0] == "check":
-                raise RuntimeError("rclone check failed")
+        def fake_verify(*_args, **_kwargs):
+            calls.append("verify")
+            raise RuntimeError("Remote checksum mismatch: terminations/releases/candidate-1/tables/states.json")
 
         with tempfile.TemporaryDirectory() as directory:
             manifest, args = publish_fixture(directory)
             with (
                 patch.object(publisher.validator, "validate_release", return_value=manifest),
                 patch.object(publisher, "destination_is_empty", return_value=True),
-                patch.object(publisher, "rclone", side_effect=fake_rclone),
-                self.assertRaisesRegex(RuntimeError, "check failed"),
+                patch.object(publisher, "aws", side_effect=lambda *command, capture=False: calls.append(command[1]) or ""),
+                patch.object(publisher, "verify_remote", side_effect=fake_verify),
+                self.assertRaisesRegex(RuntimeError, "checksum mismatch"),
             ):
                 publisher.publish_release(args)
             record = json.loads(args.record.read_text())
 
-        self.assertNotIn("copyto", calls)
+        self.assertNotIn("manifest.json", "".join(str(call) for call in calls))
         self.assertEqual(record["status"], "uploaded")
-        self.assertIn("check failed", record["error"])
+        self.assertIn("checksum mismatch", record["error"])
 
+    def test_verify_objects_hashes_downloaded_bytes(self):
+        def fake_aws(*command, capture=False):
+            self.assertEqual(command[1], "get-object")
+            self.assertNotIn("--checksum-algorithm", command)
+            Path(command[-1]).write_bytes(b"stored-bytes")
+            return "{}"
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory, "states.json")
+            path.write_bytes(b"local-bytes")
+            with (
+                patch.object(publisher, "aws", side_effect=fake_aws),
+                self.assertRaisesRegex(RuntimeError, "checksum mismatch"),
+            ):
+                publisher.verify_objects("bucket", "prefix/", [("states.json", path)])
+
+    def test_aws_cli_reports_missing_credentials(self):
+        with patch.dict("os.environ", {}, clear=True):
+            with self.assertRaisesRegex(SystemExit, "R2_ACCESS_KEY_ID"):
+                publisher.aws_environment()
+
+    def test_dry_run_does_not_need_credentials(self):
+        with tempfile.TemporaryDirectory() as directory:
+            manifest, args = publish_fixture(directory)
+            args.dry_run = True
+            with (
+                patch.object(publisher.validator, "validate_release", return_value=manifest),
+                patch.object(publisher, "aws", side_effect=AssertionError("aws must not run")),
+                patch.dict("os.environ", {}, clear=True),
+            ):
+                record = publisher.publish_release(args)
+        self.assertEqual(record["transport"], "aws-cli")
+        self.assertNotIn("finished_at", record)
+        self.assertFalse(args.record.exists())
 
     def test_tile_reader_round_trips_properties(self):
         layers = validator.read_tile(encode_tile("terminations_counties", [tile_feature("6001", 10.5)]))
@@ -676,11 +728,17 @@ class ReviewRegressionTests(unittest.TestCase):
                 return "wrong" if "downloads/county.csv" in url else publisher.validator.sha256(args.release / "tables/states.json")
             with (patch.object(publisher.validator, "validate_release", return_value=manifest),
                   patch.object(publisher, "destination_is_empty", return_value=True),
-                  patch.object(publisher, "rclone", side_effect=lambda *a, **kw: calls.append(a)),
+                  patch.object(publisher, "verify_remote"),
+                  patch.object(publisher, "aws", side_effect=lambda *a, **kw: calls.append(a) or ""),
                   patch.object(publisher, "fetch_sha256", side_effect=corrupted),
                   self.assertRaisesRegex(RuntimeError, "downloads/county.csv")):
                 publisher.publish_release(args)
-            self.assertNotIn("copyto", [c[0] for c in calls])
+            put_keys = [
+                command[command.index("--key") + 1]
+                for command in calls
+                if command[1] == "put-object"
+            ]
+            self.assertFalse(any(key.endswith("manifest.json") for key in put_keys))
 
 
 selector = load_script("select_termination_release.py")
