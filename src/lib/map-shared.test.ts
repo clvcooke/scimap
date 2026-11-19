@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { WebMercatorViewport } from '@deck.gl/core'
+import { createBaselineLayer, createColorScale, GEO_LEVELS, type GeoConfig } from './map-config'
 import {
   createChoroplethLayer,
   createLogColorScale,
@@ -151,6 +152,14 @@ function choropleth(level: string, maxZoom: number, fetch: TileFetch) {
   })
 }
 
+function baseline(config: GeoConfig, fetch: TileFetch) {
+  const layer = createBaselineLayer(config, false, createColorScale(config, false))
+  return (layer as unknown as DrivenLayer).clone({
+    fetch,
+    onTileError: () => undefined,
+  })
+}
+
 describe('createChoroplethLayer tile zoom', () => {
   it('requests only the last available zoom when the map is zoomed past maxZoom', async () => {
     const requested: string[] = []
@@ -237,6 +246,71 @@ describe('createChoroplethLayer tile zoom', () => {
     expect(zooms.length).toBeGreaterThan(0)
     expect(Math.max(...zooms)).toBeLessThanOrEqual(7)
     expect(requested.every((url) => tileZoom(url) <= 7)).toBe(true)
+    expect(renderedNames(layer)).toContain('GeoJsonLayer')
+  })
+})
+
+// createBaselineLayer always uses id `baseline-mvt`. A fresh states layer
+// already clamps to max zoom 7; the blank map is the reused instance after
+// counties (max zoom 9) selected zoom 8. This test fails if that layer does
+// not overzoom.
+describe('createBaselineLayer tile zoom', () => {
+  it('overzooms state tiles after a county layer switches geo level without a viewport change', async () => {
+    expect(GEO_LEVELS.states.maxZoom).toBe(7)
+    expect(GEO_LEVELS.counties.maxZoom).toBeGreaterThanOrEqual(8)
+    expect(GEO_LEVELS.districts.maxZoom).toBeGreaterThanOrEqual(8)
+
+    const requested: string[] = []
+    const fetch: TileFetch = (url) => {
+      requested.push(url)
+      return Promise.resolve(featureCollection())
+    }
+    const viewport = viewportAt(8)
+    const layer = baseline(GEO_LEVELS.counties, fetch)
+
+    drive(layer, viewport, INITIAL_FLAGS)
+    await settleTiles(layer)
+
+    const countyZooms = selectedTiles(layer).map((tile) => tile.index.z)
+    expect(countyZooms).toContain(8)
+    expect(Math.max(...countyZooms)).toBeLessThanOrEqual(GEO_LEVELS.counties.maxZoom)
+    expect(requested.every((url) => url.includes('/tiles_counties_baseline_'))).toBe(true)
+
+    requested.length = 0
+    const oldProps = layer.props
+    layer.props = baseline(GEO_LEVELS.states, fetch).props
+    layer.updateState({
+      props: layer.props,
+      oldProps,
+      context: layer.context,
+      changeFlags: SWITCH_FLAGS,
+    })
+    await settleTiles(layer)
+
+    const stateZooms = selectedTiles(layer).map((tile) => tile.index.z)
+    expect(stateZooms.length).toBeGreaterThan(0)
+    expect(Math.max(...stateZooms)).toBeLessThanOrEqual(GEO_LEVELS.states.maxZoom)
+    expect(requested.length).toBeGreaterThan(0)
+    expect(requested.every((url) => url.includes('/tiles_states_baseline_'))).toBe(true)
+    expect(requested.every((url) => tileZoom(url) <= GEO_LEVELS.states.maxZoom)).toBe(true)
+    expect(renderedNames(layer)).toContain('GeoJsonLayer')
+
+    requested.length = 0
+    const stateProps = layer.props
+    layer.props = baseline(GEO_LEVELS.districts, fetch).props
+    layer.updateState({
+      props: layer.props,
+      oldProps: stateProps,
+      context: layer.context,
+      changeFlags: SWITCH_FLAGS,
+    })
+    await settleTiles(layer)
+
+    const districtZooms = selectedTiles(layer).map((tile) => tile.index.z)
+    expect(districtZooms).toContain(8)
+    expect(Math.max(...districtZooms)).toBeLessThanOrEqual(GEO_LEVELS.districts.maxZoom)
+    expect(requested.every((url) => url.includes('/tiles_districts_baseline_'))).toBe(true)
+    expect(requested.every((url) => tileZoom(url) <= GEO_LEVELS.districts.maxZoom)).toBe(true)
     expect(renderedNames(layer)).toContain('GeoJsonLayer')
   })
 })

@@ -56,11 +56,12 @@ export function createLogColorScale(domain: [number, number]) {
 // ── Layer factories ────────────────────────────────────────────────
 
 // Tileset2D keeps its previous tile index when maxZoom changes and the
-// viewport does not. Geo levels share one choropleth layer id, so switching
-// from counties (max zoom 9) to states (max zoom 7) kept requesting zoom 8
-// and the states tiles 404'd. Drop the cached viewport so the next update
-// overzooms the last available level instead.
-class OverzoomTileset extends Tileset2D {
+// viewport does not. Choropleth geo levels share one layer id, and the
+// baseline map shares `baseline-mvt`, so switching from counties (max zoom
+// 9) to states (max zoom 7) kept requesting zoom 8 and the state tiles
+// 404'd. Drop the cached viewport so the next update overzooms the last
+// available level instead.
+export class OverzoomTileset extends Tileset2D {
   private indexedMaxZoom: number | null | undefined = undefined
 
   override update(
