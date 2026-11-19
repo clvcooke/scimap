@@ -514,10 +514,12 @@ class LocalGenerationSafetyTest(unittest.TestCase):
         self.assertEqual(len(calls), 1)
         self.assertIn("--output", calls[0]["args"])
         self.assertEqual(calls[0]["args"][calls[0]["args"].index("--output") + 1], "json")
+        self.assertEqual(calls[0]["args"][calls[0]["args"].index("--region") + 1], "auto")
         self.assertIn("--no-paginate", calls[0]["args"])
         self.assertEqual(calls[0]["default_output"], "json")
         self.assertEqual(calls[0]["pager"], "")
         self.assertEqual(calls[0]["auto_prompt"], "off")
+        self.assertEqual(calls[0]["region"], "auto")
 
     def install_aws_stub(self, directory, body):
         stub_dir = Path(directory, "bin")
@@ -537,6 +539,7 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             "        'default_output': os.environ.get('AWS_DEFAULT_OUTPUT'),\n"
             "        'pager': os.environ.get('AWS_PAGER'),\n"
             "        'auto_prompt': os.environ.get('AWS_CLI_AUTO_PROMPT'),\n"
+            "        'region': os.environ.get('AWS_REGION'),\n"
             "    }) + '\\n')\n"
             "if 'put-object' in args:\n"
             "    raise SystemExit(0)\n"
@@ -578,6 +581,7 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             "R2_SECRET_ACCESS_KEY": "test-secret-key",
             "R2_ENDPOINT": "https://example.invalid",
             "AWS_DEFAULT_OUTPUT": output_mode,
+            "AWS_REGION": "us-east-2",
             "AWS_STUB_LOG": str(Path(directory, "aws-stub.jsonl")),
             "AWS_STUB_BODY": str(Path(directory, "stub-body")),
             "PATH": stub_dir + os.pathsep + os.environ.get("PATH", ""),
@@ -602,6 +606,7 @@ class LocalGenerationSafetyTest(unittest.TestCase):
         for call in calls:
             args = call["args"]
             self.assertEqual(args[args.index("--output") + 1], "json")
+            self.assertEqual(args[args.index("--region") + 1], "auto")
             self.assertIn("--no-cli-pager", args)
             self.assertIn("--no-cli-auto-prompt", args)
             if "list-objects-v2" in args:
@@ -609,6 +614,7 @@ class LocalGenerationSafetyTest(unittest.TestCase):
             self.assertEqual(call["default_output"], "json")
             self.assertEqual(call["pager"], "")
             self.assertEqual(call["auto_prompt"], "off")
+            self.assertEqual(call["region"], "auto")
             self.assertNotIn("test-secret-key", " ".join(args))
 
     def test_dry_run_does_not_need_credentials(self):

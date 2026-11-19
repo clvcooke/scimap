@@ -84,6 +84,8 @@ def aws_environment():
     env["AWS_ACCESS_KEY_ID"] = access_key
     env["AWS_SECRET_ACCESS_KEY"] = secret_key
     env["AWS_DEFAULT_REGION"] = "auto"
+    # AWS_REGION outranks AWS_DEFAULT_REGION. Pin both so an inherited region cannot sign for R2.
+    env["AWS_REGION"] = "auto"
     return env, endpoint
 
 
@@ -93,7 +95,7 @@ def command_name(args):
 
 def aws(*args, capture=False):
     env, endpoint = aws_environment()
-    # Operator output, pager, and prompt preferences must not change results.
+    # Operator output, pager, prompt, and region preferences must not change results.
     env["AWS_DEFAULT_OUTPUT"] = "json"
     env["AWS_PAGER"] = ""
     env["AWS_CLI_AUTO_PROMPT"] = "off"
@@ -101,6 +103,7 @@ def aws(*args, capture=False):
         "aws",
         *map(str, args),
         "--endpoint-url", endpoint,
+        "--region", "auto",
         "--output", "json",
         "--no-cli-pager",
         "--no-cli-auto-prompt",
