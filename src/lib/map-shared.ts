@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { scaleLinear } from 'd3-scale'
 import type { StyleSpecification } from 'maplibre-gl'
-import { MVTLayer } from '@deck.gl/geo-layers'
+import { MVTLayer, _Tileset2D as Tileset2D } from '@deck.gl/geo-layers'
 import { LUT_BLUES, LUT_OR_RD, LUT_MAGMA_INV, LUT_SIZE, FILL_ALPHA } from './color-lut'
 import {
   getHouseRep,
@@ -55,6 +55,27 @@ export function createLogColorScale(domain: [number, number]) {
 
 // ── Layer factories ────────────────────────────────────────────────
 
+// Tileset2D keeps its previous tile index when maxZoom changes and the
+// viewport does not. Geo levels share one choropleth layer id, so switching
+// from counties (max zoom 9) to states (max zoom 7) kept requesting zoom 8
+// and the states tiles 404'd. Drop the cached viewport so the next update
+// overzooms the last available level instead.
+class OverzoomTileset extends Tileset2D {
+  private indexedMaxZoom: number | null | undefined = undefined
+
+  override update(
+    viewport: Parameters<Tileset2D['update']>[0],
+    params?: Parameters<Tileset2D['update']>[1],
+  ): number {
+    const maxZoom = this.opts.maxZoom
+    if (maxZoom !== this.indexedMaxZoom) {
+      this.indexedMaxZoom = maxZoom
+      ;(this as unknown as { _viewport: unknown })._viewport = null
+    }
+    return super.update(viewport, params)
+  }
+}
+
 export function createChoroplethLayer(
   config: MapGeoConfig,
   colorScale: ReturnType<typeof createLogColorScale>,
@@ -71,6 +92,7 @@ export function createChoroplethLayer(
     highlightColor: [0, 0, 0, 50],
     uniqueIdProperty: config.uniqueIdProperty,
     maxZoom: config.maxZoom,
+    TilesetClass: OverzoomTileset,
     getLineColor: [255, 255, 255, FILL_ALPHA / 3],
     getLineWidth: 1,
     lineWidthMinPixels: 1,
