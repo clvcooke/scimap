@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 import { formatCurrency, formatNumber } from '@/lib/constants'
-import { getCountyName, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
+import { getCountyName, getStateAbbr, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
 import { stateName } from '@/lib/constants'
 import type { BudgetDrawerConfig } from './BudgetDrawer'
 
@@ -17,7 +17,7 @@ export default function BudgetMobileCard({
   onSeeMore: () => void
   onClose: () => void
 }) {
-  const stateRaw = props.state != null ? String(props.state) : ''
+  const stateRaw = getStateAbbr(props)
   const county = geoLevel === 'counties' ? getCountyName(props) : undefined
 
   let label = stateName(stateRaw)

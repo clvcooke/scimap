@@ -168,6 +168,10 @@ export function getLegislatorKeys(props: TileProps): { stateCode: string; cdFp: 
   return { stateCode, cdFp }
 }
 
+export function getStateAbbr(props: TileProps): string {
+  return props.state != null ? String(props.state) : getLegislatorKeys(props).stateCode
+}
+
 /**
  * Read the county display name from tile properties. Some tile schemas expose it
  * as `county` (terminations/grants); others merge it through from the source CSV
@@ -189,7 +193,7 @@ export function buildTooltipHeader(
   geoLevel: LossGeoLevel,
 ): { locationLine: string; politicianHtml: string } {
   const { stateCode, cdFp } = getLegislatorKeys(props)
-  const stateAbbr = props.state != null ? String(props.state) : stateCode
+  const stateAbbr = getStateAbbr(props)
 
   const county = geoLevel === 'counties' ? getCountyName(props) : undefined
 

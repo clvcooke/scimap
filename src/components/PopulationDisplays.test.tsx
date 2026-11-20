@@ -6,6 +6,7 @@ import SCIMap from './Map'
 import DetailDrawer from './DetailDrawer'
 import MobileInfoCard from './MobileInfoCard'
 import BudgetDrawer from './BudgetDrawer'
+import BudgetMobileCard from './BudgetMobileCard'
 
 const sample = vi.hoisted(() => ({ props: {} as TileProps }))
 vi.mock('@/hooks/use-mobile', () => ({ useIsMobile: () => false }))
@@ -50,4 +51,15 @@ it.each(['Guam', 'San Juan Municipio'])('shows unavailable population in all car
 it('omits the population line in budget drawers for tiles without a population field', () => {
   render(<BudgetDrawer props={{ name: 'California', state: 'CA' }} geoLevel="states" config={{ stats: () => [], sections: () => [] }} onClose={vi.fn()} />)
   expect(screen.queryByText(/Population:/)).not.toBeInTheDocument()
+})
+
+it('labels a county from its FIPS when the tile has no state property', () => {
+  const props = { FIPS: '24001', name: 'Allegany County' }
+  const config = { stats: () => [], sections: () => [] }
+  const drawer = render(<BudgetDrawer props={props} geoLevel="counties" config={config} onClose={vi.fn()} />)
+  expect(screen.getByText('Allegany County, MD')).toBeInTheDocument()
+  drawer.unmount()
+
+  render(<BudgetMobileCard props={props} geoLevel="counties" config={config} onSeeMore={vi.fn()} onClose={vi.fn()} />)
+  expect(screen.getByText('Allegany County, MD')).toBeInTheDocument()
 })

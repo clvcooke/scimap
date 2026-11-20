@@ -9,7 +9,7 @@ import {
   getSenatorsList,
   formatPoliticianName,
 } from '@/lib/legislature'
-import { getCountyName, getLegislatorKeys, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
+import { getCountyName, getLegislatorKeys, getStateAbbr, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
 import type { FiscalYear } from '@/lib/report-card-data'
 import { stateName } from '@/lib/constants'
 import { Events, track, buildGeographyEventProps, type MapType } from '@/lib/analytics'
@@ -64,7 +64,7 @@ function formatStat(value: number, format: 'currency' | 'number') {
 }
 
 function locationLabel(props: TileProps, geoLevel: LossGeoLevel): string {
-  const stateRaw = props.state != null ? String(props.state) : ''
+  const stateRaw = getStateAbbr(props)
 
   if (geoLevel === 'districts' && props.GEOID) {
     const num = String(props.GEOID).slice(-2)

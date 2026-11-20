@@ -6,8 +6,8 @@ session. Table CSV exports include the release ID; scientific downloads point to
 that same release. A reload reads the selection again. There is no bundled-data
 fallback after a failed request, so partial or mixed releases are never displayed.
 
-The review build uses `/termination-selection.json`, which selects the existing
-reviewed v2 candidate. No R2 pointer is created by deploying this change. To use
+The review build uses `/termination-selection.json`, which selects the reviewed
+Guam release `2026-10-23-s01-reviewed-20261118-guam-local`. No R2 pointer is created by deploying this change. To use
 operator selection without rebuilding the site for each release, configure
 `VITE_TERMINATION_SELECTION_URL` once to
 `https://data.scienceimpacts.org/terminations/website-release.json` and deploy after
