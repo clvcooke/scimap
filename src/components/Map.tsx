@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import type { PickingInfo } from '@deck.gl/core'
 import type { MjolnirGestureEvent } from 'mjolnir.js'
-import { formatCurrency, formatNumber, stateName } from '@/lib/constants'
+import { formatCurrency, formatNumber, formatPopulation, stateName } from '@/lib/constants'
 import type { GeoLevel } from '@/lib/constants'
 import {
   GEO_LEVELS,
@@ -76,7 +76,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
   const renderTooltip = useCallback(
     (p: TileProps, geoLevel: GeoLevel) => {
       const tile = p as TileProperties
-      const pop = tile.pop_2024 ?? 0
+      const population = `<div>Population: ${formatPopulation(tile.pop_2024)}</div>`
       const displayName = getBaselineDisplayName(tile, geoLevel)
 
       if (agencyFilter === 'nih') {
@@ -86,7 +86,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
           `<div class="font-semibold">${displayName}</div>` +
           `<div>NIH Economic Impact: ${formatCurrency(impact)}</div>` +
           `<div>Jobs Supported: ${formatNumber(jobs)}</div>` +
-          (pop > 0 ? `<div>Population: ${formatNumber(pop)}</div>` : '') +
+          population +
           `<div class="text-xs mt-1 opacity-75">Click for details</div>`
         )
       }
@@ -98,7 +98,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
           `<div class="font-semibold">${displayName}</div>` +
           `<div>NSF Economic Impact: ${formatCurrency(impact)}</div>` +
           (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
-          (pop > 0 ? `<div>Population: ${formatNumber(pop)}</div>` : '') +
+          population +
           `<div class="text-xs mt-1 opacity-75">Click for details</div>`
         )
       }
@@ -111,7 +111,7 @@ export default function SCIMap({ initialLat, initialLng, initialZoom, displayLoc
         `<div class="font-semibold">${displayName}</div>` +
         `<div>Total Economic Impact: ${formatCurrency(impact)}</div>` +
         (jobs > 0 ? `<div>Jobs Supported: ${formatNumber(jobs)}</div>` : '') +
-        (pop > 0 ? `<div>Population: ${formatNumber(pop)}</div>` : '') +
+        population +
         `<div class="mt-1 text-[11px] text-gray-300">` +
         `NIH: ${formatCurrency(nihImpact)} · NSF: ${formatCurrency(nsfImpact)}` +
         `</div>` +

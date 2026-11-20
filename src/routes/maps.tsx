@@ -1,3 +1,5 @@
+import { useTerminationRelease } from '@/lib/termination-release-context'
+import { TerminationReleaseProvider } from '@/components/TerminationReleaseProvider'
 import { useMemo } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Events, track, type MapType } from '@/lib/analytics'
@@ -14,11 +16,11 @@ import {
 } from '@/lib/map-shared'
 import type { MapGeoConfig } from '@/lib/map-shared'
 import { GEO_LEVELS as BASELINE_GEO_LEVELS, createColorScale, createBaselineLayer } from '@/lib/map-config'
-import { GRANTS_GEO_LEVELS, GRANTS_COLOR_PROPERTY } from '@/lib/grants-map-config'
+import { grantsGeoLevels, GRANTS_COLOR_PROPERTY } from '@/lib/grants-map-config'
 import { FY27_GEO_LEVELS, FY27_COLOR_PROPERTY } from '@/lib/fy27-map-config'
 import { IDC_GEO_LEVELS, IDC_COLOR_PROPERTY } from '@/lib/idc-map-config'
 import IconClusterLayer from '@/layers/icon-cluster-layer'
-import { GRANT_LOSSES, type GrantTermination } from '@/data/grant-losses'
+import { type GrantTermination } from '@/data/grant-losses'
 import type { Position } from '@deck.gl/core'
 
 export const Route = createFileRoute('/maps')({
@@ -77,23 +79,24 @@ function ChoroplethPreview({
 const getGrantPosition = (d: GrantTermination): Position => [d.lon, d.lat, 0]
 
 function GrantsPreview() {
-  const config = GRANTS_GEO_LEVELS.counties
+  const release = useTerminationRelease()
+  const config = useMemo(() => grantsGeoLevels(release).counties, [release])
   const colorScale = useMemo(() => createLogColorScale(config.domain), [config])
   const mapLayer = useMemo(
-    () => createChoroplethLayer(config, colorScale, GRANTS_COLOR_PROPERTY, LUT_OR_RD, 'grants-preview'),
-    [config, colorScale],
+    () => createChoroplethLayer(config, colorScale, GRANTS_COLOR_PROPERTY, LUT_OR_RD, `grants-preview-${release.manifest.release_id}`),
+    [config, colorScale, release.manifest.release_id],
   )
   const outlineLayer = useMemo(() => createStateOutlineLayer(), [])
   const clusterLayer = useMemo(
     () =>
       new IconClusterLayer<GrantTermination>({
-        data: GRANT_LOSSES,
+        data: release.grants,
         getPosition: getGrantPosition,
-        id: 'grants-preview-cluster',
+        id: `grants-preview-cluster-${release.manifest.release_id}`,
         sizeScale: 40,
         pickable: false,
       }),
-    [],
+    [release],
   )
 
   return (
@@ -147,7 +150,7 @@ const MAPS = [
   {
     slug: 'map-grants',
     to: '/grants' as const,
-    preview: () => <GrantsPreview />,
+    preview: () => <TerminationReleaseProvider><GrantsPreview /></TerminationReleaseProvider>,
   },
   {
     slug: 'map-fy27',

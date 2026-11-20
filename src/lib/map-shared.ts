@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { scaleLinear } from 'd3-scale'
 import type { StyleSpecification } from 'maplibre-gl'
-import { MVTLayer } from '@deck.gl/geo-layers'
+import { MVTLayer, _Tileset2D as Tileset2D } from '@deck.gl/geo-layers'
 import { LUT_BLUES, LUT_OR_RD, LUT_MAGMA_INV, LUT_SIZE, FILL_ALPHA } from './color-lut'
 import {
   getHouseRep,
@@ -45,6 +45,18 @@ export interface MapGeoConfig {
 
 export type TileProps = Record<string, number | string>
 
+// ── No-data territories ────────────────────────────────────────────
+
+/** Generators set this to 1 on a territory whose source has no row. The feature has no values. */
+export const NO_DATA_PROPERTY = 'no_data'
+export const NO_DATA_MESSAGE = 'Data not available for this territory'
+/** Neutral gray, so a territory without data never reads as a $0 loss. */
+export const NO_DATA_FILL: [number, number, number, number] = [189, 189, 189, FILL_ALPHA]
+
+export function isNoData(props: Record<string, number | string | undefined>): boolean {
+  return Number(props[NO_DATA_PROPERTY]) === 1
+}
+
 // ── Color scale ────────────────────────────────────────────────────
 
 export function createLogColorScale(domain: [number, number]) {
@@ -54,6 +66,28 @@ export function createLogColorScale(domain: [number, number]) {
 }
 
 // ── Layer factories ────────────────────────────────────────────────
+
+// Tileset2D keeps its previous tile index when maxZoom changes and the
+// viewport does not. Choropleth geo levels share one layer id, and the
+// baseline map shares `baseline-mvt`, so switching from counties (max zoom
+// 9) to states (max zoom 7) kept requesting zoom 8 and the state tiles
+// 404'd. Drop the cached viewport so the next update overzooms the last
+// available level instead.
+export class OverzoomTileset extends Tileset2D {
+  private indexedMaxZoom: number | null | undefined = undefined
+
+  override update(
+    viewport: Parameters<Tileset2D['update']>[0],
+    params?: Parameters<Tileset2D['update']>[1],
+  ): number {
+    const maxZoom = this.opts.maxZoom
+    if (maxZoom !== this.indexedMaxZoom) {
+      this.indexedMaxZoom = maxZoom
+      ;(this as unknown as { _viewport: unknown })._viewport = null
+    }
+    return super.update(viewport, params)
+  }
+}
 
 export function createChoroplethLayer(
   config: MapGeoConfig,
@@ -71,12 +105,14 @@ export function createChoroplethLayer(
     highlightColor: [0, 0, 0, 50],
     uniqueIdProperty: config.uniqueIdProperty,
     maxZoom: config.maxZoom,
+    TilesetClass: OverzoomTileset,
     getLineColor: [255, 255, 255, FILL_ALPHA / 3],
     getLineWidth: 1,
     lineWidthMinPixels: 1,
     lineWidthUnits: 'pixels' as const,
     updateTriggers: { getFillColor: [colorScale, colorProperty] },
     getFillColor: (f: { properties: Record<string, number> }) => {
+      if (isNoData(f.properties)) return NO_DATA_FILL
       const v = f.properties[colorProperty] ?? 0
       const idx =
         Math.round(colorScale(v > 0 ? Math.log(v) : 0) * (LUT_SIZE - 1)) * 4
@@ -86,7 +122,7 @@ export function createChoroplethLayer(
 }
 
 const STATE_TILE =
-  'https://data.scienceimpacts.org/tiles_states_budget_v1/{z}/{x}/{y}.pbf'
+  'https://data.scienceimpacts.org/tiles_states_budget26_v2/{z}/{x}/{y}.pbf'
 
 export function createStateOutlineLayer(tileUrl: string = STATE_TILE) {
   return new MVTLayer({
@@ -145,6 +181,10 @@ export function getLegislatorKeys(props: TileProps): { stateCode: string; cdFp: 
   return { stateCode, cdFp }
 }
 
+export function getStateAbbr(props: TileProps): string {
+  return props.state != null ? String(props.state) : getLegislatorKeys(props).stateCode
+}
+
 /**
  * Read the county display name from tile properties. Some tile schemas expose it
  * as `county` (terminations/grants); others merge it through from the source CSV
@@ -166,7 +206,7 @@ export function buildTooltipHeader(
   geoLevel: LossGeoLevel,
 ): { locationLine: string; politicianHtml: string } {
   const { stateCode, cdFp } = getLegislatorKeys(props)
-  const stateAbbr = props.state != null ? String(props.state) : stateCode
+  const stateAbbr = getStateAbbr(props)
 
   const county = geoLevel === 'counties' ? getCountyName(props) : undefined
 
@@ -195,6 +235,20 @@ export function buildTooltipHeader(
   }
 
   return { locationLine, politicianHtml: html }
+}
+
+/**
+ * Tooltip for a no-data territory: its name and legislators, and no amounts.
+ * ChoroplethMap passes its generic geo-level key; the header only branches on
+ * 'counties' and 'districts', so any other key reads as a state.
+ */
+export function renderNoDataTooltip(props: TileProps, geoLevel: string): string {
+  const { locationLine, politicianHtml } = buildTooltipHeader(props, geoLevel as LossGeoLevel)
+  return (
+    `<div class="font-semibold">${locationLine}</div>` +
+    politicianHtml +
+    `<div class="mt-1">${NO_DATA_MESSAGE}</div>`
+  )
 }
 
 // ── Labels-only basemap style ─────────────────────────────────────

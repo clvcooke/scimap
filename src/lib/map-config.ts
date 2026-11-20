@@ -2,7 +2,7 @@ import { scaleLinear, type ScaleLinear } from 'd3-scale'
 import { MVTLayer } from '@deck.gl/geo-layers'
 import { LUT_BLUES, LUT_SIZE, FILL_ALPHA } from './color-lut'
 import type { GeoLevel } from './constants'
-import { NSF_DIRECTORATES, type AgencyFilter } from './map-shared'
+import { NSF_DIRECTORATES, OverzoomTileset, type AgencyFilter } from './map-shared'
 
 // --- Types ---
 
@@ -25,7 +25,7 @@ export interface GeoConfig {
 // --- Tile configuration ---
 
 const DOMAIN = 'https://data.scienceimpacts.org'
-const TILE_VERSION = 'baseline-v9'
+const TILE_VERSION = 'baseline-v11'
 export const INITIAL_VIEW_STATE = {
   longitude: -98.5795,
   latitude: 39.8283,
@@ -131,6 +131,7 @@ export function createBaselineLayer(
     highlightColor: [0, 0, 0, 50],
     uniqueIdProperty: config.uniqueIdProperty,
     maxZoom: config.maxZoom,
+    TilesetClass: OverzoomTileset,
     getLineColor: [255, 255, 255, FILL_ALPHA / 3],
     getLineWidth: 1,
     lineWidthMinPixels: 1,

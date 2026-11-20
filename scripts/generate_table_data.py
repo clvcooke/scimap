@@ -8,8 +8,10 @@ instead of parsing and aggregating raw CSVs at runtime.
 
 Usage:
     python scripts/generate_table_data.py
+    python scripts/generate_table_data.py --population-only
 """
 
+import argparse
 import csv
 import json
 import os
@@ -50,6 +52,7 @@ LEVELS = {
 
 NIH_SUM_FIELDS = ["econ_impact", "raw_funding", "jobs"]
 NSF_SUM_FIELDS = ["econ_impact", "raw_funding"]
+ID_WIDTHS = {"FIPS": 5, "GEOID": 4}
 
 
 def safe_float(val):
@@ -80,6 +83,7 @@ def aggregate_csv(csv_path, id_col, name_col, state_col, sum_fields, prefix):
             rid = row[id_col]
             if not rid:
                 continue
+            rid = rid.zfill(ID_WIDTHS.get(id_col, 0))
 
             if rid not in regions:
                 # Derive name (treat "NA" as missing)
@@ -109,9 +113,9 @@ def load_pop(csv_path, id_col, pad_width=None):
         reader = csv.DictReader(f)
         for row in reader:
             rid = row[id_col]
-            if pad_width:
-                rid = rid.zfill(pad_width)
-            pop[rid] = safe_int(row.get("pop_2024"))
+            rid = rid.zfill(pad_width or ID_WIDTHS.get(id_col, 0))
+            value = row.get("pop_2024")
+            pop[rid] = safe_int(value) if value and value != "NA" else None
     return pop
 
 
@@ -133,7 +137,7 @@ def merge_and_total(nih_regions, nsf_regions, pop_lookup):
         entry = {
             "id": nih.get("id", nsf.get("id", rid)),
             "name": name,
-            "pop_2024": pop_lookup.get(rid, 0),
+            "pop_2024": pop_lookup.get(rid),
             # NIH fields
             "nih_econ_impact": round(nih.get("nih_econ_impact", 0), 2),
             "nih_raw_funding": round(nih.get("nih_raw_funding", 0), 2),
@@ -154,38 +158,46 @@ def merge_and_total(nih_regions, nsf_regions, pop_lookup):
     return result
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--population-only", action="store_true", help="Refresh populations from committed references without changing funding/jobs")
+    args = parser.parse_args(argv)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     for level_name, config in LEVELS.items():
         print(f"Processing {level_name}...")
-
-        nih_regions = aggregate_csv(
-            config["nih_csv"],
-            config["id_col"],
-            config["name_col"],
-            config["state_col"],
-            NIH_SUM_FIELDS,
-            prefix="nih_",
-        )
-        print(f"  NIH: {len(nih_regions)} regions")
-
-        nsf_regions = aggregate_csv(
-            config["nsf_csv"],
-            config["id_col"],
-            config["name_col"],
-            config["state_col"],
-            NSF_SUM_FIELDS,
-            prefix="nsf_",
-        )
-        print(f"  NSF: {len(nsf_regions)} regions")
-
         pop_lookup = load_pop(config["pop_csv"], config["id_col"])
         print(f"  Pop: {len(pop_lookup)} regions")
-
-        rows = merge_and_total(nih_regions, nsf_regions, pop_lookup)
-
         output_path = os.path.join(OUTPUT_DIR, f"table_{level_name}.json")
+
+        if args.population_only:
+            with open(output_path, encoding="utf-8") as source:
+                rows = json.load(source)
+            for row in rows:
+                rid = row["id"].zfill(ID_WIDTHS.get(config["id_col"], 0))
+                row["pop_2024"] = pop_lookup.get(rid)
+        else:
+            nih_regions = aggregate_csv(
+                config["nih_csv"],
+                config["id_col"],
+                config["name_col"],
+                config["state_col"],
+                NIH_SUM_FIELDS,
+                prefix="nih_",
+            )
+            print(f"  NIH: {len(nih_regions)} regions")
+
+            nsf_regions = aggregate_csv(
+                config["nsf_csv"],
+                config["id_col"],
+                config["name_col"],
+                config["state_col"],
+                NSF_SUM_FIELDS,
+                prefix="nsf_",
+            )
+            print(f"  NSF: {len(nsf_regions)} regions")
+            rows = merge_and_total(nih_regions, nsf_regions, pop_lookup)
+
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(rows, f, separators=(",", ":"))
 

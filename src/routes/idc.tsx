@@ -25,7 +25,7 @@ function IDCRoute() {
       <div className="flex h-[calc(100dvh-57px)] flex-col md:h-[calc(100dvh-65px)]">
         <MapHeader page={PAGE} />
         <div key={`${lat}-${lng}-${zoom}`} className="relative w-full flex-1 min-h-0">
-          <IDCMap aboutContent={ABOUT} />
+          <IDCMap initialLat={lat} initialLng={lng} initialZoom={zoom} aboutContent={ABOUT} />
           <MapFocusOverlay />
         </div>
       </div>

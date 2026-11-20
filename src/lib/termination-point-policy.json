@@ -1,0 +1,4 @@
+{
+  "minimum_current_loss_dollars": 0.005,
+  "requires_positive_current_grant_count": true
+}

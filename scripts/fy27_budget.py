@@ -25,9 +25,26 @@ NIH_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NIH Budget")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NSF Budget")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "v6"
-# Territories that only have congressional district geometry (no state/county/city shapes)
-TERRITORY_DISTRICT_GEOIDS = {"PR": "7298", "VI": "7898"}
+TILE_VERSION = "v7"
+# Territories that only have congressional district geometry (no state/county/city shapes).
+# One at-large district polygon is reused as the state and county map feature.
+TERRITORY_DISTRICT_GEOIDS = {
+    "AS": "6098",
+    "GU": "6698",
+    "MP": "6998",
+    "PR": "7298",
+    "VI": "7898",
+}
+TERRITORY_NAMES = {
+    "AS": "American Samoa",
+    "GU": "Guam",
+    "MP": "Northern Mariana Islands",
+    "PR": "Puerto Rico",
+    "VI": "Virgin Islands",
+}
+# Set to 1 on a territory feature whose source has no row. The website draws
+# it in a neutral color and says the data is not available. It carries no values.
+NO_DATA_PROPERTY = "no_data"
 
 # ── Remote geo-reference data (Cloudflare R2) ────────────────────────
 R2_BASE = "https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data"
@@ -49,20 +66,20 @@ def download_geo_refs():
         local_path = os.path.join(GEO_CACHE_DIR, filename)
         if os.path.exists(local_path):
             print(f"  Cached: {filename}")
-            continue
+        else:
+            url = f"{R2_BASE}/{filename}"
+            print(f"  Downloading: {filename} ...")
+            rc = subprocess.run(["curl", "-sL", "-o", local_path, url]).returncode
+            if rc != 0:
+                raise RuntimeError(f"curl failed for {url} (exit {rc})")
+            print(f"  Saved: {local_path}")
 
-        url = f"{R2_BASE}/{filename}"
-        print(f"  Downloading: {filename} ...")
-        rc = subprocess.run(["curl", "-sL", "-o", local_path, url]).returncode
-        if rc != 0:
-            raise RuntimeError(f"curl failed for {url} (exit {rc})")
-        print(f"  Saved: {local_path}")
-
-        # Auto-extract zip files
+        # A cached zip can sit next to an empty extract directory from an older run.
         if filename.endswith(".zip"):
             extract_dir = os.path.join(GEO_CACHE_DIR, os.path.splitext(filename)[0])
-            if not os.path.exists(extract_dir):
+            if not shapefile_present(extract_dir):
                 print(f"  Extracting: {filename} -> {extract_dir}")
+                os.makedirs(extract_dir, exist_ok=True)
                 with zipfile.ZipFile(local_path, "r") as zf:
                     zf.extractall(extract_dir)
 
@@ -114,6 +131,16 @@ def build_levels():
             "zoom": 9,
         },
     }
+
+
+def shapefile_present(directory):
+    """Return whether a directory tree already contains a shapefile."""
+    if not os.path.isdir(directory):
+        return False
+    for root, _dirs, files in os.walk(directory):
+        if any(name.endswith(".shp") for name in files):
+            return True
+    return False
 
 
 def find_shapefile(directory):
@@ -270,8 +297,60 @@ def upload_tiles(tile_output_dir, remote_path):
     print(f"  Upload complete: {remote_path}")
 
 
+def assert_territory_geometries(territory_geoms):
+    """Fail when a required territory district polygon is missing.
+
+    A territory with no data row is only a warning. Missing geometry would
+    publish a map that silently drops that territory.
+    """
+    missing = [
+        f"{abbrev} ({geoid})"
+        for abbrev, geoid in TERRITORY_DISTRICT_GEOIDS.items()
+        if geoid not in territory_geoms
+    ]
+    if missing:
+        raise RuntimeError(
+            "Missing required territory district geometries: " + ", ".join(missing)
+        )
+
+
+def add_no_data_territories(territory_df, state_value):
+    """Add a no-data marker row for each territory that has no source row.
+
+    The marker row has the territory's identity fields and NO_DATA_PROPERTY = 1.
+    It has no value columns, so the map never shows an invented amount.
+    `state_value(abbrev)` returns what the source puts in its `state` column.
+    """
+    present = set(territory_df["GEOID"].astype(str))
+    rows = [
+        {
+            "GEOID": geoid,
+            "state": state_value(abbrev),
+            "state_code": abbrev,
+            "state_name": TERRITORY_NAMES[abbrev],
+            NO_DATA_PROPERTY: 1,
+        }
+        for abbrev, geoid in TERRITORY_DISTRICT_GEOIDS.items()
+        if geoid not in present
+    ]
+    if not rows:
+        return territory_df
+    return pd.concat([territory_df, pd.DataFrame(rows)], ignore_index=True)
+
+
+def append_no_data_districts(frame, territory_df):
+    """Add the no-data territory rows to a district frame that lacks them."""
+    if NO_DATA_PROPERTY not in territory_df.columns:
+        return frame
+    marker = territory_df[NO_DATA_PROPERTY] == 1
+    rows = territory_df[marker & ~territory_df["GEOID"].isin(frame["GEOID"])]
+    if rows.empty:
+        return frame
+    return pd.concat([frame, rows], ignore_index=True)
+
+
 def load_territory_district_data(district_config):
-    """Load district geometries and merged NIH/NSF data for PR and VI territories only."""
+    """Load district geometries and merged NIH/NSF data for AS, GU, MP, PR, and VI."""
     territory_geoids = set(TERRITORY_DISTRICT_GEOIDS.values())
 
     all_geoms = load_geometries(
@@ -291,11 +370,12 @@ def load_territory_district_data(district_config):
         territory_df["GEOID"] = territory_df["GEOID"].astype(str)
 
     territory_df = territory_df[territory_df["GEOID"].isin(territory_geoids)].copy()
+    assert_territory_geometries(territory_geoms)
     return territory_geoms, territory_df
 
 
 def inject_territory_features(level_name, merged, geometries, csv_key, territory_geoms, territory_df):
-    """Inject PR/VI district data and geometry into non-district geo levels."""
+    """Inject territory district data and geometry into non-district geo levels."""
     for abbrev, geoid in TERRITORY_DISTRICT_GEOIDS.items():
         if geoid not in territory_geoms:
             print(f"  Warning: no district geometry for territory {abbrev} ({geoid})")
@@ -357,7 +437,7 @@ def process_level(name, config, territory_geoms, territory_df):
         merged[csv_key] = merged[csv_key].astype(str)
 
     if name != "districts":
-        print("Injecting territory (PR/VI) data from district level...")
+        print("Injecting territory (AS/GU/MP/PR/VI) data from district level...")
         merged, geometries = inject_territory_features(
             name, merged, geometries, csv_key, territory_geoms, territory_df
         )
@@ -373,8 +453,11 @@ def process_level(name, config, territory_geoms, territory_df):
     tile_dir = os.path.join(OUTPUT_DIR, tile_name)
     generate_tiles(geojson_output, tile_dir, zoom)
 
-    print("Uploading tiles...")
-    upload_tiles(tile_dir, tile_name)
+    if os.environ.get("SCIMAP_SKIP_TILE_UPLOAD"):
+        print("  Skipping rclone upload (SCIMAP_SKIP_TILE_UPLOAD is set; publish with the AWS CLI)")
+    else:
+        print("Uploading tiles...")
+        upload_tiles(tile_dir, tile_name)
 
     print(f"Done: {name}")
 
@@ -385,7 +468,7 @@ def main():
 
     levels = build_levels()
 
-    print("\nPre-loading territory (PR/VI) district data...")
+    print("\nPre-loading territory (AS/GU/MP/PR/VI) district data...")
     territory_geoms, territory_df = load_territory_district_data(levels["districts"])
     print(f"  Loaded {len(territory_geoms)} territory geometries, {len(territory_df)} territory rows")
 

@@ -59,7 +59,12 @@ const renderTooltip = (p: TileProps, geoLevel: LossGeoLevel) => {
   )
 }
 
-export default function IDCMap({ aboutContent }: { aboutContent?: MapAboutContent }) {
+export default function IDCMap({ initialLat, initialLng, initialZoom, aboutContent }: {
+  initialLat?: number | undefined
+  initialLng?: number | undefined
+  initialZoom?: number | undefined
+  aboutContent?: MapAboutContent
+}) {
   return (
     <ChoroplethMap
       geoLevels={IDC_GEO_LEVELS}
@@ -71,6 +76,9 @@ export default function IDCMap({ aboutContent }: { aboutContent?: MapAboutConten
       mapType="idc"
       renderTooltip={renderTooltip}
       drawerConfig={drawerConfig}
+      initialLat={initialLat}
+      initialLng={initialLng}
+      initialZoom={initialZoom}
       aboutContent={aboutContent}
     />
   )

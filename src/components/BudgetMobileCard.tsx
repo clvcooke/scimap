@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 import { formatCurrency, formatNumber } from '@/lib/constants'
-import { getCountyName, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
+import { NO_DATA_MESSAGE, getCountyName, getStateAbbr, isNoData, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
 import { stateName } from '@/lib/constants'
 import type { BudgetDrawerConfig } from './BudgetDrawer'
 
@@ -17,7 +17,7 @@ export default function BudgetMobileCard({
   onSeeMore: () => void
   onClose: () => void
 }) {
-  const stateRaw = props.state != null ? String(props.state) : ''
+  const stateRaw = getStateAbbr(props)
   const county = geoLevel === 'counties' ? getCountyName(props) : undefined
 
   let label = stateName(stateRaw)
@@ -31,7 +31,8 @@ export default function BudgetMobileCard({
     label = String(props.state_name)
   }
 
-  const stats = config.stats(props)
+  const noData = isNoData(props)
+  const stats = noData ? [] : config.stats(props)
 
   return (
     <div className="absolute bottom-2 left-2 right-14 z-20 rounded-xl bg-white p-3 shadow-lg">
@@ -39,6 +40,7 @@ export default function BudgetMobileCard({
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm font-semibold text-gray-900">{label}</div>
           <div className="mt-0.5 flex flex-wrap gap-x-3 text-xs text-gray-500">
+            {noData && <span>{NO_DATA_MESSAGE}</span>}
             {stats.slice(0, 3).map((s) => (
               <span key={s.label}>
                 {s.label}: {s.format === 'currency' ? formatCurrency(s.value) : formatNumber(s.value)}
