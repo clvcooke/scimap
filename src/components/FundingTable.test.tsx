@@ -23,8 +23,10 @@ afterEach(() => {
 
 it('only shows the population note for a tab with missing values', () => {
   render(<FundingTable />)
+  expect(screen.getByText(/April 1, 2020 Census/)).toBeInTheDocument()
   expect(screen.getByText(/Not available means/)).toBeInTheDocument()
   fireEvent.click(screen.getByRole('tab', { name: 'State' }))
+  expect(screen.getByText(/April 1, 2020 Census/)).toBeInTheDocument()
   expect(screen.queryByText(/Not available means/)).not.toBeInTheDocument()
 })
 

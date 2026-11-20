@@ -28,8 +28,8 @@ const TILES_BY_FY = {
     colorProperty: 'budg_NIH_cuts_econ_loss',
   },
   fy27: {
-    districts: `${DOMAIN}/tiles_districts_budget27_v3/{z}/{x}/{y}.pbf`,
-    states: `${DOMAIN}/tiles_states_budget27_v3/{z}/{x}/{y}.pbf`,
+    districts: `${DOMAIN}/tiles_districts_budget27_v7/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget27_v7/{z}/{x}/{y}.pbf`,
     colorProperty: 'econ_budg_total_cuts',
   },
 } as const

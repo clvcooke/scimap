@@ -25,7 +25,7 @@ export interface GeoConfig {
 // --- Tile configuration ---
 
 const DOMAIN = 'https://data.scienceimpacts.org'
-const TILE_VERSION = 'baseline-v9'
+const TILE_VERSION = 'baseline-v10'
 export const INITIAL_VIEW_STATE = {
   longitude: -98.5795,
   latitude: 39.8283,

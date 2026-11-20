@@ -207,6 +207,9 @@ export default function FundingTable() {
         <h2 className="mb-4 text-xl font-bold text-gray-900">
           Funding by Region
         </h2>
+        <p className="mb-4 text-sm text-gray-600">
+          Territory populations for American Samoa, Guam, the Northern Mariana Islands, Puerto Rico, and the U.S. Virgin Islands are April 1, 2020 Census counts, not 2024 estimates.
+        </p>
         {config.data.some((row) => row.pop_2024 === null) && (
           <p className="mb-4 text-sm text-gray-600">Population: Not available means the reference data has no population for that region; it does not mean zero residents.</p>
         )}

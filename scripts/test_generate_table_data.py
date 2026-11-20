@@ -31,21 +31,32 @@ class PopulationTests(unittest.TestCase):
         result = merge_and_total({'66010': {'id': '66010', 'name': 'Guam'}}, {}, {})
         self.assertIsNone(result[0]['pop_2024'])
 
-    def test_only_the_documented_territory_population_gaps_remain(self):
-        expected = {
-            'states': {'AS', 'GU', 'MP', 'PR', 'VI'},
-            'districts': {'6098', '6698', '6998', '7298', '7898'},
+    def test_census_2020_territory_populations_and_remaining_gaps(self):
+        # April 1, 2020 Census. State and at-large district figures are the
+        # territory total. County figures are the matching Census area only.
+        census = {
+            'states': {
+                'AS': 49710, 'GU': 153836, 'MP': 47329, 'PR': 3285874, 'VI': 87146,
+            },
+            'districts': {
+                '6098': 49710, '6698': 153836, '6998': 47329, '7298': 3285874, '7898': 87146,
+            },
             'counties': {
-                '60010', '60050', '66010', '69110', '78030',
-                '72005', '72013', '72021', '72025', '72031', '72035',
-                '72041', '72055', '72063', '72069', '72085', '72097',
-                '72113', '72117', '72127', '72133', '72139',
+                '60010': 17059, '60050': 31819, '66010': 153836, '69110': 43385, '78030': 42261,
             },
         }
         data_dir = Path(__file__).resolve().parents[1] / 'src' / 'data'
-        for level, missing in expected.items():
+        for level, expected in census.items():
             rows = json.loads((data_dir / f'table_{level}.json').read_text())
-            self.assertEqual({row['id'] for row in rows if row['pop_2024'] is None}, missing)
+            by_id = {row['id']: row for row in rows}
+            for region_id, population in expected.items():
+                self.assertEqual(by_id[region_id]['pop_2024'], population)
+            missing = {row['id'] for row in rows if row['pop_2024'] is None}
+            if level == 'counties':
+                self.assertTrue(missing)
+                self.assertTrue(all(region_id.startswith('72') for region_id in missing))
+            else:
+                self.assertEqual(missing, set())
 
     def test_real_references_match_every_committed_population(self):
         data_dir = Path(__file__).resolve().parents[1] / 'src' / 'data'
