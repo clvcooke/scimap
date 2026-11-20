@@ -27,25 +27,20 @@ function renderDetails(warnings: string[]) {
   )
 }
 describe('public release details', () => {
-  it('deduplicates technical Guam warnings into public coverage copy and labels event dates', () => {
+  it('collapses multiple warnings into one public coverage line and labels event dates', () => {
     renderDetails([
       'counties 66010 (Guam) is in the table but on no map tile ($211,390.66 current economic loss)',
       'states GU (GU) is in the table but on no map tile ($211,390.66 current economic loss)',
     ])
-    expect(
-      screen.getAllByText(
-        'Guam appears in tables and downloads but not on the state or county maps.',
-      ),
-    ).toHaveLength(1)
+    expect(screen.getAllByText(/Some areas have limited map coverage/)).toHaveLength(1)
     expect(screen.queryByText(/66010/)).not.toBeInTheDocument()
     expect(
       screen.getByText(/Latest recorded grant event:.*NIH 2026-10-20.*NSF 2026-05-13/),
     ).toBeInTheDocument()
     expect(screen.getByText(/Data through:/)).toHaveTextContent('2026-10-26')
   })
-  it('does not claim Guam is absent when the selected release has full coverage', () => {
+  it('shows no coverage warning when the selected release has full coverage', () => {
     renderDetails([])
-    expect(screen.queryByText(/Guam appears in tables/)).not.toBeInTheDocument()
     expect(screen.queryByText(/limited map coverage/)).not.toBeInTheDocument()
   })
   it('acknowledges other coverage warnings without publishing raw diagnostics', () => {

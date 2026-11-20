@@ -71,12 +71,9 @@ export function TerminationReleaseDetails() {
           )
           .join(' · ')}
       </p>
-      {manifest.release_validation.warnings.some((warning) =>
-        /\bGuam\b|\bstates GU\b/.test(warning),
-      ) && <p>Guam appears in tables and downloads but not on the state or county maps.</p>}
-      {manifest.release_validation.warnings.some(
-        (warning) => !/\bGuam\b|\bstates GU\b/.test(warning),
-      ) && <p>Some areas have limited map coverage. See the release information for details.</p>}
+      {manifest.release_validation.warnings.length > 0 && (
+        <p>Some areas have limited map coverage. See the release information for details.</p>
+      )}
       <details>
         <summary className="cursor-pointer">Scientific CSV downloads</summary>
         <p>
