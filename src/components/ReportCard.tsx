@@ -23,8 +23,8 @@ const DOMAIN = 'https://data.scienceimpacts.org'
 
 const TILES_BY_FY = {
   fy26: {
-    districts: `${DOMAIN}/tiles_districts_budget_119_v2/{z}/{x}/{y}.pbf`,
-    states: `${DOMAIN}/tiles_states_budget_v1/{z}/{x}/{y}.pbf`,
+    districts: `${DOMAIN}/tiles_districts_budget26_v1/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget26_v1/{z}/{x}/{y}.pbf`,
     colorProperty: 'budg_NIH_cuts_econ_loss',
   },
   fy27: {

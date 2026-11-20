@@ -6,15 +6,15 @@ MVT (Mapbox Vector Tiles) containing baseline NIH funding data across four geogr
 
 | Layer | Tile path | Max zoom | Features | Unique ID property |
 |-------|-----------|----------|----------|--------------------|
-| States | `tiles_states_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 7 | 51 | `state` |
-| Counties | `tiles_counties_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 9 | 3,143 | `FIPS` |
-| Congressional Districts | `tiles_districts_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 9 | 436 | `GEOID` |
-| Cities (CBSA) | `tiles_cities_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 9 | 925 | `CBSA_FIPS` |
+| States | `tiles_states_baseline_baseline-v11/{z}/{x}/{y}.pbf` | 7 | 56 | `state` |
+| Counties | `tiles_counties_baseline_baseline-v11/{z}/{x}/{y}.pbf` | 9 | 3,149 | `FIPS` |
+| Congressional Districts | `tiles_districts_baseline_baseline-v11/{z}/{x}/{y}.pbf` | 9 | 441 | `GEOID` |
+| Cities (CBSA) | `tiles_cities_baseline_baseline-v11/{z}/{x}/{y}.pbf` | 9 | 1,842 | `CBSA_FIPS` |
 
 Tiles are served from `https://data.scienceimpacts.org/` (Cloudflare R2). Full URL example:
 
 ```
-https://data.scienceimpacts.org/tiles_states_baseline_baseline-v1/{z}/{x}/{y}.pbf
+https://data.scienceimpacts.org/tiles_states_baseline_baseline-v11/{z}/{x}/{y}.pbf
 ```
 
 ## Feature Properties
@@ -94,10 +94,10 @@ const DOMAIN = 'https://data.scienceimpacts.org'
 
 // Tile URLs
 const TILES = {
-  states: `${DOMAIN}/tiles_states_baseline_baseline-v1/{z}/{x}/{y}.pbf`,
-  counties: `${DOMAIN}/tiles_counties_baseline_baseline-v1/{z}/{x}/{y}.pbf`,
-  districts: `${DOMAIN}/tiles_districts_baseline_baseline-v1/{z}/{x}/{y}.pbf`,
-  cities: `${DOMAIN}/tiles_cities_baseline_baseline-v1/{z}/{x}/{y}.pbf`,
+  states: `${DOMAIN}/tiles_states_baseline_baseline-v11/{z}/{x}/{y}.pbf`,
+  counties: `${DOMAIN}/tiles_counties_baseline_baseline-v11/{z}/{x}/{y}.pbf`,
+  districts: `${DOMAIN}/tiles_districts_baseline_baseline-v11/{z}/{x}/{y}.pbf`,
+  cities: `${DOMAIN}/tiles_cities_baseline_baseline-v11/{z}/{x}/{y}.pbf`,
 }
 
 // Unique ID property per layer (for highlighting/picking)
@@ -166,7 +166,7 @@ The population-only correction restores 319 county rows using `SciMap_Maps/data/
 
 Territory state rows, at-large district rows and the matching territory county rows store April 1, 2020 Census counts in the historical `pop_2024` column; see the [reference notes](reference/README.md) for the sources and per-row values. Puerto Rico municipio rows stay blank.
 
-The baseline tile generator joins the same references. It zero-pads only the join key (county FIPS to five digits, district GEOIDs to four), so tile IDs stay unpadded (`6037`) while matching the padded reference (`06037`). Territory state and county map features reuse the at-large district population. Cities have no population reference and carry no `pop_2024`. Tiles regenerated after this change use `TILE_VERSION = "baseline-v11"`; `baseline-v10` dropped county populations whose FIPS starts with `0`.
+The baseline tile generator joins the same references. It zero-pads only the join key (county FIPS to five digits, district GEOIDs to four), so tile IDs stay unpadded (`6037`) while matching the padded reference (`06037`). Territory state and county map features reuse the at-large district population. Cities have no population reference and carry no `pop_2024`. Tiles regenerated after this change use `TILE_VERSION = "baseline-v11"`. `src/lib/map-config.ts` uses that same version. `baseline-v10` dropped county populations whose FIPS starts with `0`.
 
 To reproduce the population-only correction from a website checkout (without rebuilding scientific outputs):
 

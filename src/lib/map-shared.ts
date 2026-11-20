@@ -109,7 +109,7 @@ export function createChoroplethLayer(
 }
 
 const STATE_TILE =
-  'https://data.scienceimpacts.org/tiles_states_budget_v1/{z}/{x}/{y}.pbf'
+  'https://data.scienceimpacts.org/tiles_states_budget26_v1/{z}/{x}/{y}.pbf'
 
 export function createStateOutlineLayer(tileUrl: string = STATE_TILE) {
   return new MVTLayer({
