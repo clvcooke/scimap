@@ -57,7 +57,6 @@ def publish_fixture(directory):
         prefix="terminations/releases",
         public_base="https://data.example.org",
         record=Path(directory, "record.json"),
-        transfers=4,
         dry_run=False,
     )
     return manifest, args

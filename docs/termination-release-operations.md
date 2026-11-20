@@ -65,7 +65,7 @@ The reference is `CongDist_shp_119.zip` under the existing R2 reference-data URL
 
 Adding this generator support does not change an already-published immutable release. Build from a clean code revision, validate a new release ID, obtain publication approval, then publish/select a new preview candidate. Old releases retain their recorded coverage warnings; the frontend removes the Guam limitation sentence only when the selected release no longer reports that gap.
 
-Territory population values are separate from map geometry. Existing baseline population references still need reviewed territory values/reference years; a polygon or a filename containing `2024` does not supply those values. Do not fill unknown populations with zero or substitute another year silently.
+Territory population values are separate from map geometry. The territory state rows and at-large district rows use April 1, 2020 Census counts, stored in the historical `pop_2024` column; they are not 2024 estimates. Puerto Rico municipio rows stay blank. See `scripts/reference/README.md` for sources and the appended territory county rows.
 
 ## Checks before enabling production selection
 

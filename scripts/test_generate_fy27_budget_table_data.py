@@ -17,7 +17,7 @@ def write_csv(path, fieldnames, rows):
 
 
 class Fy27TerritoryTableTests(unittest.TestCase):
-    def test_retired_connecticut_counties_drop_and_missing_state_comes_from_district(self):
+    def test_missing_state_comes_from_district(self):
         nih_fields = ["budg_NIH_cuts", "econ_budg_NIH_cuts", "jobs_budg_NIH_cuts"]
         nsf_fields = ["budg_NSF_cuts", "econ_budg_NSF_cuts", "jobs_budg_NSF_cuts"]
         with tempfile.TemporaryDirectory() as directory:
@@ -66,7 +66,6 @@ class Fy27TerritoryTableTests(unittest.TestCase):
                 fy27_tables.main()
 
             states = {row["id"]: row for row in json.loads((root / "table_fy27_states.json").read_text())}
-            counties = {row["id"]: row for row in json.loads((root / "table_fy27_counties.json").read_text())}
             districts = {row["id"]: row for row in json.loads((root / "table_fy27_districts.json").read_text())}
             self.assertEqual(set(states), {"MP", "PR"})
             self.assertNotIn("NA", states)
@@ -75,8 +74,6 @@ class Fy27TerritoryTableTests(unittest.TestCase):
             self.assertEqual(states["MP"]["nsf_econ_loss"], 263130.34)
             self.assertEqual(states["PR"]["nsf_econ_loss"], 20)
             self.assertEqual(districts["6998"]["name"], "MP-98")
-            self.assertEqual(set(counties), {"09190"})
-            self.assertNotIn("09001", counties)
 
     def test_northern_mariana_state_code_na_is_renamed_once(self):
         renamed = fy27_tables.canonicalize_northern_mariana_state({

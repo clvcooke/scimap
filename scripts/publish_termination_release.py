@@ -416,7 +416,6 @@ def parse_args(argv=None):
     parser.add_argument("--prefix", default=DEFAULT_PREFIX)
     parser.add_argument("--public-base", default=DEFAULT_PUBLIC_BASE)
     parser.add_argument("--record", help="Upload record path (default: scripts/outputs/uploads/<release-id>-<UTC time>.json)")
-    parser.add_argument("--transfers", type=int, default=32, help="Accepted for compatibility; puts stay sequential")
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args(argv)
 
