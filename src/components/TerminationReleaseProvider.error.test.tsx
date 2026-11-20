@@ -6,8 +6,19 @@ vi.mock('@/lib/termination-release', () => ({
 import { TerminationReleaseProvider } from './TerminationReleaseProvider'
 
 it('retains the caller map shell when release loading fails', async () => {
-  render(<TerminationReleaseProvider fallback={(status) => <section><h1>Grant Terminations Map</h1>{status}</section>}><p>Loaded map</p></TerminationReleaseProvider>)
+  render(
+    <TerminationReleaseProvider
+      fallback={(status) => (
+        <section>
+          <h1>Grant Terminations Map</h1>
+          {status}
+        </section>
+      )}
+    >
+      <p>Loaded map</p>
+    </TerminationReleaseProvider>,
+  )
   expect(await screen.findByRole('alert')).toHaveTextContent('Termination data could not be loaded')
-  expect(screen.getByRole('heading', {name:'Grant Terminations Map'})).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: 'Grant Terminations Map' })).toBeInTheDocument()
   expect(screen.queryByText('Loaded map')).not.toBeInTheDocument()
 })

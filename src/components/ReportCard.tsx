@@ -90,7 +90,7 @@ function createMagmaLayer(
       const isSelected =
         highlightId != null && highlightId == f.properties[uniqueProperty]
       const alpha = isSelected ? FILL_ALPHA : 70
-      if (isNoData(f.properties)) return [...NO_DATA_FILL.slice(0, 3), alpha]
+      if (isNoData(f.properties)) return [NO_DATA_FILL[0], NO_DATA_FILL[1], NO_DATA_FILL[2], alpha]
       const v = f.properties[colorProperty] ?? 0
       const t = cs(v > 0 ? Math.log(v) : 0)
       const c = interpolateMagma(1 - t)

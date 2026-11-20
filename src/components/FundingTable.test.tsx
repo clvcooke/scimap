@@ -4,17 +4,40 @@ import * as csv from '@/lib/csv'
 import FundingTable from './FundingTable'
 
 vi.mock('@/data/table_counties.json', () => {
-  const funding = { nih_econ_impact: 100, nih_raw_funding: 50, nih_jobs: 20, nsf_econ_impact: 100, nsf_raw_funding: 50, total_econ_impact: 200, total_raw_funding: 100 }
-  return { default: [
-    { ...funding, id: '01001', name: 'Autauga County', pop_2024: 61464 },
-    { ...funding, id: '66010', name: 'Guam', pop_2024: null },
-    { ...funding, id: '38007', name: 'Billings County', pop_2024: 1000 },
-  ] }
+  const funding = {
+    nih_econ_impact: 100,
+    nih_raw_funding: 50,
+    nih_jobs: 20,
+    nsf_econ_impact: 100,
+    nsf_raw_funding: 50,
+    total_econ_impact: 200,
+    total_raw_funding: 100,
+  }
+  return {
+    default: [
+      { ...funding, id: '01001', name: 'Autauga County', pop_2024: 61464 },
+      { ...funding, id: '66010', name: 'Guam', pop_2024: null },
+      { ...funding, id: '38007', name: 'Billings County', pop_2024: 1000 },
+    ],
+  }
 })
 
-vi.mock('@/data/table_states.json', () => ({ default: [
-  { id: 'AL', name: 'Alabama', pop_2024: 5157699, nih_econ_impact: 100, nih_raw_funding: 50, nih_jobs: 20, nsf_econ_impact: 100, nsf_raw_funding: 50, total_econ_impact: 200, total_raw_funding: 100 },
-] }))
+vi.mock('@/data/table_states.json', () => ({
+  default: [
+    {
+      id: 'AL',
+      name: 'Alabama',
+      pop_2024: 5157699,
+      nih_econ_impact: 100,
+      nih_raw_funding: 50,
+      nih_jobs: 20,
+      nsf_econ_impact: 100,
+      nsf_raw_funding: 50,
+      total_econ_impact: 200,
+      total_raw_funding: 100,
+    },
+  ],
+}))
 
 afterEach(() => {
   cleanup()

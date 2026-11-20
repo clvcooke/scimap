@@ -2,9 +2,16 @@ import { describe, expect, it } from 'vitest'
 import { expandGrants, type GrantTermination } from '@/data/grant-losses'
 
 const grant: GrantTermination = {
-  org_name: 'Example University', lat: 1, lon: 2,
-  terminated_loss: 100, terminated_num: 1, terminated_loss_noself: 100,
-  nih_loss: 2e-10, nih_num: 0, nsf_loss: 100, nsf_num: 1,
+  org_name: 'Example University',
+  lat: 1,
+  lon: 2,
+  terminated_loss: 100,
+  terminated_num: 1,
+  terminated_loss_noself: 100,
+  nih_loss: 2e-10,
+  nih_num: 0,
+  nsf_loss: 100,
+  nsf_num: 1,
 }
 
 describe('institution grant expansion', () => {

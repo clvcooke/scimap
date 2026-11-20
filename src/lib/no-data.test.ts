@@ -20,7 +20,9 @@ const CONFIG: MapGeoConfig = {
 
 function fillOf(properties: Record<string, number | string>) {
   const layer = createChoroplethLayer(CONFIG, createLogColorScale(CONFIG.domain), 'loss', LUT_OR_RD)
-  const getFillColor = layer.props.getFillColor as (f: { properties: typeof properties }) => number[]
+  const getFillColor = layer.props.getFillColor as (f: {
+    properties: typeof properties
+  }) => number[]
   return getFillColor({ properties })
 }
 
