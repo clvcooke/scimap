@@ -23,10 +23,7 @@ PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 
 NIH_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NIH Budget")
 NSF_DIR = os.path.join(PROJECT_ROOT, "data", "2027", "FY2027 NSF Budget")
-OUTPUT_DIR = os.environ.get(
-    "SCIMAP_TILE_OUTPUT_DIR",
-    os.path.join(PROJECT_ROOT, "scripts", "outputs"),
-)
+OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
 TILE_VERSION = "v7"
 # Territories that only have congressional district geometry (no state/county/city shapes).
@@ -412,24 +409,12 @@ def process_level(name, config, territory_geoms, territory_df):
     generate_tiles(geojson_output, tile_dir, zoom)
 
     if os.environ.get("SCIMAP_SKIP_TILE_UPLOAD"):
-        print("  Skipping rclone upload (SCIMAP_SKIP_TILE_UPLOAD is set)")
+        print("  Skipping rclone upload (SCIMAP_SKIP_TILE_UPLOAD is set; publish with the AWS CLI)")
     else:
         print("Uploading tiles...")
         upload_tiles(tile_dir, tile_name)
 
     print(f"Done: {name}")
-
-
-def selected_levels(levels):
-    """Return every level, or the comma-separated subset in SCIMAP_TILE_LEVELS."""
-    raw = os.environ.get("SCIMAP_TILE_LEVELS", "").strip()
-    if not raw:
-        return levels
-    wanted = [part.strip() for part in raw.split(",") if part.strip()]
-    unknown = [name for name in wanted if name not in levels]
-    if unknown:
-        raise RuntimeError("Unknown SCIMAP_TILE_LEVELS: " + ", ".join(unknown))
-    return {name: levels[name] for name in wanted}
 
 
 def main():
@@ -442,7 +427,7 @@ def main():
     territory_geoms, territory_df = load_territory_district_data(levels["districts"])
     print(f"  Loaded {len(territory_geoms)} territory geometries, {len(territory_df)} territory rows")
 
-    for name, config in selected_levels(levels).items():
+    for name, config in levels.items():
         process_level(name, config, territory_geoms, territory_df)
 
     print("\nAll levels complete!")

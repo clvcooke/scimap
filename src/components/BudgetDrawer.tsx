@@ -172,9 +172,11 @@ function DrawerBody({
           <Drawer.Title className="text-lg font-semibold text-gray-900">
             {locationLabel(props, geoLevel)}
           </Drawer.Title>
-          <p className="mt-0.5 text-sm text-gray-500">
-            Population: {formatPopulation(props.pop_2024)}
-          </p>
+          {props.pop_2024 !== undefined && (
+            <p className="mt-0.5 text-sm text-gray-500">
+              Population: {formatPopulation(props.pop_2024)}
+            </p>
+          )}
           <PoliticianInfo props={props} geoLevel={geoLevel} />
         </div>
         <Drawer.Close className="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 active:bg-gray-200">

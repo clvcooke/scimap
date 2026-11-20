@@ -43,6 +43,11 @@ it.each(['Guam', 'San Juan Municipio'])('shows unavailable population in all car
   expect(screen.getByText('Per Cap: Not available')).toBeInTheDocument()
   mobile.unmount()
 
-  render(<BudgetDrawer props={{ name, state: name === 'Guam' ? 'GU' : 'PR', FIPS: name === 'Guam' ? '66010' : '72127' }} geoLevel="counties" config={{ stats: () => [], sections: () => [] }} onClose={close} />)
+  render(<BudgetDrawer props={{ name, state: name === 'Guam' ? 'GU' : 'PR', FIPS: name === 'Guam' ? '66010' : '72127', pop_2024: 0 }} geoLevel="counties" config={{ stats: () => [], sections: () => [] }} onClose={close} />)
   expect(screen.getByText('Population: Not available')).toBeInTheDocument()
+})
+
+it('omits the population line in budget drawers for tiles without a population field', () => {
+  render(<BudgetDrawer props={{ name: 'California', state: 'CA' }} geoLevel="states" config={{ stats: () => [], sections: () => [] }} onClose={vi.fn()} />)
+  expect(screen.queryByText(/Population:/)).not.toBeInTheDocument()
 })

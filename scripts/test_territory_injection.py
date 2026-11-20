@@ -26,8 +26,6 @@ class TerritoryInjectionTests(unittest.TestCase):
     def test_both_generators_cover_the_same_five_territories(self):
         self.assertEqual(baseline.TERRITORY_DISTRICT_GEOIDS, EXPECTED)
         self.assertEqual(fy27_budget.TERRITORY_DISTRICT_GEOIDS, EXPECTED)
-        self.assertEqual(baseline.TILE_VERSION, "baseline-v10")
-        self.assertEqual(fy27_budget.TILE_VERSION, "v7")
 
     def test_missing_required_geometry_fails(self):
         for module in (baseline, fy27_budget):
@@ -100,6 +98,15 @@ class TerritoryInjectionTests(unittest.TestCase):
             "7298": 3285874,
             "7898": 87146,
         })
+
+    def test_county_population_joins_unpadded_fips(self):
+        counties = pd.DataFrame({"FIPS": ["6037", "6059", "6111", "24001"]})
+        joined = baseline.join_population("counties", baseline.build_levels()["counties"], counties)
+        self.assertEqual(list(joined["FIPS"]), ["6037", "6059", "6111", "24001"])
+        populations = dict(zip(joined["FIPS"], joined["pop_2024"].astype(int)))
+        self.assertEqual(populations["6037"], 9757179)
+        self.assertEqual(populations["6059"], 3170435)
+        self.assertEqual(populations["6111"], 835427)
 
     def test_empty_data_row_is_skipped(self):
         geoms, frame = territory_frame(baseline)

@@ -13,12 +13,9 @@ PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 NIH_DATA_DIR = os.path.join(PROJECT_ROOT, "data", "baseline_new", "Baseline NIH")
 NSF_DATA_DIR = os.path.join(PROJECT_ROOT, "data", "baseline_new", "Baseline NSF")
 GEO_REF_DIR = os.path.join(PROJECT_ROOT, "data", "geo_ref")
-OUTPUT_DIR = os.environ.get(
-    "SCIMAP_TILE_OUTPUT_DIR",
-    os.path.join(PROJECT_ROOT, "scripts", "outputs"),
-)
+OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "baseline-v10"
+TILE_VERSION = "baseline-v11"
 NIH_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
 NSF_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
 # Territories that only have congressional district geometry (no state/county/city shapes).
@@ -112,6 +109,7 @@ def build_levels():
             "geo": geo_path("merged_data_counties_CLIP_Compress.geojson"),
             "csv_key": "FIPS",
             "geo_key": "FIPS",
+            "pop_key_pad": 5,  # reference FIPS is zero-padded; tile FIPS is not
             "zoom": 9,
         },
         "districts": {
@@ -132,6 +130,7 @@ def build_levels():
             "filter": {"CITYFLAG": 1},
             "dissolve_key": "FIPSCITY",
             "csv_key_pad": 5,  # CBSA_FIPS is 5 digits; NSF CSV strips leading zeros
+            "population": False,  # no city population reference
             "zoom": 9,
         },
     }
@@ -205,6 +204,22 @@ def load_pop_ref(level_name, csv_key, pad_width=None):
     if pad_width:
         df[csv_key] = df[csv_key].str.zfill(pad_width)
     return df
+
+
+def join_population(level_name, config, df):
+    """Left-join pop_2024 onto df, padding only the join key, not df's own key."""
+    csv_key = config["csv_key"]
+    pad_width = config.get("pop_key_pad", config.get("csv_key_pad"))
+    pop_df = load_pop_ref(level_name, csv_key, pad_width).rename(columns={csv_key: "_pop_key"})
+    keys = df[csv_key].astype(str)
+    if pad_width:
+        keys = keys.str.zfill(pad_width)
+    joined = df.assign(_pop_key=keys).merge(pop_df, on="_pop_key", how="left")
+    joined = joined.drop(columns="_pop_key")
+    missing_pop = joined["pop_2024"].isna().sum()
+    if missing_pop:
+        print(f"  Warning: {missing_pop} rows missing pop_2024")
+    return joined
 
 
 def attach_territory_population(territory_df):
@@ -438,11 +453,8 @@ def process_level(name, config, territory_geoms, territory_df):
     merged = nih_df.merge(nsf_pivoted, on=csv_key, how="outer")
 
     # Join 2024 population from the reference CSV (new source CSVs don't carry it)
-    pop_df = load_pop_ref(name, csv_key, pad_width)
-    merged = merged.merge(pop_df, on=csv_key, how="left")
-    missing_pop = merged["pop_2024"].isna().sum()
-    if missing_pop:
-        print(f"  Warning: {missing_pop} rows missing pop_2024")
+    if config.get("population", True):
+        merged = join_population(name, config, merged)
     print(f"  Merged: {len(merged)} rows, {len(merged.columns)} columns")
 
     if name != "districts":
@@ -463,24 +475,12 @@ def process_level(name, config, territory_geoms, territory_df):
     generate_tiles(geojson_output, tile_dir, zoom)
 
     if os.environ.get("SCIMAP_SKIP_TILE_UPLOAD"):
-        print("  Skipping rclone upload (SCIMAP_SKIP_TILE_UPLOAD is set)")
+        print("  Skipping rclone upload (SCIMAP_SKIP_TILE_UPLOAD is set; publish with the AWS CLI)")
     else:
         print("Uploading tiles...")
         upload_tiles(tile_dir, tile_name)
 
     print(f"Done: {name}")
-
-
-def selected_levels(levels):
-    """Return every level, or the comma-separated subset in SCIMAP_TILE_LEVELS."""
-    raw = os.environ.get("SCIMAP_TILE_LEVELS", "").strip()
-    if not raw:
-        return levels
-    wanted = [part.strip() for part in raw.split(",") if part.strip()]
-    unknown = [name for name in wanted if name not in levels]
-    if unknown:
-        raise RuntimeError("Unknown SCIMAP_TILE_LEVELS: " + ", ".join(unknown))
-    return {name: levels[name] for name in wanted}
 
 
 def main():
@@ -493,7 +493,7 @@ def main():
     territory_geoms, territory_df = load_territory_district_data(levels["districts"])
     print(f"  Loaded {len(territory_geoms)} territory geometries, {len(territory_df)} territory rows")
 
-    for name, config in selected_levels(levels).items():
+    for name, config in levels.items():
         process_level(name, config, territory_geoms, territory_df)
 
     print("\nAll levels complete!")

@@ -162,9 +162,11 @@ getFillColor: (feature) => {
 
 The table generator normalizes county FIPS to five digits and district GEOIDs to four digits on both sides of the population join. Population references use `scripts/reference/pop_2024_{states,counties,districts}.csv`. Empty/NA or unmatched populations are stored as JSON `null`, displayed as “Not available”, sorted after known populations, and exported as blank CSV cells—not as zero or `<10`.
 
-The population-only correction restores 319 county rows using `SciMap_Maps/data/county_pop.csv` (`pop_2024`) from commit `4684cf10143decacaab65e177dd623ed1d74afd0`, SHA-256 `773470640fee82d9a8a1b530b63f359c722b2ebfd3efa7436cb1304b839dfc7d`. All 2,825 previously populated county rows match that source exactly and remain unchanged. Funding, economic-impact, jobs, names, IDs and row order are unchanged at every level; no tile regeneration or upload is needed.
+The population-only correction restores 319 county rows using `SciMap_Maps/data/county_pop.csv` (`pop_2024`) from commit `4684cf10143decacaab65e177dd623ed1d74afd0`, SHA-256 `773470640fee82d9a8a1b530b63f359c722b2ebfd3efa7436cb1304b839dfc7d`. All 2,825 previously populated county rows match that source exactly and remain unchanged.
 
-Territory population additions are **pending reviewed source data from Elena**. The current references do not provide populations for the 22 territory county rows, five territory state rows, or five territory district rows present in the tables. Do not substitute another year's Census totals into `pop_2024` silently. The missing county rows comprise 17 Puerto Rico municipalities, two American Samoa areas, Guam, one Northern Mariana Islands area, and St. Thomas in the US Virgin Islands.
+Territory state rows, at-large district rows and the matching territory county rows store April 1, 2020 Census counts in the historical `pop_2024` column; see the [reference notes](reference/README.md) for the sources and per-row values. Puerto Rico municipio rows stay blank.
+
+The baseline tile generator joins the same references. It zero-pads only the join key (county FIPS to five digits, district GEOIDs to four), so tile IDs stay unpadded (`6037`) while matching the padded reference (`06037`). Territory state and county map features reuse the at-large district population. Cities have no population reference and carry no `pop_2024`. Tiles regenerated after this change use `TILE_VERSION = "baseline-v11"`; `baseline-v10` dropped county populations whose FIPS starts with `0`.
 
 To reproduce the population-only correction from a website checkout (without rebuilding scientific outputs):
 
@@ -182,7 +184,14 @@ Tooltips, desktop drawers and mobile cards use the same population formatter as 
 ```bash
 # Requires: pandas, geopandas, tippecanoe (via WSL on Windows), rclone
 python scripts/baseline.py
+
+# Build tiles without the rclone upload, then publish scripts/outputs/tiles_*
+# to new, empty R2 prefixes with the AWS CLI (region auto, put-object with
+# If-None-Match: * and Content-MD5).
+SCIMAP_SKIP_TILE_UPLOAD=1 python scripts/baseline.py
 ```
+
+`SCIMAP_SKIP_TILE_UPLOAD` works the same way in `scripts/fy27_budget.py`. Every run builds every level.
 
 ### Input files
 
