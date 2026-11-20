@@ -35,6 +35,16 @@ TERRITORY_DISTRICT_GEOIDS = {
     "PR": "7298",
     "VI": "7898",
 }
+TERRITORY_NAMES = {
+    "AS": "American Samoa",
+    "GU": "Guam",
+    "MP": "Northern Mariana Islands",
+    "PR": "Puerto Rico",
+    "VI": "Virgin Islands",
+}
+# Set to 1 on a territory feature whose source has no row. The website draws
+# it in a neutral color and says the data is not available. It carries no values.
+NO_DATA_PROPERTY = "no_data"
 
 # ── Remote geo-reference data (Cloudflare R2) ────────────────────────
 R2_BASE = "https://pub-16c87e1620124b38879fbf81846cfc4c.r2.dev/reference-data"
@@ -302,6 +312,41 @@ def assert_territory_geometries(territory_geoms):
         raise RuntimeError(
             "Missing required territory district geometries: " + ", ".join(missing)
         )
+
+
+def add_no_data_territories(territory_df, state_value):
+    """Add a no-data marker row for each territory that has no source row.
+
+    The marker row has the territory's identity fields and NO_DATA_PROPERTY = 1.
+    It has no value columns, so the map never shows an invented amount.
+    `state_value(abbrev)` returns what the source puts in its `state` column.
+    """
+    present = set(territory_df["GEOID"].astype(str))
+    rows = [
+        {
+            "GEOID": geoid,
+            "state": state_value(abbrev),
+            "state_code": abbrev,
+            "state_name": TERRITORY_NAMES[abbrev],
+            NO_DATA_PROPERTY: 1,
+        }
+        for abbrev, geoid in TERRITORY_DISTRICT_GEOIDS.items()
+        if geoid not in present
+    ]
+    if not rows:
+        return territory_df
+    return pd.concat([territory_df, pd.DataFrame(rows)], ignore_index=True)
+
+
+def append_no_data_districts(frame, territory_df):
+    """Add the no-data territory rows to a district frame that lacks them."""
+    if NO_DATA_PROPERTY not in territory_df.columns:
+        return frame
+    marker = territory_df[NO_DATA_PROPERTY] == 1
+    rows = territory_df[marker & ~territory_df["GEOID"].isin(frame["GEOID"])]
+    if rows.empty:
+        return frame
+    return pd.concat([frame, rows], ignore_index=True)
 
 
 def load_territory_district_data(district_config):

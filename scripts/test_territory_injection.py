@@ -140,11 +140,102 @@ class TerritoryInjectionTests(unittest.TestCase):
 
     def test_idc_county_rows_drop_territory_prefixes(self):
         frame = pd.DataFrame({
-            "FIPS": ["24001", "66010", "72013", "78030", "60010", "69110"],
-            "name": ["Anne Arundel", "Guam", "Arecibo", "St. Thomas", "Eastern", "Saipan"],
+            "FIPS": ["24001", "66010", "72013", "78030"],
+            "name": ["Anne Arundel", "Guam", "Arecibo", "St. Thomas"],
         })
-        kept = idc_map.drop_territory_counties(frame)
+        real = pd.DataFrame({"GEOID": ["6698", "7298", "7898"], "IDC_econ_loss": [1.0, 2.0, 0.0]})
+        territory = fy27_budget.add_no_data_territories(real, lambda abbrev: abbrev)
+        kept = idc_map.drop_territory_counties(frame, territory)
         self.assertEqual(list(kept["FIPS"]), ["24001"])
+
+    def test_idc_county_rows_without_a_district_row_fail(self):
+        frame = pd.DataFrame({"FIPS": ["24001", "60010"], "name": ["Anne Arundel", "Eastern"]})
+        real = pd.DataFrame({"GEOID": ["6698"], "IDC_econ_loss": [1.0]})
+        territory = fy27_budget.add_no_data_territories(real, lambda abbrev: abbrev)
+        with self.assertRaises(RuntimeError) as caught:
+            idc_map.drop_territory_counties(frame, territory)
+        self.assertIn("60", str(caught.exception))
+
+    def test_idc_district_state_is_the_abbreviation(self):
+        frame = pd.DataFrame({
+            "FIPS": [605, 6698],
+            "state_name": ["California", "Guam"],
+            "IDC_econ_loss": [1.0, 2.0],
+        })
+        prepared = idc_map.prepare_districts(frame)
+        self.assertEqual(list(prepared["state"]), ["CA", "GU"])
+        self.assertEqual(list(prepared["state_code"]), ["CA", "GU"])
+        self.assertEqual(list(prepared["state_name"]), ["California", "Guam"])
+        self.assertNotIn("FIPS", prepared.columns)
+
+    def test_missing_territories_get_no_data_markers_without_values(self):
+        real = pd.DataFrame({
+            "GEOID": ["7898"],
+            "state": ["Virgin Islands"],
+            "state_code": ["VI"],
+            "budg_NIH_cuts_econ_loss": [1233678.15],
+        })
+        territory = fy27_budget.add_no_data_territories(real, fy27_budget.TERRITORY_NAMES.get)
+        by_geoid = territory.set_index("GEOID")
+        self.assertEqual(sorted(by_geoid.index), sorted(EXPECTED.values()))
+        for abbrev, geoid in EXPECTED.items():
+            row = by_geoid.loc[geoid]
+            self.assertEqual(row["state_code"], abbrev)
+            if abbrev == "VI":
+                self.assertTrue(pd.isna(row[fy27_budget.NO_DATA_PROPERTY]))
+                self.assertEqual(row["budg_NIH_cuts_econ_loss"], 1233678.15)
+            else:
+                self.assertEqual(row[fy27_budget.NO_DATA_PROPERTY], 1)
+                self.assertEqual(row["state"], fy27_budget.TERRITORY_NAMES[abbrev])
+                self.assertTrue(pd.isna(row["budg_NIH_cuts_econ_loss"]))
+
+    def test_no_data_territories_reach_state_county_and_district_outputs(self):
+        geoms = {geoid: {"type": "Polygon", "coordinates": [[geoid]]} for geoid in EXPECTED.values()}
+        real = pd.DataFrame({"GEOID": ["7898"], "state": ["Virgin Islands"], "state_code": ["VI"], "econ": [5.0]})
+        territory = fy27_budget.add_no_data_territories(real, fy27_budget.TERRITORY_NAMES.get)
+
+        states, state_geoms = fy27_budget.inject_territory_features(
+            "states", pd.DataFrame({"state_code": ["MD"], "econ": [1.0]}),
+            {"MD": {}}, "state_code", geoms, territory,
+        )
+        counties, county_geoms = fy27_budget.inject_territory_features(
+            "counties", pd.DataFrame({"FIPS": ["24001"], "econ": [1.0]}),
+            {"24001": {}}, "FIPS", geoms, territory,
+        )
+        districts = fy27_budget.append_no_data_districts(
+            pd.DataFrame({"GEOID": ["2401", "7898"], "econ": [1.0, 5.0]}), territory
+        )
+
+        self.assertEqual(sorted(states["state_code"]), sorted(["MD", *EXPECTED]))
+        self.assertEqual(sorted(counties["FIPS"]), sorted(["24001", *EXPECTED.values()]))
+        self.assertEqual(sorted(districts["GEOID"]), sorted(["2401", *EXPECTED.values()]))
+        self.assertEqual(state_geoms["GU"], geoms["6698"])
+        self.assertEqual(county_geoms["6698"], geoms["6698"])
+
+        guam = fy27_budget.build_geojson(states, state_geoms, "state_code")["features"]
+        guam = next(f["properties"] for f in guam if f["properties"]["state_code"] == "GU")
+        self.assertEqual(guam[fy27_budget.NO_DATA_PROPERTY], 1)
+        self.assertIsNone(guam["econ"])
+        self.assertEqual(guam["state_name"], "Guam")
+
+        islands = next(
+            f["properties"]
+            for f in fy27_budget.build_geojson(districts, {"7898": {}}, "GEOID")["features"]
+        )
+        self.assertEqual(islands["econ"], 5.0)
+        self.assertIsNone(islands[fy27_budget.NO_DATA_PROPERTY])
+
+    def test_no_markers_when_every_territory_has_a_row(self):
+        geoids = list(EXPECTED.values())
+        real = pd.DataFrame({"GEOID": geoids, "econ": range(len(geoids))})
+        territory = fy27_budget.add_no_data_territories(real, lambda abbrev: abbrev)
+        self.assertIs(territory, real)
+        frame = pd.DataFrame({"GEOID": ["2401"], "econ": [1.0]})
+        self.assertIs(fy27_budget.append_no_data_districts(frame, territory), frame)
+
+    def test_fy26_and_idc_publish_new_tile_versions(self):
+        self.assertEqual(fy26_budget.TILE_VERSION, "v2")
+        self.assertEqual(idc_map.TILE_VERSION, "v2")
 
     def test_empty_data_row_is_skipped(self):
         geoms, frame = territory_frame(baseline)

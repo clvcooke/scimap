@@ -10,9 +10,11 @@ and counts NIH loss only.
 
 Territory rows are copied from the district file onto the state and county
 maps with the at-large district polygon, same as baseline and FY27. The
-current NIH file has the U.S. Virgin Islands only. American Samoa, Guam,
-the Northern Mariana Islands, and Puerto Rico are absent. This script does
-not invent those values.
+current NIH file has the U.S. Virgin Islands only, and the OSF NSF FY26
+files (nsf_output/NSF_budget_*.csv) have no territory rows. American Samoa,
+Guam, the Northern Mariana Islands, and Puerto Rico are drawn at state,
+county, and district level as no-data features (NO_DATA_PROPERTY = 1, no
+values). This script does not invent their values.
 
 Does not upload. Publish the new prefix with the AWS CLI.
 """
@@ -25,6 +27,9 @@ import pandas as pd
 from fy27_budget import (
     OUTPUT_DIR,
     TERRITORY_DISTRICT_GEOIDS,
+    TERRITORY_NAMES,
+    add_no_data_territories,
+    append_no_data_districts,
     assert_territory_geometries,
     build_geojson,
     download_geo_refs,
@@ -38,7 +43,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 DATA_DIR = os.path.join(PROJECT_ROOT, "data", "fy26")
 
-TILE_VERSION = "v1"
+TILE_VERSION = "v2"
 VALUE_PREFIX = "budg_"
 
 
@@ -104,9 +109,11 @@ def load_territory_district_data(district_config):
         print(
             "  No NIH FY26 row for "
             + ", ".join(missing)
-            + ". Those territories are left off the map. Values are not invented."
+            + ". Those territories are drawn as no data. Values are not invented."
         )
-    return territory_geoms, territory[keep]
+    # The FY26 source `state` column holds the full name ("Virgin Islands").
+    territory = add_no_data_territories(territory[keep], TERRITORY_NAMES.get)
+    return territory_geoms, territory
 
 
 def generate_tiles(geojson_path, tile_output_dir, zoom, layer):
@@ -182,9 +189,10 @@ def process_level(name, config, territory_geoms, territory_df):
         frame[config["csv_key"]] = frame[config["csv_key"]].astype(str)
     if name == "districts":
         frame = fill_territory_state_codes(frame, "GEOID")
+        frame = append_no_data_districts(frame, territory_df)
 
     if name != "districts":
-        print("Injecting territory rows that exist in the NIH FY26 district file...")
+        print("Injecting territory rows (no-data markers where the NIH FY26 file has none)...")
         frame, geometries = inject_territory_features(
             name, frame, geometries, config["csv_key"], territory_geoms, territory_df
         )

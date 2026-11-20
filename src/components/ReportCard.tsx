@@ -13,6 +13,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { formatCurrency, formatNumber } from '@/lib/constants'
 import type { ReportCardData, FiscalYear } from '@/lib/report-card-data'
 import { FILL_ALPHA } from '@/lib/color-lut'
+import { NO_DATA_FILL, isNoData } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
 import ColorScale from './ColorScale'
 import { Events, track, setPersonProperties, repParty, senatorPartyMix } from '@/lib/analytics'
@@ -23,8 +24,8 @@ const DOMAIN = 'https://data.scienceimpacts.org'
 
 const TILES_BY_FY = {
   fy26: {
-    districts: `${DOMAIN}/tiles_districts_budget26_v1/{z}/{x}/{y}.pbf`,
-    states: `${DOMAIN}/tiles_states_budget26_v1/{z}/{x}/{y}.pbf`,
+    districts: `${DOMAIN}/tiles_districts_budget26_v2/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget26_v2/{z}/{x}/{y}.pbf`,
     colorProperty: 'budg_NIH_cuts_econ_loss',
   },
   fy27: {
@@ -86,6 +87,7 @@ function createMagmaLayer(
     lineWidthMinPixels: 1,
     lineWidthUnits: 'pixels' as const,
     getFillColor: (f: { properties: Record<string, number> }) => {
+      if (isNoData(f.properties)) return NO_DATA_FILL
       const v = f.properties[colorProperty] ?? 0
       const t = cs(v > 0 ? Math.log(v) : 0)
       const c = interpolateMagma(1 - t)

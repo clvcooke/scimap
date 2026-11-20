@@ -2,12 +2,16 @@
 Generate MVT tiles for the indirect-cost (IDC) map.
 
 Reads SciMap_Maps output/IDC_state.csv, IDC_county.csv, and IDC_district.csv.
-State and county maps reuse the at-large district polygon for a territory
-when that territory has a district row. Guam, Puerto Rico, and the U.S.
-Virgin Islands have rows. American Samoa and the Northern Mariana Islands
-do not. This script does not invent those values. County rows whose FIPS
-is already a territory (including Puerto Rico municipios) are dropped
-before that injection so the map does not draw the territory twice.
+State and county maps reuse the at-large district polygon for every
+territory, same as baseline and FY27. Guam, Puerto Rico, and the U.S.
+Virgin Islands have district rows. American Samoa and the Northern Mariana
+Islands do not, so they are drawn at state, county, and district level as
+no-data features (NO_DATA_PROPERTY = 1, no values). This script does not
+invent their values. A territory's county rows (including Puerto Rico
+municipios) are replaced by its district row, which holds the territory
+total, so the map does not draw the territory twice. Generation fails if a
+territory has county rows but no district row, so real values are never
+dropped.
 
 Does not upload. Publish the new prefix with the AWS CLI.
 """
@@ -19,7 +23,10 @@ import pandas as pd
 
 from fy27_budget import (
     OUTPUT_DIR,
+    NO_DATA_PROPERTY,
     TERRITORY_DISTRICT_GEOIDS,
+    add_no_data_territories,
+    append_no_data_districts,
     assert_territory_geometries,
     build_geojson,
     download_geo_refs,
@@ -33,7 +40,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..")
 DATA_DIR = os.path.join(PROJECT_ROOT, "data", "idc")
 
-TILE_VERSION = "v1"
+TILE_VERSION = "v2"
 VALUE_COLUMNS = ["IDC_loss", "IDC_econ_loss", "IDC_job_loss"]
 # Real county FIPS prefixes. The map feature for these areas is the at-large
 # district polygon, not the county polygon.
@@ -126,26 +133,44 @@ def add_state_codes(df):
     return frame
 
 
-def drop_territory_counties(df):
-    """Remove territory county rows so injection can add one polygon per territory."""
+def drop_territory_counties(df, territory_df):
+    """Replace territory county rows with the territory's at-large district row.
+
+    Only territories with a real district row are replaced. County rows for a
+    territory without one would be lost, so that fails instead.
+    """
     frame = df.copy()
     frame["FIPS"] = pad_key(frame["FIPS"], 5)
     prefix = frame["FIPS"].str.slice(0, 2)
+    real = territory_df
+    if NO_DATA_PROPERTY in real.columns:
+        real = real[real[NO_DATA_PROPERTY] != 1]
+    covered = set(real["GEOID"].astype(str).str.slice(0, 2))
+    orphaned = sorted(set(prefix[prefix.isin(TERRITORY_COUNTY_PREFIXES)]) - covered)
+    if orphaned:
+        raise RuntimeError(
+            "IDC county rows exist for territory FIPS prefixes with no district row: "
+            + ", ".join(orphaned)
+        )
     dropped = int(prefix.isin(TERRITORY_COUNTY_PREFIXES).sum())
     print(f"  Dropped {dropped} territory county rows; the at-large district polygon replaces them")
     return frame[~prefix.isin(TERRITORY_COUNTY_PREFIXES)].copy()
 
 
 def prepare_districts(df):
-    """The district CSV calls the GEOID `FIPS`. The map reads `GEOID`."""
+    """The district CSV calls the GEOID `FIPS`. The map reads `GEOID`.
+
+    `state` is the abbreviation, as on the FY27 district tiles, so drawers
+    read "CA District 5". The full name stays in `state_name`.
+    """
     frame = df.copy()
-    frame["state"] = frame["state_name"]
-    missing = sorted(set(frame["state"].astype(str)) - set(NAME_TO_ABBREV))
+    missing = sorted(set(frame["state_name"].astype(str)) - set(NAME_TO_ABBREV))
     if missing:
         raise RuntimeError("IDC district state names have no abbreviation: " + ", ".join(missing))
-    frame["state_code"] = frame["state"].map(NAME_TO_ABBREV)
+    frame["state"] = frame["state_name"].map(NAME_TO_ABBREV)
+    frame["state_code"] = frame["state"]
     frame["GEOID"] = frame["FIPS"]
-    return frame.drop(columns=["FIPS", "state_name"])
+    return frame.drop(columns=["FIPS"])
 
 
 def load_territory_district_data(district_config):
@@ -168,10 +193,12 @@ def load_territory_district_data(district_config):
         print(
             "  No IDC row for "
             + ", ".join(missing)
-            + ". Those territories are left off the map. Values are not invented."
+            + ". Those territories are drawn as no data. Values are not invented."
         )
-    keep = ["GEOID", "state", "state_code", *VALUE_COLUMNS]
-    return territory_geoms, territory[keep]
+    keep = ["GEOID", "state", "state_code", "state_name", *VALUE_COLUMNS]
+    # District `state` is the abbreviation (see prepare_districts).
+    territory = add_no_data_territories(territory[keep], lambda abbrev: abbrev)
+    return territory_geoms, territory
 
 
 def generate_tiles(geojson_path, tile_output_dir, zoom, layer):
@@ -251,11 +278,11 @@ def process_level(name, config, territory_geoms, territory_df):
     else:
         frame[config["csv_key"]] = frame[config["csv_key"]].astype(str)
     if name != "districts" and config.get("before_inject"):
-        frame = config["before_inject"](frame)
-        # The county drop already wrote the padded key. Pad again only if a
-        # prepare step did not. before_inject for counties returns padded FIPS.
-    if name != "districts":
-        print("Injecting territory rows that exist in the IDC district file...")
+        frame = config["before_inject"](frame, territory_df)
+    if name == "districts":
+        frame = append_no_data_districts(frame, territory_df)
+    else:
+        print("Injecting territory rows (no-data markers where the IDC file has none)...")
         frame, geometries = inject_territory_features(
             name, frame, geometries, config["csv_key"], territory_geoms, territory_df
         )

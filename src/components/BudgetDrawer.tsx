@@ -9,7 +9,7 @@ import {
   getSenatorsList,
   formatPoliticianName,
 } from '@/lib/legislature'
-import { getCountyName, getLegislatorKeys, getStateAbbr, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
+import { NO_DATA_MESSAGE, getCountyName, getLegislatorKeys, getStateAbbr, isNoData, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
 import type { FiscalYear } from '@/lib/report-card-data'
 import { stateName } from '@/lib/constants'
 import { Events, track, buildGeographyEventProps, type MapType } from '@/lib/analytics'
@@ -161,8 +161,9 @@ function DrawerBody({
   config: BudgetDrawerConfig
   fiscalYear?: FiscalYear | undefined
 }) {
-  const stats = config.stats(props)
-  const sections = config.sections(props)
+  const noData = isNoData(props)
+  const stats = noData ? [] : config.stats(props)
+  const sections = noData ? [] : config.sections(props)
 
   return (
     <>
@@ -184,7 +185,11 @@ function DrawerBody({
         </Drawer.Close>
       </div>
 
-      <ScorecardLink props={props} geoLevel={geoLevel} fiscalYear={fiscalYear} />
+      {noData ? (
+        <p className="border-b px-5 py-4 text-sm text-gray-600">{NO_DATA_MESSAGE}.</p>
+      ) : (
+        <ScorecardLink props={props} geoLevel={geoLevel} fiscalYear={fiscalYear} />
+      )}
 
       {/* Summary cards */}
       {stats.length > 0 && (

@@ -63,3 +63,21 @@ it('labels a county from its FIPS when the tile has no state property', () => {
   render(<BudgetMobileCard props={props} geoLevel="counties" config={config} onSeeMore={vi.fn()} onClose={vi.fn()} />)
   expect(screen.getByText('Allegany County, MD')).toBeInTheDocument()
 })
+
+it('says data is not available instead of $0 for a no-data territory', () => {
+  const props = { state: 'Guam', state_code: 'GU', state_name: 'Guam', no_data: 1 }
+  const config = {
+    stats: () => [{ label: 'Economic Loss', value: 0, format: 'currency' as const }],
+    sections: () => [],
+  }
+  const drawer = render(<BudgetDrawer props={props} geoLevel="states" config={config} fiscalYear="fy26" onClose={vi.fn()} />)
+  expect(screen.getByText('Guam')).toBeInTheDocument()
+  expect(screen.getByText(/Data not available for this territory/)).toBeInTheDocument()
+  expect(screen.queryByText('Economic Loss')).not.toBeInTheDocument()
+  expect(screen.queryByText('View Full Scorecard')).not.toBeInTheDocument()
+  drawer.unmount()
+
+  render(<BudgetMobileCard props={props} geoLevel="states" config={config} onSeeMore={vi.fn()} onClose={vi.fn()} />)
+  expect(screen.getByText('Data not available for this territory')).toBeInTheDocument()
+  expect(screen.queryByText(/Economic Loss/)).not.toBeInTheDocument()
+})

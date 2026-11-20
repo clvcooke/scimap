@@ -45,6 +45,18 @@ export interface MapGeoConfig {
 
 export type TileProps = Record<string, number | string>
 
+// ── No-data territories ────────────────────────────────────────────
+
+/** Generators set this to 1 on a territory whose source has no row. The feature has no values. */
+export const NO_DATA_PROPERTY = 'no_data'
+export const NO_DATA_MESSAGE = 'Data not available for this territory'
+/** Neutral gray, so a territory without data never reads as a $0 loss. */
+export const NO_DATA_FILL: [number, number, number, number] = [189, 189, 189, FILL_ALPHA]
+
+export function isNoData(props: Record<string, number | string | undefined>): boolean {
+  return Number(props[NO_DATA_PROPERTY]) === 1
+}
+
 // ── Color scale ────────────────────────────────────────────────────
 
 export function createLogColorScale(domain: [number, number]) {
@@ -100,6 +112,7 @@ export function createChoroplethLayer(
     lineWidthUnits: 'pixels' as const,
     updateTriggers: { getFillColor: [colorScale, colorProperty] },
     getFillColor: (f: { properties: Record<string, number> }) => {
+      if (isNoData(f.properties)) return NO_DATA_FILL
       const v = f.properties[colorProperty] ?? 0
       const idx =
         Math.round(colorScale(v > 0 ? Math.log(v) : 0) * (LUT_SIZE - 1)) * 4
@@ -109,7 +122,7 @@ export function createChoroplethLayer(
 }
 
 const STATE_TILE =
-  'https://data.scienceimpacts.org/tiles_states_budget26_v1/{z}/{x}/{y}.pbf'
+  'https://data.scienceimpacts.org/tiles_states_budget26_v2/{z}/{x}/{y}.pbf'
 
 export function createStateOutlineLayer(tileUrl: string = STATE_TILE) {
   return new MVTLayer({
@@ -222,6 +235,20 @@ export function buildTooltipHeader(
   }
 
   return { locationLine, politicianHtml: html }
+}
+
+/**
+ * Tooltip for a no-data territory: its name and legislators, and no amounts.
+ * ChoroplethMap passes its generic geo-level key; the header only branches on
+ * 'counties' and 'districts', so any other key reads as a state.
+ */
+export function renderNoDataTooltip(props: TileProps, geoLevel: string): string {
+  const { locationLine, politicianHtml } = buildTooltipHeader(props, geoLevel as LossGeoLevel)
+  return (
+    `<div class="font-semibold">${locationLine}</div>` +
+    politicianHtml +
+    `<div class="mt-1">${NO_DATA_MESSAGE}</div>`
+  )
 }
 
 // ── Labels-only basemap style ─────────────────────────────────────
