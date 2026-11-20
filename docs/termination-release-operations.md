@@ -63,7 +63,7 @@ State/county geometry references cover the 50 states plus DC. The generator reus
 
 The reference is `CongDist_shp_119.zip` under the existing R2 reference-data URL in `scripts/terminations.py` (verified SHA-256 `746dd8fd7d07888ba5290b88480011710025aa1a89322438bce428d8f4e59a8b`). Its Guam polygon is valid and covers Guam's native Pacific coordinates; no artificial inset or scientific reassignment is introduced.
 
-Adding this generator support does not change an already-published immutable release. Build from a clean code revision, validate a new release ID, obtain publication approval, then publish/select a new preview candidate. Old releases retain their recorded coverage warnings; the frontend removes the Guam limitation sentence only when the selected release no longer reports that gap.
+Adding this generator support does not change an already-published immutable release. Build from a clean code revision, validate a new release ID, obtain publication approval, then publish/select a new preview candidate. Old releases retain their recorded coverage warnings. The frontend shows a generic "Some areas have limited map coverage" notice whenever the selected manifest lists any warning, and shows no notice when it lists none.
 
 Territory population values are separate from map geometry. The territory state rows and at-large district rows use April 1, 2020 Census counts, stored in the historical `pop_2024` column; they are not 2024 estimates. Puerto Rico municipio rows stay blank. See `scripts/reference/README.md` for sources and the appended territory county rows.
 
