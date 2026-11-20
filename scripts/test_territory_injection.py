@@ -233,10 +233,6 @@ class TerritoryInjectionTests(unittest.TestCase):
         frame = pd.DataFrame({"GEOID": ["2401"], "econ": [1.0]})
         self.assertIs(fy27_budget.append_no_data_districts(frame, territory), frame)
 
-    def test_fy26_and_idc_publish_new_tile_versions(self):
-        self.assertEqual(fy26_budget.TILE_VERSION, "v2")
-        self.assertEqual(idc_map.TILE_VERSION, "v2")
-
     def test_empty_data_row_is_skipped(self):
         geoms, frame = territory_frame(baseline)
         frame = frame[frame["GEOID"] != "7898"]

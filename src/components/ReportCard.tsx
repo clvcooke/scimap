@@ -87,7 +87,10 @@ function createMagmaLayer(
     lineWidthMinPixels: 1,
     lineWidthUnits: 'pixels' as const,
     getFillColor: (f: { properties: Record<string, number> }) => {
-      if (isNoData(f.properties)) return NO_DATA_FILL
+      const isSelected =
+        highlightId != null && highlightId == f.properties[uniqueProperty]
+      const alpha = isSelected ? FILL_ALPHA : 70
+      if (isNoData(f.properties)) return [...NO_DATA_FILL.slice(0, 3), alpha]
       const v = f.properties[colorProperty] ?? 0
       const t = cs(v > 0 ? Math.log(v) : 0)
       const c = interpolateMagma(1 - t)
@@ -98,9 +101,7 @@ function createMagmaLayer(
             parseInt(c.slice(3, 5), 16),
             parseInt(c.slice(5, 7), 16),
           ]
-      const isSelected =
-        highlightId != null && highlightId == f.properties[uniqueProperty]
-      return [rgb[0], rgb[1], rgb[2], isSelected ? FILL_ALPHA : 70]
+      return [rgb[0], rgb[1], rgb[2], alpha]
     },
     updateTriggers: { getFillColor: [highlightId], getLineWidth: [highlightId] },
   })
