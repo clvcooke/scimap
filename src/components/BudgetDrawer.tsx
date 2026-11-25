@@ -3,13 +3,13 @@ import { DrawerPreview as Drawer } from '@base-ui/react/drawer'
 import { Link } from '@tanstack/react-router'
 import { interpolateOrRd } from 'd3-scale-chromatic'
 import { X, FileText } from 'lucide-react'
-import { formatCurrency, formatNumber } from '@/lib/constants'
+import { formatCurrency, formatNumber, formatPopulation } from '@/lib/constants'
 import {
   getHouseRep,
   getSenatorsList,
   formatPoliticianName,
 } from '@/lib/legislature'
-import { getCountyName, getLegislatorKeys, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
+import { NO_DATA_MESSAGE, getCountyName, getLegislatorKeys, getStateAbbr, isNoData, type LossGeoLevel, type TileProps } from '@/lib/map-shared'
 import type { FiscalYear } from '@/lib/report-card-data'
 import { stateName } from '@/lib/constants'
 import { Events, track, buildGeographyEventProps, type MapType } from '@/lib/analytics'
@@ -64,7 +64,7 @@ function formatStat(value: number, format: 'currency' | 'number') {
 }
 
 function locationLabel(props: TileProps, geoLevel: LossGeoLevel): string {
-  const stateRaw = props.state != null ? String(props.state) : ''
+  const stateRaw = getStateAbbr(props)
 
   if (geoLevel === 'districts' && props.GEOID) {
     const num = String(props.GEOID).slice(-2)
@@ -161,9 +161,9 @@ function DrawerBody({
   config: BudgetDrawerConfig
   fiscalYear?: FiscalYear | undefined
 }) {
-  const stats = config.stats(props)
-  const sections = config.sections(props)
-  const population = Number(props.pop_2024 ?? 0)
+  const noData = isNoData(props)
+  const stats = noData ? [] : config.stats(props)
+  const sections = noData ? [] : config.sections(props)
 
   return (
     <>
@@ -173,9 +173,9 @@ function DrawerBody({
           <Drawer.Title className="text-lg font-semibold text-gray-900">
             {locationLabel(props, geoLevel)}
           </Drawer.Title>
-          {population > 0 && (
+          {props.pop_2024 !== undefined && (
             <p className="mt-0.5 text-sm text-gray-500">
-              Population: {formatNumber(population)}
+              Population: {formatPopulation(props.pop_2024)}
             </p>
           )}
           <PoliticianInfo props={props} geoLevel={geoLevel} />
@@ -185,7 +185,11 @@ function DrawerBody({
         </Drawer.Close>
       </div>
 
-      <ScorecardLink props={props} geoLevel={geoLevel} fiscalYear={fiscalYear} />
+      {noData ? (
+        <p className="border-b px-5 py-4 text-sm text-gray-600">{NO_DATA_MESSAGE}.</p>
+      ) : (
+        <ScorecardLink props={props} geoLevel={geoLevel} fiscalYear={fiscalYear} />
+      )}
 
       {/* Summary cards */}
       {stats.length > 0 && (

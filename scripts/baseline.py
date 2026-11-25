@@ -15,11 +15,18 @@ NSF_DATA_DIR = os.path.join(PROJECT_ROOT, "data", "baseline_new", "Baseline NSF"
 GEO_REF_DIR = os.path.join(PROJECT_ROOT, "data", "geo_ref")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "scripts", "outputs")
 
-TILE_VERSION = "baseline-v9"
+TILE_VERSION = "baseline-v11"
 NIH_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
 NSF_VALUE_COLUMNS = ["raw_funding", "econ_impact", "jobs"]
-# Territories that only have congressional district geometry (no state/county/city shapes)
-TERRITORY_DISTRICT_GEOIDS = {"PR": "7298", "VI": "7898"}
+# Territories that only have congressional district geometry (no state/county/city shapes).
+# One at-large district polygon is reused as the state and county map feature.
+TERRITORY_DISTRICT_GEOIDS = {
+    "AS": "6098",
+    "GU": "6698",
+    "MP": "6998",
+    "PR": "7298",
+    "VI": "7898",
+}
 POP_REF_DIR = os.path.join(SCRIPT_DIR, "reference")
 
 # ── Remote geo-reference data (Cloudflare R2) ────────────────────────
@@ -42,20 +49,20 @@ def download_geo_refs():
         local_path = os.path.join(GEO_CACHE_DIR, filename)
         if os.path.exists(local_path):
             print(f"  Cached: {filename}")
-            continue
+        else:
+            url = f"{R2_BASE}/{filename}"
+            print(f"  Downloading: {filename} ...")
+            rc = subprocess.run(["curl", "-sL", "-o", local_path, url]).returncode
+            if rc != 0:
+                raise RuntimeError(f"curl failed for {url} (exit {rc})")
+            print(f"  Saved: {local_path}")
 
-        url = f"{R2_BASE}/{filename}"
-        print(f"  Downloading: {filename} ...")
-        rc = subprocess.run(["curl", "-sL", "-o", local_path, url]).returncode
-        if rc != 0:
-            raise RuntimeError(f"curl failed for {url} (exit {rc})")
-        print(f"  Saved: {local_path}")
-
-        # Auto-extract zip files
+        # A cached zip can sit next to an empty extract directory from an older run.
         if filename.endswith(".zip"):
             extract_dir = os.path.join(GEO_CACHE_DIR, os.path.splitext(filename)[0])
-            if not os.path.exists(extract_dir):
+            if not shapefile_present(extract_dir):
                 print(f"  Extracting: {filename} -> {extract_dir}")
+                os.makedirs(extract_dir, exist_ok=True)
                 with zipfile.ZipFile(local_path, "r") as zf:
                     zf.extractall(extract_dir)
 
@@ -64,6 +71,16 @@ def download_geo_refs():
 
 def geo_path(name):
     return os.path.join(GEO_CACHE_DIR, name)
+
+
+def shapefile_present(directory):
+    """Return whether a directory tree already contains a shapefile."""
+    if not os.path.isdir(directory):
+        return False
+    for root, _dirs, files in os.walk(directory):
+        if any(name.endswith(".shp") for name in files):
+            return True
+    return False
 
 
 def find_shapefile(directory):
@@ -92,6 +109,7 @@ def build_levels():
             "geo": geo_path("merged_data_counties_CLIP_Compress.geojson"),
             "csv_key": "FIPS",
             "geo_key": "FIPS",
+            "pop_key_pad": 5,  # reference FIPS is zero-padded; tile FIPS is not
             "zoom": 9,
         },
         "districts": {
@@ -112,6 +130,7 @@ def build_levels():
             "filter": {"CITYFLAG": 1},
             "dissolve_key": "FIPSCITY",
             "csv_key_pad": 5,  # CBSA_FIPS is 5 digits; NSF CSV strips leading zeros
+            "population": False,  # no city population reference
             "zoom": 9,
         },
     }
@@ -185,6 +204,40 @@ def load_pop_ref(level_name, csv_key, pad_width=None):
     if pad_width:
         df[csv_key] = df[csv_key].str.zfill(pad_width)
     return df
+
+
+def join_population(level_name, config, df):
+    """Left-join pop_2024 onto df, padding only the join key, not df's own key."""
+    csv_key = config["csv_key"]
+    pad_width = config.get("pop_key_pad", config.get("csv_key_pad"))
+    pop_df = load_pop_ref(level_name, csv_key, pad_width).rename(columns={csv_key: "_pop_key"})
+    keys = df[csv_key].astype(str)
+    if pad_width:
+        keys = keys.str.zfill(pad_width)
+    joined = df.assign(_pop_key=keys).merge(pop_df, on="_pop_key", how="left")
+    joined = joined.drop(columns="_pop_key")
+    missing_pop = joined["pop_2024"].isna().sum()
+    if missing_pop:
+        print(f"  Warning: {missing_pop} rows missing pop_2024")
+    return joined
+
+
+def attach_territory_population(territory_df):
+    """Copy at-large district population onto territory rows.
+
+    State and county tiles are replaced by these district rows. Without this
+    join those map features lose pop_2024 even though the district tile has it.
+    """
+    pop_df = load_pop_ref("districts", "GEOID", 4)
+    wanted = set(TERRITORY_DISTRICT_GEOIDS.values())
+    pop_df = pop_df[pop_df["GEOID"].isin(wanted)]
+    merged = territory_df.drop(columns=["pop_2024"], errors="ignore").merge(
+        pop_df, on="GEOID", how="left"
+    )
+    missing = merged.loc[merged["pop_2024"].isna(), "GEOID"].astype(str).tolist()
+    if missing:
+        print("  Warning: territory rows missing pop_2024: " + ", ".join(missing))
+    return merged
 
 
 def build_geojson(pivoted_df, geometries, csv_key):
@@ -287,8 +340,25 @@ def normalize_key(df, key_col, pad_width=None):
     return df
 
 
+def assert_territory_geometries(territory_geoms):
+    """Fail when a required territory district polygon is missing.
+
+    A territory with no data row is only a warning. Missing geometry would
+    publish a map that silently drops that territory.
+    """
+    missing = [
+        f"{abbrev} ({geoid})"
+        for abbrev, geoid in TERRITORY_DISTRICT_GEOIDS.items()
+        if geoid not in territory_geoms
+    ]
+    if missing:
+        raise RuntimeError(
+            "Missing required territory district geometries: " + ", ".join(missing)
+        )
+
+
 def load_territory_district_data(district_config):
-    """Load district geometries and merged NIH/NSF data for PR and VI territories only."""
+    """Load district geometries and merged NIH/NSF data for AS, GU, MP, PR, and VI."""
     territory_geoids = set(TERRITORY_DISTRICT_GEOIDS.values())
     pad_width = district_config.get("csv_key_pad")
 
@@ -307,11 +377,13 @@ def load_territory_district_data(district_config):
 
     territory_df = nih_df.merge(nsf_pivoted, on="GEOID", how="outer")
     territory_df = territory_df[territory_df["GEOID"].isin(territory_geoids)].copy()
+    territory_df = attach_territory_population(territory_df)
+    assert_territory_geometries(territory_geoms)
     return territory_geoms, territory_df
 
 
 def inject_territory_features(level_name, merged, geometries, csv_key, territory_geoms, territory_df):
-    """Inject PR/VI district data and geometry into non-district geo levels."""
+    """Inject territory district data and geometry into non-district geo levels."""
     for abbrev, geoid in TERRITORY_DISTRICT_GEOIDS.items():
         if geoid not in territory_geoms:
             print(f"  Warning: no district geometry for territory {abbrev} ({geoid})")
@@ -381,15 +453,12 @@ def process_level(name, config, territory_geoms, territory_df):
     merged = nih_df.merge(nsf_pivoted, on=csv_key, how="outer")
 
     # Join 2024 population from the reference CSV (new source CSVs don't carry it)
-    pop_df = load_pop_ref(name, csv_key, pad_width)
-    merged = merged.merge(pop_df, on=csv_key, how="left")
-    missing_pop = merged["pop_2024"].isna().sum()
-    if missing_pop:
-        print(f"  Warning: {missing_pop} rows missing pop_2024")
+    if config.get("population", True):
+        merged = join_population(name, config, merged)
     print(f"  Merged: {len(merged)} rows, {len(merged.columns)} columns")
 
     if name != "districts":
-        print("Injecting territory (PR/VI) data from district level...")
+        print("Injecting territory (AS/GU/MP/PR/VI) data from district level...")
         merged, geometries = inject_territory_features(
             name, merged, geometries, csv_key, territory_geoms, territory_df
         )
@@ -405,8 +474,11 @@ def process_level(name, config, territory_geoms, territory_df):
     tile_dir = os.path.join(OUTPUT_DIR, tile_name)
     generate_tiles(geojson_output, tile_dir, zoom)
 
-    print("Uploading tiles...")
-    upload_tiles(tile_dir, tile_name)
+    if os.environ.get("SCIMAP_SKIP_TILE_UPLOAD"):
+        print("  Skipping rclone upload (SCIMAP_SKIP_TILE_UPLOAD is set; publish with the AWS CLI)")
+    else:
+        print("Uploading tiles...")
+        upload_tiles(tile_dir, tile_name)
 
     print(f"Done: {name}")
 
@@ -417,7 +489,7 @@ def main():
 
     levels = build_levels()
 
-    print("\nPre-loading territory (PR/VI) district data...")
+    print("\nPre-loading territory (AS/GU/MP/PR/VI) district data...")
     territory_geoms, territory_df = load_territory_district_data(levels["districts"])
     print(f"  Loaded {len(territory_geoms)} territory geometries, {len(territory_df)} territory rows")
 

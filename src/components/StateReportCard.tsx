@@ -21,7 +21,7 @@ const DOMAIN = 'https://data.scienceimpacts.org'
 
 const TILES_BY_FY = {
   fy27: {
-    states: `${DOMAIN}/tiles_states_budget27_v3/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget27_v7/{z}/{x}/{y}.pbf`,
     colorProperty: 'econ_budg_total_cuts',
   },
 } as const

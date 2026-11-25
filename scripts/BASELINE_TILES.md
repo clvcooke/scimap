@@ -6,15 +6,15 @@ MVT (Mapbox Vector Tiles) containing baseline NIH funding data across four geogr
 
 | Layer | Tile path | Max zoom | Features | Unique ID property |
 |-------|-----------|----------|----------|--------------------|
-| States | `tiles_states_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 7 | 51 | `state` |
-| Counties | `tiles_counties_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 9 | 3,143 | `FIPS` |
-| Congressional Districts | `tiles_districts_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 9 | 436 | `GEOID` |
-| Cities (CBSA) | `tiles_cities_baseline_baseline-v1/{z}/{x}/{y}.pbf` | 9 | 925 | `CBSA_FIPS` |
+| States | `tiles_states_baseline_baseline-v11/{z}/{x}/{y}.pbf` | 7 | 56 | `state` |
+| Counties | `tiles_counties_baseline_baseline-v11/{z}/{x}/{y}.pbf` | 9 | 3,149 | `FIPS` |
+| Congressional Districts | `tiles_districts_baseline_baseline-v11/{z}/{x}/{y}.pbf` | 9 | 441 | `GEOID` |
+| Cities (CBSA) | `tiles_cities_baseline_baseline-v11/{z}/{x}/{y}.pbf` | 9 | 1,842 | `CBSA_FIPS` |
 
 Tiles are served from `https://data.scienceimpacts.org/` (Cloudflare R2). Full URL example:
 
 ```
-https://data.scienceimpacts.org/tiles_states_baseline_baseline-v1/{z}/{x}/{y}.pbf
+https://data.scienceimpacts.org/tiles_states_baseline_baseline-v11/{z}/{x}/{y}.pbf
 ```
 
 ## Feature Properties
@@ -94,10 +94,10 @@ const DOMAIN = 'https://data.scienceimpacts.org'
 
 // Tile URLs
 const TILES = {
-  states: `${DOMAIN}/tiles_states_baseline_baseline-v1/{z}/{x}/{y}.pbf`,
-  counties: `${DOMAIN}/tiles_counties_baseline_baseline-v1/{z}/{x}/{y}.pbf`,
-  districts: `${DOMAIN}/tiles_districts_baseline_baseline-v1/{z}/{x}/{y}.pbf`,
-  cities: `${DOMAIN}/tiles_cities_baseline_baseline-v1/{z}/{x}/{y}.pbf`,
+  states: `${DOMAIN}/tiles_states_baseline_baseline-v11/{z}/{x}/{y}.pbf`,
+  counties: `${DOMAIN}/tiles_counties_baseline_baseline-v11/{z}/{x}/{y}.pbf`,
+  districts: `${DOMAIN}/tiles_districts_baseline_baseline-v11/{z}/{x}/{y}.pbf`,
+  cities: `${DOMAIN}/tiles_cities_baseline_baseline-v11/{z}/{x}/{y}.pbf`,
 }
 
 // Unique ID property per layer (for highlighting/picking)
@@ -158,12 +158,40 @@ getFillColor: (feature) => {
 }
 ```
 
+## Baseline table population corrections (T24)
+
+The table generator normalizes county FIPS to five digits and district GEOIDs to four digits on both sides of the population join. Population references use `scripts/reference/pop_2024_{states,counties,districts}.csv`. Empty/NA or unmatched populations are stored as JSON `null`, displayed as “Not available”, sorted after known populations, and exported as blank CSV cells—not as zero or `<10`.
+
+The population-only correction restores 319 county rows using `SciMap_Maps/data/county_pop.csv` (`pop_2024`) from commit `4684cf10143decacaab65e177dd623ed1d74afd0`, SHA-256 `773470640fee82d9a8a1b530b63f359c722b2ebfd3efa7436cb1304b839dfc7d`. All 2,825 previously populated county rows match that source exactly and remain unchanged.
+
+Territory state rows, at-large district rows and the matching territory county rows store April 1, 2020 Census counts in the historical `pop_2024` column; see the [reference notes](reference/README.md) for the sources and per-row values. Puerto Rico municipio rows stay blank.
+
+The baseline tile generator joins the same references. It zero-pads only the join key (county FIPS to five digits, district GEOIDs to four), so tile IDs stay unpadded (`6037`) while matching the padded reference (`06037`). Territory state and county map features reuse the at-large district population. Cities have no population reference and carry no `pop_2024`. Tiles regenerated after this change use `TILE_VERSION = "baseline-v11"`. `src/lib/map-config.ts` uses that same version. `baseline-v10` dropped county populations whose FIPS starts with `0`.
+
+To reproduce the population-only correction from a website checkout (without rebuilding scientific outputs):
+
+```bash
+python scripts/generate_table_data.py --population-only
+python -m unittest discover -s scripts -p test_generate_table_data.py
+```
+
+The reference CSVs are checked in under `scripts/reference/`; see its [provenance notes](reference/README.md). County populations come from the scientific county source above; state/district snapshots preserve existing website values, not newly reviewed estimates. The command has been run on the real tables and reference CSVs, and the test suite verifies an identical repeat run. The default full generator still needs matching funding CSVs that are not all present here; newer scientific baseline outputs have different funding totals and must not be used to reconstruct this population-only patch.
+
+Tooltips, desktop drawers and mobile cards use the same population formatter as the table and explicitly label missing values “Not available”. The table explanation is shown only for tabs with missing population data.
+
 ## Regenerating Tiles
 
 ```bash
 # Requires: pandas, geopandas, tippecanoe (via WSL on Windows), rclone
 python scripts/baseline.py
+
+# Build tiles without the rclone upload, then publish scripts/outputs/tiles_*
+# to new, empty R2 prefixes with the AWS CLI (region auto, put-object with
+# If-None-Match: * and Content-MD5).
+SCIMAP_SKIP_TILE_UPLOAD=1 python scripts/baseline.py
 ```
+
+`SCIMAP_SKIP_TILE_UPLOAD` works the same way in `scripts/fy27_budget.py`. Every run builds every level.
 
 ### Input files
 

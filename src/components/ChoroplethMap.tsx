@@ -15,6 +15,8 @@ import {
   positionTooltip,
   useLabelsStyle,
   getLegislatorKeys,
+  isNoData,
+  renderNoDataTooltip,
   type MapGeoConfig,
   type TileProps,
   type LossGeoLevel,
@@ -216,7 +218,8 @@ export default function ChoroplethMap<K extends string>({
         return
       }
 
-      el.innerHTML = renderTooltip(info.object.properties, geoLevel)
+      const props = info.object.properties
+      el.innerHTML = isNoData(props) ? renderNoDataTooltip(props, geoLevel) : renderTooltip(props, geoLevel)
       el.style.display = 'block'
       positionTooltip(el, info.x, info.y, containerRef.current ?? undefined)
     },
@@ -391,7 +394,11 @@ export default function ChoroplethMap<K extends string>({
           <div className="flex items-start gap-2">
             <div
               className="min-w-0 flex-1 space-y-0.5 [&_.font-semibold]:text-gray-900"
-              dangerouslySetInnerHTML={{ __html: renderTooltip(mobileTooltipProps, geoLevel) }}
+              dangerouslySetInnerHTML={{
+                __html: isNoData(mobileTooltipProps)
+                  ? renderNoDataTooltip(mobileTooltipProps, geoLevel)
+                  : renderTooltip(mobileTooltipProps, geoLevel),
+              }}
             />
             <button
               onClick={() => setMobileTooltipProps(null)}

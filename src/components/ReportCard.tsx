@@ -13,6 +13,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { formatCurrency, formatNumber } from '@/lib/constants'
 import type { ReportCardData, FiscalYear } from '@/lib/report-card-data'
 import { FILL_ALPHA } from '@/lib/color-lut'
+import { NO_DATA_FILL, isNoData } from '@/lib/map-shared'
 import { useIsMobile } from '@/hooks/use-mobile'
 import ColorScale from './ColorScale'
 import { Events, track, setPersonProperties, repParty, senatorPartyMix } from '@/lib/analytics'
@@ -23,13 +24,13 @@ const DOMAIN = 'https://data.scienceimpacts.org'
 
 const TILES_BY_FY = {
   fy26: {
-    districts: `${DOMAIN}/tiles_districts_budget_119_v2/{z}/{x}/{y}.pbf`,
-    states: `${DOMAIN}/tiles_states_budget_v1/{z}/{x}/{y}.pbf`,
+    districts: `${DOMAIN}/tiles_districts_budget26_v2/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget26_v2/{z}/{x}/{y}.pbf`,
     colorProperty: 'budg_NIH_cuts_econ_loss',
   },
   fy27: {
-    districts: `${DOMAIN}/tiles_districts_budget27_v3/{z}/{x}/{y}.pbf`,
-    states: `${DOMAIN}/tiles_states_budget27_v3/{z}/{x}/{y}.pbf`,
+    districts: `${DOMAIN}/tiles_districts_budget27_v7/{z}/{x}/{y}.pbf`,
+    states: `${DOMAIN}/tiles_states_budget27_v7/{z}/{x}/{y}.pbf`,
     colorProperty: 'econ_budg_total_cuts',
   },
 } as const
@@ -86,6 +87,10 @@ function createMagmaLayer(
     lineWidthMinPixels: 1,
     lineWidthUnits: 'pixels' as const,
     getFillColor: (f: { properties: Record<string, number> }) => {
+      const isSelected =
+        highlightId != null && highlightId == f.properties[uniqueProperty]
+      const alpha = isSelected ? FILL_ALPHA : 70
+      if (isNoData(f.properties)) return [NO_DATA_FILL[0], NO_DATA_FILL[1], NO_DATA_FILL[2], alpha]
       const v = f.properties[colorProperty] ?? 0
       const t = cs(v > 0 ? Math.log(v) : 0)
       const c = interpolateMagma(1 - t)
@@ -96,9 +101,7 @@ function createMagmaLayer(
             parseInt(c.slice(3, 5), 16),
             parseInt(c.slice(5, 7), 16),
           ]
-      const isSelected =
-        highlightId != null && highlightId == f.properties[uniqueProperty]
-      return [rgb[0], rgb[1], rgb[2], isSelected ? FILL_ALPHA : 70]
+      return [rgb[0], rgb[1], rgb[2], alpha]
     },
     updateTriggers: { getFillColor: [highlightId], getLineWidth: [highlightId] },
   })

@@ -7,33 +7,10 @@ import type { GeoLevel } from '@/lib/constants'
 import { typedKeys } from '@/lib/utils'
 import { toCsv, downloadCsv } from '@/lib/csv'
 
-import statesData from '@/data/table_terminations_states.json'
-import countiesData from '@/data/table_terminations_counties.json'
-import districtsData from '@/data/table_terminations_districts.json'
-
-// --- Types ---
-
-interface RegionRow {
-  id: string
-  name: string
-  nih_econ_loss: number
-  nih_funding_loss: number
-  nih_job_loss: number
-  nsf_econ_loss: number
-  nsf_funding_loss: number
-  nsf_job_loss: number
-  total_econ_loss: number
-  total_funding_loss: number
-  total_job_loss: number
-}
+import { useTerminationRelease } from '@/lib/termination-release-context'
+import type { RegionRow } from '@/lib/termination-release'
 
 type SortKey = keyof Omit<RegionRow, 'id' | 'name'>
-
-const GEO_TABLE: Record<GeoLevel, { label: string; data: RegionRow[] }> = {
-  states: { label: 'State', data: statesData as RegionRow[] },
-  counties: { label: 'County', data: countiesData as RegionRow[] },
-  districts: { label: 'District', data: districtsData as RegionRow[] },
-}
 
 // --- Column config ---
 
@@ -130,20 +107,23 @@ function buildCsv(rows: RegionRow[], regionLabel: string): string {
 // --- Component ---
 
 export default function TerminationsTable() {
+  const { tables, manifest } = useTerminationRelease()
+  const GEO_TABLE = useMemo(() => ({ states: { label: 'State', data: tables.states }, counties: { label: 'County', data: tables.counties }, districts: { label: 'District', data: tables.districts } }), [tables])
   const [geoLevel, setGeoLevel] = useState<GeoLevel>('counties')
   const [sortKey, setSortKey] = useState<SortKey>('total_econ_loss')
   const [sortAsc, setSortAsc] = useState(false)
 
   const config = GEO_TABLE[geoLevel]
 
+  const data = config.data
   const sortedRows = useMemo(() => {
-    const sorted = [...config.data]
+    const sorted = [...data]
     sorted.sort((a, b) => {
       const diff = a[sortKey] - b[sortKey]
       return sortAsc ? diff : -diff
     })
     return sorted
-  }, [config.data, sortKey, sortAsc])
+  }, [data, sortKey, sortAsc])
 
   function handleSort(key: SortKey) {
     if (key === sortKey) {
@@ -156,7 +136,7 @@ export default function TerminationsTable() {
 
   function handleExport() {
     const csv = buildCsv(sortedRows, config.label)
-    downloadCsv(csv, `grant_terminations_${geoLevel}.csv`)
+    downloadCsv(csv, `grant_terminations_${geoLevel}_${manifest.release_id}.csv`)
   }
 
   return (
