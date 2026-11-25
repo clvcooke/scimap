@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
 import { Events, track } from '@/lib/analytics'
 import { useEmbedLayout } from '@/hooks/use-embed-layout'
+import { TerminationPreviewBanner } from '@/components/TerminationPreviewBanner'
 
 function navClickHandler(navLocation: 'header' | 'footer' | 'mobile' | 'maps_dropdown') {
   return (e: React.MouseEvent<HTMLElement>) => {
@@ -284,6 +285,7 @@ function RootLayout() {
     <div className="flex min-h-screen w-full flex-col bg-white">
       <ScrollToTop />
       {header && <Header />}
+      <TerminationPreviewBanner />
 
       <main className="relative flex w-full flex-1 flex-col">
         <Outlet />

@@ -1,6 +1,10 @@
 import { webcrypto } from 'node:crypto'
 import { describe, it, expect, vi } from 'vitest'
-import { loadTerminationRelease, artifactUrl } from './termination-release'
+import {
+  loadTerminationRelease,
+  loadTerminationReleaseById,
+  artifactUrl,
+} from './termination-release'
 import POINT_POLICY from './termination-point-policy.json'
 
 Object.defineProperty(globalThis, 'crypto', { value: webcrypto, configurable: true })
@@ -147,12 +151,53 @@ describe('atomic termination release loading', () => {
       expect.objectContaining({ signal: controller.signal }),
     )
   })
+  it('loads a pinned release directly and only requests artifacts from that release', async () => {
+    const f = await fixture('2026-11-24-daily-20261124T162915Z-02777460')
+    const release = await loadTerminationReleaseById(f.manifest.release_id, f.fetcher)
+    expect(release.manifestUrl).toBe(f.base + 'manifest.json')
+    expect(release.tables.states[0]?.name).toBe('Alabama')
+    expect(vi.mocked(f.fetcher).mock.calls.map(([url]) => url)).toEqual([
+      f.base + 'manifest.json',
+      f.base + 'tables/states.json',
+      f.base + 'tables/counties.json',
+      f.base + 'tables/districts.json',
+      f.base + 'institutions.json',
+    ])
+  })
+  it.each(['', '.', '../other', 'a/../b', 'a%2fb', 'a\\b', 'a?b', 'a#b', 'a\n'])(
+    'rejects invalid preview IDs (%j) without making any request',
+    async (id) => {
+      const f = await fixture()
+      await expect(loadTerminationReleaseById(id, f.fetcher)).rejects.toThrow(
+        'Invalid preview dataset ID',
+      )
+      expect(f.fetcher).not.toHaveBeenCalled()
+    },
+  )
+  it('rejects a pinned manifest for a different release before loading artifacts', async () => {
+    const f = await fixture()
+    f.manifest.release_id = 'test-b'
+    await f.seal()
+    await expect(loadTerminationReleaseById('test-a', f.fetcher)).rejects.toThrow(
+      'identity mismatch',
+    )
+    expect(f.fetcher).toHaveBeenCalledTimes(1)
+  })
+  it('rejects an altered JSON artifact in a pinned release without falling back to the selection', async () => {
+    const f = await fixture()
+    f.bodies[f.base + 'tables/counties.json'] += ' '
+    await expect(loadTerminationReleaseById('test-a', f.fetcher)).rejects.toThrow('checksum')
+    expect(vi.mocked(f.fetcher).mock.calls.every(([url]) => String(url).startsWith(f.base))).toBe(
+      true,
+    )
+  })
   it('does not allow artifacts to escape the release directory', () => {
     for (const path of [
       '../other.json',
       '/absolute.json',
       'https://other.test/file',
       'tables/%2e%2e/data.json',
+      '.\t./other-release/data.json',
       'tables/a.json?x',
     ])
       expect(() => artifactUrl('https://example.test/release/', path)).toThrow()

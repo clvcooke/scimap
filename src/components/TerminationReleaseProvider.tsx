@@ -1,14 +1,20 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { loadTerminationRelease, type TerminationRelease } from '@/lib/termination-release'
-
+import {
+  loadTerminationRelease,
+  loadTerminationReleaseById,
+  type TerminationRelease,
+} from '@/lib/termination-release'
 import { ReleaseContext, useTerminationRelease } from '@/lib/termination-release-context'
-const configuredUrl: unknown = import.meta.env.VITE_TERMINATION_SELECTION_URL
-const SELECTION_URL =
-  typeof configuredUrl === 'string' && configuredUrl ? configuredUrl : '/termination-selection.json'
-// A page session stays on one release, including route changes. A reload reads the pointer again.
+import { sessionTerminationSource } from '@/lib/termination-preview'
+
+// A page session stays on one release, including route changes. A reload reads the source again.
 let sessionRelease: Promise<TerminationRelease> | undefined
 function selectedRelease() {
-  sessionRelease ??= loadTerminationRelease(SELECTION_URL).catch((error: unknown) => {
+  sessionRelease ??= (
+    typeof sessionTerminationSource === 'string'
+      ? loadTerminationRelease(sessionTerminationSource)
+      : loadTerminationReleaseById(sessionTerminationSource.releaseId)
+  ).catch((error: unknown) => {
     sessionRelease = undefined
     throw error
   })

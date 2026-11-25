@@ -16,6 +16,44 @@ the team's exact-release/cutover approval. Configure pointer responses to revali
 helper applies the correct pointer headers. The JSON/PBF CORS allowlist must cover
 the deployed origin, Pages previews and `http://localhost:5173`.
 
+## Review the daily candidate or a pinned release
+
+Open `https://terminations-candidate.scimap.pages.dev/grants` for the latest
+validated daily dataset. Open or reload that bare URL after a new daily run;
+no website rebuild is needed. The grants card on `/maps` uses the same dataset
+as `/grants` for the lifetime of the page, including in-app navigation.
+
+To review an exact release or share it with another reviewer, add its ID to a
+Pages preview URL, for example:
+
+```text
+https://terminations-candidate.scimap.pages.dev/grants?release=2026-11-24-daily-20261124T162915Z-02777460
+```
+
+The **Previewing dataset** banner shows the pinned ID. Use **Open default dataset**
+to exit the pin. To change it, open a URL with the new ID; reloading a URL with no
+`release` parameter also returns to the host's default. The override works on
+`*.pages.dev` and `localhost`, not on production. It reads the manifest directly
+from the immutable release URL instead of checking it against a pointer hash.
+The manifest must report the requested ID and pass the same validation as the
+normal selection path. JSON artifact hashes are still checked against that
+manifest, and tile and download URLs stay in that release. An invalid, missing
+or corrupt release shows an error rather than falling back to another dataset.
+
+### One-time Cloudflare Pages setup
+
+1. Create a dedicated `terminations-candidate` branch in the repository connected
+   to the `scimap` Pages project, at a commit that includes this feature.
+2. In the project's Git branch controls, allow preview builds for
+   `terminations-candidate` (no change if all non-production branches are already
+   enabled) and deploy that branch as a **preview**, not as the production branch.
+3. Share the stable branch alias `https://terminations-candidate.scimap.pages.dev/grants`,
+   not a deployment-specific URL. Only this exact hostname selects
+   `https://data.scienceimpacts.org/terminations/latest-validated.json` by default.
+   No build variable is needed: do **not** set `VITE_TERMINATION_SELECTION_URL` to
+   the daily pointer in Pages. Other hosts keep their existing bundled or configured
+   selection. Keep the candidate branch current when website code needs updating.
+
 ## Prepare, select and roll back
 
 Publish a new release ID with the AWS CLI transport. It does not call rclone:
