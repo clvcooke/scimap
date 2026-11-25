@@ -1,14 +1,24 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { loadTerminationRelease, type TerminationRelease } from '@/lib/termination-release'
-
+import {
+  loadTerminationRelease,
+  loadTerminationReleaseById,
+  type TerminationRelease,
+} from '@/lib/termination-release'
 import { ReleaseContext, useTerminationRelease } from '@/lib/termination-release-context'
-const configuredUrl: unknown = import.meta.env.VITE_TERMINATION_SELECTION_URL
-const SELECTION_URL =
-  typeof configuredUrl === 'string' && configuredUrl ? configuredUrl : '/termination-selection.json'
-// A page session stays on one release, including route changes. A reload reads the pointer again.
+import { sessionTerminationSource } from '@/lib/termination-preview'
+
+const loadableSource =
+  typeof sessionTerminationSource === 'string' || 'releaseId' in sessionTerminationSource
+    ? sessionTerminationSource
+    : null
+// A page session stays on one release, including route changes. A reload reads the source again.
 let sessionRelease: Promise<TerminationRelease> | undefined
-function selectedRelease() {
-  sessionRelease ??= loadTerminationRelease(SELECTION_URL).catch((error: unknown) => {
+function selectedRelease(source: string | { releaseId: string }) {
+  sessionRelease ??= (
+    typeof source === 'string'
+      ? loadTerminationRelease(source)
+      : loadTerminationReleaseById(source.releaseId)
+  ).catch((error: unknown) => {
     sessionRelease = undefined
     throw error
   })
@@ -24,8 +34,9 @@ export function TerminationReleaseProvider({
   const [release, setRelease] = useState<TerminationRelease | null>(null)
   const [error, setError] = useState(false)
   useEffect(() => {
+    if (!loadableSource) return
     let active = true
-    void selectedRelease().then(
+    void selectedRelease(loadableSource).then(
       (data) => {
         if (active) setRelease(data)
       },
@@ -37,6 +48,13 @@ export function TerminationReleaseProvider({
       active = false
     }
   }, [])
+  if (!loadableSource)
+    return fallback(
+      <div role="alert" className="p-6">
+        Termination data is not shown because this link’s preview dataset ID is not valid. See the
+        notice at the top of the page.
+      </div>,
+    )
   if (error)
     return fallback(
       <div role="alert" className="p-6">

@@ -16,6 +16,65 @@ the team's exact-release/cutover approval. Configure pointer responses to revali
 helper applies the correct pointer headers. The JSON/PBF CORS allowlist must cover
 the deployed origin, Pages previews and `http://localhost:5173`.
 
+## Review the daily candidate or a pinned release
+
+Open `https://terminations-candidate.scimap.pages.dev/grants` for the latest
+validated daily dataset. Open or reload that bare URL after a new daily run;
+no website rebuild is needed. The grants card on `/maps` uses the same dataset
+as `/grants` for the lifetime of the page, including in-app navigation.
+
+To review an exact release or share it with another reviewer, add its ID to a
+Pages preview URL, for example:
+
+```text
+https://terminations-candidate.scimap.pages.dev/grants?release=2026-11-24-daily-20261124T162915Z-02777460
+```
+
+The **Previewing dataset** banner shows the pinned ID. If the `release` value is
+not a valid ID, or the link has more than one, the banner shows the rejected value,
+the allowed characters and a link to the newest dataset, and no data is loaded. Use **Open default dataset**
+to exit the pin. To change it, open a URL with the new ID; reloading a URL with no
+`release` parameter also returns to the host's default. The override works on
+`*.scimap.pages.dev` branch and deployment previews and `localhost`, not on
+production (`scienceimpacts.org` or the bare `scimap.pages.dev` alias). It reads the manifest directly
+from the immutable release URL instead of checking it against a pointer hash.
+The manifest must report the requested ID and pass the same validation as the
+normal selection path. JSON artifact hashes are still checked against that
+manifest, and tile and download URLs stay in that release. An invalid, missing
+or corrupt release shows an error rather than falling back to another dataset.
+
+### One-time Cloudflare Pages setup
+
+1. In the `scimap` Pages project's Git branch controls, allow preview builds for
+   the existing `terminations-candidate` branch (no change if all non-production
+   branches are already enabled). Deploy it as a **preview**, not as production.
+2. Share the stable branch alias `https://terminations-candidate.scimap.pages.dev/grants`,
+   not a deployment-specific URL. Only this exact hostname selects
+   `https://data.scienceimpacts.org/terminations/latest-validated.json` by default.
+   No build variable is needed: do **not** set `VITE_TERMINATION_SELECTION_URL` to
+   the daily pointer in Pages. Other hosts keep their existing bundled or configured
+   selection.
+
+Once the workflow is on `main`, **Sync Terminations Candidate Branch** mirrors
+`main` to `terminations-candidate` on pushes to `main`, daily at 23:00 UTC, and
+on manual runs from `main`. The candidate branch is deploy-only: the workflow
+replaces its tip with the exact `main` commit and never pushes back to `main`.
+Do not commit directly to `terminations-candidate`. The workflow's token must be
+allowed to update the candidate branch, including non-fast-forward updates. It
+uses the existing `SLACK_WEBHOOK_URL` repository secret to report a failed sync.
+
+The built-in workflow token cannot update files under `.github/workflows/`, so
+GitHub rejects a sync whose new `main` changes a workflow file relative to the
+candidate branch. This happens on the first sync after this workflow merges and
+again whenever `main` changes a workflow. The run fails and the Slack alert names
+this reason. Then someone allowed to update workflow files runs, once:
+
+```sh
+git fetch origin main && git push --force origin origin/main:terminations-candidate
+```
+
+Later syncs work normally until `main` changes a workflow file again.
+
 ## Prepare, select and roll back
 
 Publish a new release ID with the AWS CLI transport. It does not call rclone:

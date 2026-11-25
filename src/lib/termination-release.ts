@@ -58,7 +58,8 @@ export function artifactUrl(base: string, path: string) {
     !path ||
     path.startsWith('/') ||
     path.split('/').some((part) => !part || part === '.' || part === '..') ||
-    /[?#%\\:]/.test(path)
+    /[?#%\\:]/.test(path) ||
+    !new URL(base + path).href.startsWith(base)
   ) {
     throw new Error('Invalid release artifact path')
   }
@@ -70,6 +71,10 @@ async function fetchBytes(url: string, fetcher: typeof fetch, signal?: AbortSign
   if (!response.ok) throw new Error(`Could not load termination data (${response.status})`)
   return response.arrayBuffer()
 }
+async function fetchJson(url: string, fetcher: typeof fetch, signal?: AbortSignal) {
+  return JSON.parse(new TextDecoder().decode(await fetchBytes(url, fetcher, signal))) as unknown
+}
+
 async function verifiedJson(
   url: string,
   hash: string,
@@ -89,7 +94,7 @@ export function validateManifest(value: unknown): asserts value is ReleaseManife
   const m = value as ReleaseManifest
   if (
     m?.schema_version !== 1 ||
-    !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(m.release_id) ||
+    !isTerminationReleaseId(m.release_id) ||
     !/^\d{4}-\d{2}-\d{2}$/.test(m.reporting_week) ||
     !/^\d{4}-\d{2}-\d{2}$/.test(m.as_of) ||
     m.reporting_week > m.as_of ||
@@ -183,9 +188,12 @@ export async function loadTerminationRelease(
   fetcher: typeof fetch = fetch,
   signal?: AbortSignal,
 ): Promise<TerminationRelease> {
-  const selection = JSON.parse(
-    new TextDecoder().decode(await fetchBytes(selectionUrl, fetcher, signal)),
-  ) as { schema_version: number; manifest_url: string; manifest_sha256: string; release_id: string }
+  const selection = (await fetchJson(selectionUrl, fetcher, signal)) as {
+    schema_version: number
+    manifest_url: string
+    manifest_sha256: string
+    release_id: string
+  }
   if (
     selection.schema_version !== 1 ||
     typeof selection.manifest_url !== 'string' ||
@@ -199,10 +207,35 @@ export async function loadTerminationRelease(
     fetcher,
     signal,
   )
+  return assembleRelease(manifest, selection.release_id, selection.manifest_url, fetcher, signal)
+}
+
+export function isTerminationReleaseId(id: unknown) {
+  return typeof id === 'string' && /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(id)
+}
+
+export async function loadTerminationReleaseById(
+  releaseId: string,
+  fetcher: typeof fetch = fetch,
+  signal?: AbortSignal,
+): Promise<TerminationRelease> {
+  if (!isTerminationReleaseId(releaseId)) throw new Error('Invalid preview dataset ID')
+  const manifestUrl = `${DATA_ROOT}${releaseId}/manifest.json`
+  // A pinned preview trusts the manifest at the immutable release URL, not a mutable selection.
+  const manifest = await fetchJson(manifestUrl, fetcher, signal)
+  return assembleRelease(manifest, releaseId, manifestUrl, fetcher, signal)
+}
+
+async function assembleRelease(
+  manifest: unknown,
+  releaseId: string,
+  manifestUrl: string,
+  fetcher: typeof fetch,
+  signal?: AbortSignal,
+): Promise<TerminationRelease> {
   validateManifest(manifest)
-  if (selection.release_id !== manifest.release_id)
-    throw new Error('Termination release identity mismatch')
-  const baseUrl = selection.manifest_url.slice(0, -'manifest.json'.length)
+  if (releaseId !== manifest.release_id) throw new Error('Termination release identity mismatch')
+  const baseUrl = manifestUrl.slice(0, -'manifest.json'.length)
   const [states, counties, districts, institutions] = await Promise.all([
     ...LEVELS.map(async (level) => {
       const record = manifest.artifacts.tables?.[level]
@@ -218,7 +251,7 @@ export async function loadTerminationRelease(
   ])
   return {
     manifest,
-    manifestUrl: selection.manifest_url,
+    manifestUrl,
     baseUrl,
     tables: {
       states: validateTable(states),
