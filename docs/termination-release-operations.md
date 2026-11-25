@@ -30,7 +30,9 @@ Pages preview URL, for example:
 https://terminations-candidate.scimap.pages.dev/grants?release=2026-11-24-daily-20261124T162915Z-02777460
 ```
 
-The **Previewing dataset** banner shows the pinned ID. Use **Open default dataset**
+The **Previewing dataset** banner shows the pinned ID. If the `release` value is
+not a valid ID, or the link has more than one, the banner shows the rejected value,
+the allowed characters and a link to the newest dataset, and no data is loaded. Use **Open default dataset**
 to exit the pin. To change it, open a URL with the new ID; reloading a URL with no
 `release` parameter also returns to the host's default. The override works on
 `*.scimap.pages.dev` branch and deployment previews and `localhost`, not on
@@ -60,6 +62,18 @@ replaces its tip with the exact `main` commit and never pushes back to `main`.
 Do not commit directly to `terminations-candidate`. The workflow's token must be
 allowed to update the candidate branch, including non-fast-forward updates. It
 uses the existing `SLACK_WEBHOOK_URL` repository secret to report a failed sync.
+
+The built-in workflow token cannot update files under `.github/workflows/`, so
+GitHub rejects a sync whose new `main` changes a workflow file relative to the
+candidate branch. This happens on the first sync after this workflow merges and
+again whenever `main` changes a workflow. The run fails and the Slack alert names
+this reason. Then someone allowed to update workflow files runs, once:
+
+```sh
+git fetch origin main && git push --force origin origin/main:terminations-candidate
+```
+
+Later syncs work normally until `main` changes a workflow file again.
 
 ## Prepare, select and roll back
 

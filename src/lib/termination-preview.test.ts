@@ -45,5 +45,15 @@ it('uses the daily pointer only on the dedicated candidate alias', () => {
 
 it('rejects ambiguous preview URLs instead of choosing the first ID or the default', () => {
   const location = { hostname: 'localhost', search: '?release=one&release=two' }
-  expect(getTerminationReleaseSource(location, website)).toEqual({ releaseId: '' })
+  expect(getTerminationReleaseSource(location, website)).toEqual({
+    rejectedRelease: ['one', 'two'],
+  })
 })
+
+it.each(['', '../other', '.hidden', 'a b'])(
+  'rejects the malformed preview ID %j and keeps its value',
+  (value) => {
+    const location = { hostname: 'localhost', search: `?release=${encodeURIComponent(value)}` }
+    expect(getTerminationReleaseSource(location, website)).toEqual({ rejectedRelease: [value] })
+  },
+)

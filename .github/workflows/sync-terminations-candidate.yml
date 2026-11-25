@@ -25,17 +25,30 @@ jobs:
           ref: main
 
       - name: Mirror main to terminations-candidate
+        id: mirror
         run: |
           git fetch --depth=1 origin +refs/heads/main:refs/remotes/origin/main +refs/heads/terminations-candidate:refs/remotes/origin/terminations-candidate
           previous=$(git rev-parse refs/remotes/origin/terminations-candidate)
-          git push --force-with-lease="refs/heads/terminations-candidate:$previous" origin refs/remotes/origin/main:refs/heads/terminations-candidate
+          if ! git push --force-with-lease="refs/heads/terminations-candidate:$previous" origin refs/remotes/origin/main:refs/heads/terminations-candidate 2> "$RUNNER_TEMP/push.log"; then
+            cat "$RUNNER_TEMP/push.log" >&2
+            if grep -q 'refusing to allow a GitHub App to create or update workflow' "$RUNNER_TEMP/push.log"; then
+              echo 'reason=workflow-permission' >> "$GITHUB_OUTPUT"
+            fi
+            exit 1
+          fi
+          cat "$RUNNER_TEMP/push.log" >&2
 
       - name: Notify Slack on sync failure
         if: failure()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REASON: ${{ steps.mirror.outputs.reason }}
         run: |
-          jq -n --arg url "$RUN_URL" '{text: "⚠️ Terminations candidate branch sync failed: \($url)"}' |
+          if [ "$REASON" = workflow-permission ]; then
+            detail='GitHub refused the update because main changes a file under .github/workflows and the workflow token cannot update workflow files. Someone with permission to update workflow files must run: git fetch origin main && git push --force origin origin/main:terminations-candidate'
+          fi
+          jq -n --arg url "$RUN_URL" --arg detail "${detail:-}" \
+            '{text: ("⚠️ Terminations candidate branch sync failed: \($url)" + (if $detail == "" then "" else "\n\($detail)" end))}' |
             curl --silent --show-error --fail-with-body --max-time 15 \
               -H 'Content-Type: application/json' --data-binary @- "${SLACK_WEBHOOK_URL:?Set the repository Slack webhook secret}"
