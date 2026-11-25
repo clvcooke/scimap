@@ -5,7 +5,7 @@ export function getTerminationReleaseSource(
   { hostname, search }: Pick<Location, 'hostname' | 'search'>,
   configuredUrl: unknown,
 ): string | { releaseId: string } {
-  if (hostname === 'localhost' || hostname.endsWith('.pages.dev')) {
+  if (hostname === 'localhost' || hostname.endsWith('.scimap.pages.dev')) {
     const releases = new URLSearchParams(search).getAll('release')
     if (releases.length) return { releaseId: releases.length === 1 ? releases[0] : '' }
   }

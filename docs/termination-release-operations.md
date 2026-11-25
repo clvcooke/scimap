@@ -33,7 +33,8 @@ https://terminations-candidate.scimap.pages.dev/grants?release=2026-11-24-daily-
 The **Previewing dataset** banner shows the pinned ID. Use **Open default dataset**
 to exit the pin. To change it, open a URL with the new ID; reloading a URL with no
 `release` parameter also returns to the host's default. The override works on
-`*.pages.dev` and `localhost`, not on production. It reads the manifest directly
+`*.scimap.pages.dev` branch and deployment previews and `localhost`, not on
+production (`scienceimpacts.org` or the bare `scimap.pages.dev` alias). It reads the manifest directly
 from the immutable release URL instead of checking it against a pointer hash.
 The manifest must report the requested ID and pass the same validation as the
 normal selection path. JSON artifact hashes are still checked against that
