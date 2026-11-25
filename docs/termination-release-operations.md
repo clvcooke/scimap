@@ -43,17 +43,23 @@ or corrupt release shows an error rather than falling back to another dataset.
 
 ### One-time Cloudflare Pages setup
 
-1. Create a dedicated `terminations-candidate` branch in the repository connected
-   to the `scimap` Pages project, at a commit that includes this feature.
-2. In the project's Git branch controls, allow preview builds for
-   `terminations-candidate` (no change if all non-production branches are already
-   enabled) and deploy that branch as a **preview**, not as the production branch.
-3. Share the stable branch alias `https://terminations-candidate.scimap.pages.dev/grants`,
+1. In the `scimap` Pages project's Git branch controls, allow preview builds for
+   the existing `terminations-candidate` branch (no change if all non-production
+   branches are already enabled). Deploy it as a **preview**, not as production.
+2. Share the stable branch alias `https://terminations-candidate.scimap.pages.dev/grants`,
    not a deployment-specific URL. Only this exact hostname selects
    `https://data.scienceimpacts.org/terminations/latest-validated.json` by default.
    No build variable is needed: do **not** set `VITE_TERMINATION_SELECTION_URL` to
    the daily pointer in Pages. Other hosts keep their existing bundled or configured
-   selection. Keep the candidate branch current when website code needs updating.
+   selection.
+
+Once the workflow is on `main`, **Sync Terminations Candidate Branch** mirrors
+`main` to `terminations-candidate` on pushes to `main`, daily at 23:00 UTC, and
+on manual runs from `main`. The candidate branch is deploy-only: the workflow
+replaces its tip with the exact `main` commit and never pushes back to `main`.
+Do not commit directly to `terminations-candidate`. The workflow's token must be
+allowed to update the candidate branch, including non-fast-forward updates. It
+uses the existing `SLACK_WEBHOOK_URL` repository secret to report a failed sync.
 
 ## Prepare, select and roll back
 

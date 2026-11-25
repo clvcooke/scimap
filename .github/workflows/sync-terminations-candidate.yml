@@ -1,0 +1,41 @@
+name: Sync Terminations Candidate Branch
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 23 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-terminations-candidate
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Mirror main to terminations-candidate
+        run: |
+          git fetch --depth=1 origin +refs/heads/main:refs/remotes/origin/main +refs/heads/terminations-candidate:refs/remotes/origin/terminations-candidate
+          previous=$(git rev-parse refs/remotes/origin/terminations-candidate)
+          git push --force-with-lease="refs/heads/terminations-candidate:$previous" origin refs/remotes/origin/main:refs/heads/terminations-candidate
+
+      - name: Notify Slack on sync failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          jq -n --arg url "$RUN_URL" '{text: "⚠️ Terminations candidate branch sync failed: \($url)"}' |
+            curl --silent --show-error --fail-with-body --max-time 15 \
+              -H 'Content-Type: application/json' --data-binary @- "${SLACK_WEBHOOK_URL:?Set the repository Slack webhook secret}"
